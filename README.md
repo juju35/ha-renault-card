@@ -24,7 +24,7 @@ Pick the vehicle, the card finds all its entities by itself.
 - Charging status and time left, plug, lock, door and air conditioning status
 - Location with the time of the last update; tap it to open the map
 - Action buttons for every button of the vehicle (horn, flash lights, air conditioning, start/stop charge), pressed with a confirmation tap, and the charge mode picker for electric cars
-- Built-in pictures for the Espace and the Captur, or your own picture, and a French licence plate badge
+- Built-in pictures for the Espace and the Captur, or your own picture, and a French licence plate drawn like the real one (EU band, department, Breton flag for Brittany)
 - Optional **Orange Internet On the move** section: data left, percentage, renewal or expiry date
 - Automatic entity discovery from the device (English or French entity IDs)
 - Visual editor in the dashboard UI (no YAML needed)
@@ -99,6 +99,7 @@ name: Espace
 fuel_tank_capacity: 55
 low_range: 100
 show_plate: true
+plate_department: "35"
 show_location: true
 show_actions: true
 show_data_plan: true
@@ -120,7 +121,8 @@ entities:
 | `show_image` | ❌ | `true` | Show the vehicle picture |
 | `fuel_tank_capacity` | ❌ | — | Tank capacity in litres; shows the fuel gauge |
 | `low_range` | ❌ | `100` | Range (km) below which the card shows a low range warning; `0` turns it off |
-| `show_plate` | ❌ | `true` | Show the licence plate badge (when the device name is a French plate) |
+| `show_plate` | ❌ | `true` | Show the licence plate (when the device name is a French plate) |
+| `plate_department` | ❌ | — | Department number on the right of the plate, e.g. `35`; the Breton flag is added for 22, 29, 35 and 56 |
 | `show_location` | ❌ | `true` | Show the location row |
 | `show_actions` | ❌ | `true` | Show the action buttons and charge mode |
 | `show_data_plan` | ❌ | `true` | Show the Orange Internet On the move section when a data plan is found |

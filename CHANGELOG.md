@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.0
+
+### What's new
+- The licence plate now looks like a real French plate: black frame, EU band with the circle of stars and F, condensed characters, and a right band with the department number.
+- New `plate_department` option, also in the visual editor; the Breton flag is shown for 22, 29, 35 and 56.
+
 ## 1.3.1
 
 ### Changes

@@ -1,4 +1,4 @@
-var RENAULT_CARD_VERSION = '1.3.1';
+var RENAULT_CARD_VERSION = '1.4.0';
 
 // Built-in vehicle pictures (600 px WebP, transparent background), picked from the device model.
 var RN_IMAGES = {
@@ -55,6 +55,8 @@ var RnI18n = {
     ed_low_range: 'Seuil d\'autonomie faible',
     ed_low_range_helper: '100 km par défaut',
     ed_show_plate: 'Plaque d\'immatriculation',
+    ed_plate_department: 'Département de la plaque',
+    ed_plate_department_helper: 'Numéro affiché à droite de la plaque, par exemple 35 (drapeau breton pour 22, 29, 35 et 56)',
     ed_show_location: 'Position',
     ed_show_actions: 'Boutons d\'action',
     ed_show_data_plan: 'Orange Internet On the move',
@@ -113,6 +115,8 @@ var RnI18n = {
     ed_low_range: 'Low range threshold',
     ed_low_range_helper: 'Defaults to 100 km',
     ed_show_plate: 'Licence plate',
+    ed_plate_department: 'Plate department',
+    ed_plate_department_helper: 'Number shown on the right of the plate, for example 35 (Breton flag for 22, 29, 35 and 56)',
     ed_show_location: 'Location',
     ed_show_actions: 'Action buttons',
     ed_show_data_plan: 'Orange Internet On the move',
@@ -234,6 +238,58 @@ function rnFindDataPlan(hass, vehicleDevice) {
 function rnBuiltinImage(device) {
   var word = String((device && device.model) || '').split(' ')[0].toLowerCase();
   return RN_IMAGES[word];
+}
+
+// ── French licence plate (SVG, 520 × 110 mm proportions) ────────────────────
+var RN_BRITTANY = ['22', '29', '35', '56'];
+
+function rnStar(cx, cy, r) {
+  var pts = [];
+  for (var i = 0; i < 10; i++) {
+    var a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * 0.4 : r;
+    pts.push((cx + rr * Math.cos(a)).toFixed(2) + ',' + (cy + rr * Math.sin(a)).toFixed(2));
+  }
+  return '<polygon points="' + pts.join(' ') + '"/>';
+}
+
+// Gwenn-ha-du: 9 stripes, ermine canton.
+function rnBreizhFlag(x, y, w, h) {
+  var out = '<g><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="#fff"/>';
+  var sh = h / 9;
+  for (var i = 0; i < 9; i += 2) out += '<rect x="' + x + '" y="' + (y + i * sh).toFixed(2) + '" width="' + w + '" height="' + sh.toFixed(2) + '" fill="#000"/>';
+  var cw = w * 0.42, ch = sh * 5;
+  out += '<rect x="' + x + '" y="' + y + '" width="' + cw.toFixed(2) + '" height="' + ch.toFixed(2) + '" fill="#fff"/>';
+  for (var r = 0; r < 3; r++) for (var c2 = 0; c2 < 3; c2++) {
+    if ((r + c2) % 2) continue;
+    out += '<circle cx="' + (x + cw * (c2 + 0.5) / 3).toFixed(2) + '" cy="' + (y + ch * (r + 0.5) / 3).toFixed(2) + '" r="' + (sh * 0.45).toFixed(2) + '" fill="#000"/>';
+  }
+  return out + '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="none" stroke="#fff" stroke-width="0.8"/></g>';
+}
+
+function rnPlateSvg(plate, dept) {
+  var blue = '#003da5', yellow = '#ffd200';
+  var stars = '';
+  for (var i = 0; i < 12; i++) {
+    var a = i * Math.PI / 6;
+    stars += rnStar(29 + 12 * Math.cos(a), 33 + 12 * Math.sin(a), 3.2);
+  }
+  var right = '';
+  if (dept) {
+    var d = String(dept).toUpperCase();
+    right = (RN_BRITTANY.indexOf(d) >= 0 ? rnBreizhFlag(474, 14, 34, 24) : '') +
+      '<text x="491" y="' + (RN_BRITTANY.indexOf(d) >= 0 ? 88 : 72) + '" text-anchor="middle" fill="#fff" font-size="' + (RN_BRITTANY.indexOf(d) >= 0 ? 40 : 46) + '" font-weight="700"' +
+      ' font-family="\'Roboto Condensed\',\'Arial Narrow\',Arial,sans-serif" textLength="' + (d.length > 2 ? 38 : 32) + '" lengthAdjust="spacingAndGlyphs">' + rnEsc(d) + '</text>';
+  }
+  return '<svg class="plate" viewBox="0 0 520 120" role="img" aria-label="' + rnEsc(plate) + '" xmlns="http://www.w3.org/2000/svg">' +
+    '<rect x="0" y="0" width="520" height="120" rx="10" fill="#111"/>' +
+    '<rect x="6" y="6" width="508" height="100" rx="4" fill="#fff"/>' +
+    '<path d="M10 6 H52 V106 H10 a4 4 0 0 1 -4 -4 V10 a4 4 0 0 1 4 -4 Z" fill="' + blue + '"/>' +
+    '<g fill="' + yellow + '">' + stars + '</g>' +
+    '<text x="29" y="94" text-anchor="middle" fill="#fff" font-size="30" font-weight="700" font-family="Arial,sans-serif">F</text>' +
+    '<path d="M468 6 H510 a4 4 0 0 1 4 4 V102 a4 4 0 0 1 -4 4 H468 Z" fill="' + blue + '"/>' + right +
+    '<text x="260" y="88" text-anchor="middle" fill="#111" font-size="82" font-weight="700"' +
+    ' font-family="\'Roboto Condensed\',\'Arial Narrow\',\'DIN Condensed\',Arial,sans-serif" textLength="392" lengthAdjust="spacingAndGlyphs">' + rnEsc(plate) + '</text>' +
+    '</svg>';
 }
 
 // French SIV plate "GW782EN" → "GW-782-EN"
@@ -460,7 +516,7 @@ class RenaultCard extends HTMLElement {
     var header = '<div class="header">' +
       (imgSrc ? '' : '<div class="badge"><ha-icon icon="mdi:car"></ha-icon></div>') +
       '<div class="titles"><div class="name">' + rnEsc(name) + '</div>' + (model ? '<div class="model">' + rnEsc(model) + '</div>' : '') + '</div>' +
-      (plate ? '<div class="plate"><span class="eu">F</span><span class="num">' + plate + '</span><span class="eu right"></span></div>' : '') +
+      (plate ? rnPlateSvg(plate, c.plate_department) : '') +
       '</div>';
 
     var image = imgSrc ? '<div class="image"><img src="' + rnEsc(imgSrc) + '" alt="' + rnEsc(name) + '"></div>' : '';
@@ -609,11 +665,7 @@ class RenaultCard extends HTMLElement {
       '.titles { flex: 1; min-width: 0; }' +
       '.name { font-size: 18px; font-weight: 500; color: var(--primary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
       '.model { font-size: 13px; color: var(--secondary-text-color); margin-top: 2px; }' +
-      '.plate { display: inline-flex; align-items: stretch; height: 26px; border-radius: 4px; overflow: hidden; flex-shrink: 0;' +
-        ' border: 1.5px solid #1b1b1b; background: #fff; font-family: "DIN Alternate", "Arial Narrow", Arial, sans-serif; }' +
-      '.plate .eu { width: 14px; background: #1f4fa8; color: #fff; font-size: 10px; font-weight: 700; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 2px; }' +
-      '.plate .eu.right { padding: 0; }' +
-      '.plate .num { padding: 0 8px; display: flex; align-items: center; font-size: 15px; font-weight: 700; letter-spacing: 0.04em; color: #1b1b1b; }' +
+      '.plate { height: 30px; width: auto; flex-shrink: 0; display: block; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.25)); }' +
       '.image { display: flex; justify-content: center; margin: -4px 0; }' +
       '.image img { max-width: 100%; max-height: 170px; object-fit: contain; }' +
       '.chips { display: flex; flex-wrap: wrap; gap: 6px; }' +
@@ -751,6 +803,7 @@ class RenaultCardEditor extends HTMLElement {
           { name: 'show_data_plan', selector: { boolean: {} } },
         ],
       },
+      { name: 'plate_department', selector: { text: {} } },
       { name: 'data_plan_device_id', selector: { device: { integration: 'orange_internet_on_the_move' } } },
       {
         name: 'language',
