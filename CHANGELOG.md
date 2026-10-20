@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.0
+
+### What's new
+- Renault logo next to the vehicle name, in the theme text colour: black on light themes, white on dark themes. Hide it with `show_logo: false` or from the visual editor.
+
 ## 1.4.0
 
 ### What's new

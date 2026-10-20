@@ -24,6 +24,7 @@ Pick the vehicle, the card finds all its entities by itself.
 - Charging status and time left, plug, lock, door and air conditioning status
 - Location with the time of the last update; tap it to open the map
 - Action buttons for every button of the vehicle (horn, flash lights, air conditioning, start/stop charge), pressed with a confirmation tap, and the charge mode picker for electric cars
+- Renault logo next to the name, black on light themes and white on dark themes
 - Built-in pictures for the Espace and the Captur, or your own picture, and a French licence plate drawn like the real one (EU band, department, Breton flag for Brittany)
 - Optional **Orange Internet On the move** section: data left, percentage, renewal or expiry date
 - Automatic entity discovery from the device (English or French entity IDs)
@@ -79,7 +80,7 @@ For another model, or to use your own photo, give the card any image, ideally a 
 image: /local/renault/clio.png
 ```
 
-Without a picture (no built-in one for the model and no `image`, or `show_image: false`), the card shows a car icon next to the name.
+Without a picture (no built-in one for the model and no `image`, or `show_image: false`), the card shows only the Renault logo next to the name (or a car icon with `show_logo: false`).
 
 ### Minimal
 
@@ -118,6 +119,7 @@ entities:
 | `entity` | ❌ | — | Any entity of the vehicle, used to find the device |
 | `name` | ❌ | Device name | Card title |
 | `image` | ❌ | Built-in | Picture URL; replaces the built-in Espace / Captur picture |
+| `show_logo` | ❌ | `true` | Show the Renault logo next to the name (follows the theme text colour) |
 | `show_image` | ❌ | `true` | Show the vehicle picture |
 | `fuel_tank_capacity` | ❌ | — | Tank capacity in litres; shows the fuel gauge |
 | `low_range` | ❌ | `100` | Range (km) below which the card shows a low range warning; `0` turns it off |
