@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.1
+
+### Changes
+- New built-in pictures for the Renault Espace (Gris Schiste) and Captur (blue with a white roof), both facing right.
+
 ## 1.7.0
 
 ### What's new
