@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.1
+
+### Changes
+- New built-in picture for the Renault Captur, facing the same way as the Espace.
+
 ## 1.6.0
 
 ### What's new
