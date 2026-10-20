@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.0
+
+### Changes
+- Orange logo in the Orange Internet On the move section header, and an orange data bar to match.
+
 ## 1.0.1
 
 ### Changes
