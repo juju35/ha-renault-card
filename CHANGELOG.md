@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.0
+
+### What's new
+- Built-in pictures for the Renault Espace and Captur, picked from the vehicle model: no `image` needed for these two. `image` still replaces them, and `show_image: false` hides the picture.
+
+### Changes
+- The Espace picture's ground shadow is now translucent, so it no longer shows as a light strip on dark themes.
+
 ## 1.2.0
 
 ### What's new

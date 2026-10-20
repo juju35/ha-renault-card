@@ -24,7 +24,7 @@ Pick the vehicle, the card finds all its entities by itself.
 - Charging status and time left, plug, lock, door and air conditioning status
 - Location with the time of the last update; tap it to open the map
 - Action buttons for every button of the vehicle (horn, flash lights, air conditioning, start/stop charge), pressed with a confirmation tap, and the charge mode picker for electric cars
-- Vehicle picture and French licence plate badge
+- Built-in pictures for the Espace and the Captur, or your own picture, and a French licence plate badge
 - Optional **Orange Internet On the move** section: data left, percentage, renewal or expiry date
 - Automatic entity discovery from the device (English or French entity IDs)
 - Visual editor in the dashboard UI (no YAML needed)
@@ -71,13 +71,15 @@ Add the card from the dashboard (**Add card → Renault Card**). The first Renau
 
 ### Vehicle picture
 
-The card shows any image you give it, ideally a PNG or WebP with a transparent background. Put it in `/config/www/renault/` and use `/local/renault/<file>`:
+The card ships with pictures of the **Espace** and the **Captur**, picked from the vehicle model: nothing to set up for these two.
+
+For another model, or to use your own photo, give the card any image, ideally a PNG or WebP with a transparent background. Put it in `/config/www/renault/` and use `/local/renault/<file>`:
 
 ```yaml
-image: /local/renault/espace.png
+image: /local/renault/clio.png
 ```
 
-Without a picture, the card shows a car icon next to the name.
+Without a picture (no built-in one for the model and no `image`, or `show_image: false`), the card shows a car icon next to the name.
 
 ### Minimal
 
@@ -94,7 +96,6 @@ Use either `device_id` (what the visual editor writes) or `entity` (any entity o
 type: custom:renault-card
 device_id: 5a8c1932ddf3f29163a275f06789b1bf
 name: Espace
-image: /local/renault/espace.png
 fuel_tank_capacity: 55
 low_range: 100
 show_plate: true
@@ -115,7 +116,8 @@ entities:
 | `device_id` | ❌* | Auto | Renault vehicle device (*or `entity`; the first vehicle is used if both are missing) |
 | `entity` | ❌ | — | Any entity of the vehicle, used to find the device |
 | `name` | ❌ | Device name | Card title |
-| `image` | ❌ | — | Vehicle picture URL |
+| `image` | ❌ | Built-in | Picture URL; replaces the built-in Espace / Captur picture |
+| `show_image` | ❌ | `true` | Show the vehicle picture |
 | `fuel_tank_capacity` | ❌ | — | Tank capacity in litres; shows the fuel gauge |
 | `low_range` | ❌ | `100` | Range (km) below which the card shows a low range warning; `0` turns it off |
 | `show_plate` | ❌ | `true` | Show the licence plate badge (when the device name is a French plate) |
