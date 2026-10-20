@@ -1,4 +1,7 @@
-var RENAULT_CARD_VERSION = '1.5.0';
+var RENAULT_CARD_VERSION = '1.6.0';
+
+// Leaflet 1.9.4 stylesheet (BSD-2-Clause, see licenses/LICENSE-leaflet), inlined for the map card's shadow root.
+var RN_LEAFLET_CSS = "/* required styles */\n\n.leaflet-pane,\n.leaflet-tile,\n.leaflet-marker-icon,\n.leaflet-marker-shadow,\n.leaflet-tile-container,\n.leaflet-pane > svg,\n.leaflet-pane > canvas,\n.leaflet-zoom-box,\n.leaflet-image-layer,\n.leaflet-layer {\n\tposition: absolute;\n\tleft: 0;\n\ttop: 0;\n\t}\n.leaflet-container {\n\toverflow: hidden;\n\t}\n.leaflet-tile,\n.leaflet-marker-icon,\n.leaflet-marker-shadow {\n\t-webkit-user-select: none;\n\t   -moz-user-select: none;\n\t        user-select: none;\n\t  -webkit-user-drag: none;\n\t}\n/* Prevents IE11 from highlighting tiles in blue */\n.leaflet-tile::selection {\n\tbackground: transparent;\n}\n/* Safari renders non-retina tile on retina better with this, but Chrome is worse */\n.leaflet-safari .leaflet-tile {\n\timage-rendering: -webkit-optimize-contrast;\n\t}\n/* hack that prevents hw layers \"stretching\" when loading new tiles */\n.leaflet-safari .leaflet-tile-container {\n\twidth: 1600px;\n\theight: 1600px;\n\t-webkit-transform-origin: 0 0;\n\t}\n.leaflet-marker-icon,\n.leaflet-marker-shadow {\n\tdisplay: block;\n\t}\n/* .leaflet-container svg: reset svg max-width decleration shipped in Joomla! (joomla.org) 3.x */\n/* .leaflet-container img: map is broken in FF if you have max-width: 100% on tiles */\n.leaflet-container .leaflet-overlay-pane svg {\n\tmax-width: none !important;\n\tmax-height: none !important;\n\t}\n.leaflet-container .leaflet-marker-pane img,\n.leaflet-container .leaflet-shadow-pane img,\n.leaflet-container .leaflet-tile-pane img,\n.leaflet-container img.leaflet-image-layer,\n.leaflet-container .leaflet-tile {\n\tmax-width: none !important;\n\tmax-height: none !important;\n\twidth: auto;\n\tpadding: 0;\n\t}\n\n.leaflet-container img.leaflet-tile {\n\t/* See: https://bugs.chromium.org/p/chromium/issues/detail?id=600120 */\n\tmix-blend-mode: plus-lighter;\n}\n\n.leaflet-container.leaflet-touch-zoom {\n\t-ms-touch-action: pan-x pan-y;\n\ttouch-action: pan-x pan-y;\n\t}\n.leaflet-container.leaflet-touch-drag {\n\t-ms-touch-action: pinch-zoom;\n\t/* Fallback for FF which doesn't support pinch-zoom */\n\ttouch-action: none;\n\ttouch-action: pinch-zoom;\n}\n.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom {\n\t-ms-touch-action: none;\n\ttouch-action: none;\n}\n.leaflet-container {\n\t-webkit-tap-highlight-color: transparent;\n}\n.leaflet-container a {\n\t-webkit-tap-highlight-color: rgba(51, 181, 229, 0.4);\n}\n.leaflet-tile {\n\tfilter: inherit;\n\tvisibility: hidden;\n\t}\n.leaflet-tile-loaded {\n\tvisibility: inherit;\n\t}\n.leaflet-zoom-box {\n\twidth: 0;\n\theight: 0;\n\t-moz-box-sizing: border-box;\n\t     box-sizing: border-box;\n\tz-index: 800;\n\t}\n/* workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=888319 */\n.leaflet-overlay-pane svg {\n\t-moz-user-select: none;\n\t}\n\n.leaflet-pane         { z-index: 400; }\n\n.leaflet-tile-pane    { z-index: 200; }\n.leaflet-overlay-pane { z-index: 400; }\n.leaflet-shadow-pane  { z-index: 500; }\n.leaflet-marker-pane  { z-index: 600; }\n.leaflet-tooltip-pane   { z-index: 650; }\n.leaflet-popup-pane   { z-index: 700; }\n\n.leaflet-map-pane canvas { z-index: 100; }\n.leaflet-map-pane svg    { z-index: 200; }\n\n.leaflet-vml-shape {\n\twidth: 1px;\n\theight: 1px;\n\t}\n.lvml {\n\tbehavior: url(#default#VML);\n\tdisplay: inline-block;\n\tposition: absolute;\n\t}\n\n\n/* control positioning */\n\n.leaflet-control {\n\tposition: relative;\n\tz-index: 800;\n\tpointer-events: visiblePainted; /* IE 9-10 doesn't have auto */\n\tpointer-events: auto;\n\t}\n.leaflet-top,\n.leaflet-bottom {\n\tposition: absolute;\n\tz-index: 1000;\n\tpointer-events: none;\n\t}\n.leaflet-top {\n\ttop: 0;\n\t}\n.leaflet-right {\n\tright: 0;\n\t}\n.leaflet-bottom {\n\tbottom: 0;\n\t}\n.leaflet-left {\n\tleft: 0;\n\t}\n.leaflet-control {\n\tfloat: left;\n\tclear: both;\n\t}\n.leaflet-right .leaflet-control {\n\tfloat: right;\n\t}\n.leaflet-top .leaflet-control {\n\tmargin-top: 10px;\n\t}\n.leaflet-bottom .leaflet-control {\n\tmargin-bottom: 10px;\n\t}\n.leaflet-left .leaflet-control {\n\tmargin-left: 10px;\n\t}\n.leaflet-right .leaflet-control {\n\tmargin-right: 10px;\n\t}\n\n\n/* zoom and fade animations */\n\n.leaflet-fade-anim .leaflet-popup {\n\topacity: 0;\n\t-webkit-transition: opacity 0.2s linear;\n\t   -moz-transition: opacity 0.2s linear;\n\t        transition: opacity 0.2s linear;\n\t}\n.leaflet-fade-anim .leaflet-map-pane .leaflet-popup {\n\topacity: 1;\n\t}\n.leaflet-zoom-animated {\n\t-webkit-transform-origin: 0 0;\n\t    -ms-transform-origin: 0 0;\n\t        transform-origin: 0 0;\n\t}\nsvg.leaflet-zoom-animated {\n\twill-change: transform;\n}\n\n.leaflet-zoom-anim .leaflet-zoom-animated {\n\t-webkit-transition: -webkit-transform 0.25s cubic-bezier(0,0,0.25,1);\n\t   -moz-transition:    -moz-transform 0.25s cubic-bezier(0,0,0.25,1);\n\t        transition:         transform 0.25s cubic-bezier(0,0,0.25,1);\n\t}\n.leaflet-zoom-anim .leaflet-tile,\n.leaflet-pan-anim .leaflet-tile {\n\t-webkit-transition: none;\n\t   -moz-transition: none;\n\t        transition: none;\n\t}\n\n.leaflet-zoom-anim .leaflet-zoom-hide {\n\tvisibility: hidden;\n\t}\n\n\n/* cursors */\n\n.leaflet-interactive {\n\tcursor: pointer;\n\t}\n.leaflet-grab {\n\tcursor: -webkit-grab;\n\tcursor:    -moz-grab;\n\tcursor:         grab;\n\t}\n.leaflet-crosshair,\n.leaflet-crosshair .leaflet-interactive {\n\tcursor: crosshair;\n\t}\n.leaflet-popup-pane,\n.leaflet-control {\n\tcursor: auto;\n\t}\n.leaflet-dragging .leaflet-grab,\n.leaflet-dragging .leaflet-grab .leaflet-interactive,\n.leaflet-dragging .leaflet-marker-draggable {\n\tcursor: move;\n\tcursor: -webkit-grabbing;\n\tcursor:    -moz-grabbing;\n\tcursor:         grabbing;\n\t}\n\n/* marker & overlays interactivity */\n.leaflet-marker-icon,\n.leaflet-marker-shadow,\n.leaflet-image-layer,\n.leaflet-pane > svg path,\n.leaflet-tile-container {\n\tpointer-events: none;\n\t}\n\n.leaflet-marker-icon.leaflet-interactive,\n.leaflet-image-layer.leaflet-interactive,\n.leaflet-pane > svg path.leaflet-interactive,\nsvg.leaflet-image-layer.leaflet-interactive path {\n\tpointer-events: visiblePainted; /* IE 9-10 doesn't have auto */\n\tpointer-events: auto;\n\t}\n\n/* visual tweaks */\n\n.leaflet-container {\n\tbackground: #ddd;\n\toutline-offset: 1px;\n\t}\n.leaflet-container a {\n\tcolor: #0078A8;\n\t}\n.leaflet-zoom-box {\n\tborder: 2px dotted #38f;\n\tbackground: rgba(255,255,255,0.5);\n\t}\n\n\n/* general typography */\n.leaflet-container {\n\tfont-family: \"Helvetica Neue\", Arial, Helvetica, sans-serif;\n\tfont-size: 12px;\n\tfont-size: 0.75rem;\n\tline-height: 1.5;\n\t}\n\n\n/* general toolbar styles */\n\n.leaflet-bar {\n\tbox-shadow: 0 1px 5px rgba(0,0,0,0.65);\n\tborder-radius: 4px;\n\t}\n.leaflet-bar a {\n\tbackground-color: #fff;\n\tborder-bottom: 1px solid #ccc;\n\twidth: 26px;\n\theight: 26px;\n\tline-height: 26px;\n\tdisplay: block;\n\ttext-align: center;\n\ttext-decoration: none;\n\tcolor: black;\n\t}\n.leaflet-bar a,\n.leaflet-control-layers-toggle {\n\tbackground-position: 50% 50%;\n\tbackground-repeat: no-repeat;\n\tdisplay: block;\n\t}\n.leaflet-bar a:hover,\n.leaflet-bar a:focus {\n\tbackground-color: #f4f4f4;\n\t}\n.leaflet-bar a:first-child {\n\tborder-top-left-radius: 4px;\n\tborder-top-right-radius: 4px;\n\t}\n.leaflet-bar a:last-child {\n\tborder-bottom-left-radius: 4px;\n\tborder-bottom-right-radius: 4px;\n\tborder-bottom: none;\n\t}\n.leaflet-bar a.leaflet-disabled {\n\tcursor: default;\n\tbackground-color: #f4f4f4;\n\tcolor: #bbb;\n\t}\n\n.leaflet-touch .leaflet-bar a {\n\twidth: 30px;\n\theight: 30px;\n\tline-height: 30px;\n\t}\n.leaflet-touch .leaflet-bar a:first-child {\n\tborder-top-left-radius: 2px;\n\tborder-top-right-radius: 2px;\n\t}\n.leaflet-touch .leaflet-bar a:last-child {\n\tborder-bottom-left-radius: 2px;\n\tborder-bottom-right-radius: 2px;\n\t}\n\n/* zoom control */\n\n.leaflet-control-zoom-in,\n.leaflet-control-zoom-out {\n\tfont: bold 18px 'Lucida Console', Monaco, monospace;\n\ttext-indent: 1px;\n\t}\n\n.leaflet-touch .leaflet-control-zoom-in, .leaflet-touch .leaflet-control-zoom-out  {\n\tfont-size: 22px;\n\t}\n\n\n/* layers control */\n\n.leaflet-control-layers {\n\tbox-shadow: 0 1px 5px rgba(0,0,0,0.4);\n\tbackground: #fff;\n\tborder-radius: 5px;\n\t}\n.leaflet-control-layers-toggle {\n\tbackground-image: url(images/layers.png);\n\twidth: 36px;\n\theight: 36px;\n\t}\n.leaflet-retina .leaflet-control-layers-toggle {\n\tbackground-image: url(images/layers-2x.png);\n\tbackground-size: 26px 26px;\n\t}\n.leaflet-touch .leaflet-control-layers-toggle {\n\twidth: 44px;\n\theight: 44px;\n\t}\n.leaflet-control-layers .leaflet-control-layers-list,\n.leaflet-control-layers-expanded .leaflet-control-layers-toggle {\n\tdisplay: none;\n\t}\n.leaflet-control-layers-expanded .leaflet-control-layers-list {\n\tdisplay: block;\n\tposition: relative;\n\t}\n.leaflet-control-layers-expanded {\n\tpadding: 6px 10px 6px 6px;\n\tcolor: #333;\n\tbackground: #fff;\n\t}\n.leaflet-control-layers-scrollbar {\n\toverflow-y: scroll;\n\toverflow-x: hidden;\n\tpadding-right: 5px;\n\t}\n.leaflet-control-layers-selector {\n\tmargin-top: 2px;\n\tposition: relative;\n\ttop: 1px;\n\t}\n.leaflet-control-layers label {\n\tdisplay: block;\n\tfont-size: 13px;\n\tfont-size: 1.08333em;\n\t}\n.leaflet-control-layers-separator {\n\theight: 0;\n\tborder-top: 1px solid #ddd;\n\tmargin: 5px -10px 5px -6px;\n\t}\n\n/* Default icon URLs */\n.leaflet-default-icon-path { /* used only in path-guessing heuristic, see L.Icon.Default */\n\tbackground-image: url(images/marker-icon.png);\n\t}\n\n\n/* attribution and scale controls */\n\n.leaflet-container .leaflet-control-attribution {\n\tbackground: #fff;\n\tbackground: rgba(255, 255, 255, 0.8);\n\tmargin: 0;\n\t}\n.leaflet-control-attribution,\n.leaflet-control-scale-line {\n\tpadding: 0 5px;\n\tcolor: #333;\n\tline-height: 1.4;\n\t}\n.leaflet-control-attribution a {\n\ttext-decoration: none;\n\t}\n.leaflet-control-attribution a:hover,\n.leaflet-control-attribution a:focus {\n\ttext-decoration: underline;\n\t}\n.leaflet-attribution-flag {\n\tdisplay: inline !important;\n\tvertical-align: baseline !important;\n\twidth: 1em;\n\theight: 0.6669em;\n\t}\n.leaflet-left .leaflet-control-scale {\n\tmargin-left: 5px;\n\t}\n.leaflet-bottom .leaflet-control-scale {\n\tmargin-bottom: 5px;\n\t}\n.leaflet-control-scale-line {\n\tborder: 2px solid #777;\n\tborder-top: none;\n\tline-height: 1.1;\n\tpadding: 2px 5px 1px;\n\twhite-space: nowrap;\n\t-moz-box-sizing: border-box;\n\t     box-sizing: border-box;\n\tbackground: rgba(255, 255, 255, 0.8);\n\ttext-shadow: 1px 1px #fff;\n\t}\n.leaflet-control-scale-line:not(:first-child) {\n\tborder-top: 2px solid #777;\n\tborder-bottom: none;\n\tmargin-top: -2px;\n\t}\n.leaflet-control-scale-line:not(:first-child):not(:last-child) {\n\tborder-bottom: 2px solid #777;\n\t}\n\n.leaflet-touch .leaflet-control-attribution,\n.leaflet-touch .leaflet-control-layers,\n.leaflet-touch .leaflet-bar {\n\tbox-shadow: none;\n\t}\n.leaflet-touch .leaflet-control-layers,\n.leaflet-touch .leaflet-bar {\n\tborder: 2px solid rgba(0,0,0,0.2);\n\tbackground-clip: padding-box;\n\t}\n\n\n/* popup */\n\n.leaflet-popup {\n\tposition: absolute;\n\ttext-align: center;\n\tmargin-bottom: 20px;\n\t}\n.leaflet-popup-content-wrapper {\n\tpadding: 1px;\n\ttext-align: left;\n\tborder-radius: 12px;\n\t}\n.leaflet-popup-content {\n\tmargin: 13px 24px 13px 20px;\n\tline-height: 1.3;\n\tfont-size: 13px;\n\tfont-size: 1.08333em;\n\tmin-height: 1px;\n\t}\n.leaflet-popup-content p {\n\tmargin: 17px 0;\n\tmargin: 1.3em 0;\n\t}\n.leaflet-popup-tip-container {\n\twidth: 40px;\n\theight: 20px;\n\tposition: absolute;\n\tleft: 50%;\n\tmargin-top: -1px;\n\tmargin-left: -20px;\n\toverflow: hidden;\n\tpointer-events: none;\n\t}\n.leaflet-popup-tip {\n\twidth: 17px;\n\theight: 17px;\n\tpadding: 1px;\n\n\tmargin: -10px auto 0;\n\tpointer-events: auto;\n\n\t-webkit-transform: rotate(45deg);\n\t   -moz-transform: rotate(45deg);\n\t    -ms-transform: rotate(45deg);\n\t        transform: rotate(45deg);\n\t}\n.leaflet-popup-content-wrapper,\n.leaflet-popup-tip {\n\tbackground: white;\n\tcolor: #333;\n\tbox-shadow: 0 3px 14px rgba(0,0,0,0.4);\n\t}\n.leaflet-container a.leaflet-popup-close-button {\n\tposition: absolute;\n\ttop: 0;\n\tright: 0;\n\tborder: none;\n\ttext-align: center;\n\twidth: 24px;\n\theight: 24px;\n\tfont: 16px/24px Tahoma, Verdana, sans-serif;\n\tcolor: #757575;\n\ttext-decoration: none;\n\tbackground: transparent;\n\t}\n.leaflet-container a.leaflet-popup-close-button:hover,\n.leaflet-container a.leaflet-popup-close-button:focus {\n\tcolor: #585858;\n\t}\n.leaflet-popup-scrolled {\n\toverflow: auto;\n\t}\n\n.leaflet-oldie .leaflet-popup-content-wrapper {\n\t-ms-zoom: 1;\n\t}\n.leaflet-oldie .leaflet-popup-tip {\n\twidth: 24px;\n\tmargin: 0 auto;\n\n\t-ms-filter: \"progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)\";\n\tfilter: progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678);\n\t}\n\n.leaflet-oldie .leaflet-control-zoom,\n.leaflet-oldie .leaflet-control-layers,\n.leaflet-oldie .leaflet-popup-content-wrapper,\n.leaflet-oldie .leaflet-popup-tip {\n\tborder: 1px solid #999;\n\t}\n\n\n/* div icon */\n\n.leaflet-div-icon {\n\tbackground: #fff;\n\tborder: 1px solid #666;\n\t}\n\n\n/* Tooltip */\n/* Base styles for the element that has a tooltip */\n.leaflet-tooltip {\n\tposition: absolute;\n\tpadding: 6px;\n\tbackground-color: #fff;\n\tborder: 1px solid #fff;\n\tborder-radius: 3px;\n\tcolor: #222;\n\twhite-space: nowrap;\n\t-webkit-user-select: none;\n\t-moz-user-select: none;\n\t-ms-user-select: none;\n\tuser-select: none;\n\tpointer-events: none;\n\tbox-shadow: 0 1px 3px rgba(0,0,0,0.4);\n\t}\n.leaflet-tooltip.leaflet-interactive {\n\tcursor: pointer;\n\tpointer-events: auto;\n\t}\n.leaflet-tooltip-top:before,\n.leaflet-tooltip-bottom:before,\n.leaflet-tooltip-left:before,\n.leaflet-tooltip-right:before {\n\tposition: absolute;\n\tpointer-events: none;\n\tborder: 6px solid transparent;\n\tbackground: transparent;\n\tcontent: \"\";\n\t}\n\n/* Directions */\n\n.leaflet-tooltip-bottom {\n\tmargin-top: 6px;\n}\n.leaflet-tooltip-top {\n\tmargin-top: -6px;\n}\n.leaflet-tooltip-bottom:before,\n.leaflet-tooltip-top:before {\n\tleft: 50%;\n\tmargin-left: -6px;\n\t}\n.leaflet-tooltip-top:before {\n\tbottom: 0;\n\tmargin-bottom: -12px;\n\tborder-top-color: #fff;\n\t}\n.leaflet-tooltip-bottom:before {\n\ttop: 0;\n\tmargin-top: -12px;\n\tmargin-left: -6px;\n\tborder-bottom-color: #fff;\n\t}\n.leaflet-tooltip-left {\n\tmargin-left: -6px;\n}\n.leaflet-tooltip-right {\n\tmargin-left: 6px;\n}\n.leaflet-tooltip-left:before,\n.leaflet-tooltip-right:before {\n\ttop: 50%;\n\tmargin-top: -6px;\n\t}\n.leaflet-tooltip-left:before {\n\tright: 0;\n\tmargin-right: -12px;\n\tborder-left-color: #fff;\n\t}\n.leaflet-tooltip-right:before {\n\tleft: 0;\n\tmargin-left: -12px;\n\tborder-right-color: #fff;\n\t}\n\n/* Printing */\n\n@media print {\n\t/* Prevent printers from removing background-images of controls. */\n\t.leaflet-control {\n\t\t-webkit-print-color-adjust: exact;\n\t\tprint-color-adjust: exact;\n\t\t}\n\t}\n";
 
 // Renault diamond, used as a CSS mask so it takes the theme text colour (black on light, white on dark).
 var RN_RENAULT_LOGO = 'data:image/png;base64,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';
@@ -877,6 +880,773 @@ if (!customElements.get('renault-card')) {
     type: 'renault-card',
     name: 'Renault Card',
     description: 'Renault vehicle card (range, fuel, battery, location, actions) with optional Orange Internet On the move data plan',
+    preview: true,
+    documentationURL: 'https://github.com/juju35/ha-renault-card',
+  });
+}
+
+// ── renault-map-card ─────────────────────────────────────────────────────────
+// Leaflet and MapLibre ship with the card in dist/ (all .js, so HACS downloads them): no CDN,
+// only the map tiles come from the network. Same base maps as ha-carburants-france.
+var RN_MAP_DEFAULTS = { height: 400, show_icon: true, show_home: true, show_name: true, show_picture: true, map_style: 'ha', theme: 'auto' };
+
+var RN_OSM_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors';
+var RN_IGN_WMTS = 'https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&STYLE=normal&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}';
+
+// Base maps that need no API key. "osm" goes through Home Assistant (see _tileUrl).
+// photo: aerial imagery, never darkened by the dark theme.
+var RN_MAP_STYLES = {
+  // Home Assistant's own map: OpenStreetMap vector tiles and the style its map card uses (2026.9+).
+  ha: { vector: true, maxZoom: 20, attribution: RN_OSM_ATTRIBUTION },
+  osm: { maxZoom: 19, attribution: RN_OSM_ATTRIBUTION },
+  osm_fr: {
+    url: 'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
+    maxZoom: 20,
+    attribution: '&copy; <a href="https://www.openstreetmap.fr" target="_blank" rel="noopener">OpenStreetMap France</a> | ' + RN_OSM_ATTRIBUTION,
+  },
+  ign: {
+    url: RN_IGN_WMTS + '&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&FORMAT=image/png',
+    maxNativeZoom: 19,
+    maxZoom: 20,
+    attribution: 'Plan IGN &copy; <a href="https://www.ign.fr" target="_blank" rel="noopener">IGN</a>',
+  },
+  ign_photo: {
+    url: RN_IGN_WMTS + '&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&FORMAT=image/jpeg',
+    maxNativeZoom: 19,
+    maxZoom: 20,
+    photo: true,
+    attribution: 'Photographies aériennes &copy; <a href="https://www.ign.fr" target="_blank" rel="noopener">IGN</a>',
+  },
+  topo: {
+    url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+    maxZoom: 17,
+    attribution: RN_OSM_ATTRIBUTION + ', SRTM | &copy; <a href="https://opentopomap.org" target="_blank" rel="noopener">OpenTopoMap</a> (CC-BY-SA)',
+  },
+  cyclosm: {
+    url: 'https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png',
+    maxZoom: 20,
+    attribution: '<a href="https://www.cyclosm.org" target="_blank" rel="noopener">CyclOSM</a> | ' + RN_OSM_ATTRIBUTION,
+  },
+  satellite: {
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    maxZoom: 19,
+    photo: true,
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+  },
+  custom: { maxZoom: 20 },
+};
+
+var RnMapI18n = {
+  fr: {
+    default_title: 'Véhicules',
+    home: 'Domicile',
+    directions: 'Itinéraire',
+    details: 'Détails',
+    no_vehicle: 'Aucun véhicule Renault avec une position trouvé',
+    editor: {
+      devices: 'Véhicules (vide = tous)',
+      title: 'Titre (vide pour aucun)',
+      height: 'Hauteur (px)',
+      zoom: 'Zoom (vide = ajusté aux véhicules)',
+      map_style: 'Fond de carte',
+      theme: 'Thème du fond de carte',
+      tile_url: 'URL des tuiles ({z}, {x}, {y})',
+      tile_attribution: 'Attribution des tuiles',
+      show_icon: 'Logo Renault',
+      show_home: 'Domicile',
+      show_name: 'Nom sur les repères',
+      show_picture: 'Photo sur les repères',
+    },
+    themes: { auto: 'Selon le thème', light: 'Clair', dark: 'Sombre' },
+    styles: {
+      ha: 'Home Assistant',
+      osm: 'OpenStreetMap',
+      osm_fr: 'OpenStreetMap France',
+      ign: 'Plan IGN',
+      ign_photo: 'Photos aériennes IGN',
+      topo: 'OpenTopoMap (relief)',
+      cyclosm: 'CyclOSM (vélo)',
+      satellite: 'Satellite (Esri)',
+      custom: 'Personnalisé (URL)',
+    },
+  },
+  en: {
+    default_title: 'Vehicles',
+    home: 'Home',
+    directions: 'Directions',
+    details: 'Details',
+    no_vehicle: 'No Renault vehicle with a location found',
+    editor: {
+      devices: 'Vehicles (empty = all)',
+      title: 'Title (empty for none)',
+      height: 'Height (px)',
+      zoom: 'Zoom (empty = fit the vehicles)',
+      map_style: 'Base map',
+      theme: 'Base map theme',
+      tile_url: 'Tile URL ({z}, {x}, {y})',
+      tile_attribution: 'Tile attribution',
+      show_icon: 'Renault logo',
+      show_home: 'Home',
+      show_name: 'Names on markers',
+      show_picture: 'Pictures on markers',
+    },
+    themes: { auto: 'Follow theme', light: 'Light', dark: 'Dark' },
+    styles: {
+      ha: 'Home Assistant',
+      osm: 'OpenStreetMap',
+      osm_fr: 'OpenStreetMap France',
+      ign: 'IGN map',
+      ign_photo: 'IGN aerial photos',
+      topo: 'OpenTopoMap (terrain)',
+      cyclosm: 'CyclOSM (cycling)',
+      satellite: 'Satellite (Esri)',
+      custom: 'Custom (URL)',
+    },
+  },
+};
+
+function rnMapLang(hass) {
+  var l = ((hass && hass.language) || document.documentElement.lang || 'en').split('-')[0];
+  return RnMapI18n[l] ? l : 'en';
+}
+
+// Where this file was loaded from (/hacsfiles/ha-renault-card/ with HACS): the libraries sit next to it.
+var rnBaseUrl = null;
+function rnAssetBase() {
+  if (rnBaseUrl) return rnBaseUrl;
+  var found = null;
+  try {
+    var entries = performance.getEntriesByType('resource');
+    for (var i = entries.length - 1; i >= 0; i--) {
+      if (/\/renault-card\.js(\?|$)/.test(entries[i].name)) { found = entries[i].name; break; }
+    }
+  } catch (err) { /* no resource timing */ }
+  if (!found) {
+    var scripts = document.querySelectorAll('script[src]');
+    for (var j = 0; j < scripts.length; j++) {
+      if (/\/renault-card\.js(\?|$)/.test(scripts[j].src)) found = scripts[j].src;
+    }
+  }
+  rnBaseUrl = found ? found.split('?')[0].replace(/[^/]*$/, '') : '/hacsfiles/ha-renault-card/';
+  return rnBaseUrl;
+}
+
+function rnLoadScript(file, check) {
+  return new Promise(function (resolve, reject) {
+    if (check()) { resolve(); return; }
+    var script = document.createElement('script');
+    script.src = rnAssetBase() + file + '?v=' + RENAULT_CARD_VERSION;
+    script.onload = function () { resolve(); };
+    script.onerror = function () { reject(new Error(file + ' could not be loaded from ' + rnAssetBase())); };
+    document.head.appendChild(script);
+  });
+}
+
+var rnLeafletPromise = null;
+function rnLoadLeaflet() {
+  if (window.L && window.L.map) return Promise.resolve(window.L);
+  if (!rnLeafletPromise) {
+    rnLeafletPromise = rnLoadScript('leaflet.js', function () { return window.L && window.L.map; })
+      .then(function () { return window.L; })
+      .catch(function (err) { rnLeafletPromise = null; throw err; });
+  }
+  return rnLeafletPromise;
+}
+
+// MapLibre GL draws Home Assistant's vector map; the adapter puts it in Leaflet, as the native map card does.
+var rnMaplibrePromise = null;
+function rnLoadMaplibre() {
+  if (!rnMaplibrePromise) {
+    var base = rnAssetBase();
+    rnMaplibrePromise = Promise.all([
+      import(base + 'maplibre-gl.js?v=' + RENAULT_CARD_VERSION),
+      rnLoadScript('maplibre-gl-css.js', function () { return !!window.__rnMaplibreCss; }),
+    ]).then(function (results) {
+      var module = results[0];
+      // The worker is a .js file next to the library (HACS only downloads .js files).
+      if (module.setWorkerUrl) module.setWorkerUrl(base + 'maplibre-gl-worker.js?v=' + RENAULT_CARD_VERSION);
+      window.maplibregl = window.maplibregl || module;
+      if (window.MaplibreGLLeaflet && window.MaplibreGLLeaflet.maplibreGL) return window.MaplibreGLLeaflet.maplibreGL;
+      return rnLoadScript('leaflet-maplibre-gl.js', function () { return window.MaplibreGLLeaflet; })
+        .then(function () { return window.MaplibreGLLeaflet.maplibreGL; });
+    }).catch(function (err) {
+      rnMaplibrePromise = null;
+      throw err;
+    });
+  }
+  return rnMaplibrePromise;
+}
+
+function rnSupportsWebGL2() {
+  try {
+    return !!document.createElement('canvas').getContext('webgl2');
+  } catch (err) {
+    return false;
+  }
+}
+
+// Everything the map needs about one vehicle.
+function rnVehicle(hass, deviceId) {
+  var device = hass.devices && hass.devices[deviceId];
+  var list = rnDeviceEntities(hass, deviceId);
+  var ent = {};
+  Object.keys(RN_ROLES).forEach(function (role) { ent[role] = rnFindRole(hass, list, RN_ROLES[role]); });
+  var tracker = ent.location && hass.states[ent.location];
+  if (!tracker || tracker.attributes.latitude == null || tracker.attributes.longitude == null) return null;
+  return {
+    deviceId: deviceId,
+    device: device,
+    ent: ent,
+    tracker: tracker,
+    name: device ? String(device.name_by_user || device.name || '').trim() : tracker.attributes.friendly_name,
+    model: device && device.model ? 'Renault ' + rnModel(device.model) : '',
+    image: rnBuiltinImage(device),
+    lat: tracker.attributes.latitude,
+    lon: tracker.attributes.longitude,
+  };
+}
+
+class RenaultMapCard extends HTMLElement {
+  static getConfigElement() {
+    return document.createElement('renault-map-card-editor');
+  }
+
+  static getStubConfig() {
+    return {};
+  }
+
+  setConfig(config) {
+    var previous = this._config;
+    this._config = Object.assign({}, RN_MAP_DEFAULTS, config || {});
+    if (previous && this._tilesKey(previous) !== this._tilesKey(this._config)) this._vectorFailed = false;
+    this._reloadTilesIfNeeded();
+    this._fitted = false;
+    this._sig = null;
+    if (this._hass) this._update();
+  }
+
+  set hass(hass) {
+    this._hass = hass;
+    var sig = this._signature();
+    if (sig !== this._sig || !this._map) {
+      this._sig = sig;
+      this._update();
+    } else if (this._root) {
+      // Theme switched in Home Assistant: dark filter and light / dark vector style follow.
+      this._root.querySelector('.map').classList.toggle('dark', this._darkTiles());
+      this._reloadTilesIfNeeded();
+    }
+  }
+
+  connectedCallback() {
+    if (!this._map) return;
+    var self = this;
+    if (this._resizeObserver) this._resizeObserver.observe(this._root.querySelector('.map'));
+    this._scheduleTokenRefresh();
+    // The token may have expired while the card was detached.
+    if (this._tiles && this._tiles.getMaplibreMap) {
+      this._hass.callWS({ type: 'map_tiles/access_token' }).then(function (res) { self._mapToken = res.token; }, function () {});
+    } else if (this._tiles && this._tiles._url && this._tiles._url.indexOf('/api/map_tiles/') === 0) {
+      this._tileUrl().then(function (url) { if (self._tiles) self._tiles.setUrl(url); });
+    }
+    setTimeout(this._invalidate.bind(this), 0);
+  }
+
+  disconnectedCallback() {
+    if (this._resizeObserver) this._resizeObserver.disconnect();
+    clearInterval(this._tokenTimer);
+  }
+
+  getCardSize() {
+    return Math.ceil((this._config ? this._config.height : 400) / 50) + 1;
+  }
+
+  getGridOptions() {
+    return { columns: 12, min_columns: 6, rows: 'auto' };
+  }
+
+  _lang() { return (this._config && this._config.language) || rnMapLang(this._hass); }
+
+  _mt() { return RnMapI18n[RnMapI18n[this._lang()] ? this._lang() : 'en']; }
+
+  _deviceIds() {
+    var ids = this._config.devices;
+    if (typeof ids === 'string') ids = [ids];
+    if (ids && ids.length) return ids;
+    return rnDevicesOf(this._hass, 'renault').filter((id) => rnDeviceEntities(this._hass, id).some(function (e) {
+      return e.entity_id.indexOf('device_tracker.') === 0;
+    }));
+  }
+
+  _vehicles() {
+    var hass = this._hass;
+    return this._deviceIds().map(function (id) { return rnVehicle(hass, id); }).filter(Boolean);
+  }
+
+  // Redraw only when something shown on the map changes.
+  _signature() {
+    if (!this._hass || !this._config) return '';
+    var hass = this._hass;
+    return JSON.stringify([this._lang(), this._vehicles().map(function (v) {
+      return [v.deviceId, v.lat, v.lon, v.tracker.state, v.name,
+        ['fuel_autonomy', 'battery_autonomy', 'battery_level', 'fuel_quantity', 'mileage', 'location_last_activity'].map(function (r) {
+          var s = v.ent[r] && hass.states[v.ent[r]];
+          return s ? s.state : null;
+        })];
+    })]);
+  }
+
+  _dark(config) {
+    var theme = (config || this._config).theme;
+    if (theme === 'dark') return true;
+    if (theme === 'light') return false;
+    return !!(this._hass && this._hass.themes && this._hass.themes.darkMode);
+  }
+
+  _style() {
+    var style = this._config.map_style;
+    if (style === 'custom' && !this._config.tile_url) style = 'osm';
+    return RN_MAP_STYLES[style] ? style : 'osm';
+  }
+
+  // What the base layer depends on; the vector style also has a light and a dark version.
+  _tilesKey(config) {
+    var vector = (RN_MAP_STYLES[config.map_style || RN_MAP_DEFAULTS.map_style] || {}).vector;
+    return [config.map_style, config.tile_url, config.tile_attribution, vector && this._dark(config)].join('|');
+  }
+
+  // Raster tiles are darkened with a filter; aerial imagery and the vector style (dark version) are not.
+  _darkTiles() {
+    var spec = RN_MAP_STYLES[this._style()];
+    return this._dark() && !spec.photo && !spec.vector && !this._vectorFailed;
+  }
+
+  _ensureShell() {
+    if (this._root) return;
+    this._root = this.attachShadow({ mode: 'open' });
+    this._root.innerHTML =
+      '<style>' + RN_LEAFLET_CSS + '</style><style class="mlcss"></style>' +
+      '<style>' + RenaultMapCard._styles() + '</style>' +
+      '<ha-card><div class="header" hidden></div><div class="message" hidden></div><div class="map"></div></ha-card>';
+    var self = this;
+    this._root.addEventListener('click', function (ev) {
+      var btn = ev.composedPath().find(function (n) { return n.dataset && n.dataset.more; });
+      if (btn) self.dispatchEvent(new CustomEvent('hass-more-info', { detail: { entityId: btn.dataset.more }, bubbles: true, composed: true }));
+    });
+  }
+
+  _update() {
+    if (!this._config || !this._hass) return;
+    this._ensureShell();
+    var mt = this._mt();
+    var header = this._root.querySelector('.header');
+    var title = this._config.title === undefined ? mt.default_title : this._config.title;
+    var icon = this._config.show_icon ? '<span class="brand" role="img" aria-label="Renault"></span>' : '';
+    header.hidden = !title && !icon;
+    header.innerHTML = icon + rnEsc(title || '');
+    var mapEl = this._root.querySelector('.map');
+    mapEl.style.height = Math.max(150, Number(this._config.height) || 400) + 'px';
+    mapEl.classList.toggle('dark', this._darkTiles());
+    this._reloadTilesIfNeeded();
+    var message = this._root.querySelector('.message');
+    var vehicles = this._vehicles();
+    if (!vehicles.length) {
+      message.hidden = false;
+      message.textContent = mt.no_vehicle;
+      return;
+    }
+    message.hidden = true;
+    var self = this;
+    rnLoadLeaflet().then(function (L) {
+      self._ensureMap(L);
+      self._drawMarkers(L, self._vehicles());
+    }).catch(function (err) {
+      message.hidden = false;
+      message.textContent = String((err && err.message) || err);
+    });
+  }
+
+  _ensureMap(L) {
+    if (this._map) return;
+    var mapEl = this._root.querySelector('.map');
+    this._map = L.map(mapEl, { zoomControl: true, attributionControl: true, scrollWheelZoom: false, zoomSnap: 0.25 });
+    mapEl.classList.toggle('dark', this._darkTiles());
+    this._loadTiles(L);
+    this._layer = L.layerGroup().addTo(this._map);
+    this._fitted = false;
+    var self = this;
+    if (window.ResizeObserver) {
+      this._resizeObserver = new ResizeObserver(function () { self._invalidate(); });
+      this._resizeObserver.observe(mapEl);
+    }
+  }
+
+  // OpenStreetMap tiles through Home Assistant's own Map tiles proxy (2026.9+), like the
+  // native map card. Its access token rotates every 30 minutes, two being valid at once.
+  _tileUrl() {
+    var hass = this._hass;
+    return Promise.resolve()
+      .then(function () { return hass.callWS({ type: 'map_tiles/access_token' }); })
+      .then(function (res) { return '/api/map_tiles/raster/{z}/{x}/{y}.png?token=' + encodeURIComponent(res.token); })
+      .catch(function () { return 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'; });
+  }
+
+  _loadTiles(L) {
+    var self = this;
+    var map = this._map;
+    var style = this._style();
+    var spec = RN_MAP_STYLES[style];
+    var options = { maxZoom: spec.maxZoom, attribution: spec.attribution };
+    if (spec.maxNativeZoom) options.maxNativeZoom = spec.maxNativeZoom;
+    var key = this._tilesKey(this._config);
+    this._tilesLoadedKey = key;
+    if (spec.vector && !this._vectorFailed) {
+      this._loadVector(L, map, key);
+      return;
+    }
+    if (spec.vector) {
+      style = 'osm';
+      spec = RN_MAP_STYLES.osm;
+      options = { maxZoom: spec.maxZoom, attribution: spec.attribution };
+    }
+    var url;
+    if (style === 'osm') url = this._tileUrl();
+    else if (style === 'custom') {
+      options.attribution = this._config.tile_attribution || '';
+      url = Promise.resolve(this._config.tile_url);
+    } else url = Promise.resolve(spec.url);
+    this._root.querySelector('.map').classList.toggle('dark', this._darkTiles());
+    url.then(function (resolved) {
+      // The map was rebuilt or the style changed while the token was loading.
+      if (self._map !== map || self._tilesKey(self._config) !== key) return;
+      self._tiles = L.tileLayer(resolved, options).addTo(map);
+      self._tiles.bringToBack();
+      self._scheduleTokenRefresh();
+    });
+  }
+
+  // The base layer no longer matches the config or the theme (light / dark vector style): swap it.
+  _reloadTilesIfNeeded() {
+    if (!this._map || this._tilesLoadedKey === this._tilesKey(this._config)) return;
+    if (this._tiles) this._map.removeLayer(this._tiles);
+    this._tiles = null;
+    this._loadTiles(window.L);
+  }
+
+  // Home Assistant's style, fetched from the instance like its map card does: /static/map/light.json
+  // or dark.json, tiles and glyphs through /api/map_tiles with the rotating token in a header.
+  // Anything missing (WebGL2, Home Assistant before 2026.9) falls back to raster OpenStreetMap.
+  _loadVector(L, map, key) {
+    var self = this;
+    var dark = this._dark();
+    var hass = this._hass;
+    var fallback = function (err) {
+      if (self._map !== map || self._tilesKey(self._config) !== key) return;
+      // eslint-disable-next-line no-console
+      console.info('renault-map-card: Home Assistant map style unavailable, using raster tiles', err);
+      self._vectorFailed = true;
+      self._loadTiles(L);
+    };
+    if (!rnSupportsWebGL2()) {
+      fallback(new Error('WebGL2 not supported'));
+      return;
+    }
+    Promise.all([
+      rnLoadMaplibre(),
+      hass.callWS({ type: 'map_tiles/access_token' }),
+      fetch('/static/map/' + (dark ? 'dark' : 'light') + '.json').then(function (resp) {
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        return resp.json();
+      }),
+    ]).then(function (results) {
+      if (self._map !== map || self._tilesKey(self._config) !== key) return;
+      self._root.querySelector('.mlcss').textContent = window.__rnMaplibreCss || '';
+      var maplibreGL = results[0];
+      var style = results[2];
+      self._mapToken = results[1].token;
+      var absolute = function (url) { return new URL(url, location.href).href; };
+      if (typeof style.sprite === 'string') style.sprite = absolute(style.sprite);
+      else if (Array.isArray(style.sprite)) {
+        style.sprite = style.sprite.map(function (sprite) { return Object.assign({}, sprite, { url: absolute(sprite.url) }); });
+      }
+      self._tiles = maplibreGL({
+        style: style,
+        attributionControl: { customAttribution: RN_OSM_ATTRIBUTION },
+        // Same as the native map card: the token in a header keeps tile URLs, and the cache, stable.
+        transformRequest: function (url) {
+          var full = new URL(url, location.href);
+          if (full.origin === location.origin && full.pathname.indexOf('/api/map_tiles/') === 0) {
+            return { url: full.href, headers: { 'X-Map-Tiles-Token': self._mapToken } };
+          }
+          return { url: full.href };
+        },
+      });
+      self._tiles.addTo(map);
+      self._scheduleTokenRefresh();
+    }).catch(fallback);
+  }
+
+  _scheduleTokenRefresh() {
+    clearInterval(this._tokenTimer);
+    if (!this._tiles) return;
+    var self = this;
+    if (this._tiles.getMaplibreMap) {
+      this._tokenTimer = setInterval(function () {
+        self._hass.callWS({ type: 'map_tiles/access_token' }).then(function (res) { self._mapToken = res.token; }, function () {});
+      }, 20 * 60 * 1000);
+      return;
+    }
+    if (!this._tiles._url || this._tiles._url.indexOf('/api/map_tiles/') !== 0) return;
+    this._tokenTimer = setInterval(function () {
+      self._tileUrl().then(function (url) { if (self._tiles) self._tiles.setUrl(url, true); });
+    }, 20 * 60 * 1000);
+  }
+
+  _invalidate() {
+    if (!this._map) return;
+    this._map.invalidateSize();
+    if (!this._fitted && this._bounds) this._fit();
+  }
+
+  _fit() {
+    var mapEl = this._root.querySelector('.map');
+    if (!mapEl.clientWidth) return; // Not laid out yet: the resize observer comes back.
+    if (this._config.zoom && this._bounds) {
+      this._map.setView(this._bounds.getCenter(), this._config.zoom);
+    } else if (this._bounds) {
+      // Pins sit above their point and are ~150 px wide: leave room on top and on the sides.
+      this._map.fitBounds(this._bounds, { paddingTopLeft: [100, 90], paddingBottomRight: [100, 30], maxZoom: 15 });
+    }
+    this._fitted = true;
+  }
+
+  _num(id) {
+    var s = id && this._hass.states[id];
+    return s && s.state !== 'unavailable' && s.state !== 'unknown' && s.state !== '' && !isNaN(Number(s.state)) ? Number(s.state) : null;
+  }
+
+  _fmt(id) {
+    var s = id && this._hass.states[id];
+    var n = this._num(id);
+    if (n == null) return '';
+    var u = s.attributes.unit_of_measurement || '';
+    return n.toLocaleString(this._lang(), { maximumFractionDigits: 0 }) + (u ? (u === '%' ? ' %' : ' ' + u) : '');
+  }
+
+  _drawMarkers(L, vehicles) {
+    var self = this;
+    var points = [];
+    var signature = vehicles.map(function (v) { return v.deviceId; }).join(',');
+    if (signature !== this._markerSet) this._fitted = false;
+    this._markerSet = signature;
+    this._layer.clearLayers();
+
+    vehicles.forEach(function (v) {
+      var range = v.ent.battery_autonomy && self._num(v.ent.battery_autonomy) != null ? v.ent.battery_autonomy : v.ent.fuel_autonomy;
+      var rangeTxt = self._fmt(range);
+      var pic = self._config.show_picture && v.image
+        ? '<img class="car" src="' + v.image + '" alt="">'
+        : '<span class="car-icon"><ha-icon icon="mdi:car"></ha-icon></span>';
+      var text = self._config.show_name
+        ? '<span class="ptext"><span class="pname">' + rnEsc(v.name) + '</span>' + (rangeTxt ? '<span class="prange">' + rnEsc(rangeTxt) + '</span>' : '') + '</span>'
+        : (rangeTxt ? '<span class="prange">' + rnEsc(rangeTxt) + '</span>' : '');
+      var icon = L.divIcon({
+        className: 'rn-marker',
+        html: '<div class="pin" title="' + rnEsc(v.name) + '">' + pic + text + '</div>',
+        iconSize: null,
+        iconAnchor: [0, 0],
+      });
+      var marker = L.marker([v.lat, v.lon], { icon: icon, riseOnHover: true });
+      marker.bindPopup(self._popup(v), { maxWidth: 280, minWidth: 230 });
+      marker.addTo(self._layer);
+      points.push([v.lat, v.lon]);
+    });
+
+    var home = this._hass.states['zone.home'];
+    if (this._config.show_home && home && home.attributes.latitude != null) {
+      L.marker([home.attributes.latitude, home.attributes.longitude], {
+        icon: L.divIcon({ className: 'rn-marker', html: '<div class="home" title="' + rnEsc(this._mt().home) + '"><ha-icon icon="mdi:home"></ha-icon></div>', iconSize: null, iconAnchor: [0, 0] }),
+        zIndexOffset: -1000,
+        keyboard: false,
+      }).addTo(this._layer);
+      points.push([home.attributes.latitude, home.attributes.longitude]);
+    }
+
+    this._bounds = points.length ? L.latLngBounds(points) : null;
+    if (!this._fitted) this._fit();
+  }
+
+  _popup(v) {
+    var mt = this._mt();
+    var lang = this._lang();
+    var hass = this._hass;
+    var where = hass.formatEntityState ? hass.formatEntityState(v.tracker) : v.tracker.state;
+    var lastId = v.ent.location_last_activity;
+    var last = lastId && hass.states[lastId] ? new Date(hass.states[lastId].state) : new Date(v.tracker.last_updated || '');
+    var when = isNaN(last.getTime()) ? '' : rnT(lang, 'updated').replace('{t}', RenaultCard.prototype._relative.call({ _lang: function () { return lang; } }, last));
+    var rows = [
+      ['battery_level', 'battery_level'], ['battery_autonomy', 'battery_autonomy'],
+      ['fuel_autonomy', 'fuel_autonomy'], ['fuel_quantity', 'fuel_quantity'], ['mileage', 'mileage'],
+    ].map((r) => {
+      var txt = this._fmt(v.ent[r[0]]);
+      return txt ? '<tr><td>' + rnEsc(rnT(lang, r[1])) + '</td><td><b>' + rnEsc(txt) + '</b></td></tr>' : '';
+    }).join('');
+    return '<div class="popup">' +
+      (v.image && this._config.show_picture ? '<img class="pimg" src="' + v.image + '" alt="">' : '') +
+      '<div class="pname-pop">' + rnEsc(v.name) + '</div>' +
+      (v.model ? '<div class="pmodel">' + rnEsc(v.model) + '</div>' : '') +
+      '<div class="pwhere">' + rnEsc(where) + (when ? ' · ' + rnEsc(when) : '') + '</div>' +
+      (rows ? '<table>' + rows + '</table>' : '') +
+      '<div class="pactions">' +
+        '<a class="pbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(v.lat + ',' + v.lon) + '">' +
+          '<ha-icon icon="mdi:directions"></ha-icon>' + rnEsc(mt.directions) + '</a>' +
+        '<button class="pbtn alt" data-more="' + v.ent.location + '"><ha-icon icon="mdi:information-outline"></ha-icon>' + rnEsc(mt.details) + '</button>' +
+      '</div></div>';
+  }
+
+  static _styles() {
+    return [
+      ':host { display: block; }',
+      'ha-card { display: block; overflow: hidden; }',
+      '.header { display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 12px 16px 8px; font-size: 1.15em; font-weight: 500; color: var(--primary-text-color); }',
+      '.brand { width: 21px; height: 28px; flex: none; background: var(--primary-text-color);' +
+        ' -webkit-mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; }',
+      '.header[hidden], .message[hidden] { display: none; }',
+      '.message { padding: 12px 16px; color: var(--secondary-text-color); }',
+      '.map { width: 100%; background: var(--secondary-background-color, #e5e5e5); z-index: 0; }',
+      '.leaflet-container { font: inherit; }',
+      '.map.dark .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(0.95) contrast(0.9); }',
+      '.rn-marker { background: none; border: none; }',
+      '.pin { position: absolute; transform: translate(-50%, calc(-100% - 8px)); display: flex; align-items: center; gap: 6px; padding: 3px 10px 3px 4px; border-radius: 18px;' +
+        ' background: var(--card-background-color, #fff); color: var(--primary-text-color, #212121); border: 2px solid var(--primary-color, #03a9f4);' +
+        ' box-shadow: 0 2px 6px rgba(0,0,0,.3); white-space: nowrap; cursor: pointer; }',
+      '.pin::after { content: ""; position: absolute; left: 50%; bottom: -9px; transform: translateX(-50%); border: 7px solid transparent; border-top: 8px solid var(--primary-color, #03a9f4); border-bottom: 0; }',
+      // Leaflet forces width:auto and max-width:none on marker images: these selectors must outrank it.
+      '.leaflet-container .leaflet-marker-pane .pin img.car { flex: none; height: 28px !important; width: 50px !important; max-width: none !important; object-fit: contain; }',
+      '.car-icon { display: flex; color: var(--primary-color, #03a9f4); --mdc-icon-size: 22px; }',
+      '.ptext { display: flex; flex-direction: column; line-height: 1.15; }',
+      '.pname { font-size: 12px; font-weight: 600; }',
+      '.prange { font-size: 11px; color: var(--secondary-text-color, #727272); }',
+      '.home { position: absolute; transform: translate(-50%, -50%); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center;' +
+        ' background: var(--primary-color, #03a9f4); color: #fff; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.35); --mdc-icon-size: 18px; }',
+      '.leaflet-popup-content-wrapper, .leaflet-popup-tip { background: var(--card-background-color, #fff); color: var(--primary-text-color, #212121); }',
+      '.leaflet-popup-content { margin: 10px 12px; font-size: 13px; }',
+      '.pimg { display: block; width: 100%; max-height: 110px; object-fit: contain; margin-bottom: 6px; }',
+      '.pname-pop { font-weight: 600; font-size: 15px; }',
+      '.pmodel { font-size: 12px; color: var(--secondary-text-color, #727272); }',
+      '.pwhere { margin-top: 4px; font-size: 12px; color: var(--secondary-text-color, #727272); }',
+      '.popup table { margin-top: 6px; border-collapse: collapse; width: 100%; }',
+      '.popup td { padding: 2px 0; }',
+      '.popup td:last-child { text-align: right; }',
+      '.pactions { display: flex; gap: 6px; margin-top: 10px; }',
+      // Leaflet colours every link in the map: the selector must outrank '.leaflet-container a'.
+      '.leaflet-container .pbtn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; padding: 7px 10px; border-radius: 16px; border: none; cursor: pointer;' +
+        ' font: inherit; font-size: 13px; font-weight: 500; text-decoration: none; background: var(--primary-color, #03a9f4); color: var(--text-primary-color, #fff); }',
+      '.leaflet-container .pbtn.alt { background: color-mix(in srgb, var(--primary-color, #03a9f4) 15%, transparent); color: var(--primary-color, #03a9f4); }',
+      '.pbtn ha-icon { --mdc-icon-size: 18px; }',
+    ].join('\n');
+  }
+}
+
+class RenaultMapCardEditor extends HTMLElement {
+  setConfig(config) {
+    this._config = Object.assign({}, config);
+    this._render();
+  }
+
+  set hass(hass) {
+    this._hass = hass;
+    if (this._form) {
+      this._form.hass = hass;
+      this._form.schema = this._schema();
+    } else {
+      this._render();
+    }
+  }
+
+  _schema() {
+    var mt = RnMapI18n[rnMapLang(this._hass)];
+    var themes = ['auto', 'light', 'dark'].map(function (k) { return { value: k, label: mt.themes[k] }; });
+    var styles = Object.keys(RN_MAP_STYLES).map(function (k) { return { value: k, label: mt.styles[k] }; });
+    var custom = this._config.map_style === 'custom'
+      ? [
+          { name: 'tile_url', selector: { text: { type: 'url' } } },
+          { name: 'tile_attribution', selector: { text: {} } },
+        ]
+      : [];
+    return [
+      { name: 'devices', selector: { device: { integration: 'renault', multiple: true } } },
+      { name: 'title', selector: { text: {} } },
+      {
+        type: 'grid', name: '', schema: [
+          { name: 'map_style', selector: { select: { mode: 'dropdown', options: styles } } },
+          { name: 'theme', selector: { select: { mode: 'dropdown', options: themes } } },
+        ],
+      },
+    ].concat(custom, [
+      {
+        type: 'grid', name: '', schema: [
+          { name: 'height', selector: { number: { min: 150, max: 1200, step: 10, mode: 'box', unit_of_measurement: 'px' } } },
+          { name: 'zoom', selector: { number: { min: 5, max: 18, mode: 'box' } } },
+          { name: 'show_icon', selector: { boolean: {} } },
+          { name: 'show_home', selector: { boolean: {} } },
+          { name: 'show_name', selector: { boolean: {} } },
+          { name: 'show_picture', selector: { boolean: {} } },
+        ],
+      },
+    ]);
+  }
+
+  _render() {
+    if (!this._hass || !this._config) return;
+    if (!this._form) {
+      this._form = document.createElement('ha-form');
+      this._form.addEventListener('value-changed', (ev) => this._valueChanged(ev));
+      this.appendChild(this._form);
+    }
+    var mt = RnMapI18n[rnMapLang(this._hass)];
+    this._form.hass = this._hass;
+    this._form.schema = this._schema();
+    this._form.computeLabel = function (s) { return mt.editor[s.name] || s.name; };
+    var data = Object.assign({}, RN_MAP_DEFAULTS, this._config);
+    if (data.title === undefined) data.title = mt.default_title;
+    this._form.data = data;
+  }
+
+  _valueChanged(ev) {
+    ev.stopPropagation();
+    var value = Object.assign({}, ev.detail.value);
+    var mt = RnMapI18n[rnMapLang(this._hass)];
+    Object.keys(value).forEach(function (key) {
+      if (key !== 'title' && (value[key] === '' || value[key] === null || value[key] === undefined)) delete value[key];
+    });
+    Object.keys(RN_MAP_DEFAULTS).forEach(function (key) {
+      if (value[key] === RN_MAP_DEFAULTS[key]) delete value[key];
+    });
+    // Cleared title = no title (''); the default title is not written to the YAML.
+    if (value.title === undefined || value.title === null) value.title = '';
+    else if (value.title === mt.default_title) delete value.title;
+    if (Array.isArray(value.devices) && !value.devices.length) delete value.devices;
+    if (value.map_style !== 'custom') { delete value.tile_url; delete value.tile_attribution; }
+    if (this._config.type) value = Object.assign({ type: this._config.type }, value);
+    this._config = value;
+    // A switch to "custom" adds the URL fields.
+    this._form.schema = this._schema();
+    this.dispatchEvent(new CustomEvent('config-changed', { detail: { config: value }, bubbles: true, composed: true }));
+  }
+}
+
+if (!customElements.get('renault-map-card-editor')) {
+  customElements.define('renault-map-card-editor', RenaultMapCardEditor);
+}
+
+if (!customElements.get('renault-map-card')) {
+  customElements.define('renault-map-card', RenaultMapCard);
+  window.customCards = window.customCards || [];
+  window.customCards.push({
+    type: 'renault-map-card',
+    name: 'Renault Map Card',
+    description: 'Map of your Renault vehicles, with Home Assistant, OpenStreetMap, IGN or satellite base maps',
     preview: true,
     documentationURL: 'https://github.com/juju35/ha-renault-card',
   });

@@ -6,7 +6,7 @@
 [![Release](https://img.shields.io/github/v/release/juju35/ha-renault-card)](https://github.com/juju35/ha-renault-card/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Custom Lovelace card for Home Assistant's [Renault](https://www.home-assistant.io/integrations/renault/) integration, with an optional section for the [Orange Internet On the move](https://github.com/rexave/hass-orange-internet-on-the-move) data plan of the car.
+Custom Lovelace cards for Home Assistant's [Renault](https://www.home-assistant.io/integrations/renault/) integration: a **vehicle card**, with an optional section for the [Orange Internet On the move](https://github.com/rexave/hass-orange-internet-on-the-move) data plan of the car, and a **map card** showing your vehicles.
 
 Pick the vehicle, the card finds all its entities by itself.
 
@@ -31,7 +31,15 @@ Pick the vehicle, the card finds all its entities by itself.
 - Visual editor in the dashboard UI (no YAML needed)
 - English and French, follows the Home Assistant language
 - Light and dark theme compatible
-- Single file, no dependencies, HACS-ready
+- HACS-ready, no CDN: the map libraries ship with the card
+
+**Map card** (`custom:renault-map-card`)
+
+- All your Renault vehicles on one map (or the ones you pick), each with its picture, name and range
+- Popup with the picture, location, last update, range, fuel, battery and mileage, plus **Directions** (Google Maps) and **Details** buttons
+- Home marker
+- Base maps without API key: Home Assistant's own map (vector, light or dark), OpenStreetMap, OpenStreetMap France, IGN map and aerial photos, OpenTopoMap, CyclOSM, Esri satellite, or your own tile URL
+- Follows the light / dark theme
 
 ## Requirements
 
@@ -50,15 +58,15 @@ Or manually:
 
 1. Open HACS → **Frontend** → **⋮** → **Custom repositories**
 2. Add `https://github.com/juju35/ha-renault-card` — Category: **Dashboard** (Lovelace)
-3. Search for **Renault Card** and install it
+3. Search for **Renault Card** and install it (both cards come in the same package)
 4. Clear your browser cache and refresh
 
 HACS registers the dashboard resource for you.
 
 ### Manual
 
-1. Download `renault-card.js` from the [latest release](https://github.com/juju35/ha-renault-card/releases/latest)
-2. Copy it to `/config/www/renault-card.js`
+1. Download all the `.js` files from the [latest release](https://github.com/juju35/ha-renault-card/releases/latest): `renault-card.js` and the map libraries (`leaflet.js`, `leaflet-maplibre-gl.js`, `maplibre-gl.js`, `maplibre-gl-worker.js`, `maplibre-gl-css.js`)
+2. Copy them all to the same folder, for example `/config/www/` (the map card loads the libraries from the folder `renault-card.js` comes from)
 3. Go to **Settings → Dashboards → Resources** → Add resource:
    - URL: `/local/renault-card.js`
    - Type: **JavaScript Module**
@@ -131,6 +139,34 @@ entities:
 | `data_plan_device_id` | ❌ | Auto | Orange Internet On the move device; found from the vehicle model when empty |
 | `language` | ❌ | Auto | Force language: `fr` or `en` (auto-detects from HA settings) |
 | `entities` | ❌ | Auto | Override detected entities: `mileage`, `fuel_autonomy`, `fuel_quantity`, `battery_level`, `battery_autonomy`, `location` |
+
+## Map card
+
+Add it from the dashboard (**Add card → Renault Map Card**). With no vehicle selected it shows all the Renault vehicles that have a location.
+
+```yaml
+type: custom:renault-map-card
+title: Vehicles
+map_style: ha
+height: 400
+```
+
+| Option | Required | Default | Description |
+|---|---|---|---|
+| `devices` | ❌ | All vehicles | List of Renault device IDs to show |
+| `title` | ❌ | `Vehicles` | Card title; empty for none |
+| `map_style` | ❌ | `ha` | `ha` (Home Assistant vector map), `osm`, `osm_fr`, `ign`, `ign_photo`, `topo`, `cyclosm`, `satellite` or `custom` |
+| `theme` | ❌ | `auto` | Base map theme: `auto` (follows Home Assistant), `light` or `dark` |
+| `tile_url` | ❌ | — | Tile URL with `{z}`, `{x}`, `{y}`, for `map_style: custom` |
+| `tile_attribution` | ❌ | — | Attribution shown for custom tiles |
+| `height` | ❌ | `400` | Map height in pixels |
+| `zoom` | ❌ | Auto | Fixed zoom level; by default the map fits the vehicles and home |
+| `show_icon` | ❌ | `true` | Renault logo in the header |
+| `show_home` | ❌ | `true` | Home marker |
+| `show_name` | ❌ | `true` | Vehicle name on the markers |
+| `show_picture` | ❌ | `true` | Vehicle picture on the markers and in the popup |
+
+The `ha` base map is the one Home Assistant's own map card uses (Home Assistant 2026.9 or later, WebGL2): OpenStreetMap vector tiles through your instance, in light or dark. On older versions or without WebGL2, the card falls back to OpenStreetMap raster tiles, also through Home Assistant when it can. Leaflet and MapLibre GL ship with the card (see [licenses](licenses)): only the map tiles come from the network.
 
 ## How it works
 

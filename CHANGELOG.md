@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.6.0
+
+### What's new
+- New map card, `custom:renault-map-card`: your Renault vehicles on a map with their picture, name and range, a popup with the details and Directions / Details buttons, and a home marker.
+- Same base maps as ha-carburants-france: Home Assistant's own vector map (light or dark), OpenStreetMap, OpenStreetMap France, IGN map and aerial photos, OpenTopoMap, CyclOSM, Esri satellite, or a custom tile URL.
+- Visual editor for the map card, labels in English and French.
+
+### Maintenance
+- Leaflet 1.9.4 and MapLibre GL 6.14.0 ship in `dist/` as `.js` files, so HACS installs them with the card; releases now attach every `dist/*.js` file.
+
 ## 1.5.0
 
 ### What's new
