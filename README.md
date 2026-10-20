@@ -165,6 +165,7 @@ height: 400
 | `show_home` | ❌ | `true` | Home marker |
 | `show_name` | ❌ | `true` | Vehicle name on the markers |
 | `show_picture` | ❌ | `true` | Vehicle picture on the markers and in the popup |
+| `show_fullscreen` | ❌ | `true` | Full screen button under the zoom buttons (on iPhone the card fills the screen) |
 
 The `ha` base map is the one Home Assistant's own map card uses (Home Assistant 2026.9 or later, WebGL2): OpenStreetMap vector tiles through your instance, in light or dark. On older versions or without WebGL2, the card falls back to OpenStreetMap raster tiles, also through Home Assistant when it can. Leaflet and MapLibre GL ship with the card (see [licenses](licenses)): only the map tiles come from the network.
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.0
+
+### What's new
+- Full screen button on the map card, under the zoom buttons, like ha-carburants-france. It uses the browser's full screen mode, or fills the window on iPhone (close with the same button or Escape). Hide it with `show_fullscreen: false` or from the visual editor.
+
 ## 1.6.1
 
 ### Changes
