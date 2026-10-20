@@ -5,13 +5,13 @@
 [![GitHub Release](https://img.shields.io/github/v/release/juju35/ha-renault-card)](https://github.com/juju35/ha-renault-card/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Custom Lovelace card for Home Assistant's [Renault](https://www.home-assistant.io/integrations/renault/) integration, with an optional section for the [Orange "Internet On the move"](https://github.com/rexave/hass-orange-internet-on-the-move) data plan of the car.
+Custom Lovelace card for Home Assistant's [Renault](https://www.home-assistant.io/integrations/renault/) integration, with an optional section for the [Orange Internet On the move](https://github.com/rexave/hass-orange-internet-on-the-move) data plan of the car.
 
 Pick the vehicle, the card finds all its entities by itself.
 
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=juju35&repository=ha-renault-card&category=plugin)
 
-| Espace (with Internet On the move) | Captur |
+| Espace (with Orange Internet On the move) | Captur |
 |---|---|
 | ![Renault Espace card](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/espace.png) | ![Renault Captur card](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/captur.png) |
 | ![Renault Espace card, dark theme](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/espace-dark.png) | ![Renault Captur card, dark theme](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/captur-dark.png) |
@@ -24,7 +24,7 @@ Pick the vehicle, the card finds all its entities by itself.
 - Location with the time of the last update; tap it to open the map
 - Action buttons for every button of the vehicle (horn, flash lights, air conditioning, start/stop charge), pressed with a confirmation tap, and the charge mode picker for electric cars
 - Vehicle picture and French licence plate badge
-- Optional **Internet On the move** section: data left, percentage, renewal or expiry date
+- Optional **Orange Internet On the move** section: data left, percentage, renewal or expiry date
 - Automatic entity discovery from the device (English or French entity IDs)
 - Visual editor in the dashboard UI (no YAML needed)
 - English and French, follows the Home Assistant language
@@ -120,8 +120,8 @@ entities:
 | `show_plate` | ❌ | `true` | Show the licence plate badge (when the device name is a French plate) |
 | `show_location` | ❌ | `true` | Show the location row |
 | `show_actions` | ❌ | `true` | Show the action buttons and charge mode |
-| `show_data_plan` | ❌ | `true` | Show the Internet On the move section when a data plan is found |
-| `data_plan_device_id` | ❌ | Auto | Internet On the move device; found from the vehicle model when empty |
+| `show_data_plan` | ❌ | `true` | Show the Orange Internet On the move section when a data plan is found |
+| `data_plan_device_id` | ❌ | Auto | Orange Internet On the move device; found from the vehicle model when empty |
 | `language` | ❌ | Auto | Force language: `fr` or `en` (auto-detects from HA settings) |
 | `entities` | ❌ | Auto | Override detected entities: `mileage`, `fuel_autonomy`, `fuel_quantity`, `battery_level`, `battery_autonomy`, `location` |
 
@@ -131,7 +131,7 @@ The card reads the entity registry to list the entities of the chosen device, th
 
 **Action buttons** need a second tap within 3 seconds, so a horn doesn't go off by accident.
 
-**Internet On the move**: the data plan device is named after the car (for example *Data Plan for RENAULT Espace*), so the card links it to the vehicle whose model matches. Set `data_plan_device_id` to pick one by hand. The integration reports data in megabytes (labelled Mbit); the card shows it in GB above 1 GB. The date is shown as a renewal date for recurring plans, as an expiry date otherwise.
+**Orange Internet On the move**: the data plan device is named after the car (for example *Data Plan for RENAULT Espace*), so the card links it to the vehicle whose model matches. Set `data_plan_device_id` to pick one by hand. The integration reports data in megabytes (labelled Mbit); the card shows it in GB above 1 GB. The date is shown as a renewal date for recurring plans, as an expiry date otherwise.
 
 ## Translations
 

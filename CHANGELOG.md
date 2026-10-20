@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1
+
+### Changes
+- The data plan section, editor labels and README now use the full service name: Orange Internet On the move.
+
 ## 1.0.0
 
 First public release.
@@ -10,6 +15,6 @@ First public release.
 - Vehicle picture, French licence plate badge, fuel gauge when the tank capacity is set, and a low range warning.
 - Location with the time of the last update; tap it to open the map.
 - Action buttons for every button the integration provides (horn, flash lights, air conditioning, charge), pressed with a confirmation tap, and the charge mode picker for electric cars.
-- Optional Internet On the move section: data left, percentage, renewal or expiry date, found automatically from the vehicle model.
+- Optional Orange Internet On the move section: data left, percentage, renewal or expiry date, found automatically from the vehicle model.
 - Visual editor in the dashboard UI, labels in English and French.
 - Light and dark theme compatible, installable via HACS.

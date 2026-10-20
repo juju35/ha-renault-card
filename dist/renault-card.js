@@ -1,4 +1,4 @@
-var RENAULT_CARD_VERSION = '1.0.0';
+var RENAULT_CARD_VERSION = '1.0.1';
 
 // ── i18n ──────────────────────────────────────────────────────────────────────
 var RnI18n = {
@@ -24,7 +24,7 @@ var RnI18n = {
     updated: 'mis à jour {t}',
     confirm: 'Confirmer ?',
     charge_mode: 'Mode de charge',
-    data_plan: 'Internet On the move',
+    data_plan: 'Orange Internet On the move',
     data_left: '{l} restants sur {t}',
     renews_on: 'Renouvellement le {d}',
     expires_on: 'Expire le {d}',
@@ -46,8 +46,8 @@ var RnI18n = {
     ed_show_plate: 'Plaque d\'immatriculation',
     ed_show_location: 'Position',
     ed_show_actions: 'Boutons d\'action',
-    ed_show_data_plan: 'Internet On the move',
-    ed_data_plan_device_id: 'Forfait Internet On the move',
+    ed_show_data_plan: 'Orange Internet On the move',
+    ed_data_plan_device_id: 'Forfait Orange Internet On the move',
     ed_data_plan_device_id_helper: 'Laisser vide pour le trouver automatiquement à partir du modèle',
     ed_language: 'Langue',
     ed_language_helper: 'Laisser vide pour suivre la langue de Home Assistant',
@@ -81,7 +81,7 @@ var RnI18n = {
     updated: 'updated {t}',
     confirm: 'Confirm?',
     charge_mode: 'Charge mode',
-    data_plan: 'Internet On the move',
+    data_plan: 'Orange Internet On the move',
     data_left: '{l} left of {t}',
     renews_on: 'Renews on {d}',
     expires_on: 'Expires on {d}',
@@ -103,8 +103,8 @@ var RnI18n = {
     ed_show_plate: 'Licence plate',
     ed_show_location: 'Location',
     ed_show_actions: 'Action buttons',
-    ed_show_data_plan: 'Internet On the move',
-    ed_data_plan_device_id: 'Internet On the move data plan',
+    ed_show_data_plan: 'Orange Internet On the move',
+    ed_data_plan_device_id: 'Orange Internet On the move data plan',
     ed_data_plan_device_id_helper: 'Leave empty to find it from the vehicle model',
     ed_language: 'Language',
     ed_language_helper: 'Leave empty to follow the Home Assistant language',
@@ -548,7 +548,7 @@ class RenaultCard extends HTMLElement {
       if (btns.length || modeHtml) actionsHtml = modeHtml + (btns.length ? '<div class="actions">' + btns.join('') + '</div>' : '');
     }
 
-    // Internet On the move
+    // Orange Internet On the move
     var planHtml = '';
     var p = r.plan;
     if (p && (this._avail(p.left_data) || this._avail(p.left_data_percentage))) {
@@ -791,7 +791,7 @@ if (!customElements.get('renault-card')) {
   window.customCards.push({
     type: 'renault-card',
     name: 'Renault Card',
-    description: 'Renault vehicle card (range, fuel, battery, location, actions) with optional Internet On the move data plan',
+    description: 'Renault vehicle card (range, fuel, battery, location, actions) with optional Orange Internet On the move data plan',
     preview: true,
     documentationURL: 'https://github.com/juju35/ha-renault-card',
   });
