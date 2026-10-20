@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.0
+
+### What's new
+- Click the Orange logo to open the Orange Internet On the move customer area in a new tab.
+
 ## 1.1.0
 
 ### Changes

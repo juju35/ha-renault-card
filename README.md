@@ -131,7 +131,7 @@ The card reads the entity registry to list the entities of the chosen device, th
 
 **Action buttons** need a second tap within 3 seconds, so a horn doesn't go off by accident.
 
-**Orange Internet On the move**: the data plan device is named after the car (for example *Data Plan for RENAULT Espace*), so the card links it to the vehicle whose model matches. Set `data_plan_device_id` to pick one by hand. The integration reports data in megabytes (labelled Mbit); the card shows it in GB above 1 GB. The date is shown as a renewal date for recurring plans, as an expiry date otherwise.
+**Orange Internet On the move**: the data plan device is named after the car (for example *Data Plan for RENAULT Espace*), so the card links it to the vehicle whose model matches. Set `data_plan_device_id` to pick one by hand. The integration reports data in megabytes (labelled Mbit); the card shows it in GB above 1 GB. The date is shown as a renewal date for recurring plans, as an expiry date otherwise. Click the Orange logo to open the [Orange Internet On the move customer area](https://internetonthemove.orange-business.com/renault/#/login); click anywhere else in the section for the entity details.
 
 ## Translations
 
