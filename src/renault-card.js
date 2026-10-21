@@ -80,7 +80,7 @@ var RnI18n = {
     en_location: 'Position',
     lease: 'LOA',
     lease_driven: '{d} sur {t}',
-    lease_ends: 'Fin le {d}',
+    lease_ends: 'Fin {d}',
     lease_months_left: '{n} mois',
     lease_ended: 'Terminée',
     lease_pace: 'Rythme {p}/an',
@@ -90,21 +90,19 @@ var RnI18n = {
     lease_warn: 'Dépassement prévu : {k}',
     lease_over: 'Forfait dépassé de {k}',
     lease_early: 'Trop tôt pour une projection',
-    lease_expected: 'Prévu aujourd\'hui {k}',
-    lease_above: '{k} au-dessus',
-    lease_below: '{k} en dessous',
-    lease_month_left: 'Ce mois-ci : reste {k} sur {t}',
-    lease_month_over: 'Ce mois-ci : {k} au-delà des {t}',
-    lease_budget: '{k}/mois jusqu\'à la fin',
-    lease_budget_none: 'Plus de km disponibles',
+    lease_expected_lbl: 'Théorique',
+    lease_month_lbl: 'Reste ce mois-ci',
+    lease_month_left: 'sur {t}',
+    lease_month_over: 'au-delà des {t}',
+    lease_budget_lbl: 'Par mois',
+    lease_budget_sub: 'jusqu\'à la fin',
     lease_pace_lbl: 'Rythme',
     lease_per_year: '/an',
-    lease_recent: 'sur les {n} derniers jours',
+    lease_recent: '{n} derniers jours',
     lease_since_start: 'depuis le début',
     lease_projection_lbl: 'Fin de LOA',
     lease_year: 'Année {n}',
     lease_year_sub: 'sur {t}',
-    lease_year_proj: 'fin d\'année {p}',
     lease_chart: 'Suivi du kilométrage',
     lease_legend_actual: 'Réel',
     lease_legend_allowed: 'Forfait',
@@ -186,7 +184,7 @@ var RnI18n = {
     en_location: 'Location',
     lease: 'Lease',
     lease_driven: '{d} of {t}',
-    lease_ends: 'Ends on {d}',
+    lease_ends: 'Ends {d}',
     lease_months_left: '{n} months',
     lease_ended: 'Ended',
     lease_pace: 'Pace {p}/year',
@@ -196,21 +194,19 @@ var RnI18n = {
     lease_warn: 'Projected over: {k}',
     lease_over: 'Allowance exceeded by {k}',
     lease_early: 'Too early for a projection',
-    lease_expected: 'Expected today {k}',
-    lease_above: '{k} above',
-    lease_below: '{k} below',
-    lease_month_left: 'This month: {k} left of {t}',
-    lease_month_over: 'This month: {k} over {t}',
-    lease_budget: '{k}/month until the end',
-    lease_budget_none: 'No kilometres left',
+    lease_expected_lbl: 'Target today',
+    lease_month_lbl: 'Left this month',
+    lease_month_left: 'of {t}',
+    lease_month_over: 'over {t}',
+    lease_budget_lbl: 'Per month',
+    lease_budget_sub: 'until the end',
     lease_pace_lbl: 'Pace',
     lease_per_year: '/year',
-    lease_recent: 'over the last {n} days',
+    lease_recent: 'last {n} days',
     lease_since_start: 'since the start',
     lease_projection_lbl: 'End of lease',
     lease_year: 'Year {n}',
     lease_year_sub: 'of {t}',
-    lease_year_proj: 'year end {p}',
     lease_chart: 'Mileage tracking',
     lease_legend_actual: 'Actual',
     lease_legend_allowed: 'Allowance',
@@ -877,22 +873,23 @@ class RenaultCard extends HTMLElement {
     else if (st.projected != null) status = this._t('lease_ok_margin', { k: this._km(st.allowed - st.projected) });
     else status = this._t('lease_ok');
     if (st.cost != null) status += ' · ≈ ' + this._money(st.cost);
-    var endTxt = st.end.toLocaleDateString(this._lang(), { day: 'numeric', month: 'long', year: 'numeric' });
+    var endTxt = st.end.toLocaleDateString(this._lang(), { month: 'short', year: 'numeric' });
 
-    // Folded: theoretical mileage today and the gap to it, then what is left this month and per month.
-    var lines = [];
+    // Folded: theoretical mileage today, this month, and the monthly budget until the end.
+    var figs = [];
     if (!st.ended) {
       var dev = Math.round(st.deviation);
-      lines.push([this._t('lease_expected', { k: this._km(st.expectedOdo) }) + ' · ' +
-        this._t(dev > 0 ? 'lease_above' : 'lease_below', { k: this._km(Math.abs(dev)) })]);
-      var month = [];
+      figs.push(this._leaseFig(this._t('lease_expected_lbl'), this._km(st.expectedOdo),
+        (dev > 0 ? '+' : '−') + this._km(Math.abs(dev)), false,
+        dev > 0 ? 'var(--warning-color, #ffa600)' : 'var(--success-color, #43a047)'));
       if (st.month) {
-        month.push(st.month.left >= 0
-          ? this._t('lease_month_left', { k: this._km(st.month.left), t: this._km(st.month.allowed) })
-          : this._t('lease_month_over', { k: this._km(-st.month.left), t: this._km(st.month.allowed) }));
+        var over = st.month.left < 0;
+        figs.push(this._leaseFig(this._t('lease_month_lbl'), this._km(Math.abs(st.month.left)),
+          this._t(over ? 'lease_month_over' : 'lease_month_left', { t: this._km(st.month.allowed) }), over));
       }
-      if (st.budget != null) month.push(st.budget > 0 ? this._t('lease_budget', { k: this._km(st.budget) }) : this._t('lease_budget_none'));
-      if (month.length) lines.push(month);
+      if (st.budget != null) {
+        figs.push(this._leaseFig(this._t('lease_budget_lbl'), st.budget > 0 ? this._km(st.budget) : '0 km', this._t('lease_budget_sub'), st.budget <= 0));
+      }
     }
     var open = !!this._leaseOpen;
     var pct = st.allowed ? st.driven / st.allowed * 100 : 0;
@@ -906,15 +903,15 @@ class RenaultCard extends HTMLElement {
       '<span class="lease-status" style="color:' + color + '"><ha-icon icon="' + icon + '"></ha-icon>' + rnEsc(status) + '</span>' +
       '<ha-icon class="chev" icon="' + (open ? 'mdi:chevron-up' : 'mdi:chevron-down') + '"></ha-icon></div>' +
       '<div class="lease-bar">' + this._bar(pct, color) + ticks + '<span class="lease-mark" style="left:' + marker.toFixed(1) + '%"></span></div>' +
-      '<div class="plan-info"><span>' + rnEsc(this._t('lease_driven', { d: this._km(st.driven), t: this._km(st.allowed) })) + '</span>' +
+      '<div class="plan-info"><span><b>' + rnEsc(this._km(st.driven)) + '</b> / ' + rnEsc(this._km(st.allowed)) + '</span>' +
       '<span>' + rnEsc(this._t('lease_ends', { d: endTxt }) + ' · ' + (st.ended ? this._t('lease_ended') : this._t('lease_months_left', { n: st.monthsLeft }))) + '</span></div>' +
-      lines.map(function (l) { return '<div class="plan-info">' + l.map(function (x) { return '<span>' + rnEsc(x) + '</span>'; }).join('') + '</div>'; }).join('') +
+      (figs.length ? '<div class="figs">' + figs.join('') + '</div>' : '') +
       (open ? this._leaseDetails(st) + this._leaseChart(st, ent.mileage) : '') + '</div>';
   }
 
-  _leaseFig(label, value, sub, warn) {
+  _leaseFig(label, value, sub, warn, subColor) {
     return '<div class="fig' + (warn ? ' warn' : '') + '"><span class="lbl">' + rnEsc(label) + '</span><span class="val">' + rnEsc(value) + '</span>' +
-      (sub ? '<span class="sub">' + rnEsc(sub) + '</span>' : '') + '</div>';
+      (sub ? '<span class="sub"' + (subColor ? ' style="color:' + subColor + '"' : '') + '>' + rnEsc(sub) + '</span>' : '') + '</div>';
   }
 
   _leaseDetails(st) {
@@ -932,7 +929,7 @@ class RenaultCard extends HTMLElement {
     if (st.year && !st.ended) {
       var yr = st.year;
       figs.push(this._leaseFig(this._t('lease_year', { n: yr.index }), this._km(yr.driven),
-        this._t('lease_year_sub', { t: this._km(yr.allowed) }) + (yr.projected != null ? ' · ' + this._t('lease_year_proj', { p: this._km(yr.projected) }) : ''),
+        this._t('lease_year_sub', { t: this._km(yr.allowed) }),
         (yr.projected || yr.driven) > yr.allowed));
     }
     return figs.length ? '<div class="figs">' + figs.join('') + '</div>' : '';
@@ -1067,7 +1064,8 @@ class RenaultCard extends HTMLElement {
       '.lease .bar { background: color-mix(in srgb, var(--secondary-text-color) 18%, transparent); }' +
       '.lease-mark { position: absolute; top: -3px; width: 2px; height: 12px; margin-left: -1px; border-radius: 1px; background: var(--primary-text-color); opacity: 0.6; }' +
       '.lease-tick { position: absolute; top: 0; width: 2px; height: 6px; margin-left: -1px; background: var(--card-background-color, #fff); }' +
-      '.figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; padding-top: 4px; }' +
+      '.figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 8px; }' +
+      '.plan-info b { font-weight: 500; color: var(--primary-text-color); }' +
       '.fig { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; border-radius: 10px; min-width: 0;' +
         ' background: color-mix(in srgb, var(--card-background-color, #fff) 60%, transparent); }' +
       '.fig .val { font-size: 14px; white-space: normal; }' +

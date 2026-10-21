@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.11.1
+
+### Changes
+- Lease: the target mileage today, the kilometres left this month and the monthly budget until the end are shown as tiles instead of lines of text, matching the unfolded tiles; shorter labels and end date.
+
 ## 1.11.0
 
 ### What's new
