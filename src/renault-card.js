@@ -1067,7 +1067,7 @@ class RenaultCard extends HTMLElement {
       '.figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 8px; }' +
       '.plan-info b { font-weight: 500; color: var(--primary-text-color); }' +
       '.fig { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; border-radius: 10px; min-width: 0;' +
-        ' background: color-mix(in srgb, var(--card-background-color, #fff) 60%, transparent); }' +
+        ' background: color-mix(in srgb, var(--primary-text-color, #212121) 7%, transparent); }' +
       '.fig .val { font-size: 14px; white-space: normal; }' +
       '.fig .sub { font-size: 11px; line-height: 1.3; color: var(--secondary-text-color); }' +
       '.fig.warn .val { color: var(--warning-color, #ffa600); }' +

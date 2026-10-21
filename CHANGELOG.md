@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.11.2
+
+### Fixes
+- Lease: the tiles are tinted from the theme text colour, so they stay visible on themes with a transparent card background.
+
 ## 1.11.1
 
 ### Changes
