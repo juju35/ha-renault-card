@@ -2,5 +2,6 @@
   "name": "Renault Card",
   "render_readme": true,
   "content_in_root": false,
-  "filename": "renault-card.js"
+  "filename": "renault-card.js",
+  "homeassistant": "2024.8.0"
 }
