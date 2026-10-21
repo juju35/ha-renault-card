@@ -43,7 +43,7 @@ Pick the vehicle, the card finds all its entities by itself.
 
 ## Prerequisites
 
-- Home Assistant with the [Renault](https://www.home-assistant.io/integrations/renault/) integration set up
+- Home Assistant 2024.8 or later with the [Renault](https://www.home-assistant.io/integrations/renault/) integration set up
 - Optional: the [Orange Internet On the move](https://github.com/rexave/hass-orange-internet-on-the-move) integration, for the data plan section
 
 ## Installation

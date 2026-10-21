@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.13.1
+
+### Changes
+- The station names on the map markers and in their popup use the 500 weight of the other ha-* cards instead of 600.
+- HACS now asks for Home Assistant 2024.8 or later, the version that brought the sections view the card supports; the README says so under **Prerequisites**.
+
 ## 1.13.0
 
 ### Changes
