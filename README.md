@@ -25,7 +25,7 @@ Pick the vehicle, the card finds all its entities by itself.
 - Action buttons for every button of the vehicle (horn, flash lights, air conditioning, start/stop charge), pressed with a confirmation tap, and the charge mode picker for electric cars
 - Renault logo next to the name, black on light themes and white on dark themes
 - Built-in pictures for the Espace and the Captur, or your own picture, and a French licence plate drawn like the real one (EU band, department, Breton flag for Brittany)
-- Optional **lease tracking** (LOA): mileage driven against the allowance, gap to the allowance today, kilometres per month left, end-of-lease projection (average or last 30 / 90 days) and estimated cost of the excess, always shown as a status; pace, contract year figures and a mileage chart folded by default
+- Optional **lease tracking** (LOA): mileage driven against the allowance, theoretical mileage expected today and the gap to it, kilometres left this month and per month until the end, end-of-lease projection (average or last 30 / 90 days) and estimated cost of the excess, always shown as a status; pace, contract year figures and a mileage chart folded by default
 - Optional **Orange Internet On the move** section: data left, percentage, renewal or expiry date
 - Automatic entity discovery from the device (English or French entity IDs)
 - Visual editor in the dashboard UI (no YAML needed)
@@ -98,7 +98,7 @@ Set the lease start date, its duration in months and the yearly mileage allowanc
 - **orange**: at the current pace, you will go over the allowance (projected excess)
 - **red**: the allowance is already exceeded
 
-Below the bar (ticks mark the contract years): the kilometres above or below the allowance line today, and the kilometres per month left until the end of the lease. With `extra_km_cost`, the status adds the estimated cost of the excess.
+Below the bar (ticks mark the contract years): the theoretical mileage expected today and how far above or below it you are, the kilometres left this month out of the monthly allowance, and the kilometres per month left until the end of the lease. With `extra_km_cost`, the status adds the estimated cost of the excess.
 
 The projection starts after 30 days. It uses the average since the start of the lease, or with `forecast: 90` (or `30`) the pace of the last 90 (or 30) days, which reacts faster to a change of habits.
 

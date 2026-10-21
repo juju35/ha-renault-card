@@ -90,9 +90,12 @@ var RnI18n = {
     lease_warn: 'Dépassement prévu : {k}',
     lease_over: 'Forfait dépassé de {k}',
     lease_early: 'Trop tôt pour une projection',
-    lease_above: '{k} au-dessus du forfait à ce jour',
-    lease_below: '{k} sous le forfait à ce jour',
-    lease_budget: 'Reste {k}/mois',
+    lease_expected: 'Prévu aujourd\'hui {k}',
+    lease_above: '{k} au-dessus',
+    lease_below: '{k} en dessous',
+    lease_month_left: 'Ce mois-ci : reste {k} sur {t}',
+    lease_month_over: 'Ce mois-ci : {k} au-delà des {t}',
+    lease_budget: '{k}/mois jusqu\'à la fin',
     lease_budget_none: 'Plus de km disponibles',
     lease_pace_lbl: 'Rythme',
     lease_per_year: '/an',
@@ -193,9 +196,12 @@ var RnI18n = {
     lease_warn: 'Projected over: {k}',
     lease_over: 'Allowance exceeded by {k}',
     lease_early: 'Too early for a projection',
-    lease_above: '{k} above the allowance so far',
-    lease_below: '{k} below the allowance so far',
-    lease_budget: '{k}/month left',
+    lease_expected: 'Expected today {k}',
+    lease_above: '{k} above',
+    lease_below: '{k} below',
+    lease_month_left: 'This month: {k} left of {t}',
+    lease_month_over: 'This month: {k} over {t}',
+    lease_budget: '{k}/month until the end',
     lease_budget_none: 'No kilometres left',
     lease_pace_lbl: 'Pace',
     lease_per_year: '/year',
@@ -459,6 +465,18 @@ function rnLeaseStatus(lease, mileage, now, points) {
     };
   }
   var budget = !ended && left > 0 ? (allowed - driven) / (left / 30.44) : null;
+  // This calendar month: the monthly allowance (prorated if the lease starts or ends in it)
+  // minus the kilometres driven since the 1st, from the statistics.
+  var nowD = new Date(now);
+  var mStart = new Date(nowD.getFullYear(), nowD.getMonth(), 1).getTime();
+  var mEnd = new Date(nowD.getFullYear(), nowD.getMonth() + 1, 1).getTime();
+  var mFrom = Math.max(mStart, dates.start.getTime()), mTo = Math.min(mEnd, dates.end.getTime());
+  var month = null;
+  var mKm = mFrom === dates.start.getTime() ? startKm : rnOdoAt(points, mFrom);
+  if (!ended && mKm != null) {
+    var quota = kmYear / 12 * (mTo - mFrom) / (mEnd - mStart);
+    month = { allowed: quota, driven: Math.max(0, mileage - mKm), left: quota - Math.max(0, mileage - mKm) };
+  }
 
   var state = 'ok';
   if (driven > allowed) state = 'over';
@@ -469,7 +487,7 @@ function rnLeaseStatus(lease, mileage, now, points) {
     start: dates.start, end: dates.end, months: dates.months, allowed: allowed, startKm: startKm, driven: driven, ended: ended,
     expected: expected, deviation: driven - expected, elapsedRatio: total ? elapsed / total : 0,
     rate: rate, recent: recent, pace: rate != null ? rate * 365.25 : null, projected: projected, state: state,
-    budget: budget, year: year, excess: excess, cost: cost && excess > 0 ? excess * cost : null,
+    budget: budget, month: month, expectedOdo: startKm + expected, year: year, excess: excess, cost: cost && excess > 0 ? excess * cost : null,
     monthsLeft: Math.max(0, Math.round(left / 30.44)),
   };
 }
@@ -861,12 +879,20 @@ class RenaultCard extends HTMLElement {
     if (st.cost != null) status += ' · ≈ ' + this._money(st.cost);
     var endTxt = st.end.toLocaleDateString(this._lang(), { day: 'numeric', month: 'long', year: 'numeric' });
 
-    // Folded: deviation from the allowance line today, and the monthly budget left.
-    var details = [];
+    // Folded: theoretical mileage today and the gap to it, then what is left this month and per month.
+    var lines = [];
     if (!st.ended) {
       var dev = Math.round(st.deviation);
-      details.push(this._t(dev > 0 ? 'lease_above' : 'lease_below', { k: this._km(Math.abs(dev)) }));
-      if (st.budget != null) details.push(st.budget > 0 ? this._t('lease_budget', { k: this._km(st.budget) }) : this._t('lease_budget_none'));
+      lines.push([this._t('lease_expected', { k: this._km(st.expectedOdo) }) + ' · ' +
+        this._t(dev > 0 ? 'lease_above' : 'lease_below', { k: this._km(Math.abs(dev)) })]);
+      var month = [];
+      if (st.month) {
+        month.push(st.month.left >= 0
+          ? this._t('lease_month_left', { k: this._km(st.month.left), t: this._km(st.month.allowed) })
+          : this._t('lease_month_over', { k: this._km(-st.month.left), t: this._km(st.month.allowed) }));
+      }
+      if (st.budget != null) month.push(st.budget > 0 ? this._t('lease_budget', { k: this._km(st.budget) }) : this._t('lease_budget_none'));
+      if (month.length) lines.push(month);
     }
     var open = !!this._leaseOpen;
     var pct = st.allowed ? st.driven / st.allowed * 100 : 0;
@@ -882,7 +908,7 @@ class RenaultCard extends HTMLElement {
       '<div class="lease-bar">' + this._bar(pct, color) + ticks + '<span class="lease-mark" style="left:' + marker.toFixed(1) + '%"></span></div>' +
       '<div class="plan-info"><span>' + rnEsc(this._t('lease_driven', { d: this._km(st.driven), t: this._km(st.allowed) })) + '</span>' +
       '<span>' + rnEsc(this._t('lease_ends', { d: endTxt }) + ' · ' + (st.ended ? this._t('lease_ended') : this._t('lease_months_left', { n: st.monthsLeft }))) + '</span></div>' +
-      (details.length ? '<div class="plan-info"><span>' + rnEsc(details.join(' · ')) + '</span></div>' : '') +
+      lines.map(function (l) { return '<div class="plan-info">' + l.map(function (x) { return '<span>' + rnEsc(x) + '</span>'; }).join('') + '</div>'; }).join('') +
       (open ? this._leaseDetails(st) + this._leaseChart(st, ent.mileage) : '') + '</div>';
   }
 

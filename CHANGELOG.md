@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.11.0
+
+### What's new
+- Lease: the theoretical mileage expected today (odometer on the allowance line) next to the gap to it.
+- Lease: kilometres left this month, out of the monthly allowance (prorated in the first and last month of the lease), from the kilometres driven since the 1st.
+
 ## 1.10.0
 
 ### What's new
