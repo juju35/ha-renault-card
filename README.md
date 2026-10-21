@@ -25,7 +25,7 @@ Pick the vehicle, the card finds all its entities by itself.
 - Action buttons for every button of the vehicle (horn, flash lights, air conditioning, start/stop charge), pressed with a confirmation tap, and the charge mode picker for electric cars
 - Renault logo next to the name, black on light themes and white on dark themes
 - Built-in pictures for the Espace and the Captur, or your own picture, and a French licence plate drawn like the real one (EU band, department, Breton flag for Brittany)
-- Optional **lease tracking** (LOA): mileage driven against the allowance, pace and end-of-lease projection, always shown as a status, with a mileage chart folded by default
+- Optional **lease tracking** (LOA): mileage driven against the allowance, gap to the allowance today, kilometres per month left, end-of-lease projection (average or last 30 / 90 days) and estimated cost of the excess, always shown as a status; pace, contract year figures and a mileage chart folded by default
 - Optional **Orange Internet On the move** section: data left, percentage, renewal or expiry date
 - Automatic entity discovery from the device (English or French entity IDs)
 - Visual editor in the dashboard UI (no YAML needed)
@@ -98,7 +98,11 @@ Set the lease start date, its duration in months and the yearly mileage allowanc
 - **orange**: at the current pace, you will go over the allowance (projected excess)
 - **red**: the allowance is already exceeded
 
-The projection starts after 30 days. Tap the section header to unfold the chart: actual mileage, linear allowance and projection, from the long-term statistics of the mileage sensor (kept by Home Assistant's recorder for as long as you have them). The chart is folded by default.
+Below the bar (ticks mark the contract years): the kilometres above or below the allowance line today, and the kilometres per month left until the end of the lease. With `extra_km_cost`, the status adds the estimated cost of the excess.
+
+The projection starts after 30 days. It uses the average since the start of the lease, or with `forecast: 90` (or `30`) the pace of the last 90 (or 30) days, which reacts faster to a change of habits.
+
+Tap the section header to unfold the details: pace, end-of-lease projection, the current contract year (contract years run from the start date) with its allowance and year-end projection, and the chart of actual mileage, allowance and projection. The history comes from the long-term statistics of the mileage sensor, kept by Home Assistant's recorder; it is fetched once an hour. The details are folded by default.
 
 ```yaml
 lease:
@@ -106,6 +110,8 @@ lease:
   duration: 37        # months
   km_per_year: 20000
   start_mileage: 12   # optional, odometer at delivery
+  forecast: 90        # optional: 90 or 30 days, average since the start by default
+  extra_km_cost: 0.08 # optional, per km, shows the cost of the excess
 ```
 
 Also in the visual editor, in the **Lease tracking** panel. Without `lease`, the section is not shown.
@@ -166,7 +172,7 @@ entities:
 | `show_actions` | ❌ | `true` | Show the action buttons and charge mode |
 | `show_data_plan` | ❌ | `true` | Show the Orange Internet On the move section when a data plan is found |
 | `data_plan_device_id` | ❌ | Auto | Orange Internet On the move device; found from the vehicle model when empty |
-| `lease` | ❌ | — | Lease tracking: `start_date` (`YYYY-MM-DD`), `duration` (months) and `km_per_year` are required to show it; `start_mileage` (km at delivery) defaults to `0` |
+| `lease` | ❌ | — | Lease tracking: `start_date` (`YYYY-MM-DD`), `duration` (months) and `km_per_year` are required to show it; `start_mileage` (km at delivery) defaults to `0`; `forecast`: `90` or `30` to project from the last days (average since the start by default); `extra_km_cost`: cost per extra km |
 | `language` | ❌ | Auto | Force language: `fr` or `en` (auto-detects from HA settings) |
 | `entities` | ❌ | Auto | Override detected entities: `mileage`, `fuel_autonomy`, `fuel_quantity`, `battery_level`, `battery_autonomy`, `location` |
 

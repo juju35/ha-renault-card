@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.10.0
+
+### What's new
+- Lease: the folded section now shows how far above or below the allowance line you are today, and the kilometres per month left until the end of the lease.
+- Lease: optional `lease.forecast: 90` or `30` projects the end of the lease from the pace of the last 90 or 30 days instead of the average since the start.
+- Lease: optional `lease.extra_km_cost` (per km, in the Home Assistant currency) adds the estimated cost of the excess to the status.
+- Lease: the unfolded section shows the pace, the end-of-lease projection and the current contract year (kilometres driven against the yearly allowance, projection at the end of the contract year) above the chart.
+- Lease: contract year ticks on the progress bar.
+
 ## 1.9.1
 
 ### Development

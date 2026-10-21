@@ -170,7 +170,7 @@ const hass = { states, entities, devices, user: { name: "Julien" } };
 const leaseStart = new Date();
 leaseStart.setMonth(leaseStart.getMonth() - 22, 1);
 leaseStart.setHours(0, 0, 0, 0);
-const lease = { start_date: `${leaseStart.getFullYear()}-${String(leaseStart.getMonth() + 1).padStart(2, "0")}-01`, duration: 37, km_per_year: 20000, start_mileage: 12 };
+const lease = { start_date: `${leaseStart.getFullYear()}-${String(leaseStart.getMonth() + 1).padStart(2, "0")}-01`, duration: 37, km_per_year: 20000, start_mileage: 12, forecast: 90, extra_km_cost: 0.08 };
 const rows = [];
 let km = 12;
 for (let t = leaseStart.getTime(); t < Date.now() - 86400000; t += 86400000) {
