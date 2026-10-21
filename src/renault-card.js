@@ -530,10 +530,20 @@ class RenaultCard extends HTMLElement {
   connectedCallback() {
     // Keep "updated 5 min ago" and the days left current.
     this._timer = setInterval(() => { this._sig = null; this._update(); }, 60000);
+    // A click elsewhere folds the lease back to its default (as in ha-carburants-france). A click,
+    // not a pointerdown: folding on press would shift the layout under the pointer before the click.
+    this._onOutside = this._onOutside || ((ev) => {
+      if (this._leaseOpen == null) return;
+      if ((ev.composedPath ? ev.composedPath() : []).indexOf(this) !== -1) return;
+      this._leaseOpen = null;
+      this._update();
+    });
+    document.addEventListener('click', this._onOutside, true);
   }
 
   disconnectedCallback() {
     clearInterval(this._timer);
+    document.removeEventListener('click', this._onOutside, true);
   }
 
   getCardSize() { return 6; }
@@ -899,7 +909,7 @@ class RenaultCard extends HTMLElement {
     // Contract year ticks on the bar.
     var ticks = '';
     for (var m = 12; m < st.months; m += 12) ticks += '<span class="lease-tick" style="left:' + (m / st.months * 100).toFixed(1) + '%"></span>';
-    return '<div class="lease lease-' + st.state + '">' +
+    return '<div class="lease lease-' + st.state + '" data-lease-toggle>' +
       '<div class="lease-head" data-lease-toggle role="button" tabindex="0" aria-expanded="' + open + '">' +
       '<ha-icon class="lease-icon" icon="mdi:file-sign"></ha-icon><span class="plan-title">' + this._t('lease') + '</span>' +
       '<span class="lease-status" style="color:' + color + '"><ha-icon icon="' + icon + '"></ha-icon>' + rnEsc(status) + '</span>' +
@@ -908,7 +918,7 @@ class RenaultCard extends HTMLElement {
       '<div class="plan-info"><span><b>' + rnEsc(this._km(st.driven)) + '</b> / ' + rnEsc(this._km(st.allowed)) + '</span>' +
       '<span>' + rnEsc(this._t('lease_ends', { d: endTxt }) + ' · ' + (st.ended ? this._t('lease_ended') : this._t('lease_months_left', { n: st.monthsLeft }))) + '</span></div>' +
       (figs.length ? '<div class="figs">' + figs.join('') + '</div>' : '') +
-      (open ? this._leaseDetails(st) + this._leaseChart(st, ent.mileage) : '') + '</div>';
+      (open ? '<div class="lease-more">' + this._leaseDetails(st) + this._leaseChart(st, ent.mileage) + '</div>' : '') + '</div>';
   }
 
   // Folded until tapped, unless expand_lease is set (same as ha-dockhand-card's sections).
@@ -1065,7 +1075,9 @@ class RenaultCard extends HTMLElement {
       '.plan-info { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 8px; font-size: 12px; color: var(--secondary-text-color); }' +
       '.lease { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 10px;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.1)); }' +
-      '.lease-head { display: flex; align-items: center; gap: 8px; cursor: pointer; min-width: 0; }' +
+      '.lease-head { display: flex; align-items: center; gap: 8px; min-width: 0; }' +
+      '.lease[data-lease-toggle] { cursor: pointer; }' +
+      '.lease-more { cursor: default; display: flex; flex-direction: column; gap: 8px; }' +
       '.lease-icon { color: var(--rn-accent); --mdc-icon-size: 22px; flex-shrink: 0; }' +
       '.lease-status { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 500; min-width: 0; text-align: right; }' +
       '.lease-status ha-icon { --mdc-icon-size: 16px; flex-shrink: 0; }' +
@@ -1118,6 +1130,8 @@ class RenaultCard extends HTMLElement {
     var path = ev.composedPath();
     // Links (the Orange logo) open on their own, without the more-info dialog.
     if (path.some((n) => n.tagName === 'A')) return;
+    // As in ha-carburants-france: a tap anywhere on the lease toggles it, reading the details does not.
+    if (path.some((n) => n.classList && n.classList.contains('lease-more'))) return;
     if (path.some((n) => n.dataset && n.dataset.leaseToggle !== undefined)) {
       this._leaseOpen = !this._leaseIsOpen();
       this._update();

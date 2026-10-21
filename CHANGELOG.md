@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.13.0
+
+### Changes
+- Lease folds like the stations of ha-carburants-france: a tap anywhere on the lease section unfolds or folds it (not only the header), a tap in the unfolded details does nothing, and a click anywhere else on the page folds it back to its default (`expand_lease`).
+
 ## 1.12.0
 
 ### What's new
