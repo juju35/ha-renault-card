@@ -77,7 +77,8 @@ export async function render(shots, { icons = {}, hass = {}, extra = "" } = {}) 
         const el = document.createElement(type);
         el.setConfig({ type: `custom:${type}`, ...config });
         el.hass = { states: {}, entities: {}, devices: {}, language: "en", locale: { language: "en" },
-                    themes: { darkMode: dark }, callService: async () => {}, callWS: async () => ({}), ...hass };
+                    themes: { darkMode: dark }, callService: async () => {},
+                    callWS: async (msg) => (msg.type === "recorder/statistics_during_period" && hass.mockStatistics) || ({}), ...hass };
         document.getElementById("root").appendChild(el);
       },
       { type: s.type, config: s.config || {}, hass: { ...hass, ...(s.hass || {}) }, dark: s.theme === "dark" }
@@ -100,6 +101,11 @@ const icons = {
   "car-light-high": "M13,4.8C9,4.8 9,19.2 13,19.2C17,19.2 22,16.5 22,12C22,7.5 17,4.8 13,4.8M13.1,17.2C12.7,16.8 12,15 12,12C12,9 12.7,7.2 13.1,6.8C16,6.9 20,8.7 20,12C20,15.3 16,17.1 13.1,17.2M2,5H9.5C9.3,5.4 9,5.8 8.9,6.4C8.8,6.6 8.8,6.8 8.7,7H2V5M8,11H2V9H8.2C8.1,9.6 8.1,10.3 8,11M8.7,17C8.9,17.8 9.2,18.4 9.6,19H2.1V17H8.7M8.2,15H2V13H8C8.1,13.7 8.1,14.4 8.2,15Z",
   "car-off": "M20.5,19.85L6.41,5.76L2.41,1.76L1.11,3L4.57,6.46L3,11V19A1,1 0 0,0 4,20H5A1,1 0 0,0 6,19V18H16.11L20.84,22.73L22.11,21.46L20.5,19.85M6.5,15A1.5,1.5 0 0,1 5,13.5A1.5,1.5 0 0,1 6.5,12A1.5,1.5 0 0,1 8,13.5A1.5,1.5 0 0,1 6.5,15M5,10L5.78,7.67L8.11,10H5M17.5,5.5L19,10H13.2L16.12,12.92C16.5,12.17 17.37,11.86 18.12,12.21C18.87,12.57 19.18,13.47 18.83,14.21C18.68,14.5 18.43,14.77 18.12,14.92L21,17.8V11L18.92,5C18.71,4.4 18.14,4 17.5,4H7.2L8.7,5.5H17.5Z",
   "car-tire-alert": "M11,13H13V15H11V13M11,5H13V11H11V5M17,4.76C18.86,6.19 20,8.61 20,11C20,14 18.33,16.64 15.86,18H8.14C5.67,16.64 4,14 4,11C4,8.61 5.09,6.17 7,4.76V2H5V3.86C3.15,5.68 2,8.2 2,11C2,13.8 3.15,16.32 5,18.14V22H7V20H9V22H11V20H13V22H15V20H17V22H19V18.14C20.85,16.32 22,13.8 22,11C22,8.2 20.85,5.68 19,3.86V2H17V4.76Z",
+  "alert-circle-outline": "M11,15H13V17H11V15M11,7H13V13H11V7M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z",
+  "check-circle-outline": "M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M12 20C7.59 20 4 16.41 4 12S7.59 4 12 4 20 7.59 20 12 16.41 20 12 20M16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z",
+  "chevron-down": "M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z",
+  "chevron-up": "M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z",
+  "file-sign": "M19.7 12.9L14 18.6H11.7V16.3L17.4 10.6L19.7 12.9M23.1 12.1C23.1 12.4 22.8 12.7 22.5 13L20 15.5L19.1 14.6L21.7 12L21.1 11.4L20.4 12.1L18.1 9.8L20.3 7.7C20.5 7.5 20.9 7.5 21.2 7.7L22.6 9.1C22.8 9.3 22.8 9.7 22.6 10C22.4 10.2 22.2 10.4 22.2 10.6C22.2 10.8 22.4 11 22.6 11.2C22.9 11.5 23.2 11.8 23.1 12.1M3 20V4H10V9H15V10.5L17 8.5V8L11 2H3C1.9 2 1 2.9 1 4V20C1 21.1 1.9 22 3 22H15C16.1 22 17 21.1 17 20H3M11 17.1C10.8 17.1 10.6 17.2 10.5 17.2L10 15H8.5L6.4 16.7L7 14H5.5L4.5 19H6L8.9 16.4L9.5 18.7H10.5L11 18.6V17.1Z",
   "chevron-right": "M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z",
   "counter": "M4,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M4,6V18H11V6H4M20,18V6H18.76C19,6.54 18.95,7.07 18.95,7.13C18.88,7.8 18.41,8.5 18.24,8.75L15.91,11.3L19.23,11.28L19.24,12.5L14.04,12.47L14,11.47C14,11.47 17.05,8.24 17.2,7.95C17.34,7.67 17.91,6 16.5,6C15.27,6.05 15.41,7.3 15.41,7.3L13.87,7.31C13.87,7.31 13.88,6.65 14.25,6H13V18H15.58L15.57,17.14L16.54,17.13C16.54,17.13 17.45,16.97 17.46,16.08C17.5,15.08 16.65,15.08 16.5,15.08C16.37,15.08 15.43,15.13 15.43,15.95H13.91C13.91,15.95 13.95,13.89 16.5,13.89C19.1,13.89 18.96,15.91 18.96,15.91C18.96,15.91 19,17.16 17.85,17.63L18.37,18H20M8.92,16H7.42V10.2L5.62,10.76V9.53L8.76,8.41H8.92V16Z",
   "directions": "M14,14.5V12H10V15H8V11A1,1 0 0,1 9,10H14V7.5L17.5,11M21.71,11.29L12.71,2.29H12.7C12.31,1.9 11.68,1.9 11.29,2.29L2.29,11.29C1.9,11.68 1.9,12.32 2.29,12.71L11.29,21.71C11.68,22.09 12.31,22.1 12.71,21.71L21.71,12.71C22.1,12.32 22.1,11.68 21.71,11.29Z",
@@ -160,10 +166,33 @@ const devices = {
 };
 const hass = { states, entities, devices, user: { name: "Julien" } };
 
+// Lease started 22 months ago: daily mileage statistics with weekday / weekend driving.
+const leaseStart = new Date();
+leaseStart.setMonth(leaseStart.getMonth() - 22, 1);
+leaseStart.setHours(0, 0, 0, 0);
+const lease = { start_date: `${leaseStart.getFullYear()}-${String(leaseStart.getMonth() + 1).padStart(2, "0")}-01`, duration: 37, km_per_year: 20000, start_mileage: 12 };
+const rows = [];
+let km = 12;
+for (let t = leaseStart.getTime(); t < Date.now() - 86400000; t += 86400000) {
+  const day = new Date(t);
+  const summer = day.getMonth() === 7 ? 3 : 1;
+  km += (day.getDay() % 6 ? 42 : 95) * summer * (0.6 + ((t / 86400000) * 7919 % 10) / 12);
+  rows.push({ start: t, state: Math.round(km) });
+}
+const scale = (34497 - 12) / (km - 12);
+rows.forEach((r) => { r.state = Math.round(12 + (r.state - 12) * scale); });
+const leaseHass = { mockStatistics: { "sensor.espace_mileage": rows } };
+const openLease = async (page) => {
+  await page.locator(".lease-head").click();
+  await page.waitForTimeout(300);
+};
+
 await render(
   [
     { file: "espace", type: "renault-card", theme: "light", width: 420, config: { plate_department: "35" } },
     { file: "espace-dark", type: "renault-card", theme: "dark", width: 420, config: { plate_department: "35", language: "fr" } },
+    { file: "lease", type: "renault-card", theme: "light", width: 420, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, lease }, hass: leaseHass, after: openLease },
+    { file: "lease-dark", type: "renault-card", theme: "dark", width: 420, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, language: "fr", lease }, hass: leaseHass, after: openLease },
     { file: "captur", type: "renault-card", theme: "light", width: 420, config: { device_id: "captur", plate_department: "35", show_data_plan: false } },
     { file: "captur-dark", type: "renault-card", theme: "dark", width: 420, config: { device_id: "captur", plate_department: "35", show_data_plan: false, language: "fr" } },
   ],

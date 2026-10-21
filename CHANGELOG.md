@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.9.0
+
+### What's new
+- Optional lease (LOA) tracking: set `lease.start_date`, `lease.duration` (months), `lease.km_per_year` and optionally `lease.start_mileage`. The card shows the kilometres driven against the allowance, where you should be today, your yearly pace, the projected mileage at the end of the lease, and a status that is always visible: within the allowance (with the margin), projected excess, or allowance exceeded.
+- Tap the lease header to unfold the mileage chart (actual, allowance, projection) built from the mileage sensor's long-term statistics; it is folded by default.
+- Lease tracking panel in the visual editor, labels in English and French.
+
 ## 1.8.0
 
 ### Changes

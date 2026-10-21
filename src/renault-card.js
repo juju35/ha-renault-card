@@ -78,6 +78,30 @@ var RnI18n = {
     en_battery_level: 'Niveau de batterie',
     en_battery_autonomy: 'Autonomie batterie',
     en_location: 'Position',
+    lease: 'LOA',
+    lease_driven: '{d} sur {t}',
+    lease_ends: 'Fin le {d}',
+    lease_months_left: '{n} mois',
+    lease_ended: 'Terminée',
+    lease_pace: 'Rythme {p}/an',
+    lease_projection: 'Projection {p}',
+    lease_ok: 'Dans le forfait',
+    lease_ok_margin: 'Marge de {k}',
+    lease_warn: 'Dépassement prévu : {k}',
+    lease_over: 'Forfait dépassé de {k}',
+    lease_early: 'Trop tôt pour une projection',
+    lease_chart: 'Suivi du kilométrage',
+    lease_legend_actual: 'Réel',
+    lease_legend_allowed: 'Forfait',
+    lease_legend_projection: 'Projection',
+    lease_no_history: 'Pas d\'historique pour l\'instant',
+    ed_lease: 'Suivi de LOA',
+    ed_start_date: 'Début de la LOA',
+    ed_duration: 'Durée',
+    ed_duration_unit: 'mois',
+    ed_km_per_year: 'Kilométrage par an',
+    ed_start_mileage: 'Kilométrage à la livraison',
+    ed_start_mileage_helper: '0 par défaut',
   },
   en: {
     vehicle: 'Vehicle',
@@ -139,6 +163,30 @@ var RnI18n = {
     en_battery_level: 'Battery level',
     en_battery_autonomy: 'Battery range',
     en_location: 'Location',
+    lease: 'Lease',
+    lease_driven: '{d} of {t}',
+    lease_ends: 'Ends on {d}',
+    lease_months_left: '{n} months',
+    lease_ended: 'Ended',
+    lease_pace: 'Pace {p}/year',
+    lease_projection: 'Projection {p}',
+    lease_ok: 'Within allowance',
+    lease_ok_margin: '{k} to spare',
+    lease_warn: 'Projected over: {k}',
+    lease_over: 'Allowance exceeded by {k}',
+    lease_early: 'Too early for a projection',
+    lease_chart: 'Mileage tracking',
+    lease_legend_actual: 'Actual',
+    lease_legend_allowed: 'Allowance',
+    lease_legend_projection: 'Projection',
+    lease_no_history: 'No history yet',
+    ed_lease: 'Lease tracking',
+    ed_start_date: 'Lease start',
+    ed_duration: 'Duration',
+    ed_duration_unit: 'months',
+    ed_km_per_year: 'Mileage per year',
+    ed_start_mileage: 'Mileage at delivery',
+    ed_start_mileage_helper: 'Defaults to 0',
   },
 };
 
@@ -314,6 +362,40 @@ var RN_BUTTON_ICONS = [
   [/(start_charge|charge)/, 'mdi:ev-station'],
 ];
 
+// ── Lease (LOA) tracking ─────────────────────────────────────────────────────
+// lease: { start_date: 'YYYY-MM-DD', duration: months, km_per_year, start_mileage? }
+function rnLeaseDates(lease) {
+  var m = String((lease && lease.start_date) || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
+  var months = Number(lease && lease.duration);
+  if (!m || !(months > 0) || !(Number(lease.km_per_year) > 0)) return null;
+  var y = Number(m[1]), mo = Number(m[2]) - 1, d = Number(m[3]);
+  return { start: new Date(y, mo, d), end: new Date(y, mo + months, d), months: months };
+}
+
+// Driven, allowance, pace and end-of-lease projection at time `now`.
+function rnLeaseStatus(lease, mileage, now) {
+  var dates = rnLeaseDates(lease);
+  if (!dates || mileage == null || isNaN(mileage)) return null;
+  var DAY = 86400000;
+  var allowed = Number(lease.km_per_year) * dates.months / 12;
+  var startKm = Number(lease.start_mileage) || 0;
+  var driven = Math.max(0, mileage - startKm);
+  var total = (dates.end - dates.start) / DAY;
+  var elapsed = Math.max(0, Math.min(total, (now - dates.start) / DAY));
+  var ended = now >= dates.end;
+  // Below 30 days the pace says little: no projection yet.
+  var projected = ended ? driven : (elapsed >= 30 ? driven / elapsed * total : null);
+  var state = 'ok';
+  if (driven > allowed) state = 'over';
+  else if (projected != null && projected > allowed) state = 'warn';
+  return {
+    start: dates.start, end: dates.end, allowed: allowed, startKm: startKm, driven: driven, ended: ended,
+    expected: total ? allowed * elapsed / total : 0, elapsedRatio: total ? elapsed / total : 0,
+    pace: elapsed >= 30 ? driven / elapsed * 365.25 : null, projected: projected, state: state,
+    monthsLeft: Math.max(0, Math.round((dates.end - now) / DAY / 30.44)),
+  };
+}
+
 // ── renault-card ─────────────────────────────────────────────────────────────
 class RenaultCard extends HTMLElement {
   static getConfigElement() {
@@ -334,6 +416,13 @@ class RenaultCard extends HTMLElement {
       this.attachShadow({ mode: 'open' });
       this.shadowRoot.addEventListener('click', (ev) => this._onClick(ev));
       this.shadowRoot.addEventListener('change', (ev) => this._onChange(ev));
+      this.shadowRoot.addEventListener('keydown', (ev) => {
+        if ((ev.key === 'Enter' || ev.key === ' ') && ev.target.dataset && ev.target.dataset.leaseToggle !== undefined) {
+          ev.preventDefault();
+          this._leaseOpen = !this._leaseOpen;
+          this._update();
+        }
+      });
     }
     this._sig = null;
     this._update();
@@ -479,7 +568,7 @@ class RenaultCard extends HTMLElement {
     var ids = [];
     Object.keys(r.ent).forEach(function (k) { ids = ids.concat(r.ent[k]); });
     if (r.plan) Object.keys(RN_PLAN_ROLES).forEach(function (k) { ids.push(r.plan[k]); });
-    var sig = JSON.stringify([this._lang(), r.deviceId, this._armed, ids.map(function (id) {
+    var sig = JSON.stringify([this._lang(), r.deviceId, this._armed, this._leaseOpen, this._leaseHist && this._leaseHist.key, ids.map(function (id) {
       var s = id && hass.states[id];
       return s ? [id, s.state, s.attributes.options] : null;
     })]);
@@ -660,7 +749,108 @@ class RenaultCard extends HTMLElement {
     this.shadowRoot.innerHTML = this._styles() + '<ha-card>' + header + image +
       (chips.length ? '<div class="chips">' + chips.join('') + '</div>' : '') +
       (tiles.length ? '<div class="tiles">' + tiles.join('') + '</div>' : '') +
-      locationHtml + planHtml + actionsHtml + '</ha-card>';
+      this._leaseHtml(ent) + locationHtml + planHtml + actionsHtml + '</ha-card>';
+  }
+
+  _km(n) { return this._fmtNum(Math.round(n)) + ' km'; }
+
+  _leaseHtml(ent) {
+    var lease = this._config.lease;
+    var st = rnLeaseStatus(lease, this._num(ent.mileage), Date.now());
+    if (!st) return '';
+    var color = st.state === 'over' ? 'var(--error-color, #db4437)' : st.state === 'warn' ? 'var(--warning-color, #ffa600)' : 'var(--success-color, #43a047)';
+    var icon = st.state === 'ok' ? 'mdi:check-circle-outline' : 'mdi:alert-circle-outline';
+    var status;
+    if (st.state === 'over') status = this._t('lease_over', { k: this._km(st.driven - st.allowed) });
+    else if (st.state === 'warn') status = this._t('lease_warn', { k: this._km(st.projected - st.allowed) });
+    else if (st.projected != null) status = this._t('lease_ok_margin', { k: this._km(st.allowed - st.projected) });
+    else status = this._t('lease_ok');
+    var endTxt = st.end.toLocaleDateString(this._lang(), { day: 'numeric', month: 'long', year: 'numeric' });
+    var details = [];
+    if (st.pace != null && !st.ended) details.push(this._t('lease_pace', { p: this._km(st.pace) }));
+    if (st.projected != null && !st.ended) details.push(this._t('lease_projection', { p: this._km(st.projected) }));
+    if (st.projected == null) details.push(this._t('lease_early'));
+    var open = !!this._leaseOpen;
+    var pct = st.allowed ? st.driven / st.allowed * 100 : 0;
+    var marker = Math.max(0, Math.min(100, st.elapsedRatio * 100));
+    return '<div class="lease lease-' + st.state + '">' +
+      '<div class="lease-head" data-lease-toggle role="button" tabindex="0" aria-expanded="' + open + '">' +
+      '<ha-icon class="lease-icon" icon="mdi:file-sign"></ha-icon><span class="plan-title">' + this._t('lease') + '</span>' +
+      '<span class="lease-status" style="color:' + color + '"><ha-icon icon="' + icon + '"></ha-icon>' + rnEsc(status) + '</span>' +
+      '<ha-icon class="chev" icon="' + (open ? 'mdi:chevron-up' : 'mdi:chevron-down') + '"></ha-icon></div>' +
+      '<div class="lease-bar">' + this._bar(pct, color) + '<span class="lease-mark" style="left:' + marker.toFixed(1) + '%"></span></div>' +
+      '<div class="plan-info"><span>' + rnEsc(this._t('lease_driven', { d: this._km(st.driven), t: this._km(st.allowed) })) + '</span>' +
+      '<span>' + rnEsc(this._t('lease_ends', { d: endTxt }) + ' · ' + (st.ended ? this._t('lease_ended') : this._t('lease_months_left', { n: st.monthsLeft }))) + '</span></div>' +
+      (details.length ? '<div class="plan-info"><span>' + rnEsc(details.join(' · ')) + '</span></div>' : '') +
+      (open ? this._leaseChart(st, ent.mileage) : '') + '</div>';
+  }
+
+  // Daily mileage from the long-term statistics (kept forever by the recorder), cached for an hour.
+  _leaseFetch(st, entityId) {
+    var key = entityId + '|' + st.start.getTime();
+    if (!this._hass.callWS || (this._leaseHist && this._leaseHist.key === key && Date.now() - this._leaseHist.at < 3600000)) return;
+    if (this._leaseFetching === key) return;
+    this._leaseFetching = key;
+    this._hass.callWS({
+      type: 'recorder/statistics_during_period', start_time: st.start.toISOString(), end_time: new Date().toISOString(),
+      statistic_ids: [entityId], period: 'day', types: ['state'],
+    }).then((res) => {
+      var rows = (res && res[entityId]) || [];
+      var points = rows.map(function (row) {
+        return [typeof row.start === 'number' ? row.start : new Date(row.start).getTime(), Number(row.state)];
+      }).filter(function (p) { return !isNaN(p[0]) && !isNaN(p[1]); });
+      this._leaseHist = { key: key, at: Date.now(), points: points };
+    }).catch(() => {
+      this._leaseHist = { key: key, at: Date.now(), points: [] };
+    }).then(() => {
+      this._leaseFetching = null;
+      this._update();
+    });
+  }
+
+  _leaseChart(st, entityId) {
+    this._leaseFetch(st, entityId);
+    var hist = this._leaseHist && this._leaseHist.key === entityId + '|' + st.start.getTime() ? this._leaseHist.points : null;
+    var now = Date.now();
+    var t0 = st.start.getTime(), t1 = st.end.getTime();
+    var W = 320, H = 150, L = 6, R = 6, T = 8, B = 20;
+    var top = Math.max(st.allowed, st.projected || 0, st.driven) * 1.08 || 1;
+    var x = function (t) { return (L + (Math.max(t0, Math.min(t1, t)) - t0) / (t1 - t0) * (W - L - R)).toFixed(1); };
+    var y = function (km) { return (T + (1 - Math.max(0, km) / top) * (H - T - B)).toFixed(1); };
+    var pts = [[t0, 0]];
+    (hist || []).forEach(function (p) {
+      if (p[0] >= t0 && p[0] <= now) pts.push([p[0], Math.max(0, p[1] - st.startKm)]);
+    });
+    pts.push([Math.min(now, t1), st.driven]);
+    var line = pts.map(function (p, i) { return (i ? 'L' : 'M') + x(p[0]) + ' ' + y(p[1]); }).join(' ');
+    var area = line + ' L' + x(pts[pts.length - 1][0]) + ' ' + y(0) + ' L' + x(t0) + ' ' + y(0) + ' Z';
+    var color = st.state === 'over' ? 'var(--error-color, #db4437)' : st.state === 'warn' ? 'var(--warning-color, #ffa600)' : 'var(--success-color, #43a047)';
+    // Year ticks on the x axis.
+    var ticks = '';
+    var startYear = st.start.getFullYear(), endYear = st.end.getFullYear();
+    for (var yr = startYear + 1; yr <= endYear; yr++) {
+      var tx = x(new Date(yr, 0, 1).getTime());
+      ticks += '<line x1="' + tx + '" x2="' + tx + '" y1="' + T + '" y2="' + (H - B) + '" class="grid"/>' +
+        '<text x="' + tx + '" y="' + (H - 6) + '" text-anchor="middle">' + yr + '</text>';
+    }
+    var proj = st.projected != null && !st.ended
+      ? '<path d="M' + x(now) + ' ' + y(st.driven) + ' L' + x(t1) + ' ' + y(st.projected) + '" class="proj" style="stroke:' + color + '"/>' : '';
+    var svg = '<svg class="lease-chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + rnEsc(this._t('lease_chart')) + '">' +
+      ticks +
+      '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(st.allowed) + '" y2="' + y(st.allowed) + '" class="limit"/>' +
+      '<text x="' + (L + 2) + '" y="' + (Number(y(st.allowed)) - 4) + '" class="limit-lbl">' + rnEsc(this._km(st.allowed)) + '</text>' +
+      '<path d="M' + x(t0) + ' ' + y(0) + ' L' + x(t1) + ' ' + y(st.allowed) + '" class="allowed"/>' +
+      '<path d="' + area + '" class="area"/>' +
+      '<path d="' + line + '" class="actual"/>' + proj +
+      '<line x1="' + x(now) + '" x2="' + x(now) + '" y1="' + T + '" y2="' + (H - B) + '" class="today"/>' +
+      '<circle cx="' + x(Math.min(now, t1)) + '" cy="' + y(st.driven) + '" r="3" class="dot"/>' +
+      '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + (H - B) + '" y2="' + (H - B) + '" class="axis"/>' +
+      '</svg>';
+    return '<div class="lease-graph"><div class="legend">' +
+      '<span><i class="sw actual-sw"></i>' + this._t('lease_legend_actual') + '</span>' +
+      '<span><i class="sw allowed-sw"></i>' + this._t('lease_legend_allowed') + '</span>' +
+      (proj ? '<span><i class="sw proj-sw" style="border-color:' + color + '"></i>' + this._t('lease_legend_projection') + '</span>' : '') +
+      '</div>' + svg + (hist && !hist.length ? '<div class="plan-info"><span>' + this._t('lease_no_history') + '</span></div>' : '') + '</div>';
   }
 
   _styles() {
@@ -704,7 +894,8 @@ class RenaultCard extends HTMLElement {
       '.row > ha-icon { color: var(--rn-accent); --mdc-icon-size: 22px; }' +
       '.row-text { flex: 1; }' +
       '.when { font-size: 12px; color: var(--secondary-text-color); text-align: right; }' +
-      '.chev { color: var(--secondary-text-color); --mdc-icon-size: 20px; }' +
+      '.chev { color: var(--secondary-text-color); --mdc-icon-size: 20px; flex-shrink: 0; }' +
+      '.lease-head .plan-title { flex: 1 0 auto; }' +
       '.plan { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 10px; cursor: pointer;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.1)); }' +
       '.plan-head { display: flex; align-items: center; gap: 8px; }' +
@@ -714,6 +905,34 @@ class RenaultCard extends HTMLElement {
       '.pct { font-size: 13px; font-weight: 500; color: var(--primary-text-color); }' +
       '.plan .bar { background: color-mix(in srgb, var(--secondary-text-color) 18%, transparent); }' +
       '.plan-info { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 8px; font-size: 12px; color: var(--secondary-text-color); }' +
+      '.lease { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 10px;' +
+        ' background: var(--secondary-background-color, rgba(128,128,128,0.1)); }' +
+      '.lease-head { display: flex; align-items: center; gap: 8px; cursor: pointer; min-width: 0; }' +
+      '.lease-icon { color: var(--rn-accent); --mdc-icon-size: 22px; flex-shrink: 0; }' +
+      '.lease-status { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 500; min-width: 0; text-align: right; }' +
+      '.lease-status ha-icon { --mdc-icon-size: 16px; flex-shrink: 0; }' +
+      '.lease-bar { position: relative; }' +
+      '.lease .bar { background: color-mix(in srgb, var(--secondary-text-color) 18%, transparent); }' +
+      '.lease-mark { position: absolute; top: -3px; width: 2px; height: 12px; margin-left: -1px; border-radius: 1px; background: var(--primary-text-color); opacity: 0.6; }' +
+      '.lease-graph { display: flex; flex-direction: column; gap: 6px; padding-top: 4px; }' +
+      '.legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--secondary-text-color); }' +
+      '.legend span { display: inline-flex; align-items: center; gap: 5px; }' +
+      '.sw { display: inline-block; width: 14px; height: 0; border-top: 2px solid; }' +
+      '.actual-sw { border-color: var(--rn-accent); }' +
+      '.allowed-sw { border-top-style: dashed; border-color: var(--secondary-text-color); }' +
+      '.proj-sw { border-top-style: dotted; }' +
+      '.lease-chart { width: 100%; height: auto; display: block; overflow: visible; }' +
+      '.lease-chart text { font-size: 10px; fill: var(--secondary-text-color); font-family: inherit; }' +
+      '.lease-chart .grid { stroke: color-mix(in srgb, var(--secondary-text-color) 15%, transparent); stroke-width: 1; }' +
+      '.lease-chart .axis { stroke: color-mix(in srgb, var(--secondary-text-color) 40%, transparent); stroke-width: 1; }' +
+      '.lease-chart .limit { stroke: var(--error-color, #db4437); stroke-width: 1; stroke-opacity: 0.5; }' +
+      '.lease-chart .limit-lbl { fill: var(--error-color, #db4437); }' +
+      '.lease-chart .allowed { fill: none; stroke: var(--secondary-text-color); stroke-width: 1.2; stroke-dasharray: 4 3; }' +
+      '.lease-chart .area { fill: color-mix(in srgb, var(--rn-accent) 14%, transparent); stroke: none; }' +
+      '.lease-chart .actual { fill: none; stroke: var(--rn-accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }' +
+      '.lease-chart .proj { fill: none; stroke-width: 1.6; stroke-dasharray: 1.5 3; stroke-linecap: round; }' +
+      '.lease-chart .today { stroke: var(--primary-text-color); stroke-opacity: 0.25; stroke-width: 1; }' +
+      '.lease-chart .dot { fill: var(--rn-accent); }' +
       '.field { display: flex; flex-direction: column; gap: 4px; }' +
       '.field > span { font-size: 12px; color: var(--secondary-text-color); }' +
       'select { font: inherit; font-size: 14px; color: var(--primary-text-color); padding: 9px 32px 9px 12px; border-radius: 10px; width: 100%;' +
@@ -733,6 +952,11 @@ class RenaultCard extends HTMLElement {
     var path = ev.composedPath();
     // Links (the Orange logo) open on their own, without the more-info dialog.
     if (path.some((n) => n.tagName === 'A')) return;
+    if (path.some((n) => n.dataset && n.dataset.leaseToggle !== undefined)) {
+      this._leaseOpen = !this._leaseOpen;
+      this._update();
+      return;
+    }
     var press = path.find((n) => n.dataset && n.dataset.press);
     if (press) {
       var id = press.dataset.press;
@@ -818,6 +1042,19 @@ class RenaultCardEditor extends HTMLElement {
       { name: 'plate_department', selector: { text: {} } },
       { name: 'data_plan_device_id', selector: { device: { integration: 'orange_internet_on_the_move' } } },
       {
+        type: 'expandable', name: 'lease', title: t('ed_lease'), flatten: false, icon: 'mdi:file-sign',
+        schema: [
+          { name: 'start_date', selector: { date: {} } },
+          {
+            type: 'grid', name: '', schema: [
+              { name: 'duration', selector: { number: { min: 1, max: 120, step: 1, mode: 'box', unit_of_measurement: t('ed_duration_unit') } } },
+              { name: 'km_per_year', selector: { number: { min: 0, max: 100000, step: 1000, mode: 'box', unit_of_measurement: 'km' } } },
+            ],
+          },
+          { name: 'start_mileage', selector: { number: { min: 0, max: 1000000, step: 1, mode: 'box', unit_of_measurement: 'km' } } },
+        ],
+      },
+      {
         name: 'language',
         selector: { select: { mode: 'dropdown', options: [{ value: 'fr', label: 'Français' }, { value: 'en', label: 'English' }] } },
       },
@@ -861,6 +1098,11 @@ class RenaultCardEditor extends HTMLElement {
       var e = Object.assign({}, value.entities);
       Object.keys(e).forEach(function (k) { if (!e[k]) delete e[k]; });
       if (Object.keys(e).length) value.entities = e; else delete value.entities;
+    }
+    if (value.lease) {
+      var l = Object.assign({}, value.lease);
+      Object.keys(l).forEach(function (k) { if (l[k] === '' || l[k] === null || l[k] === undefined) delete l[k]; });
+      if (Object.keys(l).length) value.lease = l; else delete value.lease;
     }
     if (!value.show_data_plan && value.show_data_plan !== undefined) delete value.data_plan_device_id;
     if (this._config.type) value = Object.assign({ type: this._config.type }, value);

@@ -1,4 +1,4 @@
-var RENAULT_CARD_VERSION = '1.8.0';
+var RENAULT_CARD_VERSION = '1.9.0';
 
 // Leaflet 1.9.4 stylesheet (BSD-2-Clause, see licenses/LICENSE-leaflet), inlined for the map card's shadow root.
 var RN_LEAFLET_CSS = "/* required styles */\n\n.leaflet-pane,\n.leaflet-tile,\n.leaflet-marker-icon,\n.leaflet-marker-shadow,\n.leaflet-tile-container,\n.leaflet-pane > svg,\n.leaflet-pane > canvas,\n.leaflet-zoom-box,\n.leaflet-image-layer,\n.leaflet-layer {\n\tposition: absolute;\n\tleft: 0;\n\ttop: 0;\n\t}\n.leaflet-container {\n\toverflow: hidden;\n\t}\n.leaflet-tile,\n.leaflet-marker-icon,\n.leaflet-marker-shadow {\n\t-webkit-user-select: none;\n\t   -moz-user-select: none;\n\t        user-select: none;\n\t  -webkit-user-drag: none;\n\t}\n/* Prevents IE11 from highlighting tiles in blue */\n.leaflet-tile::selection {\n\tbackground: transparent;\n}\n/* Safari renders non-retina tile on retina better with this, but Chrome is worse */\n.leaflet-safari .leaflet-tile {\n\timage-rendering: -webkit-optimize-contrast;\n\t}\n/* hack that prevents hw layers \"stretching\" when loading new tiles */\n.leaflet-safari .leaflet-tile-container {\n\twidth: 1600px;\n\theight: 1600px;\n\t-webkit-transform-origin: 0 0;\n\t}\n.leaflet-marker-icon,\n.leaflet-marker-shadow {\n\tdisplay: block;\n\t}\n/* .leaflet-container svg: reset svg max-width decleration shipped in Joomla! (joomla.org) 3.x */\n/* .leaflet-container img: map is broken in FF if you have max-width: 100% on tiles */\n.leaflet-container .leaflet-overlay-pane svg {\n\tmax-width: none !important;\n\tmax-height: none !important;\n\t}\n.leaflet-container .leaflet-marker-pane img,\n.leaflet-container .leaflet-shadow-pane img,\n.leaflet-container .leaflet-tile-pane img,\n.leaflet-container img.leaflet-image-layer,\n.leaflet-container .leaflet-tile {\n\tmax-width: none !important;\n\tmax-height: none !important;\n\twidth: auto;\n\tpadding: 0;\n\t}\n\n.leaflet-container img.leaflet-tile {\n\t/* See: https://bugs.chromium.org/p/chromium/issues/detail?id=600120 */\n\tmix-blend-mode: plus-lighter;\n}\n\n.leaflet-container.leaflet-touch-zoom {\n\t-ms-touch-action: pan-x pan-y;\n\ttouch-action: pan-x pan-y;\n\t}\n.leaflet-container.leaflet-touch-drag {\n\t-ms-touch-action: pinch-zoom;\n\t/* Fallback for FF which doesn't support pinch-zoom */\n\ttouch-action: none;\n\ttouch-action: pinch-zoom;\n}\n.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom {\n\t-ms-touch-action: none;\n\ttouch-action: none;\n}\n.leaflet-container {\n\t-webkit-tap-highlight-color: transparent;\n}\n.leaflet-container a {\n\t-webkit-tap-highlight-color: rgba(51, 181, 229, 0.4);\n}\n.leaflet-tile {\n\tfilter: inherit;\n\tvisibility: hidden;\n\t}\n.leaflet-tile-loaded {\n\tvisibility: inherit;\n\t}\n.leaflet-zoom-box {\n\twidth: 0;\n\theight: 0;\n\t-moz-box-sizing: border-box;\n\t     box-sizing: border-box;\n\tz-index: 800;\n\t}\n/* workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=888319 */\n.leaflet-overlay-pane svg {\n\t-moz-user-select: none;\n\t}\n\n.leaflet-pane         { z-index: 400; }\n\n.leaflet-tile-pane    { z-index: 200; }\n.leaflet-overlay-pane { z-index: 400; }\n.leaflet-shadow-pane  { z-index: 500; }\n.leaflet-marker-pane  { z-index: 600; }\n.leaflet-tooltip-pane   { z-index: 650; }\n.leaflet-popup-pane   { z-index: 700; }\n\n.leaflet-map-pane canvas { z-index: 100; }\n.leaflet-map-pane svg    { z-index: 200; }\n\n.leaflet-vml-shape {\n\twidth: 1px;\n\theight: 1px;\n\t}\n.lvml {\n\tbehavior: url(#default#VML);\n\tdisplay: inline-block;\n\tposition: absolute;\n\t}\n\n\n/* control positioning */\n\n.leaflet-control {\n\tposition: relative;\n\tz-index: 800;\n\tpointer-events: visiblePainted; /* IE 9-10 doesn't have auto */\n\tpointer-events: auto;\n\t}\n.leaflet-top,\n.leaflet-bottom {\n\tposition: absolute;\n\tz-index: 1000;\n\tpointer-events: none;\n\t}\n.leaflet-top {\n\ttop: 0;\n\t}\n.leaflet-right {\n\tright: 0;\n\t}\n.leaflet-bottom {\n\tbottom: 0;\n\t}\n.leaflet-left {\n\tleft: 0;\n\t}\n.leaflet-control {\n\tfloat: left;\n\tclear: both;\n\t}\n.leaflet-right .leaflet-control {\n\tfloat: right;\n\t}\n.leaflet-top .leaflet-control {\n\tmargin-top: 10px;\n\t}\n.leaflet-bottom .leaflet-control {\n\tmargin-bottom: 10px;\n\t}\n.leaflet-left .leaflet-control {\n\tmargin-left: 10px;\n\t}\n.leaflet-right .leaflet-control {\n\tmargin-right: 10px;\n\t}\n\n\n/* zoom and fade animations */\n\n.leaflet-fade-anim .leaflet-popup {\n\topacity: 0;\n\t-webkit-transition: opacity 0.2s linear;\n\t   -moz-transition: opacity 0.2s linear;\n\t        transition: opacity 0.2s linear;\n\t}\n.leaflet-fade-anim .leaflet-map-pane .leaflet-popup {\n\topacity: 1;\n\t}\n.leaflet-zoom-animated {\n\t-webkit-transform-origin: 0 0;\n\t    -ms-transform-origin: 0 0;\n\t        transform-origin: 0 0;\n\t}\nsvg.leaflet-zoom-animated {\n\twill-change: transform;\n}\n\n.leaflet-zoom-anim .leaflet-zoom-animated {\n\t-webkit-transition: -webkit-transform 0.25s cubic-bezier(0,0,0.25,1);\n\t   -moz-transition:    -moz-transform 0.25s cubic-bezier(0,0,0.25,1);\n\t        transition:         transform 0.25s cubic-bezier(0,0,0.25,1);\n\t}\n.leaflet-zoom-anim .leaflet-tile,\n.leaflet-pan-anim .leaflet-tile {\n\t-webkit-transition: none;\n\t   -moz-transition: none;\n\t        transition: none;\n\t}\n\n.leaflet-zoom-anim .leaflet-zoom-hide {\n\tvisibility: hidden;\n\t}\n\n\n/* cursors */\n\n.leaflet-interactive {\n\tcursor: pointer;\n\t}\n.leaflet-grab {\n\tcursor: -webkit-grab;\n\tcursor:    -moz-grab;\n\tcursor:         grab;\n\t}\n.leaflet-crosshair,\n.leaflet-crosshair .leaflet-interactive {\n\tcursor: crosshair;\n\t}\n.leaflet-popup-pane,\n.leaflet-control {\n\tcursor: auto;\n\t}\n.leaflet-dragging .leaflet-grab,\n.leaflet-dragging .leaflet-grab .leaflet-interactive,\n.leaflet-dragging .leaflet-marker-draggable {\n\tcursor: move;\n\tcursor: -webkit-grabbing;\n\tcursor:    -moz-grabbing;\n\tcursor:         grabbing;\n\t}\n\n/* marker & overlays interactivity */\n.leaflet-marker-icon,\n.leaflet-marker-shadow,\n.leaflet-image-layer,\n.leaflet-pane > svg path,\n.leaflet-tile-container {\n\tpointer-events: none;\n\t}\n\n.leaflet-marker-icon.leaflet-interactive,\n.leaflet-image-layer.leaflet-interactive,\n.leaflet-pane > svg path.leaflet-interactive,\nsvg.leaflet-image-layer.leaflet-interactive path {\n\tpointer-events: visiblePainted; /* IE 9-10 doesn't have auto */\n\tpointer-events: auto;\n\t}\n\n/* visual tweaks */\n\n.leaflet-container {\n\tbackground: #ddd;\n\toutline-offset: 1px;\n\t}\n.leaflet-container a {\n\tcolor: #0078A8;\n\t}\n.leaflet-zoom-box {\n\tborder: 2px dotted #38f;\n\tbackground: rgba(255,255,255,0.5);\n\t}\n\n\n/* general typography */\n.leaflet-container {\n\tfont-family: \"Helvetica Neue\", Arial, Helvetica, sans-serif;\n\tfont-size: 12px;\n\tfont-size: 0.75rem;\n\tline-height: 1.5;\n\t}\n\n\n/* general toolbar styles */\n\n.leaflet-bar {\n\tbox-shadow: 0 1px 5px rgba(0,0,0,0.65);\n\tborder-radius: 4px;\n\t}\n.leaflet-bar a {\n\tbackground-color: #fff;\n\tborder-bottom: 1px solid #ccc;\n\twidth: 26px;\n\theight: 26px;\n\tline-height: 26px;\n\tdisplay: block;\n\ttext-align: center;\n\ttext-decoration: none;\n\tcolor: black;\n\t}\n.leaflet-bar a,\n.leaflet-control-layers-toggle {\n\tbackground-position: 50% 50%;\n\tbackground-repeat: no-repeat;\n\tdisplay: block;\n\t}\n.leaflet-bar a:hover,\n.leaflet-bar a:focus {\n\tbackground-color: #f4f4f4;\n\t}\n.leaflet-bar a:first-child {\n\tborder-top-left-radius: 4px;\n\tborder-top-right-radius: 4px;\n\t}\n.leaflet-bar a:last-child {\n\tborder-bottom-left-radius: 4px;\n\tborder-bottom-right-radius: 4px;\n\tborder-bottom: none;\n\t}\n.leaflet-bar a.leaflet-disabled {\n\tcursor: default;\n\tbackground-color: #f4f4f4;\n\tcolor: #bbb;\n\t}\n\n.leaflet-touch .leaflet-bar a {\n\twidth: 30px;\n\theight: 30px;\n\tline-height: 30px;\n\t}\n.leaflet-touch .leaflet-bar a:first-child {\n\tborder-top-left-radius: 2px;\n\tborder-top-right-radius: 2px;\n\t}\n.leaflet-touch .leaflet-bar a:last-child {\n\tborder-bottom-left-radius: 2px;\n\tborder-bottom-right-radius: 2px;\n\t}\n\n/* zoom control */\n\n.leaflet-control-zoom-in,\n.leaflet-control-zoom-out {\n\tfont: bold 18px 'Lucida Console', Monaco, monospace;\n\ttext-indent: 1px;\n\t}\n\n.leaflet-touch .leaflet-control-zoom-in, .leaflet-touch .leaflet-control-zoom-out  {\n\tfont-size: 22px;\n\t}\n\n\n/* layers control */\n\n.leaflet-control-layers {\n\tbox-shadow: 0 1px 5px rgba(0,0,0,0.4);\n\tbackground: #fff;\n\tborder-radius: 5px;\n\t}\n.leaflet-control-layers-toggle {\n\tbackground-image: url(images/layers.png);\n\twidth: 36px;\n\theight: 36px;\n\t}\n.leaflet-retina .leaflet-control-layers-toggle {\n\tbackground-image: url(images/layers-2x.png);\n\tbackground-size: 26px 26px;\n\t}\n.leaflet-touch .leaflet-control-layers-toggle {\n\twidth: 44px;\n\theight: 44px;\n\t}\n.leaflet-control-layers .leaflet-control-layers-list,\n.leaflet-control-layers-expanded .leaflet-control-layers-toggle {\n\tdisplay: none;\n\t}\n.leaflet-control-layers-expanded .leaflet-control-layers-list {\n\tdisplay: block;\n\tposition: relative;\n\t}\n.leaflet-control-layers-expanded {\n\tpadding: 6px 10px 6px 6px;\n\tcolor: #333;\n\tbackground: #fff;\n\t}\n.leaflet-control-layers-scrollbar {\n\toverflow-y: scroll;\n\toverflow-x: hidden;\n\tpadding-right: 5px;\n\t}\n.leaflet-control-layers-selector {\n\tmargin-top: 2px;\n\tposition: relative;\n\ttop: 1px;\n\t}\n.leaflet-control-layers label {\n\tdisplay: block;\n\tfont-size: 13px;\n\tfont-size: 1.08333em;\n\t}\n.leaflet-control-layers-separator {\n\theight: 0;\n\tborder-top: 1px solid #ddd;\n\tmargin: 5px -10px 5px -6px;\n\t}\n\n/* Default icon URLs */\n.leaflet-default-icon-path { /* used only in path-guessing heuristic, see L.Icon.Default */\n\tbackground-image: url(images/marker-icon.png);\n\t}\n\n\n/* attribution and scale controls */\n\n.leaflet-container .leaflet-control-attribution {\n\tbackground: #fff;\n\tbackground: rgba(255, 255, 255, 0.8);\n\tmargin: 0;\n\t}\n.leaflet-control-attribution,\n.leaflet-control-scale-line {\n\tpadding: 0 5px;\n\tcolor: #333;\n\tline-height: 1.4;\n\t}\n.leaflet-control-attribution a {\n\ttext-decoration: none;\n\t}\n.leaflet-control-attribution a:hover,\n.leaflet-control-attribution a:focus {\n\ttext-decoration: underline;\n\t}\n.leaflet-attribution-flag {\n\tdisplay: inline !important;\n\tvertical-align: baseline !important;\n\twidth: 1em;\n\theight: 0.6669em;\n\t}\n.leaflet-left .leaflet-control-scale {\n\tmargin-left: 5px;\n\t}\n.leaflet-bottom .leaflet-control-scale {\n\tmargin-bottom: 5px;\n\t}\n.leaflet-control-scale-line {\n\tborder: 2px solid #777;\n\tborder-top: none;\n\tline-height: 1.1;\n\tpadding: 2px 5px 1px;\n\twhite-space: nowrap;\n\t-moz-box-sizing: border-box;\n\t     box-sizing: border-box;\n\tbackground: rgba(255, 255, 255, 0.8);\n\ttext-shadow: 1px 1px #fff;\n\t}\n.leaflet-control-scale-line:not(:first-child) {\n\tborder-top: 2px solid #777;\n\tborder-bottom: none;\n\tmargin-top: -2px;\n\t}\n.leaflet-control-scale-line:not(:first-child):not(:last-child) {\n\tborder-bottom: 2px solid #777;\n\t}\n\n.leaflet-touch .leaflet-control-attribution,\n.leaflet-touch .leaflet-control-layers,\n.leaflet-touch .leaflet-bar {\n\tbox-shadow: none;\n\t}\n.leaflet-touch .leaflet-control-layers,\n.leaflet-touch .leaflet-bar {\n\tborder: 2px solid rgba(0,0,0,0.2);\n\tbackground-clip: padding-box;\n\t}\n\n\n/* popup */\n\n.leaflet-popup {\n\tposition: absolute;\n\ttext-align: center;\n\tmargin-bottom: 20px;\n\t}\n.leaflet-popup-content-wrapper {\n\tpadding: 1px;\n\ttext-align: left;\n\tborder-radius: 12px;\n\t}\n.leaflet-popup-content {\n\tmargin: 13px 24px 13px 20px;\n\tline-height: 1.3;\n\tfont-size: 13px;\n\tfont-size: 1.08333em;\n\tmin-height: 1px;\n\t}\n.leaflet-popup-content p {\n\tmargin: 17px 0;\n\tmargin: 1.3em 0;\n\t}\n.leaflet-popup-tip-container {\n\twidth: 40px;\n\theight: 20px;\n\tposition: absolute;\n\tleft: 50%;\n\tmargin-top: -1px;\n\tmargin-left: -20px;\n\toverflow: hidden;\n\tpointer-events: none;\n\t}\n.leaflet-popup-tip {\n\twidth: 17px;\n\theight: 17px;\n\tpadding: 1px;\n\n\tmargin: -10px auto 0;\n\tpointer-events: auto;\n\n\t-webkit-transform: rotate(45deg);\n\t   -moz-transform: rotate(45deg);\n\t    -ms-transform: rotate(45deg);\n\t        transform: rotate(45deg);\n\t}\n.leaflet-popup-content-wrapper,\n.leaflet-popup-tip {\n\tbackground: white;\n\tcolor: #333;\n\tbox-shadow: 0 3px 14px rgba(0,0,0,0.4);\n\t}\n.leaflet-container a.leaflet-popup-close-button {\n\tposition: absolute;\n\ttop: 0;\n\tright: 0;\n\tborder: none;\n\ttext-align: center;\n\twidth: 24px;\n\theight: 24px;\n\tfont: 16px/24px Tahoma, Verdana, sans-serif;\n\tcolor: #757575;\n\ttext-decoration: none;\n\tbackground: transparent;\n\t}\n.leaflet-container a.leaflet-popup-close-button:hover,\n.leaflet-container a.leaflet-popup-close-button:focus {\n\tcolor: #585858;\n\t}\n.leaflet-popup-scrolled {\n\toverflow: auto;\n\t}\n\n.leaflet-oldie .leaflet-popup-content-wrapper {\n\t-ms-zoom: 1;\n\t}\n.leaflet-oldie .leaflet-popup-tip {\n\twidth: 24px;\n\tmargin: 0 auto;\n\n\t-ms-filter: \"progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)\";\n\tfilter: progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678);\n\t}\n\n.leaflet-oldie .leaflet-control-zoom,\n.leaflet-oldie .leaflet-control-layers,\n.leaflet-oldie .leaflet-popup-content-wrapper,\n.leaflet-oldie .leaflet-popup-tip {\n\tborder: 1px solid #999;\n\t}\n\n\n/* div icon */\n\n.leaflet-div-icon {\n\tbackground: #fff;\n\tborder: 1px solid #666;\n\t}\n\n\n/* Tooltip */\n/* Base styles for the element that has a tooltip */\n.leaflet-tooltip {\n\tposition: absolute;\n\tpadding: 6px;\n\tbackground-color: #fff;\n\tborder: 1px solid #fff;\n\tborder-radius: 3px;\n\tcolor: #222;\n\twhite-space: nowrap;\n\t-webkit-user-select: none;\n\t-moz-user-select: none;\n\t-ms-user-select: none;\n\tuser-select: none;\n\tpointer-events: none;\n\tbox-shadow: 0 1px 3px rgba(0,0,0,0.4);\n\t}\n.leaflet-tooltip.leaflet-interactive {\n\tcursor: pointer;\n\tpointer-events: auto;\n\t}\n.leaflet-tooltip-top:before,\n.leaflet-tooltip-bottom:before,\n.leaflet-tooltip-left:before,\n.leaflet-tooltip-right:before {\n\tposition: absolute;\n\tpointer-events: none;\n\tborder: 6px solid transparent;\n\tbackground: transparent;\n\tcontent: \"\";\n\t}\n\n/* Directions */\n\n.leaflet-tooltip-bottom {\n\tmargin-top: 6px;\n}\n.leaflet-tooltip-top {\n\tmargin-top: -6px;\n}\n.leaflet-tooltip-bottom:before,\n.leaflet-tooltip-top:before {\n\tleft: 50%;\n\tmargin-left: -6px;\n\t}\n.leaflet-tooltip-top:before {\n\tbottom: 0;\n\tmargin-bottom: -12px;\n\tborder-top-color: #fff;\n\t}\n.leaflet-tooltip-bottom:before {\n\ttop: 0;\n\tmargin-top: -12px;\n\tmargin-left: -6px;\n\tborder-bottom-color: #fff;\n\t}\n.leaflet-tooltip-left {\n\tmargin-left: -6px;\n}\n.leaflet-tooltip-right {\n\tmargin-left: 6px;\n}\n.leaflet-tooltip-left:before,\n.leaflet-tooltip-right:before {\n\ttop: 50%;\n\tmargin-top: -6px;\n\t}\n.leaflet-tooltip-left:before {\n\tright: 0;\n\tmargin-right: -12px;\n\tborder-left-color: #fff;\n\t}\n.leaflet-tooltip-right:before {\n\tleft: 0;\n\tmargin-left: -12px;\n\tborder-right-color: #fff;\n\t}\n\n/* Printing */\n\n@media print {\n\t/* Prevent printers from removing background-images of controls. */\n\t.leaflet-control {\n\t\t-webkit-print-color-adjust: exact;\n\t\tprint-color-adjust: exact;\n\t\t}\n\t}\n";
@@ -78,6 +78,30 @@ var RnI18n = {
     en_battery_level: 'Niveau de batterie',
     en_battery_autonomy: 'Autonomie batterie',
     en_location: 'Position',
+    lease: 'LOA',
+    lease_driven: '{d} sur {t}',
+    lease_ends: 'Fin le {d}',
+    lease_months_left: '{n} mois',
+    lease_ended: 'Terminée',
+    lease_pace: 'Rythme {p}/an',
+    lease_projection: 'Projection {p}',
+    lease_ok: 'Dans le forfait',
+    lease_ok_margin: 'Marge de {k}',
+    lease_warn: 'Dépassement prévu : {k}',
+    lease_over: 'Forfait dépassé de {k}',
+    lease_early: 'Trop tôt pour une projection',
+    lease_chart: 'Suivi du kilométrage',
+    lease_legend_actual: 'Réel',
+    lease_legend_allowed: 'Forfait',
+    lease_legend_projection: 'Projection',
+    lease_no_history: 'Pas d\'historique pour l\'instant',
+    ed_lease: 'Suivi de LOA',
+    ed_start_date: 'Début de la LOA',
+    ed_duration: 'Durée',
+    ed_duration_unit: 'mois',
+    ed_km_per_year: 'Kilométrage par an',
+    ed_start_mileage: 'Kilométrage à la livraison',
+    ed_start_mileage_helper: '0 par défaut',
   },
   en: {
     vehicle: 'Vehicle',
@@ -139,6 +163,30 @@ var RnI18n = {
     en_battery_level: 'Battery level',
     en_battery_autonomy: 'Battery range',
     en_location: 'Location',
+    lease: 'Lease',
+    lease_driven: '{d} of {t}',
+    lease_ends: 'Ends on {d}',
+    lease_months_left: '{n} months',
+    lease_ended: 'Ended',
+    lease_pace: 'Pace {p}/year',
+    lease_projection: 'Projection {p}',
+    lease_ok: 'Within allowance',
+    lease_ok_margin: '{k} to spare',
+    lease_warn: 'Projected over: {k}',
+    lease_over: 'Allowance exceeded by {k}',
+    lease_early: 'Too early for a projection',
+    lease_chart: 'Mileage tracking',
+    lease_legend_actual: 'Actual',
+    lease_legend_allowed: 'Allowance',
+    lease_legend_projection: 'Projection',
+    lease_no_history: 'No history yet',
+    ed_lease: 'Lease tracking',
+    ed_start_date: 'Lease start',
+    ed_duration: 'Duration',
+    ed_duration_unit: 'months',
+    ed_km_per_year: 'Mileage per year',
+    ed_start_mileage: 'Mileage at delivery',
+    ed_start_mileage_helper: 'Defaults to 0',
   },
 };
 
@@ -314,6 +362,40 @@ var RN_BUTTON_ICONS = [
   [/(start_charge|charge)/, 'mdi:ev-station'],
 ];
 
+// ── Lease (LOA) tracking ─────────────────────────────────────────────────────
+// lease: { start_date: 'YYYY-MM-DD', duration: months, km_per_year, start_mileage? }
+function rnLeaseDates(lease) {
+  var m = String((lease && lease.start_date) || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
+  var months = Number(lease && lease.duration);
+  if (!m || !(months > 0) || !(Number(lease.km_per_year) > 0)) return null;
+  var y = Number(m[1]), mo = Number(m[2]) - 1, d = Number(m[3]);
+  return { start: new Date(y, mo, d), end: new Date(y, mo + months, d), months: months };
+}
+
+// Driven, allowance, pace and end-of-lease projection at time `now`.
+function rnLeaseStatus(lease, mileage, now) {
+  var dates = rnLeaseDates(lease);
+  if (!dates || mileage == null || isNaN(mileage)) return null;
+  var DAY = 86400000;
+  var allowed = Number(lease.km_per_year) * dates.months / 12;
+  var startKm = Number(lease.start_mileage) || 0;
+  var driven = Math.max(0, mileage - startKm);
+  var total = (dates.end - dates.start) / DAY;
+  var elapsed = Math.max(0, Math.min(total, (now - dates.start) / DAY));
+  var ended = now >= dates.end;
+  // Below 30 days the pace says little: no projection yet.
+  var projected = ended ? driven : (elapsed >= 30 ? driven / elapsed * total : null);
+  var state = 'ok';
+  if (driven > allowed) state = 'over';
+  else if (projected != null && projected > allowed) state = 'warn';
+  return {
+    start: dates.start, end: dates.end, allowed: allowed, startKm: startKm, driven: driven, ended: ended,
+    expected: total ? allowed * elapsed / total : 0, elapsedRatio: total ? elapsed / total : 0,
+    pace: elapsed >= 30 ? driven / elapsed * 365.25 : null, projected: projected, state: state,
+    monthsLeft: Math.max(0, Math.round((dates.end - now) / DAY / 30.44)),
+  };
+}
+
 // ── renault-card ─────────────────────────────────────────────────────────────
 class RenaultCard extends HTMLElement {
   static getConfigElement() {
@@ -334,6 +416,13 @@ class RenaultCard extends HTMLElement {
       this.attachShadow({ mode: 'open' });
       this.shadowRoot.addEventListener('click', (ev) => this._onClick(ev));
       this.shadowRoot.addEventListener('change', (ev) => this._onChange(ev));
+      this.shadowRoot.addEventListener('keydown', (ev) => {
+        if ((ev.key === 'Enter' || ev.key === ' ') && ev.target.dataset && ev.target.dataset.leaseToggle !== undefined) {
+          ev.preventDefault();
+          this._leaseOpen = !this._leaseOpen;
+          this._update();
+        }
+      });
     }
     this._sig = null;
     this._update();
@@ -479,7 +568,7 @@ class RenaultCard extends HTMLElement {
     var ids = [];
     Object.keys(r.ent).forEach(function (k) { ids = ids.concat(r.ent[k]); });
     if (r.plan) Object.keys(RN_PLAN_ROLES).forEach(function (k) { ids.push(r.plan[k]); });
-    var sig = JSON.stringify([this._lang(), r.deviceId, this._armed, ids.map(function (id) {
+    var sig = JSON.stringify([this._lang(), r.deviceId, this._armed, this._leaseOpen, this._leaseHist && this._leaseHist.key, ids.map(function (id) {
       var s = id && hass.states[id];
       return s ? [id, s.state, s.attributes.options] : null;
     })]);
@@ -660,7 +749,108 @@ class RenaultCard extends HTMLElement {
     this.shadowRoot.innerHTML = this._styles() + '<ha-card>' + header + image +
       (chips.length ? '<div class="chips">' + chips.join('') + '</div>' : '') +
       (tiles.length ? '<div class="tiles">' + tiles.join('') + '</div>' : '') +
-      locationHtml + planHtml + actionsHtml + '</ha-card>';
+      this._leaseHtml(ent) + locationHtml + planHtml + actionsHtml + '</ha-card>';
+  }
+
+  _km(n) { return this._fmtNum(Math.round(n)) + ' km'; }
+
+  _leaseHtml(ent) {
+    var lease = this._config.lease;
+    var st = rnLeaseStatus(lease, this._num(ent.mileage), Date.now());
+    if (!st) return '';
+    var color = st.state === 'over' ? 'var(--error-color, #db4437)' : st.state === 'warn' ? 'var(--warning-color, #ffa600)' : 'var(--success-color, #43a047)';
+    var icon = st.state === 'ok' ? 'mdi:check-circle-outline' : 'mdi:alert-circle-outline';
+    var status;
+    if (st.state === 'over') status = this._t('lease_over', { k: this._km(st.driven - st.allowed) });
+    else if (st.state === 'warn') status = this._t('lease_warn', { k: this._km(st.projected - st.allowed) });
+    else if (st.projected != null) status = this._t('lease_ok_margin', { k: this._km(st.allowed - st.projected) });
+    else status = this._t('lease_ok');
+    var endTxt = st.end.toLocaleDateString(this._lang(), { day: 'numeric', month: 'long', year: 'numeric' });
+    var details = [];
+    if (st.pace != null && !st.ended) details.push(this._t('lease_pace', { p: this._km(st.pace) }));
+    if (st.projected != null && !st.ended) details.push(this._t('lease_projection', { p: this._km(st.projected) }));
+    if (st.projected == null) details.push(this._t('lease_early'));
+    var open = !!this._leaseOpen;
+    var pct = st.allowed ? st.driven / st.allowed * 100 : 0;
+    var marker = Math.max(0, Math.min(100, st.elapsedRatio * 100));
+    return '<div class="lease lease-' + st.state + '">' +
+      '<div class="lease-head" data-lease-toggle role="button" tabindex="0" aria-expanded="' + open + '">' +
+      '<ha-icon class="lease-icon" icon="mdi:file-sign"></ha-icon><span class="plan-title">' + this._t('lease') + '</span>' +
+      '<span class="lease-status" style="color:' + color + '"><ha-icon icon="' + icon + '"></ha-icon>' + rnEsc(status) + '</span>' +
+      '<ha-icon class="chev" icon="' + (open ? 'mdi:chevron-up' : 'mdi:chevron-down') + '"></ha-icon></div>' +
+      '<div class="lease-bar">' + this._bar(pct, color) + '<span class="lease-mark" style="left:' + marker.toFixed(1) + '%"></span></div>' +
+      '<div class="plan-info"><span>' + rnEsc(this._t('lease_driven', { d: this._km(st.driven), t: this._km(st.allowed) })) + '</span>' +
+      '<span>' + rnEsc(this._t('lease_ends', { d: endTxt }) + ' · ' + (st.ended ? this._t('lease_ended') : this._t('lease_months_left', { n: st.monthsLeft }))) + '</span></div>' +
+      (details.length ? '<div class="plan-info"><span>' + rnEsc(details.join(' · ')) + '</span></div>' : '') +
+      (open ? this._leaseChart(st, ent.mileage) : '') + '</div>';
+  }
+
+  // Daily mileage from the long-term statistics (kept forever by the recorder), cached for an hour.
+  _leaseFetch(st, entityId) {
+    var key = entityId + '|' + st.start.getTime();
+    if (!this._hass.callWS || (this._leaseHist && this._leaseHist.key === key && Date.now() - this._leaseHist.at < 3600000)) return;
+    if (this._leaseFetching === key) return;
+    this._leaseFetching = key;
+    this._hass.callWS({
+      type: 'recorder/statistics_during_period', start_time: st.start.toISOString(), end_time: new Date().toISOString(),
+      statistic_ids: [entityId], period: 'day', types: ['state'],
+    }).then((res) => {
+      var rows = (res && res[entityId]) || [];
+      var points = rows.map(function (row) {
+        return [typeof row.start === 'number' ? row.start : new Date(row.start).getTime(), Number(row.state)];
+      }).filter(function (p) { return !isNaN(p[0]) && !isNaN(p[1]); });
+      this._leaseHist = { key: key, at: Date.now(), points: points };
+    }).catch(() => {
+      this._leaseHist = { key: key, at: Date.now(), points: [] };
+    }).then(() => {
+      this._leaseFetching = null;
+      this._update();
+    });
+  }
+
+  _leaseChart(st, entityId) {
+    this._leaseFetch(st, entityId);
+    var hist = this._leaseHist && this._leaseHist.key === entityId + '|' + st.start.getTime() ? this._leaseHist.points : null;
+    var now = Date.now();
+    var t0 = st.start.getTime(), t1 = st.end.getTime();
+    var W = 320, H = 150, L = 6, R = 6, T = 8, B = 20;
+    var top = Math.max(st.allowed, st.projected || 0, st.driven) * 1.08 || 1;
+    var x = function (t) { return (L + (Math.max(t0, Math.min(t1, t)) - t0) / (t1 - t0) * (W - L - R)).toFixed(1); };
+    var y = function (km) { return (T + (1 - Math.max(0, km) / top) * (H - T - B)).toFixed(1); };
+    var pts = [[t0, 0]];
+    (hist || []).forEach(function (p) {
+      if (p[0] >= t0 && p[0] <= now) pts.push([p[0], Math.max(0, p[1] - st.startKm)]);
+    });
+    pts.push([Math.min(now, t1), st.driven]);
+    var line = pts.map(function (p, i) { return (i ? 'L' : 'M') + x(p[0]) + ' ' + y(p[1]); }).join(' ');
+    var area = line + ' L' + x(pts[pts.length - 1][0]) + ' ' + y(0) + ' L' + x(t0) + ' ' + y(0) + ' Z';
+    var color = st.state === 'over' ? 'var(--error-color, #db4437)' : st.state === 'warn' ? 'var(--warning-color, #ffa600)' : 'var(--success-color, #43a047)';
+    // Year ticks on the x axis.
+    var ticks = '';
+    var startYear = st.start.getFullYear(), endYear = st.end.getFullYear();
+    for (var yr = startYear + 1; yr <= endYear; yr++) {
+      var tx = x(new Date(yr, 0, 1).getTime());
+      ticks += '<line x1="' + tx + '" x2="' + tx + '" y1="' + T + '" y2="' + (H - B) + '" class="grid"/>' +
+        '<text x="' + tx + '" y="' + (H - 6) + '" text-anchor="middle">' + yr + '</text>';
+    }
+    var proj = st.projected != null && !st.ended
+      ? '<path d="M' + x(now) + ' ' + y(st.driven) + ' L' + x(t1) + ' ' + y(st.projected) + '" class="proj" style="stroke:' + color + '"/>' : '';
+    var svg = '<svg class="lease-chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + rnEsc(this._t('lease_chart')) + '">' +
+      ticks +
+      '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(st.allowed) + '" y2="' + y(st.allowed) + '" class="limit"/>' +
+      '<text x="' + (L + 2) + '" y="' + (Number(y(st.allowed)) - 4) + '" class="limit-lbl">' + rnEsc(this._km(st.allowed)) + '</text>' +
+      '<path d="M' + x(t0) + ' ' + y(0) + ' L' + x(t1) + ' ' + y(st.allowed) + '" class="allowed"/>' +
+      '<path d="' + area + '" class="area"/>' +
+      '<path d="' + line + '" class="actual"/>' + proj +
+      '<line x1="' + x(now) + '" x2="' + x(now) + '" y1="' + T + '" y2="' + (H - B) + '" class="today"/>' +
+      '<circle cx="' + x(Math.min(now, t1)) + '" cy="' + y(st.driven) + '" r="3" class="dot"/>' +
+      '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + (H - B) + '" y2="' + (H - B) + '" class="axis"/>' +
+      '</svg>';
+    return '<div class="lease-graph"><div class="legend">' +
+      '<span><i class="sw actual-sw"></i>' + this._t('lease_legend_actual') + '</span>' +
+      '<span><i class="sw allowed-sw"></i>' + this._t('lease_legend_allowed') + '</span>' +
+      (proj ? '<span><i class="sw proj-sw" style="border-color:' + color + '"></i>' + this._t('lease_legend_projection') + '</span>' : '') +
+      '</div>' + svg + (hist && !hist.length ? '<div class="plan-info"><span>' + this._t('lease_no_history') + '</span></div>' : '') + '</div>';
   }
 
   _styles() {
@@ -704,7 +894,8 @@ class RenaultCard extends HTMLElement {
       '.row > ha-icon { color: var(--rn-accent); --mdc-icon-size: 22px; }' +
       '.row-text { flex: 1; }' +
       '.when { font-size: 12px; color: var(--secondary-text-color); text-align: right; }' +
-      '.chev { color: var(--secondary-text-color); --mdc-icon-size: 20px; }' +
+      '.chev { color: var(--secondary-text-color); --mdc-icon-size: 20px; flex-shrink: 0; }' +
+      '.lease-head .plan-title { flex: 1 0 auto; }' +
       '.plan { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 10px; cursor: pointer;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.1)); }' +
       '.plan-head { display: flex; align-items: center; gap: 8px; }' +
@@ -714,6 +905,34 @@ class RenaultCard extends HTMLElement {
       '.pct { font-size: 13px; font-weight: 500; color: var(--primary-text-color); }' +
       '.plan .bar { background: color-mix(in srgb, var(--secondary-text-color) 18%, transparent); }' +
       '.plan-info { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 8px; font-size: 12px; color: var(--secondary-text-color); }' +
+      '.lease { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 10px;' +
+        ' background: var(--secondary-background-color, rgba(128,128,128,0.1)); }' +
+      '.lease-head { display: flex; align-items: center; gap: 8px; cursor: pointer; min-width: 0; }' +
+      '.lease-icon { color: var(--rn-accent); --mdc-icon-size: 22px; flex-shrink: 0; }' +
+      '.lease-status { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 500; min-width: 0; text-align: right; }' +
+      '.lease-status ha-icon { --mdc-icon-size: 16px; flex-shrink: 0; }' +
+      '.lease-bar { position: relative; }' +
+      '.lease .bar { background: color-mix(in srgb, var(--secondary-text-color) 18%, transparent); }' +
+      '.lease-mark { position: absolute; top: -3px; width: 2px; height: 12px; margin-left: -1px; border-radius: 1px; background: var(--primary-text-color); opacity: 0.6; }' +
+      '.lease-graph { display: flex; flex-direction: column; gap: 6px; padding-top: 4px; }' +
+      '.legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--secondary-text-color); }' +
+      '.legend span { display: inline-flex; align-items: center; gap: 5px; }' +
+      '.sw { display: inline-block; width: 14px; height: 0; border-top: 2px solid; }' +
+      '.actual-sw { border-color: var(--rn-accent); }' +
+      '.allowed-sw { border-top-style: dashed; border-color: var(--secondary-text-color); }' +
+      '.proj-sw { border-top-style: dotted; }' +
+      '.lease-chart { width: 100%; height: auto; display: block; overflow: visible; }' +
+      '.lease-chart text { font-size: 10px; fill: var(--secondary-text-color); font-family: inherit; }' +
+      '.lease-chart .grid { stroke: color-mix(in srgb, var(--secondary-text-color) 15%, transparent); stroke-width: 1; }' +
+      '.lease-chart .axis { stroke: color-mix(in srgb, var(--secondary-text-color) 40%, transparent); stroke-width: 1; }' +
+      '.lease-chart .limit { stroke: var(--error-color, #db4437); stroke-width: 1; stroke-opacity: 0.5; }' +
+      '.lease-chart .limit-lbl { fill: var(--error-color, #db4437); }' +
+      '.lease-chart .allowed { fill: none; stroke: var(--secondary-text-color); stroke-width: 1.2; stroke-dasharray: 4 3; }' +
+      '.lease-chart .area { fill: color-mix(in srgb, var(--rn-accent) 14%, transparent); stroke: none; }' +
+      '.lease-chart .actual { fill: none; stroke: var(--rn-accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }' +
+      '.lease-chart .proj { fill: none; stroke-width: 1.6; stroke-dasharray: 1.5 3; stroke-linecap: round; }' +
+      '.lease-chart .today { stroke: var(--primary-text-color); stroke-opacity: 0.25; stroke-width: 1; }' +
+      '.lease-chart .dot { fill: var(--rn-accent); }' +
       '.field { display: flex; flex-direction: column; gap: 4px; }' +
       '.field > span { font-size: 12px; color: var(--secondary-text-color); }' +
       'select { font: inherit; font-size: 14px; color: var(--primary-text-color); padding: 9px 32px 9px 12px; border-radius: 10px; width: 100%;' +
@@ -733,6 +952,11 @@ class RenaultCard extends HTMLElement {
     var path = ev.composedPath();
     // Links (the Orange logo) open on their own, without the more-info dialog.
     if (path.some((n) => n.tagName === 'A')) return;
+    if (path.some((n) => n.dataset && n.dataset.leaseToggle !== undefined)) {
+      this._leaseOpen = !this._leaseOpen;
+      this._update();
+      return;
+    }
     var press = path.find((n) => n.dataset && n.dataset.press);
     if (press) {
       var id = press.dataset.press;
@@ -818,6 +1042,19 @@ class RenaultCardEditor extends HTMLElement {
       { name: 'plate_department', selector: { text: {} } },
       { name: 'data_plan_device_id', selector: { device: { integration: 'orange_internet_on_the_move' } } },
       {
+        type: 'expandable', name: 'lease', title: t('ed_lease'), flatten: false, icon: 'mdi:file-sign',
+        schema: [
+          { name: 'start_date', selector: { date: {} } },
+          {
+            type: 'grid', name: '', schema: [
+              { name: 'duration', selector: { number: { min: 1, max: 120, step: 1, mode: 'box', unit_of_measurement: t('ed_duration_unit') } } },
+              { name: 'km_per_year', selector: { number: { min: 0, max: 100000, step: 1000, mode: 'box', unit_of_measurement: 'km' } } },
+            ],
+          },
+          { name: 'start_mileage', selector: { number: { min: 0, max: 1000000, step: 1, mode: 'box', unit_of_measurement: 'km' } } },
+        ],
+      },
+      {
         name: 'language',
         selector: { select: { mode: 'dropdown', options: [{ value: 'fr', label: 'Français' }, { value: 'en', label: 'English' }] } },
       },
@@ -861,6 +1098,11 @@ class RenaultCardEditor extends HTMLElement {
       var e = Object.assign({}, value.entities);
       Object.keys(e).forEach(function (k) { if (!e[k]) delete e[k]; });
       if (Object.keys(e).length) value.entities = e; else delete value.entities;
+    }
+    if (value.lease) {
+      var l = Object.assign({}, value.lease);
+      Object.keys(l).forEach(function (k) { if (l[k] === '' || l[k] === null || l[k] === undefined) delete l[k]; });
+      if (Object.keys(l).length) value.lease = l; else delete value.lease;
     }
     if (!value.show_data_plan && value.show_data_plan !== undefined) delete value.data_plan_device_id;
     if (this._config.type) value = Object.assign({ type: this._config.type }, value);

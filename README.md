@@ -25,6 +25,7 @@ Pick the vehicle, the card finds all its entities by itself.
 - Action buttons for every button of the vehicle (horn, flash lights, air conditioning, start/stop charge), pressed with a confirmation tap, and the charge mode picker for electric cars
 - Renault logo next to the name, black on light themes and white on dark themes
 - Built-in pictures for the Espace and the Captur, or your own picture, and a French licence plate drawn like the real one (EU band, department, Breton flag for Brittany)
+- Optional **lease tracking** (LOA): mileage driven against the allowance, pace and end-of-lease projection, always shown as a status, with a mileage chart folded by default
 - Optional **Orange Internet On the move** section: data left, percentage, renewal or expiry date
 - Automatic entity discovery from the device (English or French entity IDs)
 - Visual editor in the dashboard UI (no YAML needed)
@@ -89,6 +90,30 @@ image: /local/renault/clio.png
 
 Without a picture (no built-in one for the model and no `image`, or `show_image: false`), the card shows only the Renault logo next to the name (or a car icon with `show_logo: false`).
 
+### Lease tracking (LOA)
+
+Set the lease start date, its duration in months and the yearly mileage allowance: the card adds a **Lease** section with the kilometres driven against the allowance, a marker for where you should be today, your yearly pace, the projected mileage at the end of the lease and a status:
+
+- **green**: within the allowance, with the margin left at the end of the lease
+- **orange**: at the current pace, you will go over the allowance (projected excess)
+- **red**: the allowance is already exceeded
+
+The projection starts after 30 days. Tap the section header to unfold the chart: actual mileage, linear allowance and projection, from the long-term statistics of the mileage sensor (kept by Home Assistant's recorder for as long as you have them). The chart is folded by default.
+
+```yaml
+lease:
+  start_date: "2024-12-01"
+  duration: 37        # months
+  km_per_year: 20000
+  start_mileage: 12   # optional, odometer at delivery
+```
+
+Also in the visual editor, in the **Lease tracking** panel. Without `lease`, the section is not shown.
+
+| Lease (folded chart open) | Dark, French |
+|---|---|
+| ![Lease tracking](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/lease.png) | ![Lease tracking, dark theme](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/lease-dark.png) |
+
 ### Minimal
 
 ```yaml
@@ -112,6 +137,11 @@ show_location: true
 show_actions: true
 show_data_plan: true
 data_plan_device_id: 63dc3dbab368191d3a6944a848e2c8ce
+lease:
+  start_date: "2024-12-01"
+  duration: 37
+  km_per_year: 20000
+  start_mileage: 12
 language: en
 entities:
   mileage: sensor.espace_mileage
@@ -136,6 +166,7 @@ entities:
 | `show_actions` | ❌ | `true` | Show the action buttons and charge mode |
 | `show_data_plan` | ❌ | `true` | Show the Orange Internet On the move section when a data plan is found |
 | `data_plan_device_id` | ❌ | Auto | Orange Internet On the move device; found from the vehicle model when empty |
+| `lease` | ❌ | — | Lease tracking: `start_date` (`YYYY-MM-DD`), `duration` (months) and `km_per_year` are required to show it; `start_mileage` (km at delivery) defaults to `0` |
 | `language` | ❌ | Auto | Force language: `fr` or `en` (auto-detects from HA settings) |
 | `entities` | ❌ | Auto | Override detected entities: `mileage`, `fuel_autonomy`, `fuel_quantity`, `battery_level`, `battery_autonomy`, `location` |
 
