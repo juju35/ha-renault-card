@@ -1,12 +1,12 @@
 {
   "name": ".",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "description": "Lovelace cards for the Renault integration in Home Assistant, with an optional Orange Internet On the move section.",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "check": "node scripts/build.mjs --check && node --check dist/renault-card.js",
+    "check": "node scripts/build.mjs && node --check dist/renault-card.js",
     "screenshots": "node scripts/screenshots.mjs"
   },
   "license": "MIT",

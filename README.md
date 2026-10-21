@@ -221,17 +221,19 @@ The card reads the entity registry to list the entities of the chosen device, th
 ```bash
 npm install
 npm run build        # stamps the version of package.json into dist/renault-card.js
-npm run check        # verifies dist/ is up to date (run in CI)
+npm run check        # builds and checks the card (run in CI)
 npm run screenshots  # renders the card with mock Renault vehicles into screenshots/
 ```
 
-The map libraries in `dist/` (Leaflet, MapLibre GL and its Leaflet adapter) are vendored as-is and loaded on demand by the map card.
+The map libraries in `vendor/` (Leaflet, MapLibre GL and its Leaflet adapter) are vendored as-is; the build copies them next to the card, which loads them on demand for the map card.
+
+`dist/` is not committed: `npm run build` creates it locally, CI builds it on every push, and the release workflow attaches the built file to the release, which is where HACS downloads it from.
 
 ### Releasing
 
-1. Bump `version` in `package.json` and run `npm run build`
+1. Bump `version` in `package.json`
 2. Add a `## <version>` section at the top of [CHANGELOG.md](CHANGELOG.md)
-3. Push to `main`: the **Release** workflow creates the tag and the GitHub release with the changelog section as notes, and attaches the files of `dist/`
+3. Push to `main`: the **Release** workflow builds the card, creates the tag and the GitHub release with the changelog section as notes, and attaches the files of `dist/`
 
 ## Translations
 

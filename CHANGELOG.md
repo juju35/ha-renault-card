@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.9.1
+
+### Development
+- The built card is no longer committed in `dist/`: CI builds it on every push, and the release workflow builds it and attaches it to the release, which is where HACS downloads it from. The map libraries are now kept in `vendor/` and copied next to the card by the build. Nothing changes for users.
+
 ## 1.9.0
 
 ### What's new
