@@ -182,17 +182,13 @@ for (let t = leaseStart.getTime(); t < Date.now() - 86400000; t += 86400000) {
 const scale = (34497 - 12) / (km - 12);
 rows.forEach((r) => { r.state = Math.round(12 + (r.state - 12) * scale); });
 const leaseHass = { mockStatistics: { "sensor.espace_mileage": rows } };
-const openLease = async (page) => {
-  await page.locator(".lease-head").click();
-  await page.waitForTimeout(300);
-};
 
 await render(
   [
     { file: "espace", type: "renault-card", theme: "light", width: 420, config: { plate_department: "35" } },
     { file: "espace-dark", type: "renault-card", theme: "dark", width: 420, config: { plate_department: "35", language: "fr" } },
-    { file: "lease", type: "renault-card", theme: "light", width: 420, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, lease }, hass: leaseHass, after: openLease },
-    { file: "lease-dark", type: "renault-card", theme: "dark", width: 420, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, language: "fr", lease }, hass: leaseHass, after: openLease },
+    { file: "lease", type: "renault-card", theme: "light", width: 420, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, expand_lease: true, lease }, hass: leaseHass },
+    { file: "lease-dark", type: "renault-card", theme: "dark", width: 420, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, language: "fr", expand_lease: true, lease }, hass: leaseHass },
     { file: "captur", type: "renault-card", theme: "light", width: 420, config: { device_id: "captur", plate_department: "35", show_data_plan: false } },
     { file: "captur-dark", type: "renault-card", theme: "dark", width: 420, config: { device_id: "captur", plate_department: "35", show_data_plan: false, language: "fr" } },
   ],

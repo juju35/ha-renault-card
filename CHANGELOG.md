@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.12.0
+
+### What's new
+- `expand_lease: true` (or **Lease expanded by default** in the visual editor) shows the lease details and chart unfolded, like the sections of ha-dockhand-card.
+
+### Changes
+- Lease chevron as in ha-dockhand-card: pointing right when folded, down when unfolded, with a short rotation.
+
 ## 1.11.2
 
 ### Fixes

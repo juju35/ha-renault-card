@@ -109,6 +109,7 @@ var RnI18n = {
     lease_legend_projection: 'Projection',
     lease_no_history: 'Pas d\'historique pour l\'instant',
     ed_lease: 'Suivi de LOA',
+    ed_expand_lease: 'LOA dépliée par défaut',
     ed_start_date: 'Début de la LOA',
     ed_duration: 'Durée',
     ed_duration_unit: 'mois',
@@ -213,6 +214,7 @@ var RnI18n = {
     lease_legend_projection: 'Projection',
     lease_no_history: 'No history yet',
     ed_lease: 'Lease tracking',
+    ed_expand_lease: 'Lease expanded by default',
     ed_start_date: 'Lease start',
     ed_duration: 'Duration',
     ed_duration_unit: 'months',
@@ -511,7 +513,7 @@ class RenaultCard extends HTMLElement {
       this.shadowRoot.addEventListener('keydown', (ev) => {
         if ((ev.key === 'Enter' || ev.key === ' ') && ev.target.dataset && ev.target.dataset.leaseToggle !== undefined) {
           ev.preventDefault();
-          this._leaseOpen = !this._leaseOpen;
+          this._leaseOpen = !this._leaseIsOpen();
           this._update();
         }
       });
@@ -891,7 +893,7 @@ class RenaultCard extends HTMLElement {
         figs.push(this._leaseFig(this._t('lease_budget_lbl'), st.budget > 0 ? this._km(st.budget) : '0 km', this._t('lease_budget_sub'), st.budget <= 0));
       }
     }
-    var open = !!this._leaseOpen;
+    var open = this._leaseIsOpen();
     var pct = st.allowed ? st.driven / st.allowed * 100 : 0;
     var marker = Math.max(0, Math.min(100, st.elapsedRatio * 100));
     // Contract year ticks on the bar.
@@ -901,12 +903,17 @@ class RenaultCard extends HTMLElement {
       '<div class="lease-head" data-lease-toggle role="button" tabindex="0" aria-expanded="' + open + '">' +
       '<ha-icon class="lease-icon" icon="mdi:file-sign"></ha-icon><span class="plan-title">' + this._t('lease') + '</span>' +
       '<span class="lease-status" style="color:' + color + '"><ha-icon icon="' + icon + '"></ha-icon>' + rnEsc(status) + '</span>' +
-      '<ha-icon class="chev" icon="' + (open ? 'mdi:chevron-up' : 'mdi:chevron-down') + '"></ha-icon></div>' +
+      '<ha-icon class="chev lease-chev' + (open ? '' : ' closed') + '" icon="mdi:chevron-down"></ha-icon></div>' +
       '<div class="lease-bar">' + this._bar(pct, color) + ticks + '<span class="lease-mark" style="left:' + marker.toFixed(1) + '%"></span></div>' +
       '<div class="plan-info"><span><b>' + rnEsc(this._km(st.driven)) + '</b> / ' + rnEsc(this._km(st.allowed)) + '</span>' +
       '<span>' + rnEsc(this._t('lease_ends', { d: endTxt }) + ' · ' + (st.ended ? this._t('lease_ended') : this._t('lease_months_left', { n: st.monthsLeft }))) + '</span></div>' +
       (figs.length ? '<div class="figs">' + figs.join('') + '</div>' : '') +
       (open ? this._leaseDetails(st) + this._leaseChart(st, ent.mileage) : '') + '</div>';
+  }
+
+  // Folded until tapped, unless expand_lease is set (same as ha-dockhand-card's sections).
+  _leaseIsOpen() {
+    return this._leaseOpen != null ? this._leaseOpen : this._config.expand_lease === true;
   }
 
   _leaseFig(label, value, sub, warn, subColor) {
@@ -1045,6 +1052,8 @@ class RenaultCard extends HTMLElement {
       '.when { font-size: 12px; color: var(--secondary-text-color); text-align: right; }' +
       '.chev { color: var(--secondary-text-color); --mdc-icon-size: 20px; flex-shrink: 0; }' +
       '.lease-head .plan-title { flex: 1 0 auto; }' +
+      '.lease-chev { transition: transform .2s ease; }' +
+      '.lease-chev.closed { transform: rotate(-90deg); }' +
       '.plan { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 10px; cursor: pointer;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.1)); }' +
       '.plan-head { display: flex; align-items: center; gap: 8px; }' +
@@ -1110,7 +1119,7 @@ class RenaultCard extends HTMLElement {
     // Links (the Orange logo) open on their own, without the more-info dialog.
     if (path.some((n) => n.tagName === 'A')) return;
     if (path.some((n) => n.dataset && n.dataset.leaseToggle !== undefined)) {
-      this._leaseOpen = !this._leaseOpen;
+      this._leaseOpen = !this._leaseIsOpen();
       this._update();
       return;
     }
@@ -1145,7 +1154,7 @@ class RenaultCard extends HTMLElement {
 }
 
 // ── renault-card-editor (visual editor, built on HA's ha-form) ───────────────
-var RN_EDITOR_DEFAULTS = { show_logo: true, show_image: true, show_plate: true, show_location: true, show_actions: true, show_data_plan: true, low_range: 100 };
+var RN_EDITOR_DEFAULTS = { show_logo: true, show_image: true, show_plate: true, show_location: true, show_actions: true, show_data_plan: true, low_range: 100, expand_lease: false };
 
 class RenaultCardEditor extends HTMLElement {
   setConfig(config) {
@@ -1194,6 +1203,7 @@ class RenaultCardEditor extends HTMLElement {
           { name: 'show_location', selector: { boolean: {} } },
           { name: 'show_actions', selector: { boolean: {} } },
           { name: 'show_data_plan', selector: { boolean: {} } },
+          { name: 'expand_lease', selector: { boolean: {} } },
         ],
       },
       { name: 'plate_department', selector: { text: {} } },
