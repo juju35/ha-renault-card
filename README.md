@@ -15,7 +15,6 @@ Pick the vehicle, the card finds all its entities by itself.
 | Espace (with Orange Internet On the move) | Captur |
 |---|---|
 | ![Renault Espace card](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/espace.png) | ![Renault Captur card](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/captur.png) |
-| ![Renault Espace card, dark theme](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/espace-dark.png) | ![Renault Captur card, dark theme](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/captur-dark.png) |
 
 ## Features
 
@@ -41,7 +40,7 @@ Pick the vehicle, the card finds all its entities by itself.
 - Base maps without API key: Home Assistant's own map (vector, light or dark), OpenStreetMap, OpenStreetMap France, IGN map and aerial photos, OpenTopoMap, CyclOSM, Esri satellite, or your own tile URL
 - Follows the light / dark theme
 
-## Requirements
+## Prerequisites
 
 - Home Assistant with the [Renault](https://www.home-assistant.io/integrations/renault/) integration set up
 - Optional: the [Orange Internet On the move](https://github.com/rexave/hass-orange-internet-on-the-move) integration, for the data plan section
@@ -169,6 +168,15 @@ height: 400
 
 The `ha` base map is the one Home Assistant's own map card uses (Home Assistant 2026.9 or later, WebGL2): OpenStreetMap vector tiles through your instance, in light or dark. On older versions or without WebGL2, the card falls back to OpenStreetMap raster tiles, also through Home Assistant when it can. Leaflet and MapLibre GL ship with the card (see [licenses](licenses)): only the map tiles come from the network.
 
+## Screenshots
+
+| Espace (fuel, data plan) | Captur (plug-in hybrid, charging) |
+|---|---|
+| ![espace](screenshots/espace.png) | ![captur](screenshots/captur.png) |
+| ![espace dark](screenshots/espace-dark.png) | ![captur dark](screenshots/captur-dark.png) |
+
+Dark screenshots are in French.
+
 ## How it works
 
 The card reads the entity registry to list the entities of the chosen device, then matches each one by its translation key, then by its entity ID (English and French slugs), then by its attributes. Everything else the device exposes as a `button` becomes an action button.
@@ -176,6 +184,23 @@ The card reads the entity registry to list the entities of the chosen device, th
 **Action buttons** need a second tap within 3 seconds, so a horn doesn't go off by accident.
 
 **Orange Internet On the move**: the data plan device is named after the car (for example *Data Plan for RENAULT Espace*), so the card links it to the vehicle whose model matches. Set `data_plan_device_id` to pick one by hand. The integration reports data in megabytes (labelled Mbit); the card shows it in GB above 1 GB. The date is shown as a renewal date for recurring plans, as an expiry date otherwise. Click the Orange logo to open the [Orange Internet On the move customer area](https://internetonthemove.orange-business.com/renault/#/login); click anywhere else in the section for the entity details.
+
+## Development
+
+```bash
+npm install
+npm run build        # stamps the version of package.json into dist/renault-card.js
+npm run check        # verifies dist/ is up to date (run in CI)
+npm run screenshots  # renders the card with mock Renault vehicles into screenshots/
+```
+
+The map libraries in `dist/` (Leaflet, MapLibre GL and its Leaflet adapter) are vendored as-is and loaded on demand by the map card.
+
+### Releasing
+
+1. Bump `version` in `package.json` and run `npm run build`
+2. Add a `## <version>` section at the top of [CHANGELOG.md](CHANGELOG.md)
+3. Push to `main`: the **Release** workflow creates the tag and the GitHub release with the changelog section as notes, and attaches the files of `dist/`
 
 ## Translations
 
