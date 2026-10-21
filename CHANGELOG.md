@@ -4,7 +4,7 @@
 
 ### Changes
 - Low fuel / battery, warning chips and charging chip colors come from the Home Assistant theme (`--error-color`, `--warning-color`, `--success-color`) with the Home Assistant defaults as fallbacks.
-- Chips, tiles, rows and fields use the same sizes and radii as the other juju35 cards (12px pills, 10px tiles, 12px labels); 40px badge.
+- Chips, tiles, rows and fields use the same sizes and radii as the other ha-* cards (12px pills, 10px tiles, 12px labels); 40px badge.
 - Map card title in 18px with the same padding as the other cards.
 
 ### Development
