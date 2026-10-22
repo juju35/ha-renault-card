@@ -1022,42 +1022,42 @@ class RenaultCard extends HTMLElement {
   _styles() {
     return '<style>' +
       ':host { display: block; height: 100%; --rn-accent: var(--primary-color, #03a9f4); }' +
-      'ha-card { height: 100%; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 14px; }' +
+      'ha-card { height: 100%; box-sizing: border-box; padding: 12px; display: flex; flex-direction: column; gap: 10px; }' +
       '.empty { display: flex; align-items: center; gap: 10px; color: var(--secondary-text-color); }' +
-      '.header { display: flex; align-items: center; gap: 12px; }' +
-      '.badge { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;' +
+      '.header { display: flex; align-items: center; gap: 10px; }' +
+      '.badge { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;' +
         ' background: color-mix(in srgb, var(--rn-accent) 15%, transparent); color: var(--rn-accent); }' +
-      '.brand { width: 30px; height: 40px; flex-shrink: 0; background: var(--primary-text-color);' +
+      '.brand { width: 26px; height: 36px; flex-shrink: 0; background: var(--primary-text-color);' +
         ' -webkit-mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; }' +
       '.titles { flex: 1; min-width: 0; }' +
-      '.name { font-size: 18px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
-      '.model { font-size: 13px; color: var(--secondary-text-color); margin-top: 2px; }' +
-      '.plate { height: 30px; width: auto; flex-shrink: 0; display: block; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.25)); }' +
+      '.name { font-size: 16px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
+      '.model { font-size: 12px; color: var(--secondary-text-color); margin-top: 2px; }' +
+      '.plate { height: 26px; width: auto; flex-shrink: 0; display: block; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.25)); }' +
       '.image { display: flex; justify-content: center; margin: -4px 0; }' +
-      '.image img { max-width: 100%; max-height: 170px; object-fit: contain; }' +
+      '.image img { max-width: 100%; max-height: 116px; object-fit: contain; }' +
       '.chips { display: flex; flex-wrap: wrap; gap: 6px; }' +
-      '.chip { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 500; padding: 2px 10px 2px 6px; border-radius: 12px;' +
+      '.chip { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; padding: 1px 8px 1px 5px; border-radius: 12px;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.12)); color: var(--secondary-text-color); }' +
       '.chip[data-more] { cursor: pointer; }' +
-      '.chip ha-icon { --mdc-icon-size: 14px; }' +
+      '.chip ha-icon { --mdc-icon-size: 13px; }' +
       '.chip.warn { background: color-mix(in srgb, var(--warning-color, #ffa600) 15%, transparent); color: var(--warning-color, #ffa600); }' +
       '.chip.ok { background: color-mix(in srgb, var(--success-color, #43a047) 15%, transparent); color: var(--success-color, #43a047); }' +
-      '.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 8px; }' +
-      '.tile { display: flex; flex-direction: column; gap: 4px; padding: 8px 10px; border-radius: 10px; cursor: pointer; min-width: 0;' +
+      '.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(84px, 1fr)); gap: 6px; }' +
+      '.tile { display: flex; flex-direction: column; gap: 2px; padding: 6px 10px; border-radius: 10px; cursor: pointer; min-width: 0;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.1)); }' +
       '.tile-head { display: flex; align-items: center; gap: 6px; min-width: 0; }' +
       '.tile ha-icon { color: var(--rn-accent); --mdc-icon-size: 18px; flex-shrink: 0; }' +
       '.tile .bar { margin-top: 4px; height: 4px; background: color-mix(in srgb, var(--secondary-text-color) 18%, transparent); }' +
       '.tile.warn ha-icon, .tile.warn .val { color: var(--warning-color, #ffa600); }' +
       '.row-text { display: flex; flex-direction: column; min-width: 0; }' +
-      '.lbl { font-size: 12px; color: var(--secondary-text-color); }' +
+      '.lbl { font-size: 11px; color: var(--secondary-text-color); }' +
       '.lbl { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
-      '.val { font-size: 16px; font-weight: 500; color: var(--primary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
+      '.val { font-size: 14px; font-weight: 500; color: var(--primary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
       '.bar { height: 6px; border-radius: 3px; background: var(--secondary-background-color, rgba(128,128,128,0.15)); overflow: hidden; }' +
       '.fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }' +
-      '.row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px; cursor: pointer;' +
+      '.row { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 10px; cursor: pointer;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.1)); }' +
-      '.row > ha-icon { color: var(--rn-accent); --mdc-icon-size: 22px; }' +
+      '.row > ha-icon { color: var(--rn-accent); --mdc-icon-size: 20px; }' +
       '.row-text { flex: 1; }' +
       '.when { font-size: 12px; color: var(--secondary-text-color); text-align: right; }' +
       '.chev { color: var(--secondary-text-color); --mdc-icon-size: 20px; flex-shrink: 0; }' +
@@ -1116,10 +1116,10 @@ class RenaultCard extends HTMLElement {
       'select { font: inherit; font-size: 14px; color: var(--primary-text-color); padding: 9px 32px 9px 12px; border-radius: 10px; width: 100%;' +
         ' border: 1px solid var(--divider-color, rgba(128,128,128,0.25)); appearance: none; -webkit-appearance: none; cursor: pointer;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.1)) url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\'%3E%3Cpath fill=\'%23888\' d=\'M7 10l5 5 5-5z\'/%3E%3C/svg%3E") no-repeat right 8px center / 20px; }' +
-      '.actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }' +
+      '.actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 6px; }' +
       'button { font: inherit; cursor: pointer; border: none; }' +
       '.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; font-weight: 500; min-width: 0;' +
-        ' padding: 10px 12px; border-radius: 10px; background: color-mix(in srgb, var(--rn-accent) 14%, transparent); color: var(--rn-accent); }' +
+        ' padding: 7px 12px; border-radius: 10px; background: color-mix(in srgb, var(--rn-accent) 14%, transparent); color: var(--rn-accent); }' +
       '.btn span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
       '.btn ha-icon { --mdc-icon-size: 20px; flex-shrink: 0; }' +
       '.btn.armed { background: var(--rn-accent); color: var(--text-primary-color, #fff); }' +
