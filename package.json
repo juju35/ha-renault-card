@@ -1,5 +1,5 @@
 {
-  "name": ".",
+  "name": "ha-renault-card",
   "version": "1.13.1",
   "description": "Lovelace cards for the Renault integration in Home Assistant, with an optional Orange Internet On the move section.",
   "private": true,
