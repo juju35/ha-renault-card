@@ -236,19 +236,17 @@ function rnT(lang, key) {
 }
 
 function rnEsc(s) {
-  return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-  });
+  return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
 // ── Entity discovery ─────────────────────────────────────────────────────────
 // Each role is matched by the entity registry translation_key first, then the
 // entity_id suffix (English and French slugs), then attributes.
-function rnDc(v) { return function (s) { return s.attributes.device_class === v; }; }
+function rnDc(v) { return (s) => s.attributes.device_class === v; }
 
 var RN_ROLES = {
   mileage: { domain: 'sensor', keys: ['mileage'], id: /(mileage|kilometrage)$/,
-    test: function (s) { return s.attributes.device_class === 'distance' && s.attributes.state_class === 'total_increasing'; } },
+    test: (s) => s.attributes.device_class === 'distance' && s.attributes.state_class === 'total_increasing' },
   fuel_autonomy: { domain: 'sensor', keys: ['fuel_autonomy'], id: /(fuel_autonomy|autonomie_en_carburant|autonomie_carburant)$/ },
   fuel_quantity: { domain: 'sensor', keys: ['fuel_quantity'], id: /(fuel_quantity|quantite_de_carburant)$/, test: rnDc('volume') },
   battery_level: { domain: 'sensor', keys: ['battery_level'], id: /(battery_level|niveau_de_batterie|niveau_de_la_batterie)$/, test: rnDc('battery') },
@@ -256,7 +254,7 @@ var RN_ROLES = {
   charging_remaining_time: { domain: 'sensor', keys: ['charging_remaining_time'], id: /(charging_remaining_time|temps_de_charge_restant)$/, test: rnDc('duration') },
   outside_temperature: { domain: 'sensor', keys: ['outside_temperature'], id: /(outside_temperature|temperature_exterieure)$/, test: rnDc('temperature') },
   location_last_activity: { domain: 'sensor', keys: ['location_last_activity'], id: /(location_last_activity|derniere_activite_de_localisation)$/ },
-  location: { domain: 'device_tracker', keys: ['location'], test: function () { return true; } },
+  location: { domain: 'device_tracker', keys: ['location'], test: () => true },
   plugged_in: { domain: 'binary_sensor', keys: ['plugged_in'], id: /(plugged_in|branche)$/, test: rnDc('plug') },
   charging: { domain: 'binary_sensor', keys: ['charging'], id: /(_charging|en_charge)$/, test: rnDc('battery_charging') },
   lock_status: { domain: 'binary_sensor', keys: ['lock_status'], id: /(lock_status|verrouillage)$/, test: rnDc('lock') },
@@ -279,40 +277,34 @@ var RN_PLAN_ROLES = {
 var RN_OVERRIDABLE = ['mileage', 'fuel_autonomy', 'fuel_quantity', 'battery_level', 'battery_autonomy', 'location'];
 
 function rnDeviceEntities(hass, deviceId) {
-  if (!hass || !hass.entities || !deviceId) return [];
-  return Object.values(hass.entities).filter(function (e) {
-    return e.device_id === deviceId && !e.hidden && hass.states[e.entity_id];
-  });
+  if (!hass?.entities || !deviceId) return [];
+  return Object.values(hass.entities).filter((e) => e.device_id === deviceId && !e.hidden && hass.states[e.entity_id]);
 }
 
 function rnFindRole(hass, list, m) {
-  var inDomain = list.filter(function (e) { return e.entity_id.split('.')[0] === m.domain; });
-  var hit = inDomain.find(function (e) { return m.keys.indexOf(e.translation_key) >= 0; });
-  if (!hit && m.id) hit = inDomain.find(function (e) { return m.id.test(e.entity_id); });
-  if (!hit && m.test) hit = inDomain.find(function (e) { return m.test(hass.states[e.entity_id]); });
+  var inDomain = list.filter((e) => e.entity_id.split('.')[0] === m.domain);
+  var hit = inDomain.find((e) => m.keys.indexOf(e.translation_key) >= 0);
+  if (!hit && m.id) hit = inDomain.find((e) => m.id.test(e.entity_id));
+  if (!hit && m.test) hit = inDomain.find((e) => m.test(hass.states[e.entity_id]));
   return hit ? hit.entity_id : undefined;
 }
 
 function rnDevicesOf(hass, platform) {
-  if (!hass || !hass.entities) return [];
+  if (!hass?.entities) return [];
   var ids = [];
-  Object.values(hass.entities).forEach(function (e) {
+  Object.values(hass.entities).forEach((e) => {
     if (e.platform === platform && e.device_id && ids.indexOf(e.device_id) < 0) ids.push(e.device_id);
   });
   return ids;
 }
 
 function rnFindVehicle(hass) {
-  return rnDevicesOf(hass, 'renault').find(function (id) {
-    return rnDeviceEntities(hass, id).some(function (e) {
-      return e.entity_id.indexOf('device_tracker.') === 0 || e.entity_id.indexOf('sensor.') === 0;
-    });
-  });
+  return rnDevicesOf(hass, 'renault').find((id) => rnDeviceEntities(hass, id).some((e) => e.entity_id.indexOf('device_tracker.') === 0 || e.entity_id.indexOf('sensor.') === 0));
 }
 
 // "Espace vi" → "Espace VI"
 function rnModel(model) {
-  return String(model || '').split(' ').map(function (w) {
+  return String(model || '').split(' ').map((w) => {
     if (/^(i|ii|iii|iv|v|vi|vii|viii|ix|x)$/i.test(w)) return w.toUpperCase();
     return w.charAt(0).toUpperCase() + w.slice(1);
   }).join(' ');
@@ -323,7 +315,7 @@ function rnFindDataPlan(hass, vehicleDevice) {
   if (!vehicleDevice || !hass.devices) return undefined;
   var word = String(vehicleDevice.model || '').split(' ')[0].toLowerCase();
   if (!word) return undefined;
-  return rnDevicesOf(hass, 'orange_internet_on_the_move').find(function (id) {
+  return rnDevicesOf(hass, 'orange_internet_on_the_move').find((id) => {
     var d = hass.devices[id];
     if (!d) return false;
     var text = [d.model, d.name, d.name_by_user].join(' ').toLowerCase();
@@ -332,7 +324,7 @@ function rnFindDataPlan(hass, vehicleDevice) {
 }
 
 function rnBuiltinImage(device) {
-  var word = String((device && device.model) || '').split(' ')[0].toLowerCase();
+  var word = String((device?.model) || '').split(' ')[0].toLowerCase();
   return RN_IMAGES[word];
 }
 
@@ -343,23 +335,23 @@ function rnStar(cx, cy, r) {
   var pts = [];
   for (var i = 0; i < 10; i++) {
     var a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * 0.4 : r;
-    pts.push((cx + rr * Math.cos(a)).toFixed(2) + ',' + (cy + rr * Math.sin(a)).toFixed(2));
+    pts.push(`${(cx + rr * Math.cos(a)).toFixed(2)},${(cy + rr * Math.sin(a)).toFixed(2)}`);
   }
-  return '<polygon points="' + pts.join(' ') + '"/>';
+  return `<polygon points="${pts.join(' ')}"/>`;
 }
 
 // Gwenn-ha-du: 9 stripes, ermine canton.
 function rnBreizhFlag(x, y, w, h) {
-  var out = '<g><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="#fff"/>';
+  var out = `<g><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#fff"/>`;
   var sh = h / 9;
-  for (var i = 0; i < 9; i += 2) out += '<rect x="' + x + '" y="' + (y + i * sh).toFixed(2) + '" width="' + w + '" height="' + sh.toFixed(2) + '" fill="#000"/>';
+  for (var i = 0; i < 9; i += 2) out += `<rect x="${x}" y="${(y + i * sh).toFixed(2)}" width="${w}" height="${sh.toFixed(2)}" fill="#000"/>`;
   var cw = w * 0.42, ch = sh * 5;
-  out += '<rect x="' + x + '" y="' + y + '" width="' + cw.toFixed(2) + '" height="' + ch.toFixed(2) + '" fill="#fff"/>';
+  out += `<rect x="${x}" y="${y}" width="${cw.toFixed(2)}" height="${ch.toFixed(2)}" fill="#fff"/>`;
   for (var r = 0; r < 3; r++) for (var c2 = 0; c2 < 3; c2++) {
     if ((r + c2) % 2) continue;
-    out += '<circle cx="' + (x + cw * (c2 + 0.5) / 3).toFixed(2) + '" cy="' + (y + ch * (r + 0.5) / 3).toFixed(2) + '" r="' + (sh * 0.45).toFixed(2) + '" fill="#000"/>';
+    out += `<circle cx="${(x + cw * (c2 + 0.5) / 3).toFixed(2)}" cy="${(y + ch * (r + 0.5) / 3).toFixed(2)}" r="${(sh * 0.45).toFixed(2)}" fill="#000"/>`;
   }
-  return out + '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="none" stroke="#fff" stroke-width="0.8"/></g>';
+  return `${out}<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="none" stroke="#fff" stroke-width="0.8"/></g>`;
 }
 
 function rnPlateSvg(plate, dept) {
@@ -391,7 +383,7 @@ function rnPlateSvg(plate, dept) {
 // French SIV plate "GW782EN" → "GW-782-EN"
 function rnPlate(text) {
   var m = String(text || '').replace(/[\s-]/g, '').toUpperCase().match(/^([A-Z]{2})(\d{3})([A-Z]{2})$/);
-  return m ? m[1] + '-' + m[2] + '-' + m[3] : null;
+  return m ? `${m[1]}-${m[2]}-${m[3]}` : null;
 }
 
 var RN_BUTTON_ICONS = [
@@ -405,8 +397,8 @@ var RN_BUTTON_ICONS = [
 // ── Lease (LOA) tracking ─────────────────────────────────────────────────────
 // lease: { start_date: 'YYYY-MM-DD', duration: months, km_per_year, start_mileage? }
 function rnLeaseDates(lease) {
-  var m = String((lease && lease.start_date) || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
-  var months = Number(lease && lease.duration);
+  var m = String((lease?.start_date) || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
+  var months = Number(lease?.duration);
   if (!m || !(months > 0) || !(Number(lease.km_per_year) > 0)) return null;
   var y = Number(m[1]), mo = Number(m[2]) - 1, d = Number(m[3]);
   return { start: new Date(y, mo, d), end: new Date(y, mo + months, d), months: months };
@@ -417,7 +409,7 @@ var RN_DAY = 86400000;
 // Odometer at time t from the daily statistics ([day start, odometer at the end of that day]).
 function rnOdoAt(points, t) {
   var hit = null;
-  (points || []).forEach(function (p) { if (p[0] + RN_DAY <= t + 3600000) hit = p; });
+  (points || []).forEach((p) => { if (p[0] + RN_DAY <= t + 3600000) hit = p; });
   return hit ? hit[1] : null;
 }
 
@@ -425,7 +417,7 @@ function rnOdoAt(points, t) {
 // recent pace (forecast: 30 or 90 days) and the contract year figures.
 function rnLeaseStatus(lease, mileage, now, points) {
   var dates = rnLeaseDates(lease);
-  if (!dates || mileage == null || isNaN(mileage)) return null;
+  if (!dates || mileage == null || Number.isNaN(mileage)) return null;
   var kmYear = Number(lease.km_per_year);
   var allowed = kmYear * dates.months / 12;
   var startKm = Number(lease.start_mileage) || 0;
@@ -440,14 +432,14 @@ function rnLeaseStatus(lease, mileage, now, points) {
   // Below 30 days of contract the pace says little: no projection yet.
   var rate = elapsed >= 30 ? driven / elapsed : null, recent = false;
   var days = Number(lease.forecast);
-  if ((days === 30 || days === 90) && elapsed >= days && points && points.length) {
+  if ((days === 30 || days === 90) && elapsed >= days && points?.length) {
     var then = rnOdoAt(points, now - days * RN_DAY);
     if (then != null && mileage >= then) { rate = (mileage - then) / days; recent = true; }
   }
   var projected = ended ? driven : (rate != null ? driven + rate * left : null);
 
   // Contract year: runs from the start date, the last one ends with the lease.
-  var at = function (months) { return new Date(dates.start.getFullYear(), dates.start.getMonth() + months, dates.start.getDate()); };
+  var at = (months) => new Date(dates.start.getFullYear(), dates.start.getMonth() + months, dates.start.getDate());
   var y = 0;
   while (12 * (y + 1) < dates.months && now >= at(12 * (y + 1)).getTime()) y++;
   var ys = at(12 * y), ye = at(Math.min(12 * (y + 1), dates.months));
@@ -551,52 +543,48 @@ class RenaultCard extends HTMLElement {
   getGridOptions() { return { columns: 12, min_columns: 6 }; }
 
   _lang() {
-    var l = (this._config && this._config.language) || (this._hass && this._hass.language) || document.documentElement.lang || 'en';
+    var l = (this._config?.language) || (this._hass?.language) || document.documentElement.lang || 'en';
     l = l.split('-')[0];
     return RnI18n[l] ? l : 'en';
   }
 
   _t(k, vars) {
     var s = rnT(this._lang(), k);
-    Object.keys(vars || {}).forEach(function (v) { s = s.replace('{' + v + '}', vars[v]); });
+    Object.keys(vars || {}).forEach((v) => { s = s.replace(`{${v}}`, vars[v]); });
     return s;
   }
 
   _resolve() {
     var hass = this._hass, c = this._config;
     var deviceId = c.device_id;
-    if (!deviceId && c.entity && hass.entities && hass.entities[c.entity]) deviceId = hass.entities[c.entity].device_id;
+    if (!deviceId && c.entity && hass.entities?.[c.entity]) deviceId = hass.entities[c.entity].device_id;
     if (!deviceId) deviceId = rnFindVehicle(hass);
     var device = deviceId && hass.devices ? hass.devices[deviceId] : null;
     var list = rnDeviceEntities(hass, deviceId);
     var over = c.entities || {};
     var ent = {};
-    Object.keys(RN_ROLES).forEach(function (role) {
+    Object.keys(RN_ROLES).forEach((role) => {
       ent[role] = over[role] || rnFindRole(hass, list, RN_ROLES[role]);
     });
-    var byKey = function (keys, dc) {
-      return list.filter(function (e) {
-        return keys.indexOf(e.translation_key) >= 0 || (dc && hass.states[e.entity_id].attributes.device_class === dc && e.entity_id.indexOf(dc === 'pressure' ? 'sensor.' : 'binary_sensor.') === 0);
-      }).map(function (e) { return e.entity_id; });
-    };
+    var byKey = (keys, dc) => list.filter((e) => keys.indexOf(e.translation_key) >= 0 || (dc && hass.states[e.entity_id].attributes.device_class === dc && e.entity_id.indexOf(dc === 'pressure' ? 'sensor.' : 'binary_sensor.') === 0)).map((e) => e.entity_id);
     ent.tyres = byKey(RN_TYRES, 'pressure');
     ent.doors = byKey(RN_DOORS, 'door');
-    ent.buttons = list.filter(function (e) { return e.entity_id.indexOf('button.') === 0; }).map(function (e) { return e.entity_id; });
+    ent.buttons = list.filter((e) => e.entity_id.indexOf('button.') === 0).map((e) => e.entity_id);
 
     var plan = null;
     if (c.show_data_plan) {
       var planId = c.data_plan_device_id || rnFindDataPlan(hass, device);
       if (planId) {
-        var planList = rnDeviceEntities(hass, planId).filter(function (e) { return e.entity_id.indexOf('sensor.') === 0; });
+        var planList = rnDeviceEntities(hass, planId).filter((e) => e.entity_id.indexOf('sensor.') === 0);
         plan = { deviceId: planId };
-        Object.keys(RN_PLAN_ROLES).forEach(function (role) {
-          var hit = planList.find(function (e) { return e.translation_key === role; }) ||
-            planList.find(function (e) { return RN_PLAN_ROLES[role].test(e.entity_id); });
+        Object.keys(RN_PLAN_ROLES).forEach((role) => {
+          var hit = planList.find((e) => e.translation_key === role) ||
+            planList.find((e) => RN_PLAN_ROLES[role].test(e.entity_id));
           plan[role] = hit ? hit.entity_id : undefined;
         });
         if (!plan.left_data_percentage) {
-          var pct = planList.find(function (e) { return hass.states[e.entity_id].attributes.unit_of_measurement === '%'; });
-          plan.left_data_percentage = pct && pct.entity_id;
+          var pct = planList.find((e) => hass.states[e.entity_id].attributes.unit_of_measurement === '%');
+          plan.left_data_percentage = pct?.entity_id;
         }
       }
     }
@@ -620,15 +608,15 @@ class RenaultCard extends HTMLElement {
     if (!s) return '';
     if (this._hass.formatEntityState) return this._hass.formatEntityState(s);
     var u = s.attributes.unit_of_measurement;
-    return s.state + (u ? ' ' + u : '');
+    return s.state + (u ? ` ${u}` : '');
   }
 
   _withUnit(id, digits) {
     var s = this._st(id);
     var u = s.attributes.unit_of_measurement || '';
     var n = Number(s.state);
-    if (isNaN(n)) return this._fmtState(id);
-    return this._fmtNum(n, digits) + (u ? (u === '%' ? ' %' : ' ' + u) : '');
+    if (Number.isNaN(n)) return this._fmtState(id);
+    return this._fmtNum(n, digits) + (u ? (u === '%' ? ' %' : ` ${u}`) : '');
   }
 
   _relative(date) {
@@ -643,7 +631,7 @@ class RenaultCard extends HTMLElement {
 
   _duration(minutes) {
     var h = Math.floor(minutes / 60), m = Math.round(minutes % 60);
-    return h ? h + ' h ' + String(m).padStart(2, '0') : m + ' min';
+    return h ? `${h} h ${String(m).padStart(2, '0')}` : `${m} min`;
   }
 
   // Orange reports the data plan in megabytes (labelled Mbit): show it in GB above 1 GB.
@@ -654,13 +642,13 @@ class RenaultCard extends HTMLElement {
     var mb = v;
     if (u === 'gb' || u === 'gbit' || u === 'go' || u === 'gib') mb = v * 1024;
     else if (u === 'kb' || u === 'kbit' || u === 'ko' || u === 'kib') mb = v / 1024;
-    if (mb >= 1024) return this._fmtNum(mb / 1024, 1) + ' ' + this._t('unit_gb');
-    return this._fmtNum(mb, 0) + ' ' + this._t('unit_mb');
+    if (mb >= 1024) return `${this._fmtNum(mb / 1024, 1)} ${this._t('unit_gb')}`;
+    return `${this._fmtNum(mb, 0)} ${this._t('unit_mb')}`;
   }
 
   _entityLabel(id, deviceName) {
     var s = this._st(id);
-    var name = (s && s.attributes.friendly_name) || id;
+    var name = (s?.attributes.friendly_name) || id;
     if (deviceName && name.indexOf(deviceName) === 0) name = name.slice(deviceName.length).trim();
     return name.charAt(0).toUpperCase() + name.slice(1);
   }
@@ -670,9 +658,9 @@ class RenaultCard extends HTMLElement {
     var r = this._resolve();
     var hass = this._hass;
     var ids = [];
-    Object.keys(r.ent).forEach(function (k) { ids = ids.concat(r.ent[k]); });
-    if (r.plan) Object.keys(RN_PLAN_ROLES).forEach(function (k) { ids.push(r.plan[k]); });
-    var sig = JSON.stringify([this._lang(), r.deviceId, this._armed, this._leaseOpen, this._leaseHist && this._leaseHist.key, ids.map(function (id) {
+    Object.keys(r.ent).forEach((k) => { ids = ids.concat(r.ent[k]); });
+    if (r.plan) Object.keys(RN_PLAN_ROLES).forEach((k) => { ids.push(r.plan[k]); });
+    var sig = JSON.stringify([this._lang(), r.deviceId, this._armed, this._leaseOpen, this._leaseHist?.key, ids.map((id) => {
       var s = id && hass.states[id];
       return s ? [id, s.state, s.attributes.options] : null;
     })]);
@@ -685,14 +673,14 @@ class RenaultCard extends HTMLElement {
   }
 
   _tile(id, icon, label, value, extra) {
-    return '<div class="tile' + (extra && extra.warn ? ' warn' : '') + '"' + (id ? ' data-more="' + id + '" role="button" tabindex="0"' : '') + '>' +
+    return '<div class="tile' + (extra?.warn ? ' warn' : '') + '"' + (id ? ` data-more="${id}" role="button" tabindex="0"` : '') + '>' +
       '<div class="tile-head"><ha-icon icon="' + icon + '"></ha-icon><span class="lbl">' + rnEsc(label) + '</span></div>' +
       '<span class="val">' + rnEsc(value) + '</span>' + (extra && extra.bar != null ? this._bar(extra.bar, this._levelColor(extra.bar)) : '') + '</div>';
   }
 
   _bar(pct, color) {
     var p = Math.max(0, Math.min(100, pct));
-    return '<div class="bar"><div class="fill" style="width:' + p + '%;background:' + color + '"></div></div>';
+    return `<div class="bar"><div class="fill" style="width:${p}%;background:${color}"></div></div>`;
   }
 
   _levelColor(pct) {
@@ -704,12 +692,12 @@ class RenaultCard extends HTMLElement {
   _render(r) {
     var c = this._config, ent = r.ent, dev = r.device;
     if (!r.deviceId) {
-      this.shadowRoot.innerHTML = this._styles() + '<ha-card><div class="empty"><ha-icon icon="mdi:car-off"></ha-icon>' + this._t('no_vehicle') + '</div></ha-card>';
+      this.shadowRoot.innerHTML = `${this._styles()}<ha-card><div class="empty"><ha-icon icon="mdi:car-off"></ha-icon>${this._t('no_vehicle')}</div></ha-card>`;
       return;
     }
     var deviceName = dev ? String(dev.name_by_user || dev.name || '').trim() : '';
     var name = c.name || deviceName || this._t('vehicle');
-    var model = dev && dev.model ? 'Renault ' + rnModel(dev.model) : '';
+    var model = dev?.model ? `Renault ${rnModel(dev.model)}` : '';
     var plate = c.show_plate && dev ? rnPlate(dev.name) : null;
     var imgSrc = c.show_image ? (c.image || rnBuiltinImage(dev)) : null;
 
@@ -717,27 +705,27 @@ class RenaultCard extends HTMLElement {
     var header = '<div class="header">' +
       (c.show_logo ? '<span class="brand" role="img" aria-label="Renault"></span>' :
         (imgSrc ? '' : '<div class="badge"><ha-icon icon="mdi:car"></ha-icon></div>')) +
-      '<div class="titles"><div class="name">' + rnEsc(name) + '</div>' + (model ? '<div class="model">' + rnEsc(model) + '</div>' : '') + '</div>' +
+      '<div class="titles"><div class="name">' + rnEsc(name) + '</div>' + (model ? `<div class="model">${rnEsc(model)}</div>` : '') + '</div>' +
       (plate ? rnPlateSvg(plate, c.plate_department) : '') +
       '</div>';
 
-    var image = imgSrc ? '<div class="image"><img src="' + rnEsc(imgSrc) + '" alt="' + rnEsc(name) + '"></div>' : '';
+    var image = imgSrc ? `<div class="image"><img src="${rnEsc(imgSrc)}" alt="${rnEsc(name)}"></div>` : '';
 
     // Status chips
     var chips = [];
     var lowRange = Number(c.low_range) || 0;
     var range = this._num(ent.fuel_autonomy);
     var bRange = this._num(ent.battery_autonomy);
-    var minRange = [range, bRange].filter(function (v) { return v != null && !isNaN(v); });
+    var minRange = [range, bRange].filter((v) => v != null && !Number.isNaN(v));
     if (lowRange && minRange.length && Math.min.apply(null, minRange) < lowRange) {
-      chips.push('<span class="chip warn"><ha-icon icon="mdi:gas-station-off-outline"></ha-icon>' + this._t('low_range') + '</span>');
+      chips.push(`<span class="chip warn"><ha-icon icon="mdi:gas-station-off-outline"></ha-icon>${this._t('low_range')}</span>`);
     }
     if (this._avail(ent.lock_status)) {
       var unlocked = this._val(ent.lock_status) === 'on';
-      chips.push('<span class="chip' + (unlocked ? ' warn' : '') + '" data-more="' + ent.lock_status + '"><ha-icon icon="' + (unlocked ? 'mdi:lock-open-variant-outline' : 'mdi:lock-outline') + '"></ha-icon>' + this._t(unlocked ? 'unlocked' : 'locked') + '</span>');
+      chips.push(`<span class="chip${unlocked ? ' warn' : ''}" data-more="${ent.lock_status}"><ha-icon icon="${unlocked ? 'mdi:lock-open-variant-outline' : 'mdi:lock-outline'}"></ha-icon>${this._t(unlocked ? 'unlocked' : 'locked')}</span>`);
     }
     if (ent.doors.some((id) => this._val(id) === 'on')) {
-      chips.push('<span class="chip warn"><ha-icon icon="mdi:car-door"></ha-icon>' + this._t('doors_open') + '</span>');
+      chips.push(`<span class="chip warn"><ha-icon icon="mdi:car-door"></ha-icon>${this._t('doors_open')}</span>`);
     }
     if (this._val(ent.charging) === 'on') {
       var left = this._num(ent.charging_remaining_time);
@@ -745,10 +733,10 @@ class RenaultCard extends HTMLElement {
         (left ? this._t('charging_left', { t: this._duration(left) }) : this._t('charging')) + '</span>');
     } else if (this._avail(ent.plugged_in)) {
       var plugged = this._val(ent.plugged_in) === 'on';
-      chips.push('<span class="chip" data-more="' + ent.plugged_in + '"><ha-icon icon="' + (plugged ? 'mdi:power-plug' : 'mdi:power-plug-off-outline') + '"></ha-icon>' + this._t(plugged ? 'plugged' : 'unplugged') + '</span>');
+      chips.push(`<span class="chip" data-more="${ent.plugged_in}"><ha-icon icon="${plugged ? 'mdi:power-plug' : 'mdi:power-plug-off-outline'}"></ha-icon>${this._t(plugged ? 'plugged' : 'unplugged')}</span>`);
     }
     if (this._val(ent.hvac_status) === 'on') {
-      chips.push('<span class="chip ok"><ha-icon icon="mdi:air-conditioner"></ha-icon>' + this._t('hvac_on') + '</span>');
+      chips.push(`<span class="chip ok"><ha-icon icon="mdi:air-conditioner"></ha-icon>${this._t('hvac_on')}</span>`);
     }
 
     // Stat tiles
@@ -780,7 +768,7 @@ class RenaultCard extends HTMLElement {
     var tyres = ent.tyres.filter((id) => this._avail(id));
     if (tyres.length) {
       tiles.push(this._tile(tyres[0], 'mdi:car-tire-alert', this._t('tyres'),
-        tyres.map((id) => this._fmtNum(Number(this._val(id)), 1)).join(' · ') + ' ' + (this._st(tyres[0]).attributes.unit_of_measurement || '')));
+        `${tyres.map((id) => this._fmtNum(Number(this._val(id)), 1)).join(' · ')} ${this._st(tyres[0]).attributes.unit_of_measurement || ''}`));
     }
 
     // Location
@@ -789,7 +777,7 @@ class RenaultCard extends HTMLElement {
       var when = '';
       var lastId = this._avail(ent.location_last_activity) ? ent.location_last_activity : null;
       var last = lastId ? new Date(this._val(lastId)) : new Date(this._st(ent.location).last_updated || '');
-      if (!isNaN(last.getTime())) when = this._t('updated', { t: this._relative(last) });
+      if (!Number.isNaN(last.getTime())) when = this._t('updated', { t: this._relative(last) });
       var home = this._val(ent.location) === 'home';
       locationHtml = '<div class="row" data-more="' + ent.location + '" role="button" tabindex="0">' +
         '<ha-icon icon="' + (home ? 'mdi:home-map-marker' : 'mdi:map-marker') + '"></ha-icon>' +
@@ -803,10 +791,10 @@ class RenaultCard extends HTMLElement {
       var btns = ent.buttons.filter((id) => this._val(id) !== 'unavailable').map((id) => {
         var st = this._st(id);
         var reg = this._hass.entities[id] || {};
-        var key = (reg.translation_key || '') + ' ' + id;
+        var key = `${reg.translation_key || ''} ${id}`;
         var icon = st.attributes.icon || reg.icon;
         if (!icon) {
-          var hit = RN_BUTTON_ICONS.find(function (p) { return p[0].test(key); });
+          var hit = RN_BUTTON_ICONS.find((p) => p[0].test(key));
           icon = hit ? hit[1] : 'mdi:gesture-tap-button';
         }
         var armed = this._armed === id;
@@ -819,9 +807,9 @@ class RenaultCard extends HTMLElement {
         var opts = (s.attributes.options || []).map((o) =>
           '<option value="' + rnEsc(o) + '"' + (o === s.state ? ' selected' : '') + '>' +
           rnEsc(this._hass.formatEntityState ? this._hass.formatEntityState(s, o) : o) + '</option>').join('');
-        modeHtml = '<label class="field"><span>' + this._t('charge_mode') + '</span><select data-select="' + ent.charge_mode + '">' + opts + '</select></label>';
+        modeHtml = `<label class="field"><span>${this._t('charge_mode')}</span><select data-select="${ent.charge_mode}">${opts}</select></label>`;
       }
-      if (btns.length || modeHtml) actionsHtml = modeHtml + (btns.length ? '<div class="actions">' + btns.join('') + '</div>' : '');
+      if (btns.length || modeHtml) actionsHtml = modeHtml + (btns.length ? `<div class="actions">${btns.join('')}</div>` : '');
     }
 
     // Orange Internet On the move
@@ -835,7 +823,7 @@ class RenaultCard extends HTMLElement {
         : (this._avail(p.left_data) ? this._dataSize(p.left_data) : '');
       var expiry = this._avail(p.expiry_date) ? new Date(this._val(p.expiry_date)) : null;
       var expiryTxt = '', daysTxt = '';
-      if (expiry && !isNaN(expiry.getTime())) {
+      if (expiry && !Number.isNaN(expiry.getTime())) {
         var d = expiry.toLocaleDateString(this._lang(), { day: 'numeric', month: 'long' });
         var recurring = String(this._val(p.plan_type) || '').toLowerCase() === 'recurring';
         expiryTxt = this._t(recurring ? 'renews_on' : 'expires_on', { d: d });
@@ -845,28 +833,28 @@ class RenaultCard extends HTMLElement {
       planHtml = '<div class="plan" data-more="' + (p.left_data_percentage || p.left_data) + '" role="button" tabindex="0">' +
         '<div class="plan-head"><a class="logo-link" href="' + RN_ORANGE_URL + '" target="_blank" rel="noopener noreferrer" title="Orange Internet On the move">' +
         '<img class="logo" src="' + RN_ORANGE_LOGO + '" alt="Orange"></a><span class="plan-title">' + this._t('data_plan') + '</span>' +
-        (pct != null ? '<span class="pct">' + Math.round(pct) + ' %</span>' : '') + '</div>' +
+        (pct != null ? `<span class="pct">${Math.round(pct)} %</span>` : '') + '</div>' +
         (pct != null ? this._bar(pct, pct < 10 ? 'var(--error-color, #db4437)' : '#ff7900') : '') +
-        '<div class="plan-info"><span>' + rnEsc(leftTxt) + '</span><span>' + rnEsc(expiryTxt) + (daysTxt ? ' · ' + rnEsc(daysTxt) : '') + '</span></div></div>';
+        '<div class="plan-info"><span>' + rnEsc(leftTxt) + '</span><span>' + rnEsc(expiryTxt) + (daysTxt ? ` · ${rnEsc(daysTxt)}` : '') + '</span></div></div>';
     }
 
     this.shadowRoot.innerHTML = this._styles() + '<ha-card>' + header + image +
-      (chips.length ? '<div class="chips">' + chips.join('') + '</div>' : '') +
-      (tiles.length ? '<div class="tiles">' + tiles.join('') + '</div>' : '') +
+      (chips.length ? `<div class="chips">${chips.join('')}</div>` : '') +
+      (tiles.length ? `<div class="tiles">${tiles.join('')}</div>` : '') +
       this._leaseHtml(ent) + locationHtml + planHtml + actionsHtml + '</ha-card>';
   }
 
-  _km(n) { return this._fmtNum(Math.round(n)) + ' km'; }
+  _km(n) { return `${this._fmtNum(Math.round(n))} km`; }
 
   _money(v) {
-    var cur = (this._hass.config && this._hass.config.currency) || 'EUR';
+    var cur = (this._hass.config?.currency) || 'EUR';
     try { return new Intl.NumberFormat(this._lang(), { style: 'currency', currency: cur, maximumFractionDigits: 0 }).format(v); }
-    catch (e) { return this._fmtNum(v) + ' ' + cur; }
+    catch (_e) { return `${this._fmtNum(v)} ${cur}`; }
   }
 
   _leaseHist4(entityId, start) {
     var h = this._leaseHist;
-    return h && h.key === entityId + '|' + start.getTime() ? h.points : null;
+    return h && h.key === `${entityId}|${start.getTime()}` ? h.points : null;
   }
 
   _leaseHtml(ent) {
@@ -884,7 +872,7 @@ class RenaultCard extends HTMLElement {
     else if (st.state === 'warn') status = this._t('lease_warn', { k: this._km(st.projected - st.allowed) });
     else if (st.projected != null) status = this._t('lease_ok_margin', { k: this._km(st.allowed - st.projected) });
     else status = this._t('lease_ok');
-    if (st.cost != null) status += ' · ≈ ' + this._money(st.cost);
+    if (st.cost != null) status += ` · ≈ ${this._money(st.cost)}`;
     var endTxt = st.end.toLocaleDateString(this._lang(), { month: 'short', year: 'numeric' });
 
     // Folded: theoretical mileage today, this month, and the monthly budget until the end.
@@ -908,7 +896,7 @@ class RenaultCard extends HTMLElement {
     var marker = Math.max(0, Math.min(100, st.elapsedRatio * 100));
     // Contract year ticks on the bar.
     var ticks = '';
-    for (var m = 12; m < st.months; m += 12) ticks += '<span class="lease-tick" style="left:' + (m / st.months * 100).toFixed(1) + '%"></span>';
+    for (var m = 12; m < st.months; m += 12) ticks += `<span class="lease-tick" style="left:${(m / st.months * 100).toFixed(1)}%"></span>`;
     return '<div class="lease lease-' + st.state + '" data-lease-toggle>' +
       '<div class="lease-head" data-lease-toggle role="button" tabindex="0" aria-expanded="' + open + '">' +
       '<ha-icon class="lease-icon" icon="mdi:file-sign"></ha-icon><span class="plan-title">' + this._t('lease') + '</span>' +
@@ -916,9 +904,9 @@ class RenaultCard extends HTMLElement {
       '<ha-icon class="chev lease-chev' + (open ? '' : ' closed') + '" icon="mdi:chevron-down"></ha-icon></div>' +
       '<div class="lease-bar">' + this._bar(pct, color) + ticks + '<span class="lease-mark" style="left:' + marker.toFixed(1) + '%"></span></div>' +
       '<div class="plan-info"><span><b>' + rnEsc(this._km(st.driven)) + '</b> / ' + rnEsc(this._km(st.allowed)) + '</span>' +
-      '<span>' + rnEsc(this._t('lease_ends', { d: endTxt }) + ' · ' + (st.ended ? this._t('lease_ended') : this._t('lease_months_left', { n: st.monthsLeft }))) + '</span></div>' +
-      (figs.length ? '<div class="figs">' + figs.join('') + '</div>' : '') +
-      (open ? '<div class="lease-more">' + this._leaseDetails(st) + this._leaseChart(st, ent.mileage) + '</div>' : '') + '</div>';
+      '<span>' + rnEsc(`${this._t('lease_ends', { d: endTxt })} · ${st.ended ? this._t('lease_ended') : this._t('lease_months_left', { n: st.monthsLeft })}`) + '</span></div>' +
+      (figs.length ? `<div class="figs">${figs.join('')}</div>` : '') +
+      (open ? `<div class="lease-more">${this._leaseDetails(st)}${this._leaseChart(st, ent.mileage)}</div>` : '') + '</div>';
   }
 
   // Folded until tapped, unless expand_lease is set (same as ha-dockhand-card's sections).
@@ -928,7 +916,7 @@ class RenaultCard extends HTMLElement {
 
   _leaseFig(label, value, sub, warn, subColor) {
     return '<div class="fig' + (warn ? ' warn' : '') + '"><span class="lbl">' + rnEsc(label) + '</span><span class="val">' + rnEsc(value) + '</span>' +
-      (sub ? '<span class="sub"' + (subColor ? ' style="color:' + subColor + '"' : '') + '>' + rnEsc(sub) + '</span>' : '') + '</div>';
+      (sub ? `<span class="sub"${subColor ? ` style="color:${subColor}"` : ''}>${rnEsc(sub)}</span>` : '') + '</div>';
   }
 
   _leaseDetails(st) {
@@ -939,7 +927,7 @@ class RenaultCard extends HTMLElement {
     }
     if (st.projected != null && !st.ended) {
       figs.push(this._leaseFig(this._t('lease_projection_lbl'), this._km(st.projected),
-        st.cost != null ? '≈ ' + this._money(st.cost) : null, st.projected > st.allowed));
+        st.cost != null ? `≈ ${this._money(st.cost)}` : null, st.projected > st.allowed));
     } else if (st.projected == null) {
       figs.push(this._leaseFig(this._t('lease_projection_lbl'), '—', this._t('lease_early')));
     }
@@ -949,12 +937,12 @@ class RenaultCard extends HTMLElement {
         this._t('lease_year_sub', { t: this._km(yr.allowed) }),
         (yr.projected || yr.driven) > yr.allowed));
     }
-    return figs.length ? '<div class="figs">' + figs.join('') + '</div>' : '';
+    return figs.length ? `<div class="figs">${figs.join('')}</div>` : '';
   }
 
   // Daily mileage from the long-term statistics (kept forever by the recorder), cached for an hour.
   _leaseFetch(start, entityId) {
-    var key = entityId + '|' + start.getTime();
+    var key = `${entityId}|${start.getTime()}`;
     if (!this._hass.callWS || (this._leaseHist && this._leaseHist.key === key && Date.now() - this._leaseHist.at < 3600000)) return;
     if (this._leaseFetching === key) return;
     this._leaseFetching = key;
@@ -962,10 +950,8 @@ class RenaultCard extends HTMLElement {
       type: 'recorder/statistics_during_period', start_time: start.toISOString(), end_time: new Date().toISOString(),
       statistic_ids: [entityId], period: 'day', types: ['state'],
     }).then((res) => {
-      var rows = (res && res[entityId]) || [];
-      var points = rows.map(function (row) {
-        return [typeof row.start === 'number' ? row.start : new Date(row.start).getTime(), Number(row.state)];
-      }).filter(function (p) { return !isNaN(p[0]) && !isNaN(p[1]); });
+      var rows = (res?.[entityId]) || [];
+      var points = rows.map((row) => [typeof row.start === 'number' ? row.start : new Date(row.start).getTime(), Number(row.state)]).filter((p) => !Number.isNaN(p[0]) && !Number.isNaN(p[1]));
       this._leaseHist = { key: key, at: Date.now(), points: points };
     }).catch(() => {
       this._leaseHist = { key: key, at: Date.now(), points: [] };
@@ -981,15 +967,15 @@ class RenaultCard extends HTMLElement {
     var t0 = st.start.getTime(), t1 = st.end.getTime();
     var W = 320, H = 150, L = 6, R = 6, T = 8, B = 20;
     var top = Math.max(st.allowed, st.projected || 0, st.driven) * 1.08 || 1;
-    var x = function (t) { return (L + (Math.max(t0, Math.min(t1, t)) - t0) / (t1 - t0) * (W - L - R)).toFixed(1); };
-    var y = function (km) { return (T + (1 - Math.max(0, km) / top) * (H - T - B)).toFixed(1); };
+    var x = (t) => (L + (Math.max(t0, Math.min(t1, t)) - t0) / (t1 - t0) * (W - L - R)).toFixed(1);
+    var y = (km) => (T + (1 - Math.max(0, km) / top) * (H - T - B)).toFixed(1);
     var pts = [[t0, 0]];
-    (hist || []).forEach(function (p) {
+    (hist || []).forEach((p) => {
       if (p[0] >= t0 && p[0] <= now) pts.push([p[0], Math.max(0, p[1] - st.startKm)]);
     });
     pts.push([Math.min(now, t1), st.driven]);
-    var line = pts.map(function (p, i) { return (i ? 'L' : 'M') + x(p[0]) + ' ' + y(p[1]); }).join(' ');
-    var area = line + ' L' + x(pts[pts.length - 1][0]) + ' ' + y(0) + ' L' + x(t0) + ' ' + y(0) + ' Z';
+    var line = pts.map((p, i) => `${(i ? 'L' : 'M') + x(p[0])} ${y(p[1])}`).join(' ');
+    var area = `${line} L${x(pts[pts.length - 1][0])} ${y(0)} L${x(t0)} ${y(0)} Z`;
     var color = st.state === 'over' ? 'var(--error-color, #db4437)' : st.state === 'warn' ? 'var(--warning-color, #ffa600)' : 'var(--success-color, #43a047)';
     // Year ticks on the x axis.
     var ticks = '';
@@ -1000,7 +986,7 @@ class RenaultCard extends HTMLElement {
         '<text x="' + tx + '" y="' + (H - 6) + '" text-anchor="middle">' + yr + '</text>';
     }
     var proj = st.projected != null && !st.ended
-      ? '<path d="M' + x(now) + ' ' + y(st.driven) + ' L' + x(t1) + ' ' + y(st.projected) + '" class="proj" style="stroke:' + color + '"/>' : '';
+      ? `<path d="M${x(now)} ${y(st.driven)} L${x(t1)} ${y(st.projected)}" class="proj" style="stroke:${color}"/>` : '';
     var svg = '<svg class="lease-chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + rnEsc(this._t('lease_chart')) + '">' +
       ticks +
       '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(st.allowed) + '" y2="' + y(st.allowed) + '" class="limit"/>' +
@@ -1015,8 +1001,8 @@ class RenaultCard extends HTMLElement {
     return '<div class="lease-graph"><div class="legend">' +
       '<span><i class="sw actual-sw"></i>' + this._t('lease_legend_actual') + '</span>' +
       '<span><i class="sw allowed-sw"></i>' + this._t('lease_legend_allowed') + '</span>' +
-      (proj ? '<span><i class="sw proj-sw" style="border-color:' + color + '"></i>' + this._t('lease_legend_projection') + '</span>' : '') +
-      '</div>' + svg + (hist && !hist.length ? '<div class="plan-info"><span>' + this._t('lease_no_history') + '</span></div>' : '') + '</div>';
+      (proj ? `<span><i class="sw proj-sw" style="border-color:${color}"></i>${this._t('lease_legend_projection')}</span>` : '') +
+      '</div>' + svg + (hist && !hist.length ? `<div class="plan-info"><span>${this._t('lease_no_history')}</span></div>` : '') + '</div>';
   }
 
   _styles() {
@@ -1131,13 +1117,13 @@ class RenaultCard extends HTMLElement {
     // Links (the Orange logo) open on their own, without the more-info dialog.
     if (path.some((n) => n.tagName === 'A')) return;
     // As in ha-carburants-france: a tap anywhere on the lease toggles it, reading the details does not.
-    if (path.some((n) => n.classList && n.classList.contains('lease-more'))) return;
+    if (path.some((n) => n.classList?.contains('lease-more'))) return;
     if (path.some((n) => n.dataset && n.dataset.leaseToggle !== undefined)) {
       this._leaseOpen = !this._leaseIsOpen();
       this._update();
       return;
     }
-    var press = path.find((n) => n.dataset && n.dataset.press);
+    var press = path.find((n) => n.dataset?.press);
     if (press) {
       var id = press.dataset.press;
       // One tap arms the button, a second one within 3 s presses it.
@@ -1153,7 +1139,7 @@ class RenaultCard extends HTMLElement {
       this._update();
       return;
     }
-    var more = path.find((n) => n.dataset && n.dataset.more);
+    var more = path.find((n) => n.dataset?.more);
     if (more) {
       this.dispatchEvent(new CustomEvent('hass-more-info', { detail: { entityId: more.dataset.more }, bubbles: true, composed: true }));
     }
@@ -1161,7 +1147,7 @@ class RenaultCard extends HTMLElement {
 
   _onChange(ev) {
     var el = ev.target;
-    if (!el || !el.dataset || !el.dataset.select) return;
+    if (!el?.dataset?.select) return;
     this._hass.callService('select', 'select_option', { entity_id: el.dataset.select, option: el.value });
     el.blur();
   }
@@ -1177,9 +1163,9 @@ class RenaultCardEditor extends HTMLElement {
   }
 
   set hass(hass) {
-    var prevLang = this._hass && this._hass.language;
+    var prevLang = this._hass?.language;
     this._hass = hass;
-    if (this._form && prevLang === (hass && hass.language)) {
+    if (this._form && prevLang === (hass?.language)) {
       this._form.hass = hass;
     } else {
       this._render();
@@ -1187,7 +1173,7 @@ class RenaultCardEditor extends HTMLElement {
   }
 
   _lang() {
-    var lang = this._hass && this._hass.language ? this._hass.language.split('-')[0] : 'en';
+    var lang = this._hass?.language ? this._hass.language.split('-')[0] : 'en';
     return RnI18n[lang] ? lang : 'en';
   }
 
@@ -1266,9 +1252,9 @@ class RenaultCardEditor extends HTMLElement {
     var lang = this._lang();
     this._form.hass = this._hass;
     this._form.schema = this._schema();
-    this._form.computeLabel = (s) => (RN_OVERRIDABLE.indexOf(s.name) >= 0 ? rnT(lang, 'en_' + s.name) : rnT(lang, 'ed_' + s.name));
+    this._form.computeLabel = (s) => (RN_OVERRIDABLE.indexOf(s.name) >= 0 ? rnT(lang, `en_${s.name}`) : rnT(lang, `ed_${s.name}`));
     this._form.computeHelper = (s) => {
-      var key = 'ed_' + s.name + '_helper';
+      var key = `ed_${s.name}_helper`;
       var txt = rnT(lang, key);
       return txt === key ? undefined : txt;
     };
@@ -1281,20 +1267,20 @@ class RenaultCardEditor extends HTMLElement {
     ev.stopPropagation();
     var value = Object.assign({}, ev.detail.value);
     // Keep the YAML short: drop options left empty or at their default.
-    Object.keys(value).forEach(function (key) {
+    Object.keys(value).forEach((key) => {
       if (value[key] === '' || value[key] === null || value[key] === undefined) delete value[key];
     });
-    Object.keys(RN_EDITOR_DEFAULTS).forEach(function (key) {
+    Object.keys(RN_EDITOR_DEFAULTS).forEach((key) => {
       if (value[key] === RN_EDITOR_DEFAULTS[key]) delete value[key];
     });
     if (value.entities) {
       var e = Object.assign({}, value.entities);
-      Object.keys(e).forEach(function (k) { if (!e[k]) delete e[k]; });
+      Object.keys(e).forEach((k) => { if (!e[k]) delete e[k]; });
       if (Object.keys(e).length) value.entities = e; else delete value.entities;
     }
     if (value.lease) {
       var l = Object.assign({}, value.lease);
-      Object.keys(l).forEach(function (k) { if (l[k] === '' || l[k] === null || l[k] === undefined) delete l[k]; });
+      Object.keys(l).forEach((k) => { if (l[k] === '' || l[k] === null || l[k] === undefined) delete l[k]; });
       if (l.forecast === 'contract') delete l.forecast;
       else if (l.forecast) l.forecast = Number(l.forecast);
       if (Object.keys(l).length) value.lease = l; else delete value.lease;
@@ -1339,16 +1325,16 @@ var RN_MAP_STYLES = {
   osm_fr: {
     url: 'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
     maxZoom: 20,
-    attribution: '&copy; <a href="https://www.openstreetmap.fr" target="_blank" rel="noopener">OpenStreetMap France</a> | ' + RN_OSM_ATTRIBUTION,
+    attribution: `&copy; <a href="https://www.openstreetmap.fr" target="_blank" rel="noopener">OpenStreetMap France</a> | ${RN_OSM_ATTRIBUTION}`,
   },
   ign: {
-    url: RN_IGN_WMTS + '&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&FORMAT=image/png',
+    url: `${RN_IGN_WMTS}&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&FORMAT=image/png`,
     maxNativeZoom: 19,
     maxZoom: 20,
     attribution: 'Plan IGN &copy; <a href="https://www.ign.fr" target="_blank" rel="noopener">IGN</a>',
   },
   ign_photo: {
-    url: RN_IGN_WMTS + '&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&FORMAT=image/jpeg',
+    url: `${RN_IGN_WMTS}&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&FORMAT=image/jpeg`,
     maxNativeZoom: 19,
     maxZoom: 20,
     photo: true,
@@ -1357,12 +1343,12 @@ var RN_MAP_STYLES = {
   topo: {
     url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
     maxZoom: 17,
-    attribution: RN_OSM_ATTRIBUTION + ', SRTM | &copy; <a href="https://opentopomap.org" target="_blank" rel="noopener">OpenTopoMap</a> (CC-BY-SA)',
+    attribution: `${RN_OSM_ATTRIBUTION}, SRTM | &copy; <a href="https://opentopomap.org" target="_blank" rel="noopener">OpenTopoMap</a> (CC-BY-SA)`,
   },
   cyclosm: {
     url: 'https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png',
     maxZoom: 20,
-    attribution: '<a href="https://www.cyclosm.org" target="_blank" rel="noopener">CyclOSM</a> | ' + RN_OSM_ATTRIBUTION,
+    attribution: `<a href="https://www.cyclosm.org" target="_blank" rel="noopener">CyclOSM</a> | ${RN_OSM_ATTRIBUTION}`,
   },
   satellite: {
     url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
@@ -1449,7 +1435,7 @@ var RnMapI18n = {
 };
 
 function rnMapLang(hass) {
-  var l = ((hass && hass.language) || document.documentElement.lang || 'en').split('-')[0];
+  var l = ((hass?.language) || document.documentElement.lang || 'en').split('-')[0];
   return RnMapI18n[l] ? l : 'en';
 }
 
@@ -1463,7 +1449,7 @@ function rnAssetBase() {
     for (var i = entries.length - 1; i >= 0; i--) {
       if (/\/renault-card\.js(\?|$)/.test(entries[i].name)) { found = entries[i].name; break; }
     }
-  } catch (err) { /* no resource timing */ }
+  } catch (_err) { /* no resource timing */ }
   if (!found) {
     var scripts = document.querySelectorAll('script[src]');
     for (var j = 0; j < scripts.length; j++) {
@@ -1475,23 +1461,23 @@ function rnAssetBase() {
 }
 
 function rnLoadScript(file, check) {
-  return new Promise(function (resolve, reject) {
+  return new Promise((resolve, reject) => {
     if (check()) { resolve(); return; }
     var script = document.createElement('script');
-    script.src = rnAssetBase() + file + '?v=' + RENAULT_CARD_VERSION;
-    script.onload = function () { resolve(); };
-    script.onerror = function () { reject(new Error(file + ' could not be loaded from ' + rnAssetBase())); };
+    script.src = `${rnAssetBase() + file}?v=${RENAULT_CARD_VERSION}`;
+    script.onload = () => { resolve(); };
+    script.onerror = () => { reject(new Error(`${file} could not be loaded from ${rnAssetBase()}`)); };
     document.head.appendChild(script);
   });
 }
 
 var rnLeafletPromise = null;
 function rnLoadLeaflet() {
-  if (window.L && window.L.map) return Promise.resolve(window.L);
+  if (window.L?.map) return Promise.resolve(window.L);
   if (!rnLeafletPromise) {
-    rnLeafletPromise = rnLoadScript('leaflet.js', function () { return window.L && window.L.map; })
-      .then(function () { return window.L; })
-      .catch(function (err) { rnLeafletPromise = null; throw err; });
+    rnLeafletPromise = rnLoadScript('leaflet.js', () => window.L?.map)
+      .then(() => window.L)
+      .catch((err) => { rnLeafletPromise = null; throw err; });
   }
   return rnLeafletPromise;
 }
@@ -1502,17 +1488,17 @@ function rnLoadMaplibre() {
   if (!rnMaplibrePromise) {
     var base = rnAssetBase();
     rnMaplibrePromise = Promise.all([
-      import(base + 'maplibre-gl.js?v=' + RENAULT_CARD_VERSION),
-      rnLoadScript('maplibre-gl-css.js', function () { return !!window.__rnMaplibreCss; }),
-    ]).then(function (results) {
+      import(`${base}maplibre-gl.js?v=${RENAULT_CARD_VERSION}`),
+      rnLoadScript('maplibre-gl-css.js', () => !!window.__rnMaplibreCss),
+    ]).then((results) => {
       var module = results[0];
       // The worker is a .js file next to the library (HACS only downloads .js files).
-      if (module.setWorkerUrl) module.setWorkerUrl(base + 'maplibre-gl-worker.js?v=' + RENAULT_CARD_VERSION);
+      if (module.setWorkerUrl) module.setWorkerUrl(`${base}maplibre-gl-worker.js?v=${RENAULT_CARD_VERSION}`);
       window.maplibregl = window.maplibregl || module;
-      if (window.MaplibreGLLeaflet && window.MaplibreGLLeaflet.maplibreGL) return window.MaplibreGLLeaflet.maplibreGL;
-      return rnLoadScript('leaflet-maplibre-gl.js', function () { return window.MaplibreGLLeaflet; })
-        .then(function () { return window.MaplibreGLLeaflet.maplibreGL; });
-    }).catch(function (err) {
+      if (window.MaplibreGLLeaflet?.maplibreGL) return window.MaplibreGLLeaflet.maplibreGL;
+      return rnLoadScript('leaflet-maplibre-gl.js', () => window.MaplibreGLLeaflet)
+        .then(() => window.MaplibreGLLeaflet.maplibreGL);
+    }).catch((err) => {
       rnMaplibrePromise = null;
       throw err;
     });
@@ -1523,17 +1509,17 @@ function rnLoadMaplibre() {
 function rnSupportsWebGL2() {
   try {
     return !!document.createElement('canvas').getContext('webgl2');
-  } catch (err) {
+  } catch (_err) {
     return false;
   }
 }
 
 // Everything the map needs about one vehicle.
 function rnVehicle(hass, deviceId) {
-  var device = hass.devices && hass.devices[deviceId];
+  var device = hass.devices?.[deviceId];
   var list = rnDeviceEntities(hass, deviceId);
   var ent = {};
-  Object.keys(RN_ROLES).forEach(function (role) { ent[role] = rnFindRole(hass, list, RN_ROLES[role]); });
+  Object.keys(RN_ROLES).forEach((role) => { ent[role] = rnFindRole(hass, list, RN_ROLES[role]); });
   var tracker = ent.location && hass.states[ent.location];
   if (!tracker || tracker.attributes.latitude == null || tracker.attributes.longitude == null) return null;
   return {
@@ -1542,7 +1528,7 @@ function rnVehicle(hass, deviceId) {
     ent: ent,
     tracker: tracker,
     name: device ? String(device.name_by_user || device.name || '').trim() : tracker.attributes.friendly_name,
-    model: device && device.model ? 'Renault ' + rnModel(device.model) : '',
+    model: device?.model ? `Renault ${rnModel(device.model)}` : '',
     image: rnBuiltinImage(device),
     lat: tracker.attributes.latitude,
     lon: tracker.attributes.longitude,
@@ -1583,14 +1569,13 @@ class RenaultMapCard extends HTMLElement {
 
   connectedCallback() {
     if (!this._map) return;
-    var self = this;
     if (this._resizeObserver) this._resizeObserver.observe(this._root.querySelector('.map'));
     this._scheduleTokenRefresh();
     // The token may have expired while the card was detached.
-    if (this._tiles && this._tiles.getMaplibreMap) {
-      this._hass.callWS({ type: 'map_tiles/access_token' }).then(function (res) { self._mapToken = res.token; }, function () {});
-    } else if (this._tiles && this._tiles._url && this._tiles._url.indexOf('/api/map_tiles/') === 0) {
-      this._tileUrl().then(function (url) { if (self._tiles) self._tiles.setUrl(url); });
+    if (this._tiles?.getMaplibreMap) {
+      this._hass.callWS({ type: 'map_tiles/access_token' }).then((res) => { this._mapToken = res.token; }, () => {});
+    } else if (this._tiles?._url && this._tiles._url.indexOf('/api/map_tiles/') === 0) {
+      this._tileUrl().then((url) => { if (this._tiles) this._tiles.setUrl(url); });
     }
     setTimeout(this._invalidate.bind(this), 0);
   }
@@ -1615,42 +1600,38 @@ class RenaultMapCard extends HTMLElement {
     return { columns: 12, min_columns: 6, rows: 'auto' };
   }
 
-  _lang() { return (this._config && this._config.language) || rnMapLang(this._hass); }
+  _lang() { return (this._config?.language) || rnMapLang(this._hass); }
 
   _mt() { return RnMapI18n[RnMapI18n[this._lang()] ? this._lang() : 'en']; }
 
   _deviceIds() {
     var ids = this._config.devices;
     if (typeof ids === 'string') ids = [ids];
-    if (ids && ids.length) return ids;
-    return rnDevicesOf(this._hass, 'renault').filter((id) => rnDeviceEntities(this._hass, id).some(function (e) {
-      return e.entity_id.indexOf('device_tracker.') === 0;
-    }));
+    if (ids?.length) return ids;
+    return rnDevicesOf(this._hass, 'renault').filter((id) => rnDeviceEntities(this._hass, id).some((e) => e.entity_id.indexOf('device_tracker.') === 0));
   }
 
   _vehicles() {
     var hass = this._hass;
-    return this._deviceIds().map(function (id) { return rnVehicle(hass, id); }).filter(Boolean);
+    return this._deviceIds().map((id) => rnVehicle(hass, id)).filter(Boolean);
   }
 
   // Redraw only when something shown on the map changes.
   _signature() {
     if (!this._hass || !this._config) return '';
     var hass = this._hass;
-    return JSON.stringify([this._lang(), this._vehicles().map(function (v) {
-      return [v.deviceId, v.lat, v.lon, v.tracker.state, v.name,
-        ['fuel_autonomy', 'battery_autonomy', 'battery_level', 'fuel_quantity', 'mileage', 'location_last_activity'].map(function (r) {
+    return JSON.stringify([this._lang(), this._vehicles().map((v) => [v.deviceId, v.lat, v.lon, v.tracker.state, v.name,
+        ['fuel_autonomy', 'battery_autonomy', 'battery_level', 'fuel_quantity', 'mileage', 'location_last_activity'].map((r) => {
           var s = v.ent[r] && hass.states[v.ent[r]];
           return s ? s.state : null;
-        })];
-    })]);
+        })])]);
   }
 
   _dark(config) {
     var theme = (config || this._config).theme;
     if (theme === 'dark') return true;
     if (theme === 'light') return false;
-    return !!(this._hass && this._hass.themes && this._hass.themes.darkMode);
+    return !!(this._hass?.themes?.darkMode);
   }
 
   _style() {
@@ -1661,7 +1642,7 @@ class RenaultMapCard extends HTMLElement {
 
   // What the base layer depends on; the vector style also has a light and a dark version.
   _tilesKey(config) {
-    var vector = (RN_MAP_STYLES[config.map_style || RN_MAP_DEFAULTS.map_style] || {}).vector;
+    var vector = RN_MAP_STYLES[config.map_style || RN_MAP_DEFAULTS.map_style]?.vector;
     return [config.map_style, config.tile_url, config.tile_attribution, vector && this._dark(config)].join('|');
   }
 
@@ -1678,10 +1659,9 @@ class RenaultMapCard extends HTMLElement {
       '<style>' + RN_LEAFLET_CSS + '</style><style class="mlcss"></style>' +
       '<style>' + RenaultMapCard._styles() + '</style>' +
       '<ha-card><div class="header" hidden></div><div class="message" hidden></div><div class="map"></div></ha-card>';
-    var self = this;
-    this._root.addEventListener('click', function (ev) {
-      var btn = ev.composedPath().find(function (n) { return n.dataset && n.dataset.more; });
-      if (btn) self.dispatchEvent(new CustomEvent('hass-more-info', { detail: { entityId: btn.dataset.more }, bubbles: true, composed: true }));
+    this._root.addEventListener('click', (ev) => {
+      var btn = ev.composedPath().find((n) => n.dataset?.more);
+      if (btn) this.dispatchEvent(new CustomEvent('hass-more-info', { detail: { entityId: btn.dataset.more }, bubbles: true, composed: true }));
     });
   }
 
@@ -1695,7 +1675,7 @@ class RenaultMapCard extends HTMLElement {
     header.hidden = !title && !icon;
     header.innerHTML = icon + rnEsc(title || '');
     var mapEl = this._root.querySelector('.map');
-    mapEl.style.height = Math.max(150, Number(this._config.height) || 400) + 'px';
+    mapEl.style.height = `${Math.max(150, Number(this._config.height) || 400)}px`;
     mapEl.classList.toggle('dark', this._darkTiles());
     this._reloadTilesIfNeeded();
     var message = this._root.querySelector('.message');
@@ -1706,13 +1686,12 @@ class RenaultMapCard extends HTMLElement {
       return;
     }
     message.hidden = true;
-    var self = this;
-    rnLoadLeaflet().then(function (L) {
-      self._ensureMap(L);
-      self._drawMarkers(L, self._vehicles());
-    }).catch(function (err) {
+    rnLoadLeaflet().then((L) => {
+      this._ensureMap(L);
+      this._drawMarkers(L, this._vehicles());
+    }).catch((err) => {
       message.hidden = false;
-      message.textContent = String((err && err.message) || err);
+      message.textContent = String((err?.message) || err);
     });
   }
 
@@ -1725,9 +1704,8 @@ class RenaultMapCard extends HTMLElement {
     this._layer = L.layerGroup().addTo(this._map);
     if (this._config.show_fullscreen) this._addFullscreenControl(L);
     this._fitted = false;
-    var self = this;
     if (window.ResizeObserver) {
-      this._resizeObserver = new ResizeObserver(function () { self._invalidate(); });
+      this._resizeObserver = new ResizeObserver(() => { this._invalidate(); });
       this._resizeObserver.observe(mapEl);
     }
   }
@@ -1737,13 +1715,12 @@ class RenaultMapCard extends HTMLElement {
   _tileUrl() {
     var hass = this._hass;
     return Promise.resolve()
-      .then(function () { return hass.callWS({ type: 'map_tiles/access_token' }); })
-      .then(function (res) { return '/api/map_tiles/raster/{z}/{x}/{y}.png?token=' + encodeURIComponent(res.token); })
-      .catch(function () { return 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'; });
+      .then(() => hass.callWS({ type: 'map_tiles/access_token' }))
+      .then((res) => `/api/map_tiles/raster/{z}/{x}/{y}.png?token=${encodeURIComponent(res.token)}`)
+      .catch(() => 'https://tile.openstreetmap.org/{z}/{x}/{y}.png');
   }
 
   _loadTiles(L) {
-    var self = this;
     var map = this._map;
     var style = this._style();
     var spec = RN_MAP_STYLES[style];
@@ -1767,12 +1744,12 @@ class RenaultMapCard extends HTMLElement {
       url = Promise.resolve(this._config.tile_url);
     } else url = Promise.resolve(spec.url);
     this._root.querySelector('.map').classList.toggle('dark', this._darkTiles());
-    url.then(function (resolved) {
+    url.then((resolved) => {
       // The map was rebuilt or the style changed while the token was loading.
-      if (self._map !== map || self._tilesKey(self._config) !== key) return;
-      self._tiles = L.tileLayer(resolved, options).addTo(map);
-      self._tiles.bringToBack();
-      self._scheduleTokenRefresh();
+      if (this._map !== map || this._tilesKey(this._config) !== key) return;
+      this._tiles = L.tileLayer(resolved, options).addTo(map);
+      this._tiles.bringToBack();
+      this._scheduleTokenRefresh();
     });
   }
 
@@ -1788,15 +1765,14 @@ class RenaultMapCard extends HTMLElement {
   // or dark.json, tiles and glyphs through /api/map_tiles with the rotating token in a header.
   // Anything missing (WebGL2, Home Assistant before 2026.9) falls back to raster OpenStreetMap.
   _loadVector(L, map, key) {
-    var self = this;
     var dark = this._dark();
     var hass = this._hass;
-    var fallback = function (err) {
-      if (self._map !== map || self._tilesKey(self._config) !== key) return;
+    var fallback = (err) => {
+      if (this._map !== map || this._tilesKey(this._config) !== key) return;
       // eslint-disable-next-line no-console
       console.info('renault-map-card: Home Assistant map style unavailable, using raster tiles', err);
-      self._vectorFailed = true;
-      self._loadTiles(L);
+      this._vectorFailed = true;
+      this._loadTiles(L);
     };
     if (!rnSupportsWebGL2()) {
       fallback(new Error('WebGL2 not supported'));
@@ -1805,51 +1781,50 @@ class RenaultMapCard extends HTMLElement {
     Promise.all([
       rnLoadMaplibre(),
       hass.callWS({ type: 'map_tiles/access_token' }),
-      fetch('/static/map/' + (dark ? 'dark' : 'light') + '.json').then(function (resp) {
-        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      fetch(`/static/map/${dark ? 'dark' : 'light'}.json`).then((resp) => {
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         return resp.json();
       }),
-    ]).then(function (results) {
-      if (self._map !== map || self._tilesKey(self._config) !== key) return;
-      self._root.querySelector('.mlcss').textContent = window.__rnMaplibreCss || '';
+    ]).then((results) => {
+      if (this._map !== map || this._tilesKey(this._config) !== key) return;
+      this._root.querySelector('.mlcss').textContent = window.__rnMaplibreCss || '';
       var maplibreGL = results[0];
       var style = results[2];
-      self._mapToken = results[1].token;
-      var absolute = function (url) { return new URL(url, location.href).href; };
+      this._mapToken = results[1].token;
+      var absolute = (url) => new URL(url, location.href).href;
       if (typeof style.sprite === 'string') style.sprite = absolute(style.sprite);
       else if (Array.isArray(style.sprite)) {
-        style.sprite = style.sprite.map(function (sprite) { return Object.assign({}, sprite, { url: absolute(sprite.url) }); });
+        style.sprite = style.sprite.map((sprite) => Object.assign({}, sprite, { url: absolute(sprite.url) }));
       }
-      self._tiles = maplibreGL({
+      this._tiles = maplibreGL({
         style: style,
         attributionControl: { customAttribution: RN_OSM_ATTRIBUTION },
         // Same as the native map card: the token in a header keeps tile URLs, and the cache, stable.
-        transformRequest: function (url) {
+        transformRequest: (url) => {
           var full = new URL(url, location.href);
           if (full.origin === location.origin && full.pathname.indexOf('/api/map_tiles/') === 0) {
-            return { url: full.href, headers: { 'X-Map-Tiles-Token': self._mapToken } };
+            return { url: full.href, headers: { 'X-Map-Tiles-Token': this._mapToken } };
           }
           return { url: full.href };
         },
       });
-      self._tiles.addTo(map);
-      self._scheduleTokenRefresh();
+      this._tiles.addTo(map);
+      this._scheduleTokenRefresh();
     }).catch(fallback);
   }
 
   _scheduleTokenRefresh() {
     clearInterval(this._tokenTimer);
     if (!this._tiles) return;
-    var self = this;
     if (this._tiles.getMaplibreMap) {
-      this._tokenTimer = setInterval(function () {
-        self._hass.callWS({ type: 'map_tiles/access_token' }).then(function (res) { self._mapToken = res.token; }, function () {});
+      this._tokenTimer = setInterval(() => {
+        this._hass.callWS({ type: 'map_tiles/access_token' }).then((res) => { this._mapToken = res.token; }, () => {});
       }, 20 * 60 * 1000);
       return;
     }
-    if (!this._tiles._url || this._tiles._url.indexOf('/api/map_tiles/') !== 0) return;
-    this._tokenTimer = setInterval(function () {
-      self._tileUrl().then(function (url) { if (self._tiles) self._tiles.setUrl(url, true); });
+    if (this._tiles._url?.indexOf('/api/map_tiles/') !== 0) return;
+    this._tokenTimer = setInterval(() => {
+      this._tileUrl().then((url) => { if (this._tiles) this._tiles.setUrl(url, true); });
     }, 20 * 60 * 1000);
   }
 
@@ -1860,24 +1835,23 @@ class RenaultMapCard extends HTMLElement {
   }
 
   _addFullscreenControl(L) {
-    var self = this;
     var Fullscreen = L.Control.extend({
-      onAdd: function () {
+      onAdd: () => {
         var bar = L.DomUtil.create('div', 'leaflet-bar rn-fs');
         var link = L.DomUtil.create('a', '', bar);
         link.href = '#';
         link.setAttribute('role', 'button');
         L.DomEvent.disableClickPropagation(bar);
-        L.DomEvent.on(link, 'click', function (ev) { L.DomEvent.preventDefault(ev); self._toggleFullscreen(); });
-        self._fsLink = link;
-        self._updateFullscreenButton();
+        L.DomEvent.on(link, 'click', (ev) => { L.DomEvent.preventDefault(ev); this._toggleFullscreen(); });
+        this._fsLink = link;
+        this._updateFullscreenButton();
         return bar;
       },
     });
     new Fullscreen({ position: 'topleft' }).addTo(this._map);
     if (!this._onFsChange) {
-      this._onFsChange = function () { self._fullscreenChanged(); };
-      this._onFsKey = function (ev) { if (ev.key === 'Escape' && self._pseudoFs) self._toggleFullscreen(); };
+      this._onFsChange = () => { this._fullscreenChanged(); };
+      this._onFsKey = (ev) => { if (ev.key === 'Escape' && this._pseudoFs) this._toggleFullscreen(); };
       document.addEventListener('fullscreenchange', this._onFsChange);
       document.addEventListener('webkitfullscreenchange', this._onFsChange);
       document.addEventListener('keydown', this._onFsKey);
@@ -1891,7 +1865,7 @@ class RenaultMapCard extends HTMLElement {
   _isNativeFullscreen() {
     var selectors = [':fullscreen', ':-webkit-full-screen'];
     for (var i = 0; i < selectors.length; i++) {
-      try { if (this.matches(selectors[i])) return true; } catch (err) { /* unsupported selector */ }
+      try { if (this.matches(selectors[i])) return true; } catch (_err) { /* unsupported selector */ }
     }
     return false;
   }
@@ -1901,24 +1875,22 @@ class RenaultMapCard extends HTMLElement {
     if (this._pseudoFs) { this._pseudoFs = false; this._fullscreenChanged(); return; }
     if (this._isFullscreen()) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
     var request = this.requestFullscreen || this.webkitRequestFullscreen;
-    var self = this;
-    var pseudo = function () { self._pseudoFs = true; self._fullscreenChanged(); };
+    var pseudo = () => { this._pseudoFs = true; this._fullscreenChanged(); };
     if (!request) { pseudo(); return; }
     try {
       var result = request.call(this);
-      if (result && result.catch) result.catch(pseudo);
-    } catch (err) { pseudo(); }
+      if (result?.catch) result.catch(pseudo);
+    } catch (_err) { pseudo(); }
   }
 
   _fullscreenChanged() {
-    var card = this._root && this._root.querySelector('ha-card');
+    var card = this._root?.querySelector('ha-card');
     if (!card) return;
     var on = this._isFullscreen();
     card.classList.toggle('fullscreen', on);
     card.classList.toggle('pseudo', !!this._pseudoFs);
     this._updateFullscreenButton();
-    var self = this;
-    setTimeout(function () { self._fitted = false; self._invalidate(); }, 50);
+    setTimeout(() => { this._fitted = false; this._invalidate(); }, 50);
   }
 
   _updateFullscreenButton() {
@@ -1931,7 +1903,7 @@ class RenaultMapCard extends HTMLElement {
       : 'M5,5H10V7H7V10H5V5M14,5H19V10H17V7H14V5M17,14H19V19H14V17H17V14M10,17V19H5V14H7V17H10Z';
     this._fsLink.title = label;
     this._fsLink.setAttribute('aria-label', label);
-    this._fsLink.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="' + path + '"/></svg>';
+    this._fsLink.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="${path}"/></svg>`;
   }
 
   _fit() {
@@ -1948,7 +1920,7 @@ class RenaultMapCard extends HTMLElement {
 
   _num(id) {
     var s = id && this._hass.states[id];
-    return s && s.state !== 'unavailable' && s.state !== 'unknown' && s.state !== '' && !isNaN(Number(s.state)) ? Number(s.state) : null;
+    return s && s.state !== 'unavailable' && s.state !== 'unknown' && s.state !== '' && !Number.isNaN(Number(s.state)) ? Number(s.state) : null;
   }
 
   _fmt(id) {
@@ -1956,42 +1928,41 @@ class RenaultMapCard extends HTMLElement {
     var n = this._num(id);
     if (n == null) return '';
     var u = s.attributes.unit_of_measurement || '';
-    return n.toLocaleString(this._lang(), { maximumFractionDigits: 0 }) + (u ? (u === '%' ? ' %' : ' ' + u) : '');
+    return n.toLocaleString(this._lang(), { maximumFractionDigits: 0 }) + (u ? (u === '%' ? ' %' : ` ${u}`) : '');
   }
 
   _drawMarkers(L, vehicles) {
-    var self = this;
     var points = [];
-    var signature = vehicles.map(function (v) { return v.deviceId; }).join(',');
+    var signature = vehicles.map((v) => v.deviceId).join(',');
     if (signature !== this._markerSet) this._fitted = false;
     this._markerSet = signature;
     this._layer.clearLayers();
 
-    vehicles.forEach(function (v) {
-      var range = v.ent.battery_autonomy && self._num(v.ent.battery_autonomy) != null ? v.ent.battery_autonomy : v.ent.fuel_autonomy;
-      var rangeTxt = self._fmt(range);
-      var pic = self._config.show_picture && v.image
-        ? '<img class="car" src="' + v.image + '" alt="">'
+    vehicles.forEach((v) => {
+      var range = v.ent.battery_autonomy && this._num(v.ent.battery_autonomy) != null ? v.ent.battery_autonomy : v.ent.fuel_autonomy;
+      var rangeTxt = this._fmt(range);
+      var pic = this._config.show_picture && v.image
+        ? `<img class="car" src="${v.image}" alt="">`
         : '<span class="car-icon"><ha-icon icon="mdi:car"></ha-icon></span>';
-      var text = self._config.show_name
-        ? '<span class="ptext"><span class="pname">' + rnEsc(v.name) + '</span>' + (rangeTxt ? '<span class="prange">' + rnEsc(rangeTxt) + '</span>' : '') + '</span>'
-        : (rangeTxt ? '<span class="prange">' + rnEsc(rangeTxt) + '</span>' : '');
+      var text = this._config.show_name
+        ? `<span class="ptext"><span class="pname">${rnEsc(v.name)}</span>${rangeTxt ? `<span class="prange">${rnEsc(rangeTxt)}</span>` : ''}</span>`
+        : (rangeTxt ? `<span class="prange">${rnEsc(rangeTxt)}</span>` : '');
       var icon = L.divIcon({
         className: 'rn-marker',
-        html: '<div class="pin" title="' + rnEsc(v.name) + '">' + pic + text + '</div>',
+        html: `<div class="pin" title="${rnEsc(v.name)}">${pic}${text}</div>`,
         iconSize: null,
         iconAnchor: [0, 0],
       });
       var marker = L.marker([v.lat, v.lon], { icon: icon, riseOnHover: true });
-      marker.bindPopup(self._popup(v), { maxWidth: 280, minWidth: 230 });
-      marker.addTo(self._layer);
+      marker.bindPopup(this._popup(v), { maxWidth: 280, minWidth: 230 });
+      marker.addTo(this._layer);
       points.push([v.lat, v.lon]);
     });
 
     var home = this._hass.states['zone.home'];
     if (this._config.show_home && home && home.attributes.latitude != null) {
       L.marker([home.attributes.latitude, home.attributes.longitude], {
-        icon: L.divIcon({ className: 'rn-marker', html: '<div class="home" title="' + rnEsc(this._mt().home) + '"><ha-icon icon="mdi:home"></ha-icon></div>', iconSize: null, iconAnchor: [0, 0] }),
+        icon: L.divIcon({ className: 'rn-marker', html: `<div class="home" title="${rnEsc(this._mt().home)}"><ha-icon icon="mdi:home"></ha-icon></div>`, iconSize: null, iconAnchor: [0, 0] }),
         zIndexOffset: -1000,
         keyboard: false,
       }).addTo(this._layer);
@@ -2009,22 +1980,22 @@ class RenaultMapCard extends HTMLElement {
     var where = hass.formatEntityState ? hass.formatEntityState(v.tracker) : v.tracker.state;
     var lastId = v.ent.location_last_activity;
     var last = lastId && hass.states[lastId] ? new Date(hass.states[lastId].state) : new Date(v.tracker.last_updated || '');
-    var when = isNaN(last.getTime()) ? '' : rnT(lang, 'updated').replace('{t}', RenaultCard.prototype._relative.call({ _lang: function () { return lang; } }, last));
+    var when = Number.isNaN(last.getTime()) ? '' : rnT(lang, 'updated').replace('{t}', RenaultCard.prototype._relative.call({ _lang: () => lang }, last));
     var rows = [
       ['battery_level', 'battery_level'], ['battery_autonomy', 'battery_autonomy'],
       ['fuel_autonomy', 'fuel_autonomy'], ['fuel_quantity', 'fuel_quantity'], ['mileage', 'mileage'],
     ].map((r) => {
       var txt = this._fmt(v.ent[r[0]]);
-      return txt ? '<tr><td>' + rnEsc(rnT(lang, r[1])) + '</td><td><b>' + rnEsc(txt) + '</b></td></tr>' : '';
+      return txt ? `<tr><td>${rnEsc(rnT(lang, r[1]))}</td><td><b>${rnEsc(txt)}</b></td></tr>` : '';
     }).join('');
     return '<div class="popup">' +
-      (v.image && this._config.show_picture ? '<img class="pimg" src="' + v.image + '" alt="">' : '') +
+      (v.image && this._config.show_picture ? `<img class="pimg" src="${v.image}" alt="">` : '') +
       '<div class="pname-pop">' + rnEsc(v.name) + '</div>' +
-      (v.model ? '<div class="pmodel">' + rnEsc(v.model) + '</div>' : '') +
-      '<div class="pwhere">' + rnEsc(where) + (when ? ' · ' + rnEsc(when) : '') + '</div>' +
-      (rows ? '<table>' + rows + '</table>' : '') +
+      (v.model ? `<div class="pmodel">${rnEsc(v.model)}</div>` : '') +
+      '<div class="pwhere">' + rnEsc(where) + (when ? ` · ${rnEsc(when)}` : '') + '</div>' +
+      (rows ? `<table>${rows}</table>` : '') +
       '<div class="pactions">' +
-        '<a class="pbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(v.lat + ',' + v.lon) + '">' +
+        '<a class="pbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(`${v.lat},${v.lon}`) + '">' +
           '<ha-icon icon="mdi:directions"></ha-icon>' + rnEsc(mt.directions) + '</a>' +
         '<button class="pbtn alt" data-more="' + v.ent.location + '"><ha-icon icon="mdi:information-outline"></ha-icon>' + rnEsc(mt.details) + '</button>' +
       '</div></div>';
@@ -2097,8 +2068,8 @@ class RenaultMapCardEditor extends HTMLElement {
 
   _schema() {
     var mt = RnMapI18n[rnMapLang(this._hass)];
-    var themes = ['auto', 'light', 'dark'].map(function (k) { return { value: k, label: mt.themes[k] }; });
-    var styles = Object.keys(RN_MAP_STYLES).map(function (k) { return { value: k, label: mt.styles[k] }; });
+    var themes = ['auto', 'light', 'dark'].map((k) => ({ value: k, label: mt.themes[k] }));
+    var styles = Object.keys(RN_MAP_STYLES).map((k) => ({ value: k, label: mt.styles[k] }));
     var custom = this._config.map_style === 'custom'
       ? [
           { name: 'tile_url', selector: { text: { type: 'url' } } },
@@ -2139,7 +2110,7 @@ class RenaultMapCardEditor extends HTMLElement {
     var mt = RnMapI18n[rnMapLang(this._hass)];
     this._form.hass = this._hass;
     this._form.schema = this._schema();
-    this._form.computeLabel = function (s) { return mt.editor[s.name] || s.name; };
+    this._form.computeLabel = (s) => mt.editor[s.name] || s.name;
     var data = Object.assign({}, RN_MAP_DEFAULTS, this._config);
     if (data.title === undefined) data.title = mt.default_title;
     this._form.data = data;
@@ -2149,10 +2120,10 @@ class RenaultMapCardEditor extends HTMLElement {
     ev.stopPropagation();
     var value = Object.assign({}, ev.detail.value);
     var mt = RnMapI18n[rnMapLang(this._hass)];
-    Object.keys(value).forEach(function (key) {
+    Object.keys(value).forEach((key) => {
       if (key !== 'title' && (value[key] === '' || value[key] === null || value[key] === undefined)) delete value[key];
     });
-    Object.keys(RN_MAP_DEFAULTS).forEach(function (key) {
+    Object.keys(RN_MAP_DEFAULTS).forEach((key) => {
       if (value[key] === RN_MAP_DEFAULTS[key]) delete value[key];
     });
     // Cleared title = no title (''); the default title is not written to the YAML.
@@ -2184,4 +2155,4 @@ if (!customElements.get('renault-map-card')) {
   });
 }
 
-console.info('%c RENAULT-CARD %c v' + RENAULT_CARD_VERSION + ' ', 'color:#000;background:#ffcc33;font-weight:700', 'color:#000;background:#fff');
+console.info(`%c RENAULT-CARD %c v${RENAULT_CARD_VERSION} `, 'color:#000;background:#ffcc33;font-weight:700', 'color:#000;background:#fff');
