@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.14.0
+
+### Changes
+- More compact layout with the same information, like the other ha-* cards: 12 px card padding, 36 px header icon, 16 px name and 12 px subtitle, 11 px pills, tighter tiles and sections.
+- Vehicle picture 170 → 116 px high, four tiles per row instead of three, plate 30 → 26 px, lower tiles, rows and buttons.
+
 ## 1.13.1
 
 ### Changes
