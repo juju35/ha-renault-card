@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.14.2
+
+### Documentation
+- README: screenshots of the map card, light and dark.
+- `npm run screenshots` also renders the map card, from OpenStreetMap tiles kept in `scripts/tiles`, so the screenshots can be made again without network.
+
 ## 1.14.1
 
 ### Maintenance
