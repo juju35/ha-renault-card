@@ -1,7 +1,9 @@
-// Renders the card with mock data and saves the README screenshots.
-// Usage: npm run build && npm run screenshots
-import { chromium } from "playwright";
-import { readFileSync } from "node:fs";
+// Renders the cards with mock data and saves the README screenshots.
+// Usage: npm run build && npm run screenshots  (CHROMIUM_PATH=/path/to/chrome to use another browser)
+// The map card uses the OpenStreetMap tiles kept in scripts/tiles (committed, no network needed); a tile
+// missing there, after a change of positions or zoom, is downloaded once and should be committed too.
+import { chromium, request } from "playwright";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
@@ -63,13 +65,79 @@ const pageHtml = (theme, width) => `<!doctype html><html><head><meta charset="ut
          font-family: Roboto, "Segoe UI", Helvetica, Arial, sans-serif; width: ${width}px; }
 </style></head><body><div id="root"></div></body></html>`;
 
+// ── Map tiles ───────────────────────────────────────────────────────────────
+// Pages come from this made-up origin: the map card finds Leaflet and MapLibre at /hacsfiles/ha-renault-card/
+// (its default when its own <script> has no src), and the tiles at /tiles/.
+const ORIGIN = "https://card.test";
+const TILES = `${root}scripts/tiles`;
+const USER_AGENT = "ha-renault-card screenshots (+https://github.com/juju35/ha-renault-card)";
+let http = null;
+
+// One OpenStreetMap tile, from scripts/tiles or downloaded once (tile usage policy: identify, cache).
+async function osmTile(z, x, y) {
+  const path = `${TILES}/${z}/${x}/${y}.png`;
+  if (!existsSync(path)) {
+    const url = `https://tile.openstreetmap.org/${z}/${x}/${y}.png`;
+    http ??= await request.newContext({ extraHTTPHeaders: { "User-Agent": USER_AGENT } });
+    let resp;
+    try {
+      resp = await http.get(url, { timeout: 30000 });
+    } catch (err) {
+      throw new Error(`${url}: ${err.message.split("\n")[0]}`);
+    }
+    if (!resp.ok()) throw new Error(`${url}: HTTP ${resp.status()}`);
+    mkdirSync(`${TILES}/${z}/${x}`, { recursive: true });
+    writeFileSync(path, await resp.body());
+    console.log(`downloaded scripts/tiles/${z}/${x}/${y}.png`);
+  }
+  return readFileSync(path);
+}
+
+// Tile z/x/y at 512 px from its four children, drawn in a helper page, so the map stays sharp at 2x.
+async function retinaTile(helper, z, x, y) {
+  const children = [];
+  for (const [dx, dy] of [[0, 0], [1, 0], [0, 1], [1, 1]]) {
+    children.push([dx, dy, (await osmTile(z + 1, 2 * x + dx, 2 * y + dy)).toString("base64")]);
+  }
+  const data = await helper.evaluate(async (tiles) => {
+    const canvas = document.createElement("canvas");
+    canvas.width = canvas.height = 512;
+    const ctx = canvas.getContext("2d");
+    for (const [dx, dy, b64] of tiles) {
+      const img = new Image();
+      img.src = `data:image/png;base64,${b64}`;
+      await img.decode();
+      ctx.drawImage(img, 256 * dx, 256 * dy);
+    }
+    return canvas.toDataURL("image/png").split(",")[1];
+  }, children);
+  return Buffer.from(data, "base64");
+}
+
 // Renders each shot { file, type, theme, width, config, hass?, after? } into screenshots/<file>.png.
 // extra: more stand-in elements, as script source.
 export async function render(shots, { icons = {}, hass = {}, extra = "" } = {}) {
   const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
-  const page = await browser.newPage({ deviceScaleFactor: 2, viewport: { width: 1000, height: 2000 } });
+  const context = await browser.newContext({ deviceScaleFactor: 2, viewport: { width: 1000, height: 2000 } });
+  const helper = await context.newPage();
+  const errors = [];
+  await context.route(`${ORIGIN}/**`, async (route) => {
+    const path = new URL(route.request().url()).pathname;
+    const tile = path.match(/^\/tiles\/(\d+)\/(\d+)\/(\d+)\.png$/);
+    const lib = path.match(/^\/hacsfiles\/ha-renault-card\/([\w.-]+\.js)$/);
+    try {
+      if (tile) await route.fulfill({ body: await retinaTile(helper, ...tile.slice(1).map(Number)), contentType: "image/png" });
+      else if (lib) await route.fulfill({ body: readFileSync(`${root}dist/${lib[1]}`), contentType: "text/javascript" });
+      else await route.fulfill({ body: pageHtml(path.slice(1) === "dark" ? "dark" : "light", Number(new URL(route.request().url()).searchParams.get("width")) || 420), contentType: "text/html" });
+    } catch (err) {
+      errors.push(err.message);
+      await route.abort();
+    }
+  });
+  const page = await context.newPage();
   for (const s of shots) {
-    await page.setContent(pageHtml(s.theme, s.width));
+    // No frozen clock: Leaflet fades the map tiles in with the current time.
+    await page.goto(`${ORIGIN}/${s.theme}?width=${s.width}`);
     await page.addScriptTag({ content: haElements(icons) + extra });
     await page.addScriptTag({ content: cardJs });
     await page.evaluate(
@@ -84,10 +152,24 @@ export async function render(shots, { icons = {}, hass = {}, extra = "" } = {}) 
       { type: s.type, config: s.config || {}, hass: { ...hass, ...(s.hass || {}) }, dark: s.theme === "dark" }
     );
     if (s.after) await s.after(page);
+    if (s.type === "renault-map-card") {
+      // Every tile loaded and the fit animation over; stops at the first tile that can't be had.
+      const loaded = () => page.evaluate(() => {
+        const tiles = [...document.querySelector("renault-map-card").shadowRoot.querySelectorAll(".leaflet-tile")];
+        return tiles.length > 0 && tiles.every((t) => t.complete && t.classList.contains("leaflet-tile-loaded"));
+      });
+      for (let i = 0; !errors.length && !(await loaded()); i++) {
+        if (i > 300) throw new Error(`${s.file}: map tiles still loading after 60 s`);
+        await page.waitForTimeout(200);
+      }
+      await page.waitForTimeout(800);
+    }
+    if (errors.length) throw new Error(`Map screenshots not made, OpenStreetMap tiles unreachable: ${errors[0]}`);
     await page.waitForTimeout(400);
     await page.locator(s.type).screenshot({ path: `${root}screenshots/${s.file}.png`, animations: "disabled" });
     console.log(`screenshots/${s.file}.png`);
   }
+  await http?.dispose();
   await browser.close();
 }
 
@@ -183,6 +265,18 @@ const scale = (34497 - 12) / (km - 12);
 rows.forEach((r) => { r.state = Math.round(12 + (r.state - 12) * scale); });
 const leaseHass = { mockStatistics: { "sensor.espace_mileage": rows } };
 
+// Map card: the Captur charging at home, the Espace parked in town. OpenStreetMap raster tiles (like
+// map_style: osm) from scripts/tiles; the positions stay inside the area those tiles cover.
+const MAP_CONFIG = { zoom: 13, map_style: "custom", tile_url: `${ORIGIN}/tiles/{z}/{x}/{y}.png`, tile_attribution: "&copy; OpenStreetMap contributors" };
+const mapHass = {
+  states: {
+    ...states,
+    "device_tracker.espace_location": { ...states["device_tracker.espace_location"], state: "not_home", attributes: { ...states["device_tracker.espace_location"].attributes, latitude: 48.118, longitude: -1.6925 } },
+    "device_tracker.captur_location": { ...states["device_tracker.captur_location"], attributes: { ...states["device_tracker.captur_location"].attributes, latitude: 48.104, longitude: -1.67 } },
+    "zone.home": { entity_id: "zone.home", state: "1", attributes: { latitude: 48.104, longitude: -1.67, friendly_name: "Home" } },
+  },
+};
+
 await render(
   [
     { file: "espace", type: "renault-card", theme: "light", width: 420, config: { plate_department: "35" } },
@@ -191,6 +285,8 @@ await render(
     { file: "lease-dark", type: "renault-card", theme: "dark", width: 420, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, language: "fr", expand_lease: true, lease }, hass: leaseHass },
     { file: "captur", type: "renault-card", theme: "light", width: 420, config: { device_id: "captur", plate_department: "35", show_data_plan: false } },
     { file: "captur-dark", type: "renault-card", theme: "dark", width: 420, config: { device_id: "captur", plate_department: "35", show_data_plan: false, language: "fr" } },
+    { file: "map", type: "renault-map-card", theme: "light", width: 420, config: MAP_CONFIG, hass: mapHass },
+    { file: "map-dark", type: "renault-map-card", theme: "dark", width: 420, config: { ...MAP_CONFIG, language: "fr" }, hass: mapHass },
   ],
   { icons, hass }
 );

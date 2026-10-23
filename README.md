@@ -213,6 +213,10 @@ The `ha` base map is the one Home Assistant's own map card uses (Home Assistant 
 | ![espace](screenshots/espace.png) | ![captur](screenshots/captur.png) |
 | ![espace dark](screenshots/espace-dark.png) | ![captur dark](screenshots/captur-dark.png) |
 
+| Map card | Map card, dark |
+|---|---|
+| ![map card](screenshots/map.png) | ![map card, dark](screenshots/map-dark.png) |
+
 Dark screenshots are in French.
 
 ## How it works
