@@ -289,6 +289,12 @@ function rnFindRole(hass, list, m) {
   return hit ? hit.entity_id : undefined;
 }
 
+// False while the vehicle or one of its resolved entities has no state yet (states still loading).
+function rnResolvedReady(hass, r) {
+  if (!r.deviceId) return false;
+  return Object.keys(r.ent).every((k) => [].concat(r.ent[k]).every((id) => !id || hass.states[id]));
+}
+
 function rnDevicesOf(hass, platform) {
   if (!hass?.entities) return [];
   var ids = [];
@@ -418,6 +424,8 @@ function rnOdoAt(points, t) {
 function rnLeaseStatus(lease, mileage, now, points) {
   var dates = rnLeaseDates(lease);
   if (!dates || mileage == null || Number.isNaN(mileage)) return null;
+  // Lease entered before the delivery: nothing to track until it starts.
+  if (now < dates.start.getTime()) return null;
   var kmYear = Number(lease.km_per_year);
   var allowed = kmYear * dates.months / 12;
   var startKm = Number(lease.start_mileage) || 0;
@@ -463,7 +471,7 @@ function rnLeaseStatus(lease, mileage, now, points) {
   var mFrom = Math.max(mStart, dates.start.getTime()), mTo = Math.min(mEnd, dates.end.getTime());
   var month = null;
   var mKm = mFrom === dates.start.getTime() ? startKm : rnOdoAt(points, mFrom);
-  if (!ended && mKm != null) {
+  if (!ended && mKm != null && mFrom < mTo) {
     var quota = kmYear / 12 * (mTo - mFrom) / (mEnd - mStart);
     month = { allowed: quota, driven: Math.max(0, mileage - mKm), left: quota - Math.max(0, mileage - mKm) };
   }
@@ -503,10 +511,14 @@ class RenaultCard extends HTMLElement {
       this.shadowRoot.addEventListener('click', (ev) => this._onClick(ev));
       this.shadowRoot.addEventListener('change', (ev) => this._onChange(ev));
       this.shadowRoot.addEventListener('keydown', (ev) => {
-        if ((ev.key === 'Enter' || ev.key === ' ') && ev.target.dataset && ev.target.dataset.leaseToggle !== undefined) {
+        if ((ev.key !== 'Enter' && ev.key !== ' ') || !ev.target.dataset) return;
+        if (ev.target.dataset.leaseToggle !== undefined) {
           ev.preventDefault();
           this._leaseOpen = !this._leaseIsOpen();
           this._update();
+        } else if (ev.target.dataset.more && ev.target.getAttribute('role') === 'button') {
+          ev.preventDefault();
+          this.dispatchEvent(new CustomEvent('hass-more-info', { detail: { entityId: ev.target.dataset.more }, bubbles: true, composed: true }));
         }
       });
     }
@@ -653,9 +665,21 @@ class RenaultCard extends HTMLElement {
     return name.charAt(0).toUpperCase() + name.slice(1);
   }
 
+  // The registries are replaced, not mutated, when they change: resolve again only then.
+  _resolved() {
+    var hass = this._hass;
+    if (!this._res || this._resEnt !== hass.entities || this._resDev !== hass.devices || this._resCfg !== this._config || !rnResolvedReady(hass, this._res)) {
+      this._res = this._resolve();
+      this._resEnt = hass.entities;
+      this._resDev = hass.devices;
+      this._resCfg = this._config;
+    }
+    return this._res;
+  }
+
   _update() {
     if (!this._config || !this._hass || !this.shadowRoot) return;
-    var r = this._resolve();
+    var r = this._resolved();
     var hass = this._hass;
     var ids = [];
     Object.keys(r.ent).forEach((k) => { ids = ids.concat(r.ent[k]); });
@@ -673,8 +697,8 @@ class RenaultCard extends HTMLElement {
   }
 
   _tile(id, icon, label, value, extra) {
-    return '<div class="tile' + (extra?.warn ? ' warn' : '') + '"' + (id ? ` data-more="${id}" role="button" tabindex="0"` : '') + '>' +
-      '<div class="tile-head"><ha-icon icon="' + icon + '"></ha-icon><span class="lbl">' + rnEsc(label) + '</span></div>' +
+    return '<div class="tile' + (extra?.warn ? ' warn' : '') + '"' + (id ? ` data-more="${rnEsc(id)}" role="button" tabindex="0"` : '') + '>' +
+      '<div class="tile-head"><ha-icon icon="' + rnEsc(icon) + '"></ha-icon><span class="lbl">' + rnEsc(label) + '</span></div>' +
       '<span class="val">' + rnEsc(value) + '</span>' + (extra && extra.bar != null ? this._bar(extra.bar, this._levelColor(extra.bar)) : '') + '</div>';
   }
 
@@ -722,18 +746,18 @@ class RenaultCard extends HTMLElement {
     }
     if (this._avail(ent.lock_status)) {
       var unlocked = this._val(ent.lock_status) === 'on';
-      chips.push(`<span class="chip${unlocked ? ' warn' : ''}" data-more="${ent.lock_status}"><ha-icon icon="${unlocked ? 'mdi:lock-open-variant-outline' : 'mdi:lock-outline'}"></ha-icon>${this._t(unlocked ? 'unlocked' : 'locked')}</span>`);
+      chips.push(`<span class="chip${unlocked ? ' warn' : ''}" data-more="${rnEsc(ent.lock_status)}"><ha-icon icon="${unlocked ? 'mdi:lock-open-variant-outline' : 'mdi:lock-outline'}"></ha-icon>${this._t(unlocked ? 'unlocked' : 'locked')}</span>`);
     }
     if (ent.doors.some((id) => this._val(id) === 'on')) {
       chips.push(`<span class="chip warn"><ha-icon icon="mdi:car-door"></ha-icon>${this._t('doors_open')}</span>`);
     }
     if (this._val(ent.charging) === 'on') {
       var left = this._num(ent.charging_remaining_time);
-      chips.push('<span class="chip ok" data-more="' + ent.charging + '"><ha-icon icon="mdi:battery-charging"></ha-icon>' +
+      chips.push('<span class="chip ok" data-more="' + rnEsc(ent.charging) + '"><ha-icon icon="mdi:battery-charging"></ha-icon>' +
         (left ? this._t('charging_left', { t: this._duration(left) }) : this._t('charging')) + '</span>');
     } else if (this._avail(ent.plugged_in)) {
       var plugged = this._val(ent.plugged_in) === 'on';
-      chips.push(`<span class="chip" data-more="${ent.plugged_in}"><ha-icon icon="${plugged ? 'mdi:power-plug' : 'mdi:power-plug-off-outline'}"></ha-icon>${this._t(plugged ? 'plugged' : 'unplugged')}</span>`);
+      chips.push(`<span class="chip" data-more="${rnEsc(ent.plugged_in)}"><ha-icon icon="${plugged ? 'mdi:power-plug' : 'mdi:power-plug-off-outline'}"></ha-icon>${this._t(plugged ? 'plugged' : 'unplugged')}</span>`);
     }
     if (this._val(ent.hvac_status) === 'on') {
       chips.push(`<span class="chip ok"><ha-icon icon="mdi:air-conditioner"></ha-icon>${this._t('hvac_on')}</span>`);
@@ -779,7 +803,7 @@ class RenaultCard extends HTMLElement {
       var last = lastId ? new Date(this._val(lastId)) : new Date(this._st(ent.location).last_updated || '');
       if (!Number.isNaN(last.getTime())) when = this._t('updated', { t: this._relative(last) });
       var home = this._val(ent.location) === 'home';
-      locationHtml = '<div class="row" data-more="' + ent.location + '" role="button" tabindex="0">' +
+      locationHtml = '<div class="row" data-more="' + rnEsc(ent.location) + '" role="button" tabindex="0">' +
         '<ha-icon icon="' + (home ? 'mdi:home-map-marker' : 'mdi:map-marker') + '"></ha-icon>' +
         '<div class="row-text"><span class="lbl">' + this._t('location') + '</span><span class="val">' + rnEsc(this._fmtState(ent.location)) + '</span></div>' +
         '<span class="when">' + rnEsc(when) + '</span><ha-icon class="chev" icon="mdi:chevron-right"></ha-icon></div>';
@@ -798,7 +822,7 @@ class RenaultCard extends HTMLElement {
           icon = hit ? hit[1] : 'mdi:gesture-tap-button';
         }
         var armed = this._armed === id;
-        return '<button class="btn' + (armed ? ' armed' : '') + '" data-press="' + id + '"><ha-icon icon="' + icon + '"></ha-icon><span>' +
+        return '<button class="btn' + (armed ? ' armed' : '') + '" data-press="' + rnEsc(id) + '"><ha-icon icon="' + rnEsc(icon) + '"></ha-icon><span>' +
           rnEsc(armed ? this._t('confirm') : this._entityLabel(id, deviceName)) + '</span></button>';
       });
       var modeHtml = '';
@@ -807,7 +831,7 @@ class RenaultCard extends HTMLElement {
         var opts = (s.attributes.options || []).map((o) =>
           '<option value="' + rnEsc(o) + '"' + (o === s.state ? ' selected' : '') + '>' +
           rnEsc(this._hass.formatEntityState ? this._hass.formatEntityState(s, o) : o) + '</option>').join('');
-        modeHtml = `<label class="field"><span>${this._t('charge_mode')}</span><select data-select="${ent.charge_mode}">${opts}</select></label>`;
+        modeHtml = `<label class="field"><span>${this._t('charge_mode')}</span><select data-select="${rnEsc(ent.charge_mode)}">${opts}</select></label>`;
       }
       if (btns.length || modeHtml) actionsHtml = modeHtml + (btns.length ? `<div class="actions">${btns.join('')}</div>` : '');
     }
@@ -830,7 +854,7 @@ class RenaultCard extends HTMLElement {
         var days = Math.ceil((expiry.getTime() - Date.now()) / 86400000);
         daysTxt = days < 0 ? this._t('expired') : this._t('days_left', { n: days });
       }
-      planHtml = '<div class="plan" data-more="' + (p.left_data_percentage || p.left_data) + '" role="button" tabindex="0">' +
+      planHtml = '<div class="plan" data-more="' + rnEsc(p.left_data_percentage || p.left_data) + '" role="button" tabindex="0">' +
         '<div class="plan-head"><a class="logo-link" href="' + RN_ORANGE_URL + '" target="_blank" rel="noopener noreferrer" title="Orange Internet On the move">' +
         '<img class="logo" src="' + RN_ORANGE_LOGO + '" alt="Orange"></a><span class="plan-title">' + this._t('data_plan') + '</span>' +
         (pct != null ? `<span class="pct">${Math.round(pct)} %</span>` : '') + '</div>' +
@@ -1154,6 +1178,14 @@ class RenaultCard extends HTMLElement {
 }
 
 // ── renault-card-editor (visual editor, built on HA's ha-form) ───────────────
+// Creates the editor's ha-form once (shared by both editors).
+function rnEnsureForm(editor) {
+  if (editor._form) return;
+  editor._form = document.createElement('ha-form');
+  editor._form.addEventListener('value-changed', (ev) => editor._valueChanged(ev));
+  editor.appendChild(editor._form);
+}
+
 var RN_EDITOR_DEFAULTS = { show_logo: true, show_image: true, show_plate: true, show_location: true, show_actions: true, show_data_plan: true, low_range: 100, expand_lease: false };
 
 class RenaultCardEditor extends HTMLElement {
@@ -1244,11 +1276,7 @@ class RenaultCardEditor extends HTMLElement {
 
   _render() {
     if (!this._config || !this._hass) return;
-    if (!this._form) {
-      this._form = document.createElement('ha-form');
-      this._form.addEventListener('value-changed', (ev) => this._valueChanged(ev));
-      this.appendChild(this._form);
-    }
+    rnEnsureForm(this);
     var lang = this._lang();
     this._form.hass = this._hass;
     this._form.schema = this._schema();
@@ -1515,11 +1543,17 @@ function rnSupportsWebGL2() {
 }
 
 // Everything the map needs about one vehicle.
-function rnVehicle(hass, deviceId) {
-  var device = hass.devices?.[deviceId];
+// ent: the vehicle's entities by role (rnVehicleEntities), resolved once per registry change.
+function rnVehicleEntities(hass, deviceId) {
   var list = rnDeviceEntities(hass, deviceId);
   var ent = {};
   Object.keys(RN_ROLES).forEach((role) => { ent[role] = rnFindRole(hass, list, RN_ROLES[role]); });
+  return ent;
+}
+
+function rnVehicle(hass, deviceId, ent) {
+  var device = hass.devices?.[deviceId];
+  ent = ent || rnVehicleEntities(hass, deviceId);
   var tracker = ent.location && hass.states[ent.location];
   if (!tracker || tracker.attributes.latitude == null || tracker.attributes.longitude == null) return null;
   return {
@@ -1569,6 +1603,7 @@ class RenaultMapCard extends HTMLElement {
 
   connectedCallback() {
     if (!this._map) return;
+    if (this._fsLink && !this._onFsChange) this._bindFs();
     if (this._resizeObserver) this._resizeObserver.observe(this._root.querySelector('.map'));
     this._scheduleTokenRefresh();
     // The token may have expired while the card was detached.
@@ -1611,9 +1646,23 @@ class RenaultMapCard extends HTMLElement {
     return rnDevicesOf(this._hass, 'renault').filter((id) => rnDeviceEntities(this._hass, id).some((e) => e.entity_id.indexOf('device_tracker.') === 0));
   }
 
+  // Device and entity discovery walks the whole registry: redo it only when the registries
+  // (replaced, not mutated, on change) or the config change, or while a tracker has no state yet.
+  _discovered() {
+    var hass = this._hass, d = this._disc;
+    if (!d || d.entities !== hass.entities || d.devices !== hass.devices || d.config !== this._config ||
+        d.ids.some((id) => !d.ents[id].location || !hass.states[d.ents[id].location])) {
+      var ids = this._deviceIds();
+      var ents = {};
+      ids.forEach((id) => { ents[id] = rnVehicleEntities(hass, id); });
+      d = this._disc = { entities: hass.entities, devices: hass.devices, config: this._config, ids: ids, ents: ents };
+    }
+    return d;
+  }
+
   _vehicles() {
-    var hass = this._hass;
-    return this._deviceIds().map((id) => rnVehicle(hass, id)).filter(Boolean);
+    var hass = this._hass, d = this._discovered();
+    return d.ids.map((id) => rnVehicle(hass, id, d.ents[id])).filter(Boolean);
   }
 
   // Redraw only when something shown on the map changes.
@@ -1849,13 +1898,18 @@ class RenaultMapCard extends HTMLElement {
       },
     });
     new Fullscreen({ position: 'topleft' }).addTo(this._map);
-    if (!this._onFsChange) {
-      this._onFsChange = () => { this._fullscreenChanged(); };
-      this._onFsKey = (ev) => { if (ev.key === 'Escape' && this._pseudoFs) this._toggleFullscreen(); };
-      document.addEventListener('fullscreenchange', this._onFsChange);
-      document.addEventListener('webkitfullscreenchange', this._onFsChange);
-      document.addEventListener('keydown', this._onFsKey);
-    }
+    this._bindFs();
+  }
+
+  // Document listeners of the full screen control: added with it, removed when the card is
+  // detached and added back when it is attached again.
+  _bindFs() {
+    if (this._onFsChange) return;
+    this._onFsChange = () => { this._fullscreenChanged(); };
+    this._onFsKey = (ev) => { if (ev.key === 'Escape' && this._pseudoFs) this._toggleFullscreen(); };
+    document.addEventListener('fullscreenchange', this._onFsChange);
+    document.addEventListener('webkitfullscreenchange', this._onFsChange);
+    document.addEventListener('keydown', this._onFsKey);
   }
 
   _isFullscreen() { return this._pseudoFs || this._isNativeFullscreen(); }
@@ -1936,7 +1990,9 @@ class RenaultMapCard extends HTMLElement {
     var signature = vehicles.map((v) => v.deviceId).join(',');
     if (signature !== this._markerSet) this._fitted = false;
     this._markerSet = signature;
-    this._layer.clearLayers();
+    // Markers are kept per vehicle and updated in place, so an open popup stays open.
+    var markers = this._markers || {};
+    this._markers = {};
 
     vehicles.forEach((v) => {
       var range = v.ent.battery_autonomy && this._num(v.ent.battery_autonomy) != null ? v.ent.battery_autonomy : v.ent.fuel_autonomy;
@@ -1953,15 +2009,29 @@ class RenaultMapCard extends HTMLElement {
         iconSize: null,
         iconAnchor: [0, 0],
       });
-      var marker = L.marker([v.lat, v.lon], { icon: icon, riseOnHover: true });
-      marker.bindPopup(this._popup(v), { maxWidth: 280, minWidth: 230 });
-      marker.addTo(this._layer);
+      var marker = markers[v.deviceId];
+      if (marker) {
+        delete markers[v.deviceId];
+        marker.setLatLng([v.lat, v.lon]);
+        marker.setIcon(icon);
+        marker.setPopupContent(this._popup(v));
+      } else {
+        marker = L.marker([v.lat, v.lon], { icon: icon, riseOnHover: true });
+        marker.bindPopup(this._popup(v), { maxWidth: 280, minWidth: 230 });
+        marker.addTo(this._layer);
+      }
+      this._markers[v.deviceId] = marker;
       points.push([v.lat, v.lon]);
     });
+    Object.keys(markers).forEach((id) => { this._layer.removeLayer(markers[id]); });
 
+    if (this._homeMarker) {
+      this._layer.removeLayer(this._homeMarker);
+      this._homeMarker = null;
+    }
     var home = this._hass.states['zone.home'];
     if (this._config.show_home && home && home.attributes.latitude != null) {
-      L.marker([home.attributes.latitude, home.attributes.longitude], {
+      this._homeMarker = L.marker([home.attributes.latitude, home.attributes.longitude], {
         icon: L.divIcon({ className: 'rn-marker', html: `<div class="home" title="${rnEsc(this._mt().home)}"><ha-icon icon="mdi:home"></ha-icon></div>`, iconSize: null, iconAnchor: [0, 0] }),
         zIndexOffset: -1000,
         keyboard: false,
@@ -1997,7 +2067,7 @@ class RenaultMapCard extends HTMLElement {
       '<div class="pactions">' +
         '<a class="pbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(`${v.lat},${v.lon}`) + '">' +
           '<ha-icon icon="mdi:directions"></ha-icon>' + rnEsc(mt.directions) + '</a>' +
-        '<button class="pbtn alt" data-more="' + v.ent.location + '"><ha-icon icon="mdi:information-outline"></ha-icon>' + rnEsc(mt.details) + '</button>' +
+        '<button class="pbtn alt" data-more="' + rnEsc(v.ent.location) + '"><ha-icon icon="mdi:information-outline"></ha-icon>' + rnEsc(mt.details) + '</button>' +
       '</div></div>';
   }
 
@@ -2057,10 +2127,10 @@ class RenaultMapCardEditor extends HTMLElement {
   }
 
   set hass(hass) {
+    var prevLang = rnMapLang(this._hass);
     this._hass = hass;
-    if (this._form) {
+    if (this._form && prevLang === rnMapLang(hass)) {
       this._form.hass = hass;
-      this._form.schema = this._schema();
     } else {
       this._render();
     }
@@ -2102,11 +2172,7 @@ class RenaultMapCardEditor extends HTMLElement {
 
   _render() {
     if (!this._hass || !this._config) return;
-    if (!this._form) {
-      this._form = document.createElement('ha-form');
-      this._form.addEventListener('value-changed', (ev) => this._valueChanged(ev));
-      this.appendChild(this._form);
-    }
+    rnEnsureForm(this);
     var mt = RnMapI18n[rnMapLang(this._hass)];
     this._form.hass = this._hass;
     this._form.schema = this._schema();
