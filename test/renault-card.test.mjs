@@ -187,3 +187,64 @@ test("map markers are updated in place so an open popup survives a state change"
   card._drawMarkers(L, []);
   assert.equal(removed.length, 1);
 });
+
+test("rnLeaseStatus over the allowance: cost of the kilometres driven, and projected cost", () => {
+  const start = new Date(2026, 5, 15).getTime();
+  const l = { ...lease, extra_km_cost: 0.1 };
+  // 100 km allowed over 12 months, 1000 km driven after 200 days: 900 km over now, more projected.
+  const st = ctx.rnLeaseStatus({ ...l, km_per_year: 100, duration: 12 }, 1100, start + 200 * DAY, []);
+  assert.equal(st.state, "over");
+  assert.equal(st.driven, 1000);
+  assert.equal(st.costNow, (1000 - 100) * 0.1);
+  assert.ok(st.cost > st.costNow);
+  const ok = ctx.rnLeaseStatus(l, 1100, start + 100 * DAY, []);
+  assert.equal(ok.costNow, null);
+});
+
+test("lease status text uses the same kilometres as its cost", () => {
+  const card = Object.create(RenaultCard.prototype);
+  const start = new Date();
+  start.setDate(start.getDate() - 200);
+  const d = `${start.getFullYear()}-${String(start.getMonth() + 1).padStart(2, "0")}-${String(start.getDate()).padStart(2, "0")}`;
+  card._config = { lease: { start_date: d, duration: 12, km_per_year: 100, extra_km_cost: 1 } };
+  card._hass = { language: "en", config: { currency: "EUR" }, states: { "sensor.m": { state: "1000", attributes: {} } } };
+  card._leaseFetch = () => {};
+  const html = card._leaseHtml({ mileage: "sensor.m" });
+  assert.match(html, /Allowance exceeded by 900 km · ≈ €900/);
+});
+
+test("_num returns null for a non numeric state", () => {
+  const card = Object.create(RenaultCard.prototype);
+  card._hass = { states: { "sensor.a": { state: "abc" }, "sensor.b": { state: "12.5" }, "sensor.c": { state: "unknown" } } };
+  assert.equal(card._num("sensor.a"), null);
+  assert.equal(card._num("sensor.b"), 12.5);
+  assert.equal(card._num("sensor.c"), null);
+});
+
+test("rnRelative formats in the given language", () => {
+  assert.equal(ctx.rnRelative("en", new Date(Date.now() - 5 * 60000)), "5 minutes ago");
+  assert.equal(ctx.rnRelative("fr", new Date(Date.now() - 2 * 3600000)), "il y a 2 heures");
+});
+
+test("disconnecting the card cancels the armed button timer", () => {
+  const cleared = [];
+  const card = Object.create(RenaultCard.prototype);
+  const orig = ctx.clearTimeout;
+  ctx.clearTimeout = (t) => cleared.push(t);
+  card._armTimer = 42;
+  card._armed = "button.horn";
+  card.disconnectedCallback();
+  ctx.clearTimeout = orig;
+  assert.deepEqual(cleared, [42]);
+  assert.equal(card._armed, null);
+});
+
+test("map editor offers the language option", () => {
+  const Editor = defined["renault-map-card-editor"];
+  const ed = Object.create(Editor.prototype);
+  ed._config = {};
+  ed._hass = { language: "en" };
+  const lang = ed._schema().find((s) => s.name === "language");
+  assert.equal(lang.selector.select.options.map((o) => o.value).join(","), "fr,en");
+  assert.equal(ctx.RnMapI18n.en.editor.language, "Language");
+});

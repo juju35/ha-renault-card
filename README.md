@@ -195,7 +195,7 @@ height: 400
 | `map_style` | ❌ | `ha` | `ha` (Home Assistant vector map), `osm`, `osm_fr`, `ign`, `ign_photo`, `topo`, `cyclosm`, `satellite` or `custom` |
 | `theme` | ❌ | `auto` | Base map theme: `auto` (follows Home Assistant), `light` or `dark` |
 | `tile_url` | ❌ | — | Tile URL with `{z}`, `{x}`, `{y}`, for `map_style: custom` |
-| `tile_attribution` | ❌ | — | Attribution shown for custom tiles |
+| `tile_attribution` | ❌ | — | Attribution shown for custom tiles; rendered as HTML by Leaflet (as in Home Assistant's map card), so links are allowed |
 | `height` | ❌ | `400` | Map height in pixels |
 | `zoom` | ❌ | Auto | Fixed zoom level; by default the map fits the vehicles and home |
 | `show_icon` | ❌ | `true` | Renault logo in the header |
@@ -203,6 +203,7 @@ height: 400
 | `show_name` | ❌ | `true` | Vehicle name on the markers |
 | `show_picture` | ❌ | `true` | Vehicle picture on the markers and in the popup |
 | `show_fullscreen` | ❌ | `true` | Full screen button under the zoom buttons (on iPhone the card fills the screen) |
+| `language` | ❌ | Auto | Force language: `fr` or `en` (auto-detects from HA settings) |
 
 The `ha` base map is the one Home Assistant's own map card uses (Home Assistant 2026.9 or later, WebGL2): OpenStreetMap vector tiles through your instance, in light or dark. On older versions or without WebGL2, the card falls back to OpenStreetMap raster tiles, also through Home Assistant when it can. Leaflet and MapLibre GL ship with the card (see [licenses](licenses)): only the map tiles come from the network.
 

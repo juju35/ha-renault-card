@@ -235,6 +235,17 @@ function rnT(lang, key) {
   return strings[key] || RnI18n.en[key] || key;
 }
 
+// "5 minutes ago", "in 2 hours"… in the given language.
+function rnRelative(lang, date) {
+  var diff = (date.getTime() - Date.now()) / 1000;
+  var abs = Math.abs(diff);
+  var rtf = new Intl.RelativeTimeFormat(lang, { numeric: 'auto' });
+  if (abs < 60) return rtf.format(Math.round(diff), 'second');
+  if (abs < 3600) return rtf.format(Math.round(diff / 60), 'minute');
+  if (abs < 86400) return rtf.format(Math.round(diff / 3600), 'hour');
+  return rtf.format(Math.round(diff / 86400), 'day');
+}
+
 function rnEsc(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
@@ -486,6 +497,8 @@ function rnLeaseStatus(lease, mileage, now, points) {
     expected: expected, deviation: driven - expected, elapsedRatio: total ? elapsed / total : 0,
     rate: rate, recent: recent, pace: rate != null ? rate * 365.25 : null, projected: projected, state: state,
     budget: budget, month: month, expectedOdo: startKm + expected, year: year, excess: excess, cost: cost && excess > 0 ? excess * cost : null,
+    // Cost of the kilometres already over the allowance (the projected cost is `cost`).
+    costNow: cost && state === 'over' ? (driven - allowed) * cost : null,
     monthsLeft: Math.max(0, Math.round(left / 30.44)),
   };
 }
@@ -547,6 +560,8 @@ class RenaultCard extends HTMLElement {
 
   disconnectedCallback() {
     clearInterval(this._timer);
+    clearTimeout(this._armTimer);
+    this._armed = null;
     document.removeEventListener('click', this._onOutside, true);
   }
 
@@ -609,7 +624,11 @@ class RenaultCard extends HTMLElement {
 
   _avail(id) { var v = this._val(id); return v !== undefined && v !== 'unavailable' && v !== 'unknown' && v !== ''; }
 
-  _num(id) { return this._avail(id) ? Number(this._val(id)) : null; }
+  _num(id) {
+    if (!this._avail(id)) return null;
+    var n = Number(this._val(id));
+    return Number.isNaN(n) ? null : n;
+  }
 
   _fmtNum(n, digits) {
     return Number(n).toLocaleString(this._lang(), { maximumFractionDigits: digits == null ? 0 : digits });
@@ -631,15 +650,7 @@ class RenaultCard extends HTMLElement {
     return this._fmtNum(n, digits) + (u ? (u === '%' ? ' %' : ` ${u}`) : '');
   }
 
-  _relative(date) {
-    var diff = (date.getTime() - Date.now()) / 1000;
-    var abs = Math.abs(diff);
-    var rtf = new Intl.RelativeTimeFormat(this._lang(), { numeric: 'auto' });
-    if (abs < 60) return rtf.format(Math.round(diff), 'second');
-    if (abs < 3600) return rtf.format(Math.round(diff / 60), 'minute');
-    if (abs < 86400) return rtf.format(Math.round(diff / 3600), 'hour');
-    return rtf.format(Math.round(diff / 86400), 'day');
-  }
+  _relative(date) { return rnRelative(this._lang(), date); }
 
   _duration(minutes) {
     var h = Math.floor(minutes / 60), m = Math.round(minutes % 60);
@@ -896,7 +907,9 @@ class RenaultCard extends HTMLElement {
     else if (st.state === 'warn') status = this._t('lease_warn', { k: this._km(st.projected - st.allowed) });
     else if (st.projected != null) status = this._t('lease_ok_margin', { k: this._km(st.allowed - st.projected) });
     else status = this._t('lease_ok');
-    if (st.cost != null) status += ` · ≈ ${this._money(st.cost)}`;
+    // The cost follows the kilometres in the status: driven so far when over, projected when warned.
+    var statusCost = st.state === 'over' ? st.costNow : st.cost;
+    if (statusCost != null) status += ` · ≈ ${this._money(statusCost)}`;
     var endTxt = st.end.toLocaleDateString(this._lang(), { month: 'short', year: 'numeric' });
 
     // Folded: theoretical mileage today, this month, and the monthly budget until the end.
@@ -1403,6 +1416,7 @@ var RnMapI18n = {
       theme: 'Thème du fond de carte',
       tile_url: 'URL des tuiles ({z}, {x}, {y})',
       tile_attribution: 'Attribution des tuiles',
+      language: 'Langue',
       show_icon: 'Logo Renault',
       show_home: 'Domicile',
       show_name: 'Nom sur les repères',
@@ -1439,6 +1453,7 @@ var RnMapI18n = {
       theme: 'Base map theme',
       tile_url: 'Tile URL ({z}, {x}, {y})',
       tile_attribution: 'Tile attribution',
+      language: 'Language',
       show_icon: 'Renault logo',
       show_home: 'Home',
       show_name: 'Names on markers',
@@ -2050,7 +2065,7 @@ class RenaultMapCard extends HTMLElement {
     var where = hass.formatEntityState ? hass.formatEntityState(v.tracker) : v.tracker.state;
     var lastId = v.ent.location_last_activity;
     var last = lastId && hass.states[lastId] ? new Date(hass.states[lastId].state) : new Date(v.tracker.last_updated || '');
-    var when = Number.isNaN(last.getTime()) ? '' : rnT(lang, 'updated').replace('{t}', RenaultCard.prototype._relative.call({ _lang: () => lang }, last));
+    var when = Number.isNaN(last.getTime()) ? '' : rnT(lang, 'updated').replace('{t}', rnRelative(lang, last));
     var rows = [
       ['battery_level', 'battery_level'], ['battery_autonomy', 'battery_autonomy'],
       ['fuel_autonomy', 'fuel_autonomy'], ['fuel_quantity', 'fuel_quantity'], ['mileage', 'mileage'],
@@ -2166,6 +2181,10 @@ class RenaultMapCardEditor extends HTMLElement {
           { name: 'show_picture', selector: { boolean: {} } },
           { name: 'show_fullscreen', selector: { boolean: {} } },
         ],
+      },
+      {
+        name: 'language',
+        selector: { select: { mode: 'dropdown', options: [{ value: 'fr', label: 'Français' }, { value: 'en', label: 'English' }] } },
       },
     ]);
   }
