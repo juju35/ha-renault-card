@@ -287,9 +287,26 @@ var RN_PLAN_ROLES = {
 
 var RN_OVERRIDABLE = ['mileage', 'fuel_autonomy', 'fuel_quantity', 'battery_level', 'battery_autonomy', 'location'];
 
-function rnDeviceEntities(hass, deviceId) {
+// The device's visible entities from the registry, with or without a state.
+function rnRegistryEntities(hass, deviceId) {
   if (!hass?.entities || !deviceId) return [];
-  return Object.values(hass.entities).filter((e) => e.device_id === deviceId && !e.hidden && hass.states[e.entity_id]);
+  return Object.values(hass.entities).filter((e) => e.device_id === deviceId && !e.hidden);
+}
+
+// The same, limited to the entities that have a state (roles are matched on states too).
+function rnDeviceEntities(hass, deviceId) {
+  return rnRegistryEntities(hass, deviceId).filter((e) => hass.states[e.entity_id]);
+}
+
+// The registry entities that had no state when the roles were resolved: a role may be missing
+// only because its state was not there yet (states loading, config entry reloaded).
+function rnStateless(hass, regIds) {
+  return regIds.filter((id) => !hass.states[id]);
+}
+
+// False as soon as one of those entities has a state: resolve the roles again then.
+function rnStillStateless(hass, ids) {
+  return ids.every((id) => !hass.states[id]);
 }
 
 function rnFindRole(hass, list, m) {
@@ -300,10 +317,12 @@ function rnFindRole(hass, list, m) {
   return hit ? hit.entity_id : undefined;
 }
 
-// False while the vehicle or one of its resolved entities has no state yet (states still loading).
+// False while the vehicle or one of its resolved entities has no state yet, or once a registry
+// entity of the vehicle (or of its data plan) that had no state at resolution time has one.
 function rnResolvedReady(hass, r) {
   if (!r.deviceId) return false;
-  return Object.keys(r.ent).every((k) => [].concat(r.ent[k]).every((id) => !id || hass.states[id]));
+  return rnStillStateless(hass, r.stateless || []) &&
+    Object.keys(r.ent).every((k) => [].concat(r.ent[k]).every((id) => !id || hass.states[id]));
 }
 
 function rnDevicesOf(hass, platform) {
@@ -315,8 +334,9 @@ function rnDevicesOf(hass, platform) {
   return ids;
 }
 
+// From the registry only, so that the vehicle is found even while its states are missing.
 function rnFindVehicle(hass) {
-  return rnDevicesOf(hass, 'renault').find((id) => rnDeviceEntities(hass, id).some((e) => e.entity_id.indexOf('device_tracker.') === 0 || e.entity_id.indexOf('sensor.') === 0));
+  return rnDevicesOf(hass, 'renault').find((id) => rnRegistryEntities(hass, id).some((e) => e.entity_id.indexOf('device_tracker.') === 0 || e.entity_id.indexOf('sensor.') === 0));
 }
 
 // "Espace vi" → "Espace VI"
@@ -587,6 +607,7 @@ class RenaultCard extends HTMLElement {
     if (!deviceId && c.entity && hass.entities?.[c.entity]) deviceId = hass.entities[c.entity].device_id;
     if (!deviceId) deviceId = rnFindVehicle(hass);
     var device = deviceId && hass.devices ? hass.devices[deviceId] : null;
+    var regIds = rnRegistryEntities(hass, deviceId).map((e) => e.entity_id);
     var list = rnDeviceEntities(hass, deviceId);
     var over = c.entities || {};
     var ent = {};
@@ -602,6 +623,7 @@ class RenaultCard extends HTMLElement {
     if (c.show_data_plan) {
       var planId = c.data_plan_device_id || rnFindDataPlan(hass, device);
       if (planId) {
+        regIds = regIds.concat(rnRegistryEntities(hass, planId).map((e) => e.entity_id));
         var planList = rnDeviceEntities(hass, planId).filter((e) => e.entity_id.indexOf('sensor.') === 0);
         plan = { deviceId: planId };
         Object.keys(RN_PLAN_ROLES).forEach((role) => {
@@ -615,7 +637,7 @@ class RenaultCard extends HTMLElement {
         }
       }
     }
-    return { deviceId: deviceId, device: device, ent: ent, plan: plan };
+    return { deviceId: deviceId, device: device, ent: ent, plan: plan, stateless: rnStateless(hass, regIds) };
   }
 
   _st(id) { return id && this._hass.states[id]; }
@@ -757,18 +779,18 @@ class RenaultCard extends HTMLElement {
     }
     if (this._avail(ent.lock_status)) {
       var unlocked = this._val(ent.lock_status) === 'on';
-      chips.push(`<span class="chip${unlocked ? ' warn' : ''}" data-more="${rnEsc(ent.lock_status)}"><ha-icon icon="${unlocked ? 'mdi:lock-open-variant-outline' : 'mdi:lock-outline'}"></ha-icon>${this._t(unlocked ? 'unlocked' : 'locked')}</span>`);
+      chips.push(`<span class="chip${unlocked ? ' warn' : ''}" data-more="${rnEsc(ent.lock_status)}" role="button" tabindex="0"><ha-icon icon="${unlocked ? 'mdi:lock-open-variant-outline' : 'mdi:lock-outline'}"></ha-icon>${this._t(unlocked ? 'unlocked' : 'locked')}</span>`);
     }
     if (ent.doors.some((id) => this._val(id) === 'on')) {
       chips.push(`<span class="chip warn"><ha-icon icon="mdi:car-door"></ha-icon>${this._t('doors_open')}</span>`);
     }
     if (this._val(ent.charging) === 'on') {
       var left = this._num(ent.charging_remaining_time);
-      chips.push('<span class="chip ok" data-more="' + rnEsc(ent.charging) + '"><ha-icon icon="mdi:battery-charging"></ha-icon>' +
+      chips.push('<span class="chip ok" data-more="' + rnEsc(ent.charging) + '" role="button" tabindex="0"><ha-icon icon="mdi:battery-charging"></ha-icon>' +
         (left ? this._t('charging_left', { t: this._duration(left) }) : this._t('charging')) + '</span>');
     } else if (this._avail(ent.plugged_in)) {
       var plugged = this._val(ent.plugged_in) === 'on';
-      chips.push(`<span class="chip" data-more="${rnEsc(ent.plugged_in)}"><ha-icon icon="${plugged ? 'mdi:power-plug' : 'mdi:power-plug-off-outline'}"></ha-icon>${this._t(plugged ? 'plugged' : 'unplugged')}</span>`);
+      chips.push(`<span class="chip" data-more="${rnEsc(ent.plugged_in)}" role="button" tabindex="0"><ha-icon icon="${plugged ? 'mdi:power-plug' : 'mdi:power-plug-off-outline'}"></ha-icon>${this._t(plugged ? 'plugged' : 'unplugged')}</span>`);
     }
     if (this._val(ent.hvac_status) === 'on') {
       chips.push(`<span class="chip ok"><ha-icon icon="mdi:air-conditioner"></ha-icon>${this._t('hvac_on')}</span>`);
@@ -896,10 +918,11 @@ class RenaultCard extends HTMLElement {
     var lease = this._config.lease;
     var dates = rnLeaseDates(lease);
     if (!dates || !this._avail(ent.mileage)) return '';
-    // The statistics feed the chart, the recent pace and the contract year: fetched once an hour.
-    this._leaseFetch(dates.start, ent.mileage);
     var st = rnLeaseStatus(lease, this._num(ent.mileage), Date.now(), this._leaseHist4(ent.mileage, dates.start));
     if (!st) return '';
+    // The statistics feed the chart, the recent pace and the contract year: fetched once an hour,
+    // once the lease has started (no statistics before).
+    this._leaseFetch(dates.start, ent.mileage);
     var color = st.state === 'over' ? 'var(--error-color, #db4437)' : st.state === 'warn' ? 'var(--warning-color, #ffa600)' : 'var(--success-color, #43a047)';
     var icon = st.state === 'ok' ? 'mdi:check-circle-outline' : 'mdi:alert-circle-outline';
     var status;
@@ -1658,19 +1681,25 @@ class RenaultMapCard extends HTMLElement {
     var ids = this._config.devices;
     if (typeof ids === 'string') ids = [ids];
     if (ids?.length) return ids;
-    return rnDevicesOf(this._hass, 'renault').filter((id) => rnDeviceEntities(this._hass, id).some((e) => e.entity_id.indexOf('device_tracker.') === 0));
+    // From the registry: a vehicle whose tracker has no state yet is kept, and shown once it has one.
+    return rnDevicesOf(this._hass, 'renault').filter((id) => rnRegistryEntities(this._hass, id).some((e) => e.entity_id.indexOf('device_tracker.') === 0));
   }
 
   // Device and entity discovery walks the whole registry: redo it only when the registries
-  // (replaced, not mutated, on change) or the config change, or while a tracker has no state yet.
+  // (replaced, not mutated, on change) or the config change, or once one of the vehicles'
+  // registry entities that had no state at discovery time has one (its role may have been missed).
   _discovered() {
     var hass = this._hass, d = this._disc;
     if (!d || d.entities !== hass.entities || d.devices !== hass.devices || d.config !== this._config ||
-        d.ids.some((id) => !d.ents[id].location || !hass.states[d.ents[id].location])) {
+        !rnStillStateless(hass, d.stateless)) {
       var ids = this._deviceIds();
       var ents = {};
-      ids.forEach((id) => { ents[id] = rnVehicleEntities(hass, id); });
-      d = this._disc = { entities: hass.entities, devices: hass.devices, config: this._config, ids: ids, ents: ents };
+      var regIds = [];
+      ids.forEach((id) => {
+        ents[id] = rnVehicleEntities(hass, id);
+        regIds = regIds.concat(rnRegistryEntities(hass, id).map((e) => e.entity_id));
+      });
+      d = this._disc = { entities: hass.entities, devices: hass.devices, config: this._config, ids: ids, ents: ents, stateless: rnStateless(hass, regIds) };
     }
     return d;
   }
