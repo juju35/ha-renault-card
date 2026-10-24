@@ -1,5 +1,36 @@
 # Changelog
 
+## 1.15.1
+
+### Fixes
+- After a reload of the Renault integration, or when the states come back after the registry, the card no longer stays without location or battery and the map card no longer shows "no vehicle" until the page is reloaded.
+- The lock, charging and plug chips can be reached with Tab and open their more-info dialog with Enter or Space.
+- No statistics request is sent before the lease has started.
+
+### Changes
+- Map card: a configured vehicle without a tracker no longer runs the discovery again on every update.
+
+### Maintenance
+- Regression tests for the entity resolution and the lease statistics; duplication check skips the tests.
+
+## 1.15.0
+
+### Changes
+- Lease: when the allowance is exceeded, the status line gives the cost of the kilometres already over, next to that number of kilometres (it showed the cost of the projected excess). The projected cost is still in the "End of lease" details.
+- Lease: the section stays hidden until the lease has started, instead of showing wrong figures.
+- Map card: new `language` option (Français / English), also in the visual editor.
+
+### Fixes
+- Map card: an open vehicle popup no longer closes on every sensor update.
+- Map card: the full screen button keeps working after the card has been removed and added back to the page.
+- Button icons and entity ids from the configuration are escaped before display.
+- Enter and Space open the more-info dialog of tiles, the location row and the data plan block.
+- The fuel gauge no longer breaks when the fuel level is not a number.
+
+### Maintenance
+- CI hardened: actions pinned by commit SHA, read-only token permissions, Dependabot for action updates, duplication report annotated on pull requests; no duplicated code left.
+- Unit tests (`npm test`, run in CI); entity resolution cached and the map editor no longer rebuilt on every update; README documents that `tile_attribution` is rendered as HTML.
+
 ## 1.14.3
 
 ### Changes
