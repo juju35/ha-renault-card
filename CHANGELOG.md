@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.15.1
+
+### Fixes
+- After a reload of the Renault integration, or when the states come back after the registry, the card no longer stays without location or battery and the map card no longer shows "no vehicle" until the page is reloaded.
+- The lock, charging and plug chips can be reached with Tab and open their more-info dialog with Enter or Space.
+- No statistics request is sent before the lease has started.
+
+### Changes
+- Map card: a configured vehicle without a tracker no longer runs the discovery again on every update.
+
+### Maintenance
+- Regression tests for the entity resolution and the lease statistics; duplication check skips the tests.
+
 ## 1.15.0
 
 ### Changes
