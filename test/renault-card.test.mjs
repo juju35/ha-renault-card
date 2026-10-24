@@ -326,3 +326,16 @@ test("map card does not walk the registry again for a configured vehicle without
   card._hass = { entities, devices, states: renaultStates(["sensor.car_mileage", "sensor.car_battery_level"]) };
   assert.equal(card._discovered(), first);
 });
+
+test("no statistics request before the lease has started", () => {
+  const card = Object.create(RenaultCard.prototype);
+  const start = new Date();
+  start.setDate(start.getDate() + 30);
+  const d = `${start.getFullYear()}-${String(start.getMonth() + 1).padStart(2, "0")}-${String(start.getDate()).padStart(2, "0")}`;
+  card._config = { lease: { start_date: d, duration: 36, km_per_year: 12000 } };
+  card._hass = { language: "en", states: { "sensor.m": { state: "10", attributes: {} } } };
+  let fetched = 0;
+  card._leaseFetch = () => fetched++;
+  assert.equal(card._leaseHtml({ mileage: "sensor.m" }), "");
+  assert.equal(fetched, 0);
+});

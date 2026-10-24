@@ -779,18 +779,18 @@ class RenaultCard extends HTMLElement {
     }
     if (this._avail(ent.lock_status)) {
       var unlocked = this._val(ent.lock_status) === 'on';
-      chips.push(`<span class="chip${unlocked ? ' warn' : ''}" data-more="${rnEsc(ent.lock_status)}"><ha-icon icon="${unlocked ? 'mdi:lock-open-variant-outline' : 'mdi:lock-outline'}"></ha-icon>${this._t(unlocked ? 'unlocked' : 'locked')}</span>`);
+      chips.push(`<span class="chip${unlocked ? ' warn' : ''}" data-more="${rnEsc(ent.lock_status)}" role="button" tabindex="0"><ha-icon icon="${unlocked ? 'mdi:lock-open-variant-outline' : 'mdi:lock-outline'}"></ha-icon>${this._t(unlocked ? 'unlocked' : 'locked')}</span>`);
     }
     if (ent.doors.some((id) => this._val(id) === 'on')) {
       chips.push(`<span class="chip warn"><ha-icon icon="mdi:car-door"></ha-icon>${this._t('doors_open')}</span>`);
     }
     if (this._val(ent.charging) === 'on') {
       var left = this._num(ent.charging_remaining_time);
-      chips.push('<span class="chip ok" data-more="' + rnEsc(ent.charging) + '"><ha-icon icon="mdi:battery-charging"></ha-icon>' +
+      chips.push('<span class="chip ok" data-more="' + rnEsc(ent.charging) + '" role="button" tabindex="0"><ha-icon icon="mdi:battery-charging"></ha-icon>' +
         (left ? this._t('charging_left', { t: this._duration(left) }) : this._t('charging')) + '</span>');
     } else if (this._avail(ent.plugged_in)) {
       var plugged = this._val(ent.plugged_in) === 'on';
-      chips.push(`<span class="chip" data-more="${rnEsc(ent.plugged_in)}"><ha-icon icon="${plugged ? 'mdi:power-plug' : 'mdi:power-plug-off-outline'}"></ha-icon>${this._t(plugged ? 'plugged' : 'unplugged')}</span>`);
+      chips.push(`<span class="chip" data-more="${rnEsc(ent.plugged_in)}" role="button" tabindex="0"><ha-icon icon="${plugged ? 'mdi:power-plug' : 'mdi:power-plug-off-outline'}"></ha-icon>${this._t(plugged ? 'plugged' : 'unplugged')}</span>`);
     }
     if (this._val(ent.hvac_status) === 'on') {
       chips.push(`<span class="chip ok"><ha-icon icon="mdi:air-conditioner"></ha-icon>${this._t('hvac_on')}</span>`);
@@ -918,10 +918,11 @@ class RenaultCard extends HTMLElement {
     var lease = this._config.lease;
     var dates = rnLeaseDates(lease);
     if (!dates || !this._avail(ent.mileage)) return '';
-    // The statistics feed the chart, the recent pace and the contract year: fetched once an hour.
-    this._leaseFetch(dates.start, ent.mileage);
     var st = rnLeaseStatus(lease, this._num(ent.mileage), Date.now(), this._leaseHist4(ent.mileage, dates.start));
     if (!st) return '';
+    // The statistics feed the chart, the recent pace and the contract year: fetched once an hour,
+    // once the lease has started (no statistics before).
+    this._leaseFetch(dates.start, ent.mileage);
     var color = st.state === 'over' ? 'var(--error-color, #db4437)' : st.state === 'warn' ? 'var(--warning-color, #ffa600)' : 'var(--success-color, #43a047)';
     var icon = st.state === 'ok' ? 'mdi:check-circle-outline' : 'mdi:alert-circle-outline';
     var status;
