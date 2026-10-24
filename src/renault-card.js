@@ -2005,7 +2005,7 @@ class RenaultMapCard extends HTMLElement {
     return [
       ':host { display: block; }',
       'ha-card { display: block; overflow: hidden; }',
-      '.header { display: flex; align-items: center; gap: 12px; min-height: 40px; padding: 16px 16px 8px; font-size: 18px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color); }',
+      '.header { display: flex; align-items: center; gap: 10px; min-height: 36px; padding: 12px 12px 8px; font-size: 16px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color); }',
       '.brand { width: 21px; height: 28px; flex: none; background: var(--primary-text-color);' +
         ' -webkit-mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; }',
       '.header[hidden], .message[hidden] { display: none; }',
