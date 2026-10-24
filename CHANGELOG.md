@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.15.0
+
+### Changes
+- Lease: when the allowance is exceeded, the status line gives the cost of the kilometres already over, next to that number of kilometres (it showed the cost of the projected excess). The projected cost is still in the "End of lease" details.
+- Lease: the section stays hidden until the lease has started, instead of showing wrong figures.
+- Map card: new `language` option (Français / English), also in the visual editor.
+
+### Fixes
+- Map card: an open vehicle popup no longer closes on every sensor update.
+- Map card: the full screen button keeps working after the card has been removed and added back to the page.
+- Button icons and entity ids from the configuration are escaped before display.
+- Enter and Space open the more-info dialog of tiles, the location row and the data plan block.
+- The fuel gauge no longer breaks when the fuel level is not a number.
+
+### Maintenance
+- CI hardened: actions pinned by commit SHA, read-only token permissions, Dependabot for action updates, duplication report annotated on pull requests; no duplicated code left.
+- Unit tests (`npm test`, run in CI); entity resolution cached and the map editor no longer rebuilt on every update; README documents that `tile_attribution` is rendered as HTML.
+
 ## 1.14.3
 
 ### Changes
