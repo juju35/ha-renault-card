@@ -246,7 +246,7 @@ const devices = {
   captur: { id: "captur", name: "EF456GH", name_by_user: "Captur", model: "Captur ii", manufacturer: "Renault" },
   orange: { id: "orange", name: "RENAULT Espace", model: "Espace", manufacturer: "Orange" },
 };
-const hass = { states, entities, devices, user: { name: "Julien" } };
+const hass = { states, entities, devices, user: { name: "Alex" } };
 
 // Lease started 22 months ago: daily mileage statistics with weekday / weekend driving.
 const leaseStart = new Date();

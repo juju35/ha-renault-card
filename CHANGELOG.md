@@ -1,8 +1,16 @@
 # Changelog
 
+## 1.14.3
+
+### Changes
+- Map card: same compact header as the other ha-* cards (16 px title, 12 px padding).
+
+### Maintenance
+- Neutral user name in the screenshot mock data; screenshots regenerated.
+
 ## 1.14.2
 
-### Documentation
+### Maintenance
 - README: screenshots of the map card, light and dark.
 - `npm run screenshots` also renders the map card, from OpenStreetMap tiles kept in `scripts/tiles`, so the screenshots can be made again without network.
 
