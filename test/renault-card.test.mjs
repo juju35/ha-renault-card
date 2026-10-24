@@ -248,3 +248,81 @@ test("map editor offers the language option", () => {
   assert.equal(lang.selector.select.options.map((o) => o.value).join(","), "fr,en");
   assert.equal(ctx.RnMapI18n.en.editor.language, "Language");
 });
+
+// Registries as Home Assistant sends them: unchanged (same references) while states come and go,
+// e.g. when the config entry is reloaded.
+function renaultRegistry() {
+  const reg = (entity_id, translation_key) => ({ entity_id, device_id: "d1", platform: "renault", translation_key });
+  const entities = {
+    "sensor.car_mileage": reg("sensor.car_mileage", "mileage"),
+    "sensor.car_battery_level": reg("sensor.car_battery_level", "battery_level"),
+    "device_tracker.car_location": reg("device_tracker.car_location", "location"),
+  };
+  return { entities, devices: { d1: { id: "d1", name: "Car", model: "Espace" } } };
+}
+
+function renaultStates(which) {
+  const all = {
+    "sensor.car_mileage": { state: "1000", attributes: {} },
+    "sensor.car_battery_level": { state: "80", attributes: { device_class: "battery" } },
+    "device_tracker.car_location": { state: "home", attributes: { latitude: 48.1, longitude: -1.7 } },
+  };
+  return Object.fromEntries(which.map((id) => [id, all[id]]));
+}
+
+for (const config of [{ device_id: "d1" }, {}]) {
+  test(`entities are resolved once their states come back with the same registries (${config.device_id ? "device_id" : "auto"})`, () => {
+    const { entities, devices } = renaultRegistry();
+    const card = Object.create(RenaultCard.prototype);
+    card._config = config;
+    // Only the mileage has a state at first, then nothing (entry reloading), then the states come
+    // back one at a time.
+    card._hass = { entities, devices, states: renaultStates(["sensor.car_mileage"]) };
+    card._resolved();
+    card._hass = { entities, devices, states: {} };
+    card._resolved();
+    card._hass = { entities, devices, states: renaultStates(["sensor.car_mileage"]) };
+    card._resolved();
+    card._hass = { entities, devices, states: renaultStates(Object.keys(entities)) };
+    const r = card._resolved();
+    assert.equal(r.deviceId, "d1");
+    assert.equal(r.ent.mileage, "sensor.car_mileage");
+    assert.equal(r.ent.battery_level, "sensor.car_battery_level");
+    assert.equal(r.ent.location, "device_tracker.car_location");
+    // Then cached while nothing is missing.
+    let calls = 0;
+    const resolve = card._resolve;
+    card._resolve = function () {
+      calls++;
+      return resolve.call(this);
+    };
+    card._hass = { entities, devices, states: renaultStates(Object.keys(entities)) };
+    card._resolved();
+    assert.equal(calls, 0);
+  });
+}
+
+test("map card finds the vehicle once its states come back with the same registries", () => {
+  const { entities, devices } = renaultRegistry();
+  const card = Object.create(RenaultMapCard.prototype);
+  card._config = {};
+  card._hass = { entities, devices, states: {} };
+  assert.equal(card._vehicles().length, 0);
+  card._hass = { entities, devices, states: renaultStates(["sensor.car_mileage"]) };
+  assert.equal(card._vehicles().length, 0);
+  card._hass = { entities, devices, states: renaultStates(Object.keys(entities)) };
+  const v = card._vehicles();
+  assert.equal(v.length, 1);
+  assert.equal(v[0].ent.battery_level, "sensor.car_battery_level");
+});
+
+test("map card does not walk the registry again for a configured vehicle without a tracker", () => {
+  const { entities, devices } = renaultRegistry();
+  delete entities["device_tracker.car_location"];
+  const card = Object.create(RenaultMapCard.prototype);
+  card._config = { devices: ["d1"] };
+  card._hass = { entities, devices, states: renaultStates(["sensor.car_mileage", "sensor.car_battery_level"]) };
+  const first = card._discovered();
+  card._hass = { entities, devices, states: renaultStates(["sensor.car_mileage", "sensor.car_battery_level"]) };
+  assert.equal(card._discovered(), first);
+});
