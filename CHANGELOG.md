@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.6.0
+
+### Fixes
+- Map card: the dark-theme inversion filter is now applied to the OpenStreetMap raster tiles when the Home Assistant vector base map is unavailable (HA < 2026.9 or no WebGL2) and the card falls back to raster. Previously the `ha` vector style short-circuited the fallback check, leaving a light map on a dark dashboard.
+
 ## 2.5.0
 
 ### Changes
