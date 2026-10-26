@@ -1103,9 +1103,9 @@ class RenaultCard extends HTMLElement {
       'ha-card { height: 100%; box-sizing: border-box; padding: 12px; display: flex; flex-direction: column; gap: 10px; }' +
       '.empty { display: flex; align-items: center; gap: 10px; color: var(--secondary-text-color); }' +
       '.header { display: flex; align-items: center; gap: 10px; }' +
-      '.badge { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;' +
-        ' background: color-mix(in srgb, var(--rn-accent) 15%, transparent); color: var(--rn-accent); }' +
-      '.brand { width: 26px; height: 36px; flex-shrink: 0; background: var(--primary-text-color);' +
+      '.badge { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; flex: none;' +
+        ' background: color-mix(in srgb, var(--rn-accent) 16%, transparent); color: var(--rn-accent); --mdc-icon-size: 24px; }' +
+      '.brand { width: 40px; height: 40px; flex: none; background: var(--primary-text-color);' +
         ' -webkit-mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; }' +
       '.titles { flex: 1; min-width: 0; }' +
       '.name { font-size: 16px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
@@ -2154,7 +2154,7 @@ class RenaultMapCard extends HTMLElement {
       ':host { display: block; }',
       'ha-card { display: block; overflow: hidden; }',
       '.header { display: flex; align-items: center; gap: 10px; min-height: 36px; padding: 12px 12px 8px; font-size: 16px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color); }',
-      '.brand { width: 21px; height: 28px; flex: none; background: var(--primary-text-color);' +
+      '.brand { width: 40px; height: 40px; flex: none; background: var(--primary-text-color);' +
         ' -webkit-mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; }',
       '.header[hidden], .message[hidden] { display: none; }',
       '.message { padding: 12px 16px; color: var(--secondary-text-color); }',
