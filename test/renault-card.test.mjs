@@ -339,3 +339,31 @@ test("no statistics request before the lease has started", () => {
   assert.equal(card._leaseHtml({ mileage: "sensor.m" }), "");
   assert.equal(fetched, 0);
 });
+
+test("rnMyRenaultPhoto returns the renault_picture URL of the device, or null", () => {
+  const entities = {
+    "sensor.car_mileage": { entity_id: "sensor.car_mileage", device_id: "d1", platform: "renault" },
+    "sensor.car_picture": { entity_id: "sensor.car_picture", device_id: "d1", platform: "renault_picture" },
+    "sensor.other_picture": { entity_id: "sensor.other_picture", device_id: "d2", platform: "renault_picture" },
+  };
+  const url = "https://myrenault.example/large.png";
+  // picture_large wins.
+  let hass = { entities, states: { "sensor.car_picture": { state: "available", attributes: { picture_large: url, entity_picture: "/small.png" } } } };
+  assert.equal(ctx.rnMyRenaultPhoto(hass, { deviceId: "d1" }), url);
+  // falls back to entity_picture when picture_large is absent.
+  hass = { entities, states: { "sensor.car_picture": { state: "available", attributes: { entity_picture: "/small.png" } } } };
+  assert.equal(ctx.rnMyRenaultPhoto(hass, { deviceId: "d1" }), "/small.png");
+  // unavailable → null.
+  hass = { entities, states: { "sensor.car_picture": { state: "unavailable", attributes: { picture_large: url } } } };
+  assert.equal(ctx.rnMyRenaultPhoto(hass, { deviceId: "d1" }), null);
+  // no URL attribute → null.
+  hass = { entities, states: { "sensor.car_picture": { state: "available", attributes: {} } } };
+  assert.equal(ctx.rnMyRenaultPhoto(hass, { deviceId: "d1" }), null);
+  // only the matching device is used (d2's picture is ignored for d1).
+  hass = { entities, states: { "sensor.other_picture": { state: "available", attributes: { picture_large: url } } } };
+  assert.equal(ctx.rnMyRenaultPhoto(hass, { deviceId: "d1" }), null);
+  // defensive: missing hass pieces or deviceId never throw.
+  assert.equal(ctx.rnMyRenaultPhoto(undefined, { deviceId: "d1" }), null);
+  assert.equal(ctx.rnMyRenaultPhoto({}, { deviceId: "d1" }), null);
+  assert.equal(ctx.rnMyRenaultPhoto({ entities, states: {} }, {}), null);
+});

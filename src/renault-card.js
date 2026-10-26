@@ -380,6 +380,19 @@ function rnBuiltinImage(device) {
   return RN_IMAGES[word];
 }
 
+// Official MyRenault photo exposed by the renault_picture integration: a sensor on the same device
+// as the renault integration, holding the picture URL. Returns the URL, or null when unavailable.
+function rnMyRenaultPhoto(hass, r) {
+  var deviceId = r?.deviceId;
+  if (!hass?.entities || !hass.states || !deviceId) return null;
+  var entry = Object.values(hass.entities).find((e) => e.device_id === deviceId && e.platform === 'renault_picture');
+  if (!entry) return null;
+  var s = hass.states[entry.entity_id];
+  if (!s || s.state === 'unavailable' || s.state === 'unknown') return null;
+  var a = s.attributes || {};
+  return a.picture_large || a.entity_picture || null;
+}
+
 // Body-style illustration (fallback) chosen from the vehicle model's first word.
 var RN_ART_BY_MODEL = {
   clio: 'city', zoe: 'city', twingo: 'city', r5: 'city', '5': 'city',
@@ -747,7 +760,7 @@ class RenaultCard extends HTMLElement {
     var ids = [];
     Object.keys(r.ent).forEach((k) => { ids = ids.concat(r.ent[k]); });
     if (r.plan) Object.keys(RN_PLAN_ROLES).forEach((k) => { ids.push(r.plan[k]); });
-    var sig = JSON.stringify([this._lang(), r.deviceId, this._armed, this._leaseOpen, this._leaseHist?.key, ids.map((id) => {
+    var sig = JSON.stringify([this._lang(), r.deviceId, this._armed, this._leaseOpen, this._leaseHist?.key, rnMyRenaultPhoto(hass, r), ids.map((id) => {
       var s = id && hass.states[id];
       return s ? [id, s.state, s.attributes.options] : null;
     })]);
@@ -786,7 +799,8 @@ class RenaultCard extends HTMLElement {
     var name = c.name || deviceName || this._t('vehicle');
     var model = dev?.model ? `Renault ${rnModel(dev.model)}` : '';
     var plate = c.show_plate && dev ? rnPlate(dev.name) : null;
-    var imgSrc = c.show_image ? (c.image || (c.prefer_illustration ? null : rnBuiltinImage(dev))) : null;
+    var myPhoto = c.show_image && !c.prefer_illustration ? rnMyRenaultPhoto(this._hass, r) : null;
+    var imgSrc = c.show_image ? (c.image || (c.prefer_illustration ? null : (myPhoto || rnBuiltinImage(dev)))) : null;
     var artSvg = (!imgSrc && c.show_image) ? rnModelArt(dev) : null;
 
     // Header

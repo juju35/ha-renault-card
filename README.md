@@ -80,7 +80,7 @@ Add the card from the dashboard (**Add card → Renault Card**). The first Renau
 
 ### Vehicle picture
 
-The card ships with pictures of the **Espace** and the **Captur**, picked from the vehicle model: nothing to set up for these two.
+If the [`renault_picture`](https://github.com/juju35/ha-renault-picture) integration is installed, the card shows the official MyRenault photo of your vehicle automatically, with nothing to set up. Otherwise it ships with pictures of the **Espace** and the **Captur**, picked from the vehicle model.
 
 For another model, or to use your own photo, give the card any image, ideally a PNG or WebP with a transparent background. Put it in `/config/www/renault/` and use `/local/renault/<file>`:
 
@@ -88,7 +88,7 @@ For another model, or to use your own photo, give the card any image, ideally a 
 image: /local/renault/clio.png
 ```
 
-With no `image` and no built-in picture for the model, the card shows an illustration of the model's body style. Set `prefer_illustration: true` to use that illustration even when a built-in picture exists. With `show_image: false` the card shows only the Renault logo next to the name (or a car icon with `show_logo: false`).
+The card picks the picture in this order: your `image`, then the MyRenault photo, then the built-in Espace / Captur picture, then an illustration of the model's body style. Set `prefer_illustration: true` to always use that illustration instead. With `show_image: false` the card shows only the Renault logo next to the name (or a car icon with `show_logo: false`).
 
 ### Lease tracking (LOA)
 
@@ -161,7 +161,7 @@ entities:
 | `device_id` | ❌* | Auto | Renault vehicle device (*or `entity`; the first vehicle is used if both are missing) |
 | `entity` | ❌ | — | Any entity of the vehicle, used to find the device |
 | `name` | ❌ | Device name | Card title |
-| `image` | ❌ | Built-in | Picture URL; replaces the built-in Espace / Captur picture |
+| `image` | ❌ | Auto | Picture URL; overrides the MyRenault photo and the built-in Espace / Captur picture |
 | `show_logo` | ❌ | `true` | Show the Renault logo next to the name (follows the theme text colour) |
 | `show_image` | ❌ | `true` | Show the vehicle picture |
 | `prefer_illustration` | ❌ | `false` | Use the model illustration even when a built-in picture exists |

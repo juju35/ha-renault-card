@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.3.0
+
+### Features
+- The vehicle picture is now the official MyRenault photo when the [Renault Picture](https://github.com/juju35/ha-renault-picture) integration is installed: the card finds its sensor on the vehicle's device, with no new option. Order: custom `image`, then the illustration with `prefer_illustration`, then the MyRenault photo, the built-in picture, the illustration.
+
 ## 2.2.0
 ### Changes
 - Header: the Renault logo fills the same 40 px box as the icons of the other ha-* cards, in the vehicle card and the map card; the car badge shown without logo or picture is 40 px with a 24 px icon.
