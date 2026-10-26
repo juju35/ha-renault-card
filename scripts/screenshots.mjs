@@ -125,9 +125,11 @@ export async function render(shots, { icons = {}, hass = {}, extra = "" } = {}) 
     const path = new URL(route.request().url()).pathname;
     const tile = path.match(/^\/tiles\/(\d+)\/(\d+)\/(\d+)\.png$/);
     const lib = path.match(/^\/hacsfiles\/ha-renault-card\/([\w.-]+\.js)$/);
+    const pic = path.match(/^\/pictures\/([\w.-]+\.webp)$/);
     try {
       if (tile) await route.fulfill({ body: await retinaTile(helper, ...tile.slice(1).map(Number)), contentType: "image/png" });
       else if (lib) await route.fulfill({ body: readFileSync(`${root}dist/${lib[1]}`), contentType: "text/javascript" });
+      else if (pic) await route.fulfill({ body: readFileSync(`${root}scripts/pictures/${pic[1]}`), contentType: "image/webp" });
       else await route.fulfill({ body: pageHtml(path.slice(1) === "dark" ? "dark" : "light", Number(new URL(route.request().url()).searchParams.get("width")) || 420), contentType: "text/html" });
     } catch (err) {
       errors.push(err.message);
@@ -233,6 +235,10 @@ R("device_tracker.espace_location", "location", "home", { latitude: 48.11, longi
 R("binary_sensor.espace_lock_status", "lock_status", "off", { device_class: "lock" });
 R("button.espace_sound_horn", "start_horn", "unknown", { friendly_name: "Espace Sound horn" });
 R("button.espace_flash_lights", "start_lights", "unknown", { friendly_name: "Espace Flash lights" });
+// Renault Picture sensor on the Espace device: the MyRenault photo (scripts/pictures/espace.webp is the render
+// Renault returns for this car). The Captur has none, so its card shows the model illustration.
+const ESPACE_PHOTO = `${ORIGIN}/pictures/espace.webp`;
+add("espace", "renault_picture", "sensor.espace_picture", undefined, "available", { picture_large: ESPACE_PHOTO, entity_picture: ESPACE_PHOTO, friendly_name: "Espace Picture" });
 const C = (...a) => add("captur", "renault", ...a);
 C("sensor.captur_mileage", "mileage", "12804", { device_class: "distance", state_class: "total_increasing", unit_of_measurement: "km" });
 C("sensor.captur_battery_level", "battery_level", "78", { device_class: "battery", unit_of_measurement: "%" });
