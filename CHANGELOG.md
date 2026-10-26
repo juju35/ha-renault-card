@@ -1,9 +1,10 @@
 # Changelog
 
-## 2.3.1
+## 2.4.0
 
 ### Changes
-- Larger vehicle picture (up to 150 px high instead of 116 px), so the MyRenault photo, whose render has wide transparent margins, reads better; the built-in pictures and illustrations follow.
+- The built-in Espace and Captur pictures are removed. The picture is now the official MyRenault photo from the [Renault Picture](https://github.com/juju35/ha-renault-picture) integration, or the model illustration without it; a custom `image` still takes priority. The map card markers and popup use the MyRenault photo too. The card file is about 60 KB lighter.
+- Larger vehicle picture (up to 150 px high instead of 116 px), so the MyRenault photo, whose render has wide transparent margins, reads better; the illustrations follow.
 - Larger licence plate in the header (32 px high instead of 26 px).
 
 ## 2.3.0
