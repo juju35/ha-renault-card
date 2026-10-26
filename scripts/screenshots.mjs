@@ -135,7 +135,10 @@ export async function render(shots, { icons = {}, hass = {}, extra = "" } = {}) 
     }
   });
   const page = await context.newPage();
+  let current = "";
+  page.on("pageerror", (err) => console.error(`${current}: ${err.message}`));
   for (const s of shots) {
+    current = s.file;
     // No frozen clock: Leaflet fades the map tiles in with the current time.
     await page.goto(`${ORIGIN}/${s.theme}?width=${s.width}`);
     await page.addScriptTag({ content: haElements(icons) + extra });
@@ -166,7 +169,13 @@ export async function render(shots, { icons = {}, hass = {}, extra = "" } = {}) 
     }
     if (errors.length) throw new Error(`Map screenshots not made, OpenStreetMap tiles unreachable: ${errors[0]}`);
     await page.waitForTimeout(400);
-    await page.locator(s.type).screenshot({ path: `${root}screenshots/${s.file}.png`, animations: "disabled" });
+    // The card with the 16 px page padding around it, on the theme background.
+    const box = await page.locator("#root").boundingBox();
+    await page.screenshot({
+      path: `${root}screenshots/${s.file}.png`,
+      clip: { x: 0, y: 0, width: s.width + 32, height: Math.ceil(box.height) + 32 },
+      animations: "disabled",
+    });
     console.log(`screenshots/${s.file}.png`);
   }
   await http?.dispose();
@@ -279,14 +288,14 @@ const mapHass = {
 
 await render(
   [
-    { file: "espace", type: "renault-card", theme: "light", width: 420, config: { plate_department: "35" } },
-    { file: "espace-dark", type: "renault-card", theme: "dark", width: 420, config: { plate_department: "35", language: "fr" } },
-    { file: "lease", type: "renault-card", theme: "light", width: 420, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, expand_lease: true, lease }, hass: leaseHass },
-    { file: "lease-dark", type: "renault-card", theme: "dark", width: 420, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, language: "fr", expand_lease: true, lease }, hass: leaseHass },
-    { file: "captur", type: "renault-card", theme: "light", width: 420, config: { device_id: "captur", plate_department: "35", show_data_plan: false } },
-    { file: "captur-dark", type: "renault-card", theme: "dark", width: 420, config: { device_id: "captur", plate_department: "35", show_data_plan: false, language: "fr" } },
+    { file: "espace", type: "renault-card", theme: "light", width: 460, config: { plate_department: "35" } },
+    { file: "espace-dark", type: "renault-card", theme: "dark", width: 460, config: { plate_department: "35" } },
+    { file: "lease", type: "renault-card", theme: "light", width: 460, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, expand_lease: true, lease }, hass: leaseHass },
+    { file: "lease-dark", type: "renault-card", theme: "dark", width: 460, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, expand_lease: true, lease }, hass: leaseHass },
+    { file: "captur", type: "renault-card", theme: "light", width: 460, config: { device_id: "captur", plate_department: "35", show_data_plan: false } },
+    { file: "captur-dark", type: "renault-card", theme: "dark", width: 460, config: { device_id: "captur", plate_department: "35", show_data_plan: false } },
     { file: "map", type: "renault-map-card", theme: "light", width: 420, config: MAP_CONFIG, hass: mapHass },
-    { file: "map-dark", type: "renault-map-card", theme: "dark", width: 420, config: { ...MAP_CONFIG, language: "fr" }, hass: mapHass },
+    { file: "map-dark", type: "renault-map-card", theme: "dark", width: 420, config: MAP_CONFIG, hass: mapHass },
   ],
   { icons, hass }
 );
