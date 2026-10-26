@@ -24,7 +24,7 @@ Pick the vehicle, the card finds all its entities by itself.
 - Location with the time of the last update; tap it to open the map
 - Action buttons for every button of the vehicle (horn, flash lights, air conditioning, start/stop charge), pressed with a confirmation tap, and the charge mode picker for electric cars
 - Renault logo next to the name, black on light themes and white on dark themes
-- The official MyRenault photo of your vehicle (with [Renault Picture](https://github.com/juju35/ha-renault-picture)), an illustration of the model, or your own picture, and a French licence plate drawn like the real one (EU band, department, Breton flag for Brittany)
+- The official MyRenault photo of your vehicle (with [Renault Picture](https://github.com/juju35/ha-renault-picture)) or your own picture, and a French licence plate drawn like the real one (EU band, department, Breton flag for Brittany)
 - Optional **lease tracking** (LOA): mileage driven against the allowance, theoretical mileage expected today and the gap to it, kilometres left this month and per month until the end, end-of-lease projection (average or last 30 / 90 days) and estimated cost of the excess, always shown as a status; pace, contract year figures and a mileage chart folded by default
 - Optional **Orange Internet On the move** section: data left, percentage, renewal or expiry date
 - Automatic entity discovery from the device (English or French entity IDs)
@@ -80,7 +80,7 @@ Add the card from the dashboard (**Add card → Renault Card**). The first Renau
 
 ### Vehicle picture
 
-If the [`renault_picture`](https://github.com/juju35/ha-renault-picture) integration is installed, the card shows the official MyRenault photo of your vehicle automatically, with nothing to set up. Otherwise it shows an illustration of the model's body style.
+If the [`renault_picture`](https://github.com/juju35/ha-renault-picture) integration is installed, the card shows the official MyRenault photo of your vehicle automatically, with nothing to set up. Without it, the card shows the Renault logo next to the name.
 
 For another model, or to use your own photo, give the card any image, ideally a PNG or WebP with a transparent background. Put it in `/config/www/renault/` and use `/local/renault/<file>`:
 
@@ -88,7 +88,7 @@ For another model, or to use your own photo, give the card any image, ideally a 
 image: /local/renault/clio.png
 ```
 
-The card picks the picture in this order: your `image`, then the MyRenault photo, then an illustration of the model's body style. Set `prefer_illustration: true` to always use that illustration instead. With `show_image: false` the card shows only the Renault logo next to the name (or a car icon with `show_logo: false`).
+Your `image` takes priority over the MyRenault photo. With no picture, or with `show_image: false`, the card shows only the Renault logo next to the name (or a car icon with `show_logo: false`).
 
 ### Lease tracking (LOA)
 
@@ -164,7 +164,6 @@ entities:
 | `image` | ❌ | Auto | Picture URL; overrides the MyRenault photo |
 | `show_logo` | ❌ | `true` | Show the Renault logo next to the name (follows the theme text colour) |
 | `show_image` | ❌ | `true` | Show the vehicle picture |
-| `prefer_illustration` | ❌ | `false` | Use the model illustration even when the MyRenault photo is available |
 | `fuel_tank_capacity` | ❌ | — | Tank capacity in litres; shows the fuel gauge |
 | `low_range` | ❌ | `100` | Range (km) below which the card shows a low range warning; `0` turns it off |
 | `show_plate` | ❌ | `true` | Show the licence plate (when the device name is a French plate) |
