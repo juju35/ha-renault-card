@@ -125,9 +125,11 @@ export async function render(shots, { icons = {}, hass = {}, extra = "" } = {}) 
     const path = new URL(route.request().url()).pathname;
     const tile = path.match(/^\/tiles\/(\d+)\/(\d+)\/(\d+)\.png$/);
     const lib = path.match(/^\/hacsfiles\/ha-renault-card\/([\w.-]+\.js)$/);
+    const pic = path.match(/^\/pictures\/([\w.-]+\.webp)$/);
     try {
       if (tile) await route.fulfill({ body: await retinaTile(helper, ...tile.slice(1).map(Number)), contentType: "image/png" });
       else if (lib) await route.fulfill({ body: readFileSync(`${root}dist/${lib[1]}`), contentType: "text/javascript" });
+      else if (pic) await route.fulfill({ body: readFileSync(`${root}scripts/pictures/${pic[1]}`), contentType: "image/webp" });
       else await route.fulfill({ body: pageHtml(path.slice(1) === "dark" ? "dark" : "light", Number(new URL(route.request().url()).searchParams.get("width")) || 420), contentType: "text/html" });
     } catch (err) {
       errors.push(err.message);
@@ -233,6 +235,12 @@ R("device_tracker.espace_location", "location", "home", { latitude: 48.11, longi
 R("binary_sensor.espace_lock_status", "lock_status", "off", { device_class: "lock" });
 R("button.espace_sound_horn", "start_horn", "unknown", { friendly_name: "Espace Sound horn" });
 R("button.espace_flash_lights", "start_lights", "unknown", { friendly_name: "Espace Flash lights" });
+// Renault Picture sensors: the MyRenault photo of each car (scripts/pictures holds the renders Renault returns).
+const photo = (device, name) => {
+  const url = `${ORIGIN}/pictures/${device}.webp`;
+  add(device, "renault_picture", `sensor.${device}_picture`, undefined, "available", { picture_large: url, entity_picture: url, friendly_name: `${name} Picture` });
+};
+photo("espace", "Espace");
 const C = (...a) => add("captur", "renault", ...a);
 C("sensor.captur_mileage", "mileage", "12804", { device_class: "distance", state_class: "total_increasing", unit_of_measurement: "km" });
 C("sensor.captur_battery_level", "battery_level", "78", { device_class: "battery", unit_of_measurement: "%" });
@@ -243,6 +251,7 @@ C("binary_sensor.captur_charging", "charging", "on", { device_class: "battery_ch
 C("sensor.captur_charging_remaining_time", "charging_remaining_time", "45", { device_class: "duration", unit_of_measurement: "min" });
 C("device_tracker.captur_location", "location", "home", { latitude: 48.11, longitude: -1.68, friendly_name: "Captur Location" });
 C("sensor.captur_location_last_activity", "location_last_activity", new Date(Date.now() - 12 * 60000).toISOString(), { device_class: "timestamp" });
+photo("captur", "Captur");
 const O = (...a) => add("orange", "orange_internet_on_the_move", ...a);
 O("sensor.orange_left_data_percentage", "left_data_percentage", "61", { unit_of_measurement: "%" });
 O("sensor.orange_left_data", "left_data", "3.1", { unit_of_measurement: "GB" });
