@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.5.0
+
+### Changes
+- The model illustrations and the `prefer_illustration` option are removed. The picture is your `image`, or the MyRenault photo from the [Renault Picture](https://github.com/juju35/ha-renault-picture) integration; without either, the card shows the Renault logo next to the name (or the car icon with `show_logo: false`). A `prefer_illustration` left in a configuration is ignored.
+
 ## 2.4.0
 
 ### Changes
