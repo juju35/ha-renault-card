@@ -1744,9 +1744,10 @@ class RenaultMapCard extends HTMLElement {
   }
 
   // Raster tiles are darkened with a filter; aerial imagery and the vector style (dark version) are not.
+  // A vector style that fell back to raster is darkened like any other raster layer.
   _darkTiles() {
     var spec = RN_MAP_STYLES[this._style()];
-    return this._dark() && !spec.photo && !spec.vector && !this._vectorFailed;
+    return this._dark() && !spec.photo && !(spec.vector && !this._vectorFailed);
   }
 
   _ensureShell() {
