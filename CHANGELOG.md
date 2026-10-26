@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0
+
+### Features
+- The vehicle picture now falls back to a built-in illustration chosen by body style (city, SUV, sedan, monospace, ludospace, van) when no custom `image` is set and no built-in picture matches the model. Priority is unchanged: custom image, then built-in picture, then illustration, all under `show_image`. The illustrations are original inline SVG artwork.
+
+
 ## 1.15.1
 
 ### Fixes
