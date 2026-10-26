@@ -1102,7 +1102,8 @@ class RenaultCard extends HTMLElement {
       ':host { display: block; height: 100%; --rn-accent: var(--primary-color, #03a9f4); }' +
       'ha-card { height: 100%; box-sizing: border-box; padding: 12px; display: flex; flex-direction: column; gap: 10px; }' +
       '.empty { display: flex; align-items: center; gap: 10px; color: var(--secondary-text-color); }' +
-      '.header { display: flex; align-items: center; gap: 10px; }' +
+      // The card gap is 10 px: the header keeps 8 px to the first body element.
+      '.header { display: flex; align-items: center; gap: 10px; margin-bottom: -2px; }' +
       '.badge { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; flex: none;' +
         ' background: color-mix(in srgb, var(--rn-accent) 16%, transparent); color: var(--rn-accent); --mdc-icon-size: 24px; }' +
       '.brand { width: 40px; height: 40px; flex: none; background: var(--primary-text-color);' +
@@ -1111,7 +1112,7 @@ class RenaultCard extends HTMLElement {
       '.name { font-size: 16px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
       '.model { font-size: 12px; color: var(--secondary-text-color); margin-top: 2px; }' +
       '.plate { height: 26px; width: auto; flex-shrink: 0; display: block; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.25)); }' +
-      '.image { display: flex; justify-content: center; margin: -4px 0; }' +
+      '.image { display: flex; justify-content: center; margin: 0 0 -4px; }' +
       '.image img { max-width: 100%; max-height: 116px; object-fit: contain; }' +
       '.image svg { max-width: 100%; max-height: 116px; height: auto; display: block; }' +
       '.chips { display: flex; flex-wrap: wrap; gap: 6px; }' +
@@ -1198,10 +1199,11 @@ class RenaultCard extends HTMLElement {
       '.actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 6px; }' +
       'button { font: inherit; cursor: pointer; border: none; }' +
       '.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; font-weight: 500; min-width: 0;' +
-        ' padding: 7px 12px; border-radius: 10px; background: color-mix(in srgb, var(--rn-accent) 14%, transparent); color: var(--rn-accent); }' +
+        ' padding: 7px 12px; border-radius: 10px; background: var(--secondary-background-color, rgba(128,128,128,0.1)); color: var(--primary-text-color); }' +
       '.btn span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
       '.btn ha-icon { --mdc-icon-size: 20px; flex-shrink: 0; }' +
-      '.btn.armed { background: var(--rn-accent); color: var(--text-primary-color, #fff); }' +
+      '.btn.armed { background: color-mix(in srgb, var(--rn-accent) 16%, transparent); color: var(--rn-accent); }' +
+      '.btn.armed:hover { background: color-mix(in srgb, var(--rn-accent) 24%, transparent); }' +
     '</style>';
   }
 
@@ -2191,8 +2193,9 @@ class RenaultMapCard extends HTMLElement {
       '.pactions { display: flex; gap: 6px; margin-top: 10px; }',
       // Leaflet colours every link in the map: the selector must outrank '.leaflet-container a'.
       '.leaflet-container .pbtn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; padding: 7px 10px; border-radius: 16px; border: none; cursor: pointer;' +
-        ' font: inherit; font-size: 13px; font-weight: 500; text-decoration: none; background: var(--primary-color, #03a9f4); color: var(--text-primary-color, #fff); }',
-      '.leaflet-container .pbtn.alt { background: color-mix(in srgb, var(--primary-color, #03a9f4) 15%, transparent); color: var(--primary-color, #03a9f4); }',
+        ' font: inherit; font-size: 13px; font-weight: 500; text-decoration: none; background: color-mix(in srgb, var(--primary-color, #03a9f4) 16%, transparent); color: var(--primary-color, #03a9f4); }',
+      '.leaflet-container .pbtn:hover { background: color-mix(in srgb, var(--primary-color, #03a9f4) 24%, transparent); }',
+      '.leaflet-container .pbtn.alt { background: var(--secondary-background-color, rgba(128,128,128,0.12)); color: var(--primary-text-color, #212121); }',
       '.pbtn ha-icon { --mdc-icon-size: 18px; }',
     ].join('\n');
   }
