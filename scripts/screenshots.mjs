@@ -235,10 +235,12 @@ R("device_tracker.espace_location", "location", "home", { latitude: 48.11, longi
 R("binary_sensor.espace_lock_status", "lock_status", "off", { device_class: "lock" });
 R("button.espace_sound_horn", "start_horn", "unknown", { friendly_name: "Espace Sound horn" });
 R("button.espace_flash_lights", "start_lights", "unknown", { friendly_name: "Espace Flash lights" });
-// Renault Picture sensor on the Espace device: the MyRenault photo (scripts/pictures/espace.webp is the render
-// Renault returns for this car). The Captur has none, so its card shows the model illustration.
-const ESPACE_PHOTO = `${ORIGIN}/pictures/espace.webp`;
-add("espace", "renault_picture", "sensor.espace_picture", undefined, "available", { picture_large: ESPACE_PHOTO, entity_picture: ESPACE_PHOTO, friendly_name: "Espace Picture" });
+// Renault Picture sensors: the MyRenault photo of each car (scripts/pictures holds the renders Renault returns).
+const photo = (device, name) => {
+  const url = `${ORIGIN}/pictures/${device}.webp`;
+  add(device, "renault_picture", `sensor.${device}_picture`, undefined, "available", { picture_large: url, entity_picture: url, friendly_name: `${name} Picture` });
+};
+photo("espace", "Espace");
 const C = (...a) => add("captur", "renault", ...a);
 C("sensor.captur_mileage", "mileage", "12804", { device_class: "distance", state_class: "total_increasing", unit_of_measurement: "km" });
 C("sensor.captur_battery_level", "battery_level", "78", { device_class: "battery", unit_of_measurement: "%" });
@@ -249,6 +251,7 @@ C("binary_sensor.captur_charging", "charging", "on", { device_class: "battery_ch
 C("sensor.captur_charging_remaining_time", "charging_remaining_time", "45", { device_class: "duration", unit_of_measurement: "min" });
 C("device_tracker.captur_location", "location", "home", { latitude: 48.11, longitude: -1.68, friendly_name: "Captur Location" });
 C("sensor.captur_location_last_activity", "location_last_activity", new Date(Date.now() - 12 * 60000).toISOString(), { device_class: "timestamp" });
+photo("captur", "Captur");
 const O = (...a) => add("orange", "orange_internet_on_the_move", ...a);
 O("sensor.orange_left_data_percentage", "left_data_percentage", "61", { unit_of_measurement: "%" });
 O("sensor.orange_left_data", "left_data", "3.1", { unit_of_measurement: "GB" });
