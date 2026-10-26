@@ -1125,10 +1125,10 @@ class RenaultCard extends HTMLElement {
       '.titles { flex: 1; min-width: 0; }' +
       '.name { font-size: 16px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
       '.model { font-size: 12px; color: var(--secondary-text-color); margin-top: 2px; }' +
-      '.plate { height: 26px; width: auto; flex-shrink: 0; display: block; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.25)); }' +
+      '.plate { height: 32px; width: auto; flex-shrink: 0; display: block; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.25)); }' +
       '.image { display: flex; justify-content: center; margin: 0 0 -4px; }' +
-      '.image img { max-width: 100%; max-height: 116px; object-fit: contain; }' +
-      '.image svg { max-width: 100%; max-height: 116px; height: auto; display: block; }' +
+      '.image img { max-width: 100%; max-height: 150px; object-fit: contain; }' +
+      '.image svg { max-width: 100%; max-height: 150px; height: auto; display: block; }' +
       '.chips { display: flex; flex-wrap: wrap; gap: 6px; }' +
       '.chip { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; padding: 1px 8px 1px 5px; border-radius: 12px;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.12)); color: var(--secondary-text-color); }' +

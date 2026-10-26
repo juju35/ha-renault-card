@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.3.1
+
+### Changes
+- Larger vehicle picture (up to 150 px high instead of 116 px), so the MyRenault photo, whose render has wide transparent margins, reads better; the built-in pictures and illustrations follow.
+- Larger licence plate in the header (32 px high instead of 26 px).
+
 ## 2.3.0
 
 ### Features
