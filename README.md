@@ -219,8 +219,6 @@ The `ha` base map is the one Home Assistant's own map card uses (Home Assistant 
 |---|---|
 | ![map card](screenshots/map.png) | ![map card, dark](screenshots/map-dark.png) |
 
-Dark screenshots are in French.
-
 ## How it works
 
 The card reads the entity registry to list the entities of the chosen device, then matches each one by its translation key, then by its entity ID (English and French slugs), then by its attributes. Everything else the device exposes as a `button` becomes an action button.

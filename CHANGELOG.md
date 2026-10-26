@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.2.0
+### Changes
+- Header: the Renault logo fills the same 40 px box as the icons of the other ha-* cards, in the vehicle card and the map card; the car badge shown without logo or picture is 40 px with a 24 px icon.
+- Action buttons (Sound horn, Flash lights…) use the neutral tile colour; the button waiting for its confirmation tap is tinted with the accent colour instead of filled. Map card popup: the Directions button is tinted, Details is neutral.
+- Header: 8 px between the header and the first element of the card (picture, illustration or chips).
+
+### Maintenance
+- README screenshots: 16 px frame on the theme background, vehicle card at 460 px, English in every shot (the dark ones were in French); the screenshot script logs page errors.
+
 ## 2.1.0
 
 ### Features
