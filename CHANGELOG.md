@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.0
+
+### Features
+- New `prefer_illustration` option (YAML and visual editor): shows the model illustration even when a built-in picture exists (Espace, Captur). A custom `image` still takes priority.
+
 ## 2.0.0
 
 ### Features
