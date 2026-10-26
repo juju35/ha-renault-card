@@ -67,6 +67,8 @@ var RnI18n = {
     ed_image: 'Image personnalisée',
     ed_image_helper: 'Laisser vide pour l\'image intégrée (Espace, Captur) ou l\'illustration du modèle ; sinon une URL, par exemple /local/renault/clio.png',
     ed_show_image: 'Image du véhicule',
+    ed_prefer_illustration: 'Illustration plutôt que la photo',
+    ed_prefer_illustration_helper: 'Affiche l\'illustration du modèle même quand une photo intégrée existe (Espace, Captur).',
     ed_show_logo: 'Logo Renault',
     ed_fuel_tank_capacity: 'Capacité du réservoir',
     ed_fuel_tank_capacity_helper: 'Affiche la jauge de carburant',
@@ -172,6 +174,8 @@ var RnI18n = {
     ed_image: 'Custom picture',
     ed_image_helper: 'Leave empty for the built-in picture (Espace, Captur) or the model illustration; otherwise a URL, for example /local/renault/clio.png',
     ed_show_image: 'Vehicle picture',
+    ed_prefer_illustration: 'Illustration instead of photo',
+    ed_prefer_illustration_helper: 'Show the model illustration even when a built-in photo exists (Espace, Captur).',
     ed_show_logo: 'Renault logo',
     ed_fuel_tank_capacity: 'Fuel tank capacity',
     ed_fuel_tank_capacity_helper: 'Shows the fuel gauge',
@@ -782,7 +786,7 @@ class RenaultCard extends HTMLElement {
     var name = c.name || deviceName || this._t('vehicle');
     var model = dev?.model ? `Renault ${rnModel(dev.model)}` : '';
     var plate = c.show_plate && dev ? rnPlate(dev.name) : null;
-    var imgSrc = c.show_image ? (c.image || rnBuiltinImage(dev)) : null;
+    var imgSrc = c.show_image ? (c.image || (c.prefer_illustration ? null : rnBuiltinImage(dev))) : null;
     var artSvg = (!imgSrc && c.show_image) ? rnModelArt(dev) : null;
 
     // Header
@@ -1251,7 +1255,7 @@ function rnEnsureForm(editor) {
   editor.appendChild(editor._form);
 }
 
-var RN_EDITOR_DEFAULTS = { show_logo: true, show_image: true, show_plate: true, show_location: true, show_actions: true, show_data_plan: true, low_range: 100, expand_lease: false };
+var RN_EDITOR_DEFAULTS = { show_logo: true, show_image: true, prefer_illustration: false, show_plate: true, show_location: true, show_actions: true, show_data_plan: true, low_range: 100, expand_lease: false };
 
 class RenaultCardEditor extends HTMLElement {
   setConfig(config) {
@@ -1296,6 +1300,7 @@ class RenaultCardEditor extends HTMLElement {
         type: 'grid', name: '', schema: [
           { name: 'show_logo', selector: { boolean: {} } },
           { name: 'show_image', selector: { boolean: {} } },
+          { name: 'prefer_illustration', selector: { boolean: {} } },
           { name: 'show_plate', selector: { boolean: {} } },
           { name: 'show_location', selector: { boolean: {} } },
           { name: 'show_actions', selector: { boolean: {} } },

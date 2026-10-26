@@ -88,7 +88,7 @@ For another model, or to use your own photo, give the card any image, ideally a 
 image: /local/renault/clio.png
 ```
 
-Without a picture (no built-in one for the model and no `image`, or `show_image: false`), the card shows only the Renault logo next to the name (or a car icon with `show_logo: false`).
+With no `image` and no built-in picture for the model, the card shows an illustration of the model's body style. Set `prefer_illustration: true` to use that illustration even when a built-in picture exists. With `show_image: false` the card shows only the Renault logo next to the name (or a car icon with `show_logo: false`).
 
 ### Lease tracking (LOA)
 
@@ -164,6 +164,7 @@ entities:
 | `image` | ❌ | Built-in | Picture URL; replaces the built-in Espace / Captur picture |
 | `show_logo` | ❌ | `true` | Show the Renault logo next to the name (follows the theme text colour) |
 | `show_image` | ❌ | `true` | Show the vehicle picture |
+| `prefer_illustration` | ❌ | `false` | Use the model illustration even when a built-in picture exists |
 | `fuel_tank_capacity` | ❌ | — | Tank capacity in litres; shows the fuel gauge |
 | `low_range` | ❌ | `100` | Range (km) below which the card shows a low range warning; `0` turns it off |
 | `show_plate` | ❌ | `true` | Show the licence plate (when the device name is a French plate) |
