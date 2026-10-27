@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.7.0
+
+### Changes
+- Licence plate redrawn to the regulation dimensions of the arrêté du 9 février 2009 (520 × 110 mm): 510 × 100 usable area with a 5 mm border, 45 × 100 blue bands flush with the usable edges, ~76 mm registration characters with regulation clearances.
+- The territorial band now shows a traditional regional emblem depending on `plate_department`: Brittany, Occitania, Île-de-France, Provence, Corsica and Burgundy. Other departments show the number only. (The official modern region logos are protected designs and are not reproduced.)
+
 ## 2.6.0
 
 ### Fixes
