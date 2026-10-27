@@ -372,7 +372,7 @@ function rnMyRenaultPhoto(hass, r) {
 // Official modern region logos are protected designs and are not reproduced;
 // departments whose region has no traditional emblem show the number only.
 var RN_DEPT_EMBLEM = {};
-(function () {
+(() => {
   var m = {
     bzh: ['22', '29', '35', '56'],
     occ: ['09', '11', '12', '30', '31', '32', '34', '46', '48', '65', '66', '81', '82'],
