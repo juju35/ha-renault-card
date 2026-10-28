@@ -904,11 +904,11 @@ class RenaultCard extends HTMLElement {
     }
     if (this._avail(ent.battery_autonomy)) {
       tiles.push(this._tile(ent.battery_autonomy, 'mdi:map-marker-distance', this._t('battery_autonomy'), this._withUnit(ent.battery_autonomy),
-        { warn: lowRange && bRange < lowRange }));
+        { warn: lowRange && bRange != null && bRange < lowRange }));
     }
     if (this._avail(ent.fuel_autonomy)) {
       tiles.push(this._tile(ent.fuel_autonomy, 'mdi:map-marker-distance', this._t('fuel_autonomy'), this._withUnit(ent.fuel_autonomy),
-        { warn: lowRange && range < lowRange }));
+        { warn: lowRange && range != null && range < lowRange }));
     }
     var tank = Number(c.fuel_tank_capacity) || 0;
     var fuel = this._num(ent.fuel_quantity);
