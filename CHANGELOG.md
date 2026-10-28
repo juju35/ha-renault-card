@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.7.1
+
+### Fixes
+- Map card: the old markers no longer stay visible under the "No Renault vehicle with a location found" message when no vehicle has a position any more.
+- No low-range warning when the battery or fuel autonomy is available but not a number.
+- Map card: the IGN aerial imagery attribution is in English like the other layers.
+- Performance: the MyRenault photo entity is resolved once instead of on every state change, the relative-time and currency formatters are cached per language, and the minute timer re-renders the card only when a clock-dependent text changes.
+
+### Maintenance
+- Release gated on the unit tests as well as the build; unused Ruff tooling removed; Dependabot also follows npm; new Screenshots workflow.
+- README: animated GIF of the lease section, the six regional plate emblems, HACS 2.x install steps, fixed lease captions.
+
 ## 2.7.0
 
 ### Changes
