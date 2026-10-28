@@ -29,7 +29,7 @@ Pick the vehicle, the card finds all its entities by itself.
 - Optional **Orange Internet On the move** section: data left, percentage, renewal or expiry date
 - Automatic entity discovery from the device (English or French entity IDs)
 - Visual editor in the dashboard UI (no YAML needed)
-- English and French, follows the Home Assistant language
+- English, French, German and Spanish, follows the Home Assistant language
 - Light and dark theme compatible
 - HACS-ready, no CDN: the map libraries ship with the card
 
@@ -178,7 +178,7 @@ entities:
 | `data_plan_device_id` | ❌ | Auto | Orange Internet On the move device; found from the vehicle model when empty |
 | `expand_lease` | ❌ | `false` | Show the lease details and chart unfolded |
 | `lease` | ❌ | — | Lease tracking: `start_date` (`YYYY-MM-DD`), `duration` (months) and `km_per_year` are required to show it; `start_mileage` (km at delivery) defaults to `0`; `forecast`: `90` or `30` to project from the last days (average since the start by default); `extra_km_cost`: cost per extra km |
-| `language` | ❌ | Auto | Force language: `fr` or `en` (auto-detects from HA settings) |
+| `language` | ❌ | Auto | Force language: `en`, `fr`, `de` or `es` (auto-detects from HA settings) |
 | `entities` | ❌ | Auto | Override detected entities: `mileage`, `fuel_autonomy`, `fuel_quantity`, `battery_level`, `battery_autonomy`, `location` |
 
 ## Map card
@@ -207,7 +207,7 @@ height: 400
 | `show_name` | ❌ | `true` | Vehicle name on the markers |
 | `show_picture` | ❌ | `true` | Vehicle picture on the markers and in the popup |
 | `show_fullscreen` | ❌ | `true` | Full screen button under the zoom buttons (on iPhone the card fills the screen) |
-| `language` | ❌ | Auto | Force language: `fr` or `en` (auto-detects from HA settings) |
+| `language` | ❌ | Auto | Force language: `en`, `fr`, `de` or `es` (auto-detects from HA settings) |
 
 The `ha` base map is the one Home Assistant's own map card uses (Home Assistant 2026.9 or later, WebGL2): OpenStreetMap vector tiles through your instance, in light or dark. On older versions or without WebGL2, the card falls back to OpenStreetMap raster tiles, also through Home Assistant when it can. Leaflet and MapLibre GL ship with the card (see [licenses](licenses)): only the map tiles come from the network.
 
@@ -257,6 +257,8 @@ The card auto-detects the language from your Home Assistant settings. Currently 
 |---|---|
 | English | `en` |
 | Français | `fr` |
+| Deutsch | `de` |
+| Español | `es` |
 
 Contributions for additional languages are welcome!
 
