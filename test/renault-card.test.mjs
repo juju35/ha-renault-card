@@ -245,9 +245,42 @@ test("map editor offers the language option", () => {
   ed._config = {};
   ed._hass = { language: "en" };
   const lang = ed._schema().find((s) => s.name === "language");
-  assert.equal(lang.selector.select.options.map((o) => o.value).join(","), "fr,en");
+  assert.equal(lang.selector.select.options.map((o) => o.value).join(","), "fr,en,de,es");
   assert.equal(ctx.RnMapI18n.en.editor.language, "Language");
 });
+
+test("card editor offers fr, en, de and es", () => {
+  const Editor = defined["renault-card-editor"];
+  const ed = Object.create(Editor.prototype);
+  ed._config = {};
+  ed._hass = { language: "de" };
+  const lang = ed._schema().find((s) => s.name === "language");
+  assert.equal(lang.selector.select.options.map((o) => o.value).join(","), "fr,en,de,es");
+  assert.equal(ed._lang(), "de");
+});
+
+// Every language has exactly the English keys (nested objects included) and the same placeholders.
+function i18nPaths(obj, prefix = "") {
+  return Object.keys(obj).flatMap((k) =>
+    obj[k] && typeof obj[k] === "object" ? i18nPaths(obj[k], `${prefix + k}.`) : [prefix + k],
+  ).sort();
+}
+function i18nGet(obj, path) {
+  return path.split(".").reduce((o, k) => o[k], obj);
+}
+for (const [name, table] of [["RnI18n", ctx.RnI18n], ["RnMapI18n", ctx.RnMapI18n]]) {
+  test(`I18N parity: ${name} has en, fr, de and es with the same keys and placeholders`, () => {
+    const ref = i18nPaths(table.en);
+    for (const lang of ["fr", "de", "es"]) {
+      assert.ok(table[lang], `${name}.${lang} is missing`);
+      assert.deepEqual(i18nPaths(table[lang]), ref, `${name}.${lang} keys differ from en`);
+      for (const path of ref) {
+        const ph = (s) => (String(s).match(/\{[a-z]+\}/g) || []).sort().join();
+        assert.equal(ph(i18nGet(table[lang], path)), ph(i18nGet(table.en, path)), `${name}.${lang}.${path} placeholders`);
+      }
+    }
+  });
+}
 
 // Registries as Home Assistant sends them: unchanged (same references) while states come and go,
 // e.g. when the config entry is reloaded.
