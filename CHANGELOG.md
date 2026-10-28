@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.8.0
+
+### Features
+- German and Spanish translations for the vehicle card, the map card and their visual editors; the `language` option accepts `de` and `es`.
+
 ## 2.7.1
 
 ### Fixes
