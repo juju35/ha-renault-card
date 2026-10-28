@@ -229,11 +229,20 @@ function rnT(lang, key) {
   return strings[key] || RnI18n.en[key] || key;
 }
 
-// "5 minutes ago", "in 2 hours"… in the given language.
+// "5 minutes ago", "in 2 hours"… in the given language. The formatters are cached per language
+// (and per currency for rnMoneyFormat): they are rebuilt every minute by the refresh timer.
+var RN_RTF = {};
+var RN_MONEY = {};
+
+function rnMoneyFormat(lang, cur) {
+  var key = `${lang}|${cur}`;
+  return RN_MONEY[key] || (RN_MONEY[key] = new Intl.NumberFormat(lang, { style: 'currency', currency: cur, maximumFractionDigits: 0 }));
+}
+
 function rnRelative(lang, date) {
   var diff = (date.getTime() - Date.now()) / 1000;
   var abs = Math.abs(diff);
-  var rtf = new Intl.RelativeTimeFormat(lang, { numeric: 'auto' });
+  var rtf = RN_RTF[lang] || (RN_RTF[lang] = new Intl.RelativeTimeFormat(lang, { numeric: 'auto' }));
   if (abs < 60) return rtf.format(Math.round(diff), 'second');
   if (abs < 3600) return rtf.format(Math.round(diff / 60), 'minute');
   if (abs < 86400) return rtf.format(Math.round(diff / 3600), 'hour');
@@ -665,8 +674,9 @@ class RenaultCard extends HTMLElement {
   }
 
   connectedCallback() {
-    // Keep "updated 5 min ago" and the days left current.
-    this._timer = setInterval(() => { this._sig = null; this._update(); }, 60000);
+    // Keep "updated 5 min ago" and the days left current. The signature includes the clock-dependent
+    // texts (_timeSig), so the tick only re-renders when one of them actually changes.
+    this._timer = setInterval(() => this._update(), 60000);
     // A click elsewhere folds the lease back to its default (as in ha-carburants-france). A click,
     // not a pointerdown: folding on press would shift the layout under the pointer before the click.
     this._onOutside = this._onOutside || ((ev) => {
@@ -774,6 +784,24 @@ class RenaultCard extends HTMLElement {
 
   _relative(date) { return rnRelative(this._lang(), date); }
 
+  // The rendered texts that depend on the clock rather than on an entity state: the location
+  // "updated X ago", the data plan days left, and the lease figures (which move by the day).
+  // Included in the signature so the minute timer re-renders only when one of them changes.
+  _timeSig(r) {
+    var out = [new Date().toDateString()];
+    var ent = r.ent;
+    if (this._config.show_location && this._st(ent.location)) {
+      var lastId = this._avail(ent.location_last_activity) ? ent.location_last_activity : null;
+      var last = lastId ? new Date(this._val(lastId)) : new Date(this._st(ent.location).last_updated || '');
+      if (!Number.isNaN(last.getTime())) out.push(this._relative(last));
+    }
+    if (r.plan && this._avail(r.plan.expiry_date)) {
+      var expiry = new Date(this._val(r.plan.expiry_date));
+      if (!Number.isNaN(expiry.getTime())) out.push(Math.ceil((expiry.getTime() - Date.now()) / 86400000));
+    }
+    return out;
+  }
+
   _duration(minutes) {
     var h = Math.floor(minutes / 60), m = Math.round(minutes % 60);
     return h ? `${h} h ${String(m).padStart(2, '0')}` : `${m} min`;
@@ -817,7 +845,7 @@ class RenaultCard extends HTMLElement {
     var ids = [];
     Object.keys(r.ent).forEach((k) => { ids = ids.concat(r.ent[k]); });
     if (r.plan) Object.keys(RN_PLAN_ROLES).forEach((k) => { ids.push(r.plan[k]); });
-    var sig = JSON.stringify([this._lang(), r.deviceId, this._armed, this._leaseOpen, this._leaseHist?.key, rnPhotoUrl(hass, r.photo), ids.map((id) => {
+    var sig = JSON.stringify([this._lang(), r.deviceId, this._armed, this._leaseOpen, this._leaseHist?.key, rnPhotoUrl(hass, r.photo), this._timeSig(r), ids.map((id) => {
       var s = id && hass.states[id];
       return s ? [id, s.state, s.attributes.options] : null;
     })]);
@@ -1005,7 +1033,7 @@ class RenaultCard extends HTMLElement {
 
   _money(v) {
     var cur = (this._hass.config?.currency) || 'EUR';
-    try { return new Intl.NumberFormat(this._lang(), { style: 'currency', currency: cur, maximumFractionDigits: 0 }).format(v); }
+    try { return rnMoneyFormat(this._lang(), cur).format(v); }
     catch (_e) { return `${this._fmtNum(v)} ${cur}`; }
   }
 
@@ -1069,7 +1097,7 @@ class RenaultCard extends HTMLElement {
       (open ? `<div class="lease-more">${this._leaseDetails(st)}${this._leaseChart(st, ent.mileage)}</div>` : '') + '</div>';
   }
 
-  // Folded until tapped, unless expand_lease is set (same as ha-dockhand-card's sections).
+  // Folded until tapped, unless expand_lease is set (same as ha-carburants-france's sections).
   _leaseIsOpen() {
     return this._leaseOpen != null ? this._leaseOpen : this._config.expand_lease === true;
   }
@@ -1504,7 +1532,7 @@ var RN_MAP_STYLES = {
     maxNativeZoom: 19,
     maxZoom: 20,
     photo: true,
-    attribution: 'Photographies aériennes &copy; <a href="https://www.ign.fr" target="_blank" rel="noopener">IGN</a>',
+    attribution: 'Aerial photography &copy; <a href="https://www.ign.fr" target="_blank" rel="noopener">IGN</a>',
   },
   topo: {
     url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
@@ -1749,7 +1777,7 @@ class RenaultMapCard extends HTMLElement {
     // The token may have expired while the card was detached.
     if (this._tiles?.getMaplibreMap) {
       this._hass.callWS({ type: 'map_tiles/access_token' }).then((res) => { this._mapToken = res.token; }, () => {});
-    } else if (this._tiles?._url && this._tiles._url.indexOf('/api/map_tiles/') === 0) {
+    } else if (this._tiles && this._tilesProxied) {
       this._tileUrl().then((url) => { if (this._tiles) this._tiles.setUrl(url); });
     }
     setTimeout(this._invalidate.bind(this), 0);
@@ -1893,7 +1921,7 @@ class RenaultMapCard extends HTMLElement {
     message.hidden = true;
     rnLoadLeaflet().then((L) => {
       this._ensureMap(L);
-      this._drawMarkers(L, this._vehicles());
+      this._drawMarkers(L, vehicles);
     }).catch((err) => {
       message.hidden = false;
       message.textContent = String((err?.message) || err);
@@ -1953,6 +1981,8 @@ class RenaultMapCard extends HTMLElement {
       // The map was rebuilt or the style changed while the token was loading.
       if (this._map !== map || this._tilesKey(this._config) !== key) return;
       this._tiles = L.tileLayer(resolved, options).addTo(map);
+      // Our own flag instead of peeking at Leaflet's private _url when the token must be refreshed.
+      this._tilesProxied = typeof resolved === 'string' && resolved.indexOf('/api/map_tiles/') === 0;
       this._tiles.bringToBack();
       this._scheduleTokenRefresh();
     });
@@ -1963,6 +1993,7 @@ class RenaultMapCard extends HTMLElement {
     if (!this._map || this._tilesLoadedKey === this._tilesKey(this._config)) return;
     if (this._tiles) this._map.removeLayer(this._tiles);
     this._tiles = null;
+    this._tilesProxied = false;
     this._loadTiles(window.L);
   }
 
@@ -2027,7 +2058,7 @@ class RenaultMapCard extends HTMLElement {
       }, 20 * 60 * 1000);
       return;
     }
-    if (this._tiles._url?.indexOf('/api/map_tiles/') !== 0) return;
+    if (!this._tilesProxied) return;
     this._tokenTimer = setInterval(() => {
       this._tileUrl().then((url) => { if (this._tiles) this._tiles.setUrl(url, true); });
     }, 20 * 60 * 1000);
