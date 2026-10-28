@@ -24,7 +24,7 @@ Pick the vehicle, the card finds all its entities by itself.
 - Location with the time of the last update; tap it to open the map
 - Action buttons for every button of the vehicle (horn, flash lights, air conditioning, start/stop charge), pressed with a confirmation tap, and the charge mode picker for electric cars
 - Renault logo next to the name, black on light themes and white on dark themes
-- The official MyRenault photo of your vehicle (with [Renault Picture](https://github.com/juju35/ha-renault-picture)) or your own picture, and a French licence plate drawn like the real one (EU band, department, Breton flag for Brittany)
+- The official MyRenault photo of your vehicle (with [Renault Picture](https://github.com/juju35/ha-renault-picture)) or your own picture, and a French licence plate drawn like the real one (EU band, department, and a traditional regional emblem for Brittany, Occitania, Île-de-France, Provence, Corsica and Burgundy)
 - Optional **lease tracking** (LOA): mileage driven against the allowance, theoretical mileage expected today and the gap to it, kilometres left this month and per month until the end, end-of-lease projection (average or last 30 / 90 days) and estimated cost of the excess, always shown as a status; pace, contract year figures and a mileage chart folded by default
 - Optional **Orange Internet On the move** section: data left, percentage, renewal or expiry date
 - Automatic entity discovery from the device (English or French entity IDs)
@@ -56,8 +56,8 @@ Click the button below to add the repository directly:
 
 Or manually:
 
-1. Open HACS → **Frontend** → **⋮** → **Custom repositories**
-2. Add `https://github.com/juju35/ha-renault-card` — Category: **Dashboard** (Lovelace)
+1. Open HACS → **⋮** (top right) → **Custom repositories**
+2. Add `https://github.com/juju35/ha-renault-card` — Type: **Dashboard**
 3. Search for **Renault Card** and install it (both cards come in the same package)
 4. Clear your browser cache and refresh
 
@@ -116,9 +116,13 @@ lease:
 
 Also in the visual editor, in the **Lease tracking** panel. Without `lease`, the section is not shown.
 
-| Lease (folded chart open) | Dark, French |
+| Lease (details unfolded) | Dark theme |
 |---|---|
 | ![Lease tracking](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/lease.png) | ![Lease tracking, dark theme](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/lease-dark.png) |
+
+The lease section unfolding on tap — pace, end-of-lease projection, contract year and the mileage chart — then folding back:
+
+![Lease section unfolding and folding back](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/lease.gif)
 
 ### Minimal
 
@@ -167,7 +171,7 @@ entities:
 | `fuel_tank_capacity` | ❌ | — | Tank capacity in litres; shows the fuel gauge |
 | `low_range` | ❌ | `100` | Range (km) below which the card shows a low range warning; `0` turns it off |
 | `show_plate` | ❌ | `true` | Show the licence plate (when the device name is a French plate) |
-| `plate_department` | ❌ | — | Department number on the right of the plate, e.g. `35`; the Breton flag is added for 22, 29, 35 and 56 |
+| `plate_department` | ❌ | — | Department number on the right of the plate, e.g. `35`; departments of Brittany, Occitania, Île-de-France, Provence, Corsica and Burgundy get their traditional regional emblem |
 | `show_location` | ❌ | `true` | Show the location row |
 | `show_actions` | ❌ | `true` | Show the action buttons and charge mode |
 | `show_data_plan` | ❌ | `true` | Show the Orange Internet On the move section when a data plan is found |
@@ -232,7 +236,7 @@ The card reads the entity registry to list the entities of the chosen device, th
 npm install
 npm run build        # stamps the version of package.json into dist/renault-card.js
 npm run check        # builds and checks the card (run in CI)
-npm run screenshots  # renders the card with mock Renault vehicles into screenshots/
+npm run screenshots  # renders the card with mock Renault vehicles into screenshots/, lease.gif included (Playwright + ffmpeg)
 ```
 
 The map libraries in `vendor/` (Leaflet, MapLibre GL and its Leaflet adapter) are vendored as-is; the build copies them next to the card, which loads them on demand for the map card.
