@@ -340,6 +340,19 @@ test("no statistics request before the lease has started", () => {
   assert.equal(fetched, 0);
 });
 
+test("rnPhotoEntity resolves the entity once; rnPhotoUrl only reads its state", () => {
+  const entities = {
+    "sensor.car_picture": { entity_id: "sensor.car_picture", device_id: "d1", platform: "renault_picture" },
+  };
+  assert.equal(ctx.rnPhotoEntity({ entities }, "d1"), "sensor.car_picture");
+  assert.equal(ctx.rnPhotoEntity({ entities }, "d2"), null);
+  assert.equal(ctx.rnPhotoEntity({}, "d1"), null);
+  const hass = { states: { "sensor.car_picture": { state: "available", attributes: { picture_large: "/large.png" } } } };
+  assert.equal(ctx.rnPhotoUrl(hass, "sensor.car_picture"), "/large.png");
+  assert.equal(ctx.rnPhotoUrl(hass, null), null);
+  assert.equal(ctx.rnPhotoUrl({ states: {} }, "sensor.car_picture"), null);
+});
+
 test("rnMyRenaultPhoto returns the renault_picture URL of the device, or null", () => {
   const entities = {
     "sensor.car_mileage": { entity_id: "sensor.car_mileage", device_id: "d1", platform: "renault" },

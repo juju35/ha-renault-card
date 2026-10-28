@@ -355,16 +355,23 @@ function rnFindDataPlan(hass, vehicleDevice) {
 }
 
 // Official MyRenault photo exposed by the renault_picture integration: a sensor on the same device
-// as the renault integration, holding the picture URL. Returns the URL, or null when unavailable.
-function rnMyRenaultPhoto(hass, r) {
-  var deviceId = r?.deviceId;
-  if (!hass?.entities || !hass.states || !deviceId) return null;
+// as the renault integration, holding the picture URL. The entity walk is split out so the main
+// card can resolve it once (in _resolve, cached by _resolved) and only read its state afterwards.
+function rnPhotoEntity(hass, deviceId) {
+  if (!hass?.entities || !deviceId) return null;
   var entry = Object.values(hass.entities).find((e) => e.device_id === deviceId && e.platform === 'renault_picture');
-  if (!entry) return null;
-  var s = hass.states[entry.entity_id];
+  return entry ? entry.entity_id : null;
+}
+
+function rnPhotoUrl(hass, entityId) {
+  var s = entityId && hass?.states ? hass.states[entityId] : null;
   if (!s || s.state === 'unavailable' || s.state === 'unknown') return null;
   var a = s.attributes || {};
   return a.picture_large || a.entity_picture || null;
+}
+
+function rnMyRenaultPhoto(hass, r) {
+  return rnPhotoUrl(hass, rnPhotoEntity(hass, r?.deviceId));
 }
 
 // ── French licence plate (SVG, 520 × 110 mm proportions) ────────────────────
@@ -730,7 +737,7 @@ class RenaultCard extends HTMLElement {
         }
       }
     }
-    return { deviceId: deviceId, device: device, ent: ent, plan: plan, stateless: rnStateless(hass, regIds) };
+    return { deviceId: deviceId, device: device, ent: ent, plan: plan, photo: rnPhotoEntity(hass, deviceId), stateless: rnStateless(hass, regIds) };
   }
 
   _st(id) { return id && this._hass.states[id]; }
@@ -810,7 +817,7 @@ class RenaultCard extends HTMLElement {
     var ids = [];
     Object.keys(r.ent).forEach((k) => { ids = ids.concat(r.ent[k]); });
     if (r.plan) Object.keys(RN_PLAN_ROLES).forEach((k) => { ids.push(r.plan[k]); });
-    var sig = JSON.stringify([this._lang(), r.deviceId, this._armed, this._leaseOpen, this._leaseHist?.key, rnMyRenaultPhoto(hass, r), ids.map((id) => {
+    var sig = JSON.stringify([this._lang(), r.deviceId, this._armed, this._leaseOpen, this._leaseHist?.key, rnPhotoUrl(hass, r.photo), ids.map((id) => {
       var s = id && hass.states[id];
       return s ? [id, s.state, s.attributes.options] : null;
     })]);
@@ -849,7 +856,7 @@ class RenaultCard extends HTMLElement {
     var name = c.name || deviceName || this._t('vehicle');
     var model = dev?.model ? `Renault ${rnModel(dev.model)}` : '';
     var plate = c.show_plate && dev ? rnPlate(dev.name) : null;
-    var imgSrc = c.show_image ? (c.image || rnMyRenaultPhoto(this._hass, r)) : null;
+    var imgSrc = c.show_image ? (c.image || rnPhotoUrl(this._hass, r.photo)) : null;
 
     // Header
     var header = '<div class="header">' +
