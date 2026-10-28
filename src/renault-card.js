@@ -1877,6 +1877,15 @@ class RenaultMapCard extends HTMLElement {
     var message = this._root.querySelector('.message');
     var vehicles = this._vehicles();
     if (!vehicles.length) {
+      // Clear stale markers left over from when vehicles still had a position.
+      if (this._layer) {
+        this._layer.clearLayers();
+        this._markers = {};
+        this._homeMarker = null;
+        this._markerSet = '';
+        this._bounds = null;
+        this._fitted = false;
+      }
       message.hidden = false;
       message.textContent = mt.no_vehicle;
       return;

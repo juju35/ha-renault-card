@@ -340,6 +340,33 @@ test("no statistics request before the lease has started", () => {
   assert.equal(fetched, 0);
 });
 
+test("map card clears stale markers when no vehicle has a position any more", () => {
+  const card = Object.create(RenaultMapCard.prototype);
+  card._config = {};
+  card._hass = { states: {}, language: "en" };
+  card._ensureShell = () => {};
+  card._reloadTilesIfNeeded = () => {};
+  card._darkTiles = () => false;
+  const el = () => ({ style: {}, classList: { toggle() {} }, hidden: true });
+  const header = el();
+  const mapEl = el();
+  const message = el();
+  card._root = { querySelector: (s) => (s === ".header" ? header : s === ".map" ? mapEl : message) };
+  card._vehicles = () => [];
+  let cleared = 0;
+  card._layer = { clearLayers: () => cleared++ };
+  card._markers = { d1: {} };
+  card._homeMarker = {};
+  card._markerSet = "d1";
+  card._bounds = [[48, 2]];
+  card._update();
+  assert.equal(cleared, 1);
+  assert.deepEqual(Object.keys(card._markers), []);
+  assert.equal(card._homeMarker, null);
+  assert.equal(card._bounds, null);
+  assert.equal(message.hidden, false);
+});
+
 test("rnPhotoEntity resolves the entity once; rnPhotoUrl only reads its state", () => {
   const entities = {
     "sensor.car_picture": { entity_id: "sensor.car_picture", device_id: "d1", platform: "renault_picture" },
