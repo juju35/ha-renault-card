@@ -1,9 +1,13 @@
-// Renders the cards with mock data and saves the README screenshots.
-// Usage: npm run build && npm run screenshots  (CHROMIUM_PATH=/path/to/chrome to use another browser)
+// Renders the cards with mock data and saves the README screenshots and lease.gif.
+// Usage: npm run build && npm run screenshots  (CHROMIUM_PATH=/path/to/chrome to use another browser;
+// ffmpeg must be on the PATH for the GIF).
 // The map card uses the OpenStreetMap tiles kept in scripts/tiles (committed, no network needed); a tile
 // missing there, after a change of positions or zoom, is downloaded once and should be committed too.
+import { execFileSync } from "node:child_process";
 import { chromium, request } from "playwright";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
@@ -140,7 +144,7 @@ export async function render(shots, { icons = {}, hass = {}, extra = "" } = {}) 
   let current = "";
   page.on("pageerror", (err) => console.error(`${current}: ${err.message}`));
   for (const s of shots) {
-    current = s.file;
+    current = s.gif ? `${s.file}.gif` : s.file;
     // No frozen clock: Leaflet fades the map tiles in with the current time.
     await page.goto(`${ORIGIN}/${s.theme}?width=${s.width}`);
     await page.addScriptTag({ content: haElements(icons) + extra });
@@ -171,6 +175,10 @@ export async function render(shots, { icons = {}, hass = {}, extra = "" } = {}) 
     }
     if (errors.length) throw new Error(`Map screenshots not made, OpenStreetMap tiles unreachable: ${errors[0]}`);
     await page.waitForTimeout(400);
+    if (s.gif) {
+      await leaseGif(page, s);
+      continue;
+    }
     // The card with the 16 px page padding around it, on the theme background.
     const box = await page.locator("#root").boundingBox();
     await page.screenshot({
@@ -182,6 +190,36 @@ export async function render(shots, { icons = {}, hass = {}, extra = "" } = {}) 
   }
   await http?.dispose();
   await browser.close();
+}
+
+// Records the lease section folding and unfolding as a looping screenshots/<file>.gif (needs ffmpeg
+// on the PATH). The card re-renders in place on each toggle, so the GIF alternates the two settled
+// states: unfolded with the pace, projection and chart, then folded back. The canvas is sized on the
+// unfolded card, the taller of the two.
+async function leaseGif(page, s) {
+  const toggle = () => page.evaluate((type) => {
+    document.querySelector(type).shadowRoot.querySelector("[data-lease-toggle]").click();
+  }, s.type);
+  const dir = mkdtempSync(join(tmpdir(), "rn-frames-"));
+  await toggle();
+  await page.waitForTimeout(800); // mileage statistics fetched, chart drawn
+  const box = await page.locator("#root").boundingBox();
+  const clip = { x: 0, y: 0, width: s.width + 32, height: Math.ceil(box.height) + 32 };
+  await page.screenshot({ path: join(dir, "open.png"), clip, animations: "disabled" });
+  await toggle();
+  await page.waitForTimeout(300);
+  await page.screenshot({ path: join(dir, "closed.png"), clip, animations: "disabled" });
+  // Folded 1.6 s, unfolded 2.8 s, looping. The last entry repeats so concat honours the duration.
+  writeFileSync(join(dir, "frames.txt"),
+    "file 'closed.png'\nduration 1.6\nfile 'open.png'\nduration 2.8\nfile 'open.png'\n");
+  const out = `${root}screenshots/${s.file}.gif`;
+  execFileSync("ffmpeg", [
+    "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", join(dir, "frames.txt"),
+    "-vf", `scale=${clip.width}:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=128[p];[b][p]paletteuse=dither=bayer:bayer_scale=4`,
+    "-loop", "0", out,
+  ]);
+  rmSync(dir, { recursive: true });
+  console.log(`screenshots/${s.file}.gif`);
 }
 
 const icons = {
@@ -301,6 +339,7 @@ await render(
     { file: "espace-dark", type: "renault-card", theme: "dark", width: 460, config: { plate_department: "35" } },
     { file: "lease", type: "renault-card", theme: "light", width: 460, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, expand_lease: true, lease }, hass: leaseHass },
     { file: "lease-dark", type: "renault-card", theme: "dark", width: 460, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, expand_lease: true, lease }, hass: leaseHass },
+    { file: "lease", gif: true, type: "renault-card", theme: "light", width: 460, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, lease }, hass: leaseHass },
     { file: "captur", type: "renault-card", theme: "light", width: 460, config: { device_id: "captur", plate_department: "35", show_data_plan: false } },
     { file: "captur-dark", type: "renault-card", theme: "dark", width: 460, config: { device_id: "captur", plate_department: "35", show_data_plan: false } },
     { file: "map", type: "renault-map-card", theme: "light", width: 420, config: MAP_CONFIG, hass: mapHass },
