@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.8.2
+
+### Fixes
+- Map card: when `leaflet.js` cannot be loaded (only `renault-card.js` copied, network error), the card no longer requests it again on every state change; it retries after 30 seconds, and the error message stays on screen instead of flickering.
+
 ## 2.8.1
 
 ### Fixes
