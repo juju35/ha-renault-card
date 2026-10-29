@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.8.3
+
+### Fixes
+- Map popup: "updated X ago" is now current every time you open the popup; it no longer stays at the value from the last state change while the car is parked (for example "2 minutes ago" three hours later).
+
 ## 2.8.2
 
 ### Fixes
