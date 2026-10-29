@@ -21,6 +21,11 @@ jobs:
   screenshots:
     name: Render screenshots
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      # A push made with GITHUB_TOKEN does not trigger pull_request workflows, so the
+      # checks are re-run on the screenshot commit through workflow_dispatch below.
+      actions: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -61,6 +66,7 @@ jobs:
           }
       # scripts/tiles too: the map shots download any OpenStreetMap tile still missing there.
       - name: Commit refreshed screenshots
+        id: commit
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
         run: |
           if [ -z "$(git status --porcelain screenshots scripts/tiles)" ]; then
@@ -72,6 +78,15 @@ jobs:
           git add screenshots scripts/tiles
           git commit -m "chore: refresh screenshots"
           git push
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+      - name: Re-run checks on the screenshot commit
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && steps.commit.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for wf in lint.yml validate.yml hacs.yml; do
+            [ -f ".github/workflows/$wf" ] && gh workflow run "$wf" --ref "${{ github.head_ref }}"
+          done
       - name: Upload screenshots (manual run)
         if: github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

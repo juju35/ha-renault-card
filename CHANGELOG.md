@@ -14,6 +14,7 @@
 
 ### Maintenance
 - Screenshots workflow fails explicitly when the apt installs fail three times.
+- Screenshots workflow re-runs the Lint, Validate and HACS checks (workflow_dispatch) after pushing a screenshot commit, since a GITHUB_TOKEN push does not trigger pull_request workflows.
 
 ## 2.8.0
 
