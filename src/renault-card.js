@@ -73,12 +73,9 @@ var RnI18n = {
     en_battery_autonomy: 'Autonomie batterie',
     en_location: 'Position',
     lease: 'LOA',
-    lease_driven: '{d} sur {t}',
     lease_ends: 'Fin {d}',
     lease_months_left: '{n} mois',
     lease_ended: 'Terminée',
-    lease_pace: 'Rythme {p}/an',
-    lease_projection: 'Projection {p}',
     lease_ok: 'Dans le forfait',
     lease_ok_margin: 'Marge de {k}',
     lease_warn: 'Dépassement prévu : {k}',
@@ -178,12 +175,9 @@ var RnI18n = {
     en_battery_autonomy: 'Battery range',
     en_location: 'Location',
     lease: 'Lease',
-    lease_driven: '{d} of {t}',
     lease_ends: 'Ends {d}',
     lease_months_left: '{n} months',
     lease_ended: 'Ended',
-    lease_pace: 'Pace {p}/year',
-    lease_projection: 'Projection {p}',
     lease_ok: 'Within allowance',
     lease_ok_margin: '{k} to spare',
     lease_warn: 'Projected over: {k}',
@@ -248,7 +242,7 @@ var RnI18n = {
     data_left: '{l} von {t} übrig',
     renews_on: 'Verlängerung am {d}',
     expires_on: 'Läuft am {d} ab',
-    days_left: '{n} T',
+    days_left: '{n} Tg.',
     expired: 'Abgelaufen',
     unit_gb: 'GB',
     unit_mb: 'MB',
@@ -283,12 +277,9 @@ var RnI18n = {
     en_battery_autonomy: 'Batteriereichweite',
     en_location: 'Standort',
     lease: 'Leasing',
-    lease_driven: '{d} von {t}',
     lease_ends: 'Ende {d}',
     lease_months_left: '{n} Monate',
     lease_ended: 'Beendet',
-    lease_pace: 'Fahrleistung {p}/Jahr',
-    lease_projection: 'Prognose {p}',
     lease_ok: 'Innerhalb des Kontingents',
     lease_ok_margin: '{k} Reserve',
     lease_warn: 'Voraussichtliche Überschreitung: {k}',
@@ -297,7 +288,7 @@ var RnI18n = {
     lease_expected_lbl: 'Soll heute',
     lease_month_lbl: 'Rest diesen Monat',
     lease_month_left: 'von {t}',
-    lease_month_over: 'über {t}',
+    lease_month_over: 'über {t} hinaus',
     lease_budget_lbl: 'Pro Monat',
     lease_budget_sub: 'bis zum Ende',
     lease_pace_lbl: 'Fahrleistung',
@@ -388,12 +379,9 @@ var RnI18n = {
     en_battery_autonomy: 'Autonomía de batería',
     en_location: 'Ubicación',
     lease: 'Leasing',
-    lease_driven: '{d} de {t}',
     lease_ends: 'Termina en {d}',
     lease_months_left: '{n} meses',
     lease_ended: 'Finalizado',
-    lease_pace: 'Ritmo {p}/año',
-    lease_projection: 'Proyección {p}',
     lease_ok: 'Dentro del límite',
     lease_ok_margin: 'Margen de {k}',
     lease_warn: 'Exceso previsto: {k}',
@@ -447,6 +435,14 @@ var RN_MONEY = {};
 function rnMoneyFormat(lang, cur) {
   var key = `${lang}|${cur}`;
   return RN_MONEY[key] || (RN_MONEY[key] = new Intl.NumberFormat(lang, { style: 'currency', currency: cur, maximumFractionDigits: 0 }));
+}
+
+// Currency symbol of Home Assistant's configured currency, for the editor's per-km cost unit.
+function rnCurrencySymbol(lang, cur) {
+  try {
+    var part = rnMoneyFormat(lang, cur).formatToParts(0).find((x) => x.type === 'currency');
+    return part ? part.value : cur;
+  } catch (_e) { return cur; }
 }
 
 function rnRelative(lang, date) {
@@ -1055,7 +1051,7 @@ class RenaultCard extends HTMLElement {
     var ids = [];
     Object.keys(r.ent).forEach((k) => { ids = ids.concat(r.ent[k]); });
     if (r.plan) Object.keys(RN_PLAN_ROLES).forEach((k) => { ids.push(r.plan[k]); });
-    var sig = JSON.stringify([this._lang(), r.deviceId, this._armed, this._leaseOpen, this._leaseHist?.key, rnPhotoUrl(hass, r.photo), this._timeSig(r), ids.map((id) => {
+    var sig = JSON.stringify([this._lang(), r.deviceId, this._armed, this._leaseOpen, this._leaseHist?.key, this._leaseHist?.at, rnPhotoUrl(hass, r.photo), this._timeSig(r), ids.map((id) => {
       var s = id && hass.states[id];
       return s ? [id, s.state, s.attributes.options] : null;
     })]);
@@ -1212,7 +1208,7 @@ class RenaultCard extends HTMLElement {
     var p = r.plan;
     if (p && (this._avail(p.left_data) || this._avail(p.left_data_percentage))) {
       var pct = this._num(p.left_data_percentage);
-      if (pct == null && this._avail(p.initial_data) && this._num(p.initial_data) > 0) pct = this._num(p.left_data) / this._num(p.initial_data) * 100;
+      if (pct == null && this._num(p.left_data) != null && this._num(p.initial_data) > 0) pct = this._num(p.left_data) / this._num(p.initial_data) * 100;
       var leftTxt = this._avail(p.left_data) && this._avail(p.initial_data)
         ? this._t('data_left', { l: this._dataSize(p.left_data), t: this._dataSize(p.initial_data) })
         : (this._avail(p.left_data) ? this._dataSize(p.left_data) : '');
@@ -1629,7 +1625,7 @@ class RenaultCardEditor extends HTMLElement {
           {
             type: 'grid', name: '', schema: [
               { name: 'start_mileage', selector: { number: { min: 0, max: 1000000, step: 1, mode: 'box', unit_of_measurement: 'km' } } },
-              { name: 'extra_km_cost', selector: { number: { min: 0, max: 5, step: 0.01, mode: 'box', unit_of_measurement: '€/km' } } },
+              { name: 'extra_km_cost', selector: { number: { min: 0, max: 5, step: 0.01, mode: 'box', unit_of_measurement: `${rnCurrencySymbol(this._lang(), this._hass?.config?.currency || 'EUR')}/km` } } },
             ],
           },
           {
@@ -2003,7 +1999,8 @@ function rnVehicleEntities(hass, deviceId) {
   return ent;
 }
 
-function rnVehicle(hass, deviceId, ent) {
+// photo: the renault_picture entity id, resolved once by the map card's discovery (walked here if omitted).
+function rnVehicle(hass, deviceId, ent, photo) {
   var device = hass.devices?.[deviceId];
   ent = ent || rnVehicleEntities(hass, deviceId);
   var tracker = ent.location && hass.states[ent.location];
@@ -2015,7 +2012,7 @@ function rnVehicle(hass, deviceId, ent) {
     tracker: tracker,
     name: device ? String(device.name_by_user || device.name || '').trim() : tracker.attributes.friendly_name,
     model: device?.model ? `Renault ${rnModel(device.model)}` : '',
-    image: rnMyRenaultPhoto(hass, { deviceId: deviceId }),
+    image: rnPhotoUrl(hass, photo === undefined ? rnPhotoEntity(hass, deviceId) : photo),
     lat: tracker.attributes.latitude,
     lon: tracker.attributes.longitude,
   };
@@ -2076,7 +2073,11 @@ class RenaultMapCard extends HTMLElement {
       document.removeEventListener('keydown', this._onFsKey);
       this._onFsChange = null;
     }
-    this._pseudoFs = false;
+    // Leaving the view in pseudo full screen: drop the fixed-position classes too.
+    if (this._pseudoFs) {
+      this._pseudoFs = false;
+      this._fullscreenChanged();
+    }
   }
 
   getCardSize() {
@@ -2108,26 +2109,28 @@ class RenaultMapCard extends HTMLElement {
         !rnStillStateless(hass, d.stateless)) {
       var ids = this._deviceIds();
       var ents = {};
+      var photos = {};
       var regIds = [];
       ids.forEach((id) => {
         ents[id] = rnVehicleEntities(hass, id);
+        photos[id] = rnPhotoEntity(hass, id);
         regIds = regIds.concat(rnRegistryEntities(hass, id).map((e) => e.entity_id));
       });
-      d = this._disc = { entities: hass.entities, devices: hass.devices, config: this._config, ids: ids, ents: ents, stateless: rnStateless(hass, regIds) };
+      d = this._disc = { entities: hass.entities, devices: hass.devices, config: this._config, ids: ids, ents: ents, photos: photos, stateless: rnStateless(hass, regIds) };
     }
     return d;
   }
 
   _vehicles() {
     var hass = this._hass, d = this._discovered();
-    return d.ids.map((id) => rnVehicle(hass, id, d.ents[id])).filter(Boolean);
+    return d.ids.map((id) => rnVehicle(hass, id, d.ents[id], d.photos[id])).filter(Boolean);
   }
 
   // Redraw only when something shown on the map changes.
   _signature() {
     if (!this._hass || !this._config) return '';
     var hass = this._hass;
-    return JSON.stringify([this._lang(), this._vehicles().map((v) => [v.deviceId, v.lat, v.lon, v.tracker.state, v.name,
+    return JSON.stringify([this._lang(), this._vehicles().map((v) => [v.deviceId, v.lat, v.lon, v.tracker.state, v.name, v.image,
         ['fuel_autonomy', 'battery_autonomy', 'battery_level', 'fuel_quantity', 'mileage', 'location_last_activity'].map((r) => {
           var s = v.ent[r] && hass.states[v.ent[r]];
           return s ? s.state : null;
@@ -2520,7 +2523,9 @@ class RenaultMapCard extends HTMLElement {
     var hass = this._hass;
     var where = hass.formatEntityState ? hass.formatEntityState(v.tracker) : v.tracker.state;
     var lastId = v.ent.location_last_activity;
-    var last = lastId && hass.states[lastId] ? new Date(hass.states[lastId].state) : new Date(v.tracker.last_updated || '');
+    var lastSt = lastId && hass.states[lastId];
+    var lastOk = lastSt && lastSt.state !== 'unavailable' && lastSt.state !== 'unknown' && lastSt.state !== '';
+    var last = lastOk ? new Date(lastSt.state) : new Date(v.tracker.last_updated || '');
     var when = Number.isNaN(last.getTime()) ? '' : rnT(lang, 'updated').replace('{t}', rnRelative(lang, last));
     var rows = [
       ['battery_level', 'battery_level'], ['battery_autonomy', 'battery_autonomy'],

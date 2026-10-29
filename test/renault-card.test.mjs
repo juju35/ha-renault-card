@@ -440,3 +440,70 @@ test("rnMyRenaultPhoto returns the renault_picture URL of the device, or null", 
   assert.equal(ctx.rnMyRenaultPhoto({}, { deviceId: "d1" }), null);
   assert.equal(ctx.rnMyRenaultPhoto({ entities, states: {} }, {}), null);
 });
+
+test("map signature changes when the MyRenault photo arrives after the tracker", () => {
+  const { entities, devices } = renaultRegistry();
+  entities["sensor.car_picture"] = { entity_id: "sensor.car_picture", device_id: "d1", platform: "renault_picture" };
+  const states = {
+    ...renaultStates(Object.keys(renaultRegistry().entities)),
+    "sensor.car_picture": { state: "unknown", attributes: {} },
+  };
+  const card = Object.create(RenaultMapCard.prototype);
+  card._config = { language: "en" };
+  card._hass = { entities, devices, states };
+  const before = card._signature();
+  const disc = card._discovered();
+  assert.equal(disc.photos.d1, "sensor.car_picture");
+  card._hass = {
+    entities,
+    devices,
+    states: { ...states, "sensor.car_picture": { state: "ok", attributes: { picture_large: "/car.png" } } },
+  };
+  assert.equal(card._discovered(), disc);
+  assert.notEqual(card._signature(), before);
+  assert.equal(card._vehicles()[0].image, "/car.png");
+});
+
+test("leaving the view in pseudo full screen removes the full screen classes", () => {
+  const card = new RenaultMapCard();
+  const classes = new Set(["fullscreen", "pseudo"]);
+  const haCard = { classList: { toggle: (c, on) => (on ? classes.add(c) : classes.delete(c)) } };
+  card._root = { querySelector: () => haCard };
+  card._pseudoFs = true;
+  card.disconnectedCallback();
+  assert.equal(card._pseudoFs, false);
+  assert.equal(classes.size, 0);
+});
+
+test("map popup falls back to the tracker time when the last activity is unavailable", () => {
+  const card = Object.create(RenaultMapCard.prototype);
+  card._config = { language: "en", show_picture: false };
+  const updated = new Date(Date.now() - 5 * 60000).toISOString();
+  card._hass = { language: "en", states: { "sensor.last": { state: "unavailable", attributes: {} } } };
+  const html = card._popup({
+    ent: { location: "device_tracker.car", location_last_activity: "sensor.last" },
+    tracker: { state: "home", last_updated: updated, attributes: {} },
+    name: "Car",
+    lat: 48,
+    lon: 2,
+  });
+  assert.match(html, /5 minutes ago/);
+});
+
+test("refreshed lease statistics with the same key are rendered", () => {
+  const card = Object.create(RenaultCard.prototype);
+  card._config = {};
+  card._hass = { language: "en", states: {} };
+  card.shadowRoot = { activeElement: null };
+  card._resolved = () => ({ deviceId: "d1", ent: {} });
+  card._timeSig = () => "";
+  let renders = 0;
+  card._render = () => renders++;
+  card._leaseHist = { key: "k", at: 1, points: [] };
+  card._update();
+  card._update();
+  assert.equal(renders, 1);
+  card._leaseHist = { key: "k", at: 2, points: [[0, 1]] };
+  card._update();
+  assert.equal(renders, 2);
+});
