@@ -507,3 +507,147 @@ test("refreshed lease statistics with the same key are rendered", () => {
   card._update();
   assert.equal(renders, 2);
 });
+
+// Leaflet that cannot be loaded (renault-card.js copied alone, network error): fake <script> tags fail.
+function failingScripts() {
+  const head = [];
+  const saved = { head: ctx.document.head, createElement: ctx.document.createElement, base: ctx.rnBaseUrl };
+  ctx.rnBaseUrl = "/local/";
+  ctx.document.head = {
+    appendChild: (s) => {
+      head.push(s);
+      s.remove = () => head.splice(head.indexOf(s), 1);
+      queueMicrotask(() => s.onerror?.());
+    },
+  };
+  ctx.document.createElement = () => ({});
+  let appended = 0;
+  const append = ctx.document.head.appendChild;
+  ctx.document.head.appendChild = (s) => {
+    appended++;
+    append(s);
+  };
+  return {
+    head,
+    appended: () => appended,
+    restore() {
+      ctx.document.head = saved.head;
+      ctx.document.createElement = saved.createElement;
+      ctx.rnBaseUrl = saved.base;
+      ctx.rnLeafletFailedAt = 0;
+      ctx.rnLeafletPromise = null;
+    },
+  };
+}
+
+const flush = () => new Promise((r) => setTimeout(r, 0));
+
+function mapCardWithVehicle() {
+  const card = Object.create(RenaultMapCard.prototype);
+  card._config = {};
+  card._hass = { states: {}, language: "en" };
+  card._ensureShell = () => {};
+  card._reloadTilesIfNeeded = () => {};
+  card._darkTiles = () => false;
+  card._vehicles = () => [{ deviceId: "d1" }];
+  const el = () => ({ style: {}, classList: { toggle() {} }, hidden: true });
+  const els = { ".header": el(), ".map": el(), ".message": el() };
+  card._root = { querySelector: (s) => els[s] };
+  return { card, message: els[".message"] };
+}
+
+test("map card does not inject a new leaflet.js tag on every update after a failed load", async () => {
+  const s = failingScripts();
+  try {
+    const { card, message } = mapCardWithVehicle();
+    card._update();
+    await flush();
+    assert.equal(message.hidden, false);
+    for (let i = 0; i < 4; i++) {
+      card._update();
+      await flush();
+    }
+    assert.equal(s.appended(), 1);
+    // The failed tag is not left behind in <head>.
+    assert.equal(s.head.length, 0);
+    // A second map card on the same dashboard does not retry either.
+    const other = mapCardWithVehicle();
+    other.card._update();
+    await flush();
+    assert.equal(s.appended(), 1);
+    assert.equal(other.message.hidden, false);
+  } finally {
+    s.restore();
+  }
+});
+
+test("map card keeps the Leaflet error visible during the next updates", async () => {
+  const s = failingScripts();
+  try {
+    const { card, message } = mapCardWithVehicle();
+    card._update();
+    await flush();
+    const text = message.textContent;
+    assert.match(text, /leaflet\.js/);
+    card._update();
+    // Synchronously after the update, before the promise settles: no flicker.
+    assert.equal(message.hidden, false);
+    await flush();
+    assert.equal(message.hidden, false);
+    assert.equal(message.textContent, text);
+  } finally {
+    s.restore();
+  }
+});
+
+test("map card retries loading Leaflet once the retry delay has passed", async () => {
+  const s = failingScripts();
+  try {
+    const { card } = mapCardWithVehicle();
+    card._update();
+    await flush();
+    assert.equal(s.appended(), 1);
+    ctx.rnLeafletFailedAt = Date.now() - ctx.RN_LEAFLET_RETRY_MS - 1;
+    card._update();
+    await flush();
+    assert.equal(s.appended(), 2);
+  } finally {
+    s.restore();
+  }
+});
+
+test("map card hides the Leaflet error once Leaflet loads", async () => {
+  const s = failingScripts();
+  try {
+    const { card, message } = mapCardWithVehicle();
+    card._update();
+    await flush();
+    assert.equal(message.hidden, false);
+    card._ensureMap = () => {};
+    card._drawMarkers = () => {};
+    ctx.L = { map() {} };
+    card._update();
+    await flush();
+    assert.equal(message.hidden, true);
+  } finally {
+    delete ctx.L;
+    s.restore();
+  }
+});
+
+test("map card hides the no-vehicle message as soon as a vehicle has a position", () => {
+  const { card, message } = mapCardWithVehicle();
+  const vehicles = card._vehicles;
+  card._vehicles = () => [];
+  card._update();
+  assert.equal(message.hidden, false);
+  card._vehicles = vehicles;
+  const saved = ctx.rnLoadLeaflet;
+  ctx.rnLoadLeaflet = () => new Promise(() => {});
+  try {
+    card._update();
+    assert.equal(message.hidden, true);
+  } finally {
+    ctx.rnLoadLeaflet = saved;
+  }
+});
