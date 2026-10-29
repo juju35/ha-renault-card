@@ -494,6 +494,21 @@ var RN_PLAN_ROLES = {
   plan_type: /(plan_type|type_de_forfait)$/,
 };
 
+// Editor field shared by the vehicle and map cards: the card language (fallback: Home Assistant's).
+var RN_LANGUAGE_FIELD = {
+  name: 'language',
+  selector: {
+    select: {
+      mode: 'dropdown',
+      options: [
+        { value: 'fr', label: 'Français' },
+        { value: 'en', label: 'English' },
+        { value: 'de', label: 'Deutsch' },
+        { value: 'es', label: 'Español' },
+      ],
+    },
+  },
+};
 var RN_OVERRIDABLE = ['mileage', 'fuel_autonomy', 'fuel_quantity', 'battery_level', 'battery_autonomy', 'location'];
 
 // The device's visible entities from the registry, with or without a state.
@@ -1635,10 +1650,7 @@ class RenaultCardEditor extends HTMLElement {
           },
         ],
       },
-      {
-        name: 'language',
-        selector: { select: { mode: 'dropdown', options: [{ value: 'fr', label: 'Français' }, { value: 'en', label: 'English' }, { value: 'de', label: 'Deutsch' }, { value: 'es', label: 'Español' }] } },
-      },
+      RN_LANGUAGE_FIELD,
       {
         type: 'expandable', name: 'entities', title: t('ed_entities'), flatten: false,
         schema: RN_OVERRIDABLE.map((r) => ({ name: r, selector: { entity: { domain: domains[r] } } })),
@@ -2644,10 +2656,7 @@ class RenaultMapCardEditor extends HTMLElement {
           { name: 'show_fullscreen', selector: { boolean: {} } },
         ],
       },
-      {
-        name: 'language',
-        selector: { select: { mode: 'dropdown', options: [{ value: 'fr', label: 'Français' }, { value: 'en', label: 'English' }, { value: 'de', label: 'Deutsch' }, { value: 'es', label: 'Español' }] } },
-      },
+      RN_LANGUAGE_FIELD,
     ]);
   }
 
