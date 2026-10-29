@@ -148,6 +148,9 @@ test("map markers are updated in place so an open popup survives a state change"
     marker: (ll) => {
       const m = {
         ll,
+        on() {
+          return this;
+        },
         bindPopup(c) {
           this.popup = c;
           return this;
@@ -650,4 +653,100 @@ test("map card hides the no-vehicle message as soon as a vehicle has a position"
   } finally {
     ctx.rnLoadLeaflet = saved;
   }
+});
+
+// Fake Leaflet whose markers record their event handlers, so a test can open a popup.
+function leafletWithEvents() {
+  const added = [];
+  const L = {
+    divIcon: (o) => o,
+    latLngBounds: (p) => p,
+    marker: (ll) => {
+      const m = {
+        ll,
+        handlers: {},
+        on(type, fn) {
+          (this.handlers[type] ||= []).push(fn);
+          return this;
+        },
+        fire(type) {
+          for (const fn of this.handlers[type] || []) fn({ target: this });
+        },
+        bindPopup(c) {
+          this.popup = c;
+          return this;
+        },
+        addTo() {
+          added.push(m);
+          return m;
+        },
+        setLatLng(x) {
+          this.ll = x;
+        },
+        setIcon(i) {
+          this.icon = i;
+        },
+        setPopupContent(c) {
+          this.popup = c;
+        },
+      };
+      return m;
+    },
+  };
+  return { L, added };
+}
+
+function mapCardForPopups(hass) {
+  const card = Object.create(RenaultMapCard.prototype);
+  card._config = { language: "en", show_name: true, show_picture: false, show_home: false };
+  card._hass = hass;
+  card._layer = { removeLayer() {} };
+  card._fitted = true;
+  card._markerSet = "d1";
+  card._fit = () => {};
+  return card;
+}
+
+const parkedCar = (lat = 48) => ({
+  deviceId: "d1",
+  ent: { location: "device_tracker.car", location_last_activity: "sensor.last" },
+  tracker: { state: "home", attributes: {} },
+  name: "Car",
+  lat,
+  lon: 2,
+});
+
+test("map popup shows the current relative time when opened, without any state change", () => {
+  const VmDate = vm.runInContext("Date", ctx);
+  const realNow = VmDate.now;
+  const start = realNow();
+  try {
+    const hass = { language: "en", states: { "sensor.last": { state: new Date(start - 2 * 60000).toISOString(), attributes: {} } } };
+    const card = mapCardForPopups(hass);
+    const { L, added } = leafletWithEvents();
+    card._drawMarkers(L, [parkedCar()]);
+    assert.match(added[0].popup, /2 minutes ago/);
+    // Three hours later, nothing changed in Home Assistant: the user opens the popup.
+    VmDate.now = () => start + 3 * 3600000;
+    added[0].fire("popupopen");
+    assert.match(added[0].popup, /3 hours ago/);
+  } finally {
+    VmDate.now = realNow;
+  }
+});
+
+test("map popup opened after a redraw uses the latest vehicle, with one handler per marker", () => {
+  const hass = { language: "en", states: { "sensor.last": { state: new Date().toISOString(), attributes: {} } } };
+  const card = mapCardForPopups(hass);
+  const { L, added } = leafletWithEvents();
+  card._drawMarkers(L, [parkedCar(48)]);
+  card._drawMarkers(L, [parkedCar(49)]);
+  assert.equal(added.length, 1);
+  assert.equal(added[0].handlers.popupopen.length, 1);
+  added[0].popup = "";
+  added[0].fire("popupopen");
+  assert.match(added[0].popup, /destination=49%2C2/);
+  // The vehicle lost its position and its marker was removed: a late popupopen must not throw.
+  card._drawMarkers(L, []);
+  assert.doesNotThrow(() => added[0].fire("popupopen"));
 });

@@ -2525,8 +2525,15 @@ class RenaultMapCard extends HTMLElement {
       } else {
         marker = L.marker([v.lat, v.lon], { icon: icon, riseOnHover: true });
         marker.bindPopup(this._popup(v), { maxWidth: 280, minWidth: 230 });
+        // The map is only redrawn when a state changes: rebuild the popup when it opens so
+        // "updated X ago" is current for a parked car. Skipped once the marker was removed.
+        marker.on('popupopen', () => {
+          if (this._markers?.[marker._rnId] === marker && this._hass) marker.setPopupContent(this._popup(marker._rnVehicle));
+        });
         marker.addTo(this._layer);
       }
+      marker._rnId = v.deviceId;
+      marker._rnVehicle = v;
       this._markers[v.deviceId] = marker;
       points.push([v.lat, v.lon]);
     });
