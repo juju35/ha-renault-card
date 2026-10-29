@@ -1954,18 +1954,34 @@ function rnLoadScript(file, check) {
     var script = document.createElement('script');
     script.src = `${rnAssetBase() + file}?v=${RENAULT_CARD_VERSION}`;
     script.onload = () => { resolve(); };
-    script.onerror = () => { reject(new Error(`${file} could not be loaded from ${rnAssetBase()}`)); };
+    script.onerror = () => {
+      script.remove();
+      reject(new Error(`${file} could not be loaded from ${rnAssetBase()}`));
+    };
     document.head.appendChild(script);
   });
 }
 
+// After a failed load, every map card on the page waits this long before requesting leaflet.js again,
+// instead of adding a new <script> tag on each state change.
+var RN_LEAFLET_RETRY_MS = 30000;
 var rnLeafletPromise = null;
+var rnLeafletError = null;
+var rnLeafletFailedAt = 0;
 function rnLoadLeaflet() {
   if (window.L?.map) return Promise.resolve(window.L);
+  if (!rnLeafletPromise && rnLeafletError && Date.now() - rnLeafletFailedAt < RN_LEAFLET_RETRY_MS) {
+    return Promise.reject(rnLeafletError);
+  }
   if (!rnLeafletPromise) {
     rnLeafletPromise = rnLoadScript('leaflet.js', () => window.L?.map)
-      .then(() => window.L)
-      .catch((err) => { rnLeafletPromise = null; throw err; });
+      .then(() => { rnLeafletError = null; return window.L; })
+      .catch((err) => {
+        rnLeafletPromise = null;
+        rnLeafletError = err;
+        rnLeafletFailedAt = Date.now();
+        throw err;
+      });
   }
   return rnLeafletPromise;
 }
@@ -2213,15 +2229,20 @@ class RenaultMapCard extends HTMLElement {
         this._bounds = null;
         this._fitted = false;
       }
+      this._leafletError = false;
       message.hidden = false;
       message.textContent = mt.no_vehicle;
       return;
     }
-    message.hidden = true;
+    // A Leaflet load error stays on screen between updates (no flicker) until Leaflet is there.
+    if (!this._leafletError) message.hidden = true;
     rnLoadLeaflet().then((L) => {
+      this._leafletError = false;
+      message.hidden = true;
       this._ensureMap(L);
       this._drawMarkers(L, vehicles);
     }).catch((err) => {
+      this._leafletError = true;
       message.hidden = false;
       message.textContent = String((err?.message) || err);
     });
