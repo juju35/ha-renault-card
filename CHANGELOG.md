@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.8.1
+
+### Fixes
+- Map card: the MyRenault photo now appears on the marker and in the popup as soon as it is available, instead of after the next vehicle state change.
+- Map card: leaving the view while in pseudo full screen (iPhone) no longer leaves the map covering the dashboard on return.
+- Map popup: when the last-activity sensor is unavailable, "updated …" falls back to the tracker time instead of disappearing.
+- Orange Internet On the move: no more "0 %" with a red bar when the remaining data is unavailable.
+- Lease chart: the hourly statistics refresh is drawn without waiting for another state change.
+- Visual editor: the extra-kilometre cost unit follows the Home Assistant currency instead of always showing €.
+- German: clearer "days left" abbreviation and "over the monthly allowance" wording; unused lease texts removed.
+- Performance: the map card resolves the MyRenault photo entity once per registry change.
+
+### Maintenance
+- Screenshots workflow fails explicitly when the apt installs fail three times.
+
 ## 2.8.0
 
 ### Features
