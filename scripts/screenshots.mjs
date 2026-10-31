@@ -1,4 +1,4 @@
-// Renders the cards with mock data and saves the README screenshots and lease.gif.
+// Renders the cards with mock data and saves the README screenshots and lease.gif / lease-dark.gif.
 // Usage: npm run build && npm run screenshots  (CHROMIUM_PATH=/path/to/chrome to use another browser;
 // ffmpeg must be on the PATH for the GIF).
 // The map card uses the OpenStreetMap tiles kept in scripts/tiles (committed, no network needed); a tile
@@ -340,6 +340,7 @@ await render(
     { file: "lease", type: "renault-card", theme: "light", width: 460, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, expand_lease: true, lease }, hass: leaseHass },
     { file: "lease-dark", type: "renault-card", theme: "dark", width: 460, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, expand_lease: true, lease }, hass: leaseHass },
     { file: "lease", gif: true, type: "renault-card", theme: "light", width: 460, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, lease }, hass: leaseHass },
+    { file: "lease-dark", gif: true, type: "renault-card", theme: "dark", width: 460, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, lease }, hass: leaseHass },
     { file: "captur", type: "renault-card", theme: "light", width: 460, config: { device_id: "captur", plate_department: "35", show_data_plan: false } },
     { file: "captur-dark", type: "renault-card", theme: "dark", width: 460, config: { device_id: "captur", plate_department: "35", show_data_plan: false } },
     { file: "map", type: "renault-map-card", theme: "light", width: 420, config: MAP_CONFIG, hass: mapHass },
