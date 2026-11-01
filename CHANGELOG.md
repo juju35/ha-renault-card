@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.8.7 - 2026-11-01
+
+### Fixes
+- Lease: the end line now says "1 month" instead of "1 months" (singular and plural in every language), and shows the days left in the last month instead of "0 months".
+- Warning, success and error texts (low range, unlocked, lease status, lease figures, chart limit) the armed action button and the map popup buttons are now readable in the light theme: their text mixes the state colour with the text colour (5:1 or better in light and dark themes); gauges, bars and chart lines keep the pure colour.
+- Narrow card (6 columns of a section, about 240 px): the licence plate shrinks so the vehicle name stays visible, the model no longer breaks word by word, and "updated X ago" goes under the location instead of squeezing it to nothing.
+- Long tile and lease figure labels (Polish, Serbian…) are no longer cut on narrow cards: tiles use two columns there and figure labels wrap.
+- Map card: a long title is shortened with an ellipsis.
+
+### Maintenance
+- The map screenshots are saved with a 256 colour palette: about 450 KB each instead of 1 MB.
+
 ## 2.8.6 - 2026-11-01
 
 ### Added
