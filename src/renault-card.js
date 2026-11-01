@@ -2123,7 +2123,10 @@ class RenaultCard extends HTMLElement {
   _styles() {
     return '<style>' +
       ':host { display: block; height: 100%; --rn-accent: var(--primary-color, #03a9f4); }' +
-      'ha-card { height: 100%; box-sizing: border-box; padding: 12px; display: flex; flex-direction: column; gap: 10px; container-type: inline-size; }' +
+      // The container queries below need an inline-size container, whose intrinsic width is 0: in an
+      // auto-width parent (layout-card, inline-block, grid auto column) the card would shrink to its
+      // padding. contain-intrinsic-inline-size gives it a width there; elsewhere the parent sets it.
+      'ha-card { height: 100%; box-sizing: border-box; padding: 12px; display: flex; flex-direction: column; gap: 10px; container-type: inline-size; contain-intrinsic-inline-size: 300px; }' +
       '.empty { display: flex; align-items: center; gap: 10px; color: var(--secondary-text-color); }' +
       // The card gap is 10 px: the header keeps 8 px to the first body element.
       '.header { display: flex; align-items: center; gap: 10px; margin-bottom: -2px; }' +
@@ -2133,7 +2136,7 @@ class RenaultCard extends HTMLElement {
         ' -webkit-mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; }' +
       // At the 6 columns minimum (about 240 px) the plate gives way: it shrinks (its SVG keeps the
       // proportions) so the vehicle name keeps at least a few letters.
-      '.titles { flex: 1 1 auto; min-width: 5ch; }' +
+      '.titles { flex: 1 1 0; min-width: 5ch; }' +
       '.name { font-size: 16px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
       '.model { font-size: 12px; color: var(--secondary-text-color); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
       '.plate { height: 32px; width: auto; flex: 0 1 auto; min-width: 0; max-width: 45%; display: block; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.25)); }' +
@@ -2146,7 +2149,7 @@ class RenaultCard extends HTMLElement {
       '.chip ha-icon { --mdc-icon-size: 13px; }' +
       '.chip.warn { background: color-mix(in srgb, ' + RN_WARN + ' 15%, transparent); color: ' + rnInk(RN_WARN) + '; }' +
       '.chip.ok { background: color-mix(in srgb, ' + RN_OK + ' 15%, transparent); color: ' + rnInk(RN_OK) + '; }' +
-      '.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(84px, 1fr)); gap: 6px; }' +
+      '.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 6px; }' +
       '.tile { display: flex; flex-direction: column; gap: 2px; padding: 6px 10px; border-radius: 10px; cursor: pointer; min-width: 0;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.1)); }' +
       '.tile-head { display: flex; align-items: center; gap: 6px; min-width: 0; }' +
@@ -2164,9 +2167,9 @@ class RenaultCard extends HTMLElement {
       '.row > ha-icon { color: var(--rn-accent); --mdc-icon-size: 20px; }' +
       // The place and "updated X ago" share the row; the time wraps rather than taking it all.
       '.row-text { flex: 1 1 auto; min-width: 0; }' +
-      '.when { flex: 0 1 auto; min-width: 0; overflow-wrap: anywhere; font-size: 12px; color: var(--secondary-text-color); text-align: right; }' +
+      '.when { flex: 0 1 auto; min-width: 0; overflow-wrap: break-word; font-size: 12px; color: var(--secondary-text-color); text-align: right; }' +
       '.chev { color: var(--secondary-text-color); --mdc-icon-size: 20px; flex-shrink: 0; }' +
-      '.lease-head .plan-title { flex: 1 0 auto; }' +
+      '.lease-head .plan-title { white-space: nowrap; }' +
       '.lease-chev.closed { transform: rotate(-90deg); }' +
       '.plan { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 10px; cursor: pointer;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.1)); }' +
@@ -2174,16 +2177,18 @@ class RenaultCard extends HTMLElement {
       '.logo-link { display: flex; flex-shrink: 0; border-radius: 3px; }' +
       '.plan-head .logo { width: 24px; height: 24px; border-radius: 3px; display: block; }' +
       '.plan-title { flex: 1; font-size: 13px; font-weight: 500; color: var(--primary-text-color); }' +
-      '.pct { font-size: 13px; font-weight: 500; color: var(--primary-text-color); }' +
+      '.pct { font-size: 13px; font-weight: 500; color: var(--primary-text-color); white-space: nowrap; flex: none; }' +
       '.plan .bar { background: color-mix(in srgb, var(--secondary-text-color) 18%, transparent); }' +
       '.plan-info { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 8px; font-size: 12px; color: var(--secondary-text-color); }' +
       '.lease { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 10px;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.1)); }' +
-      '.lease-head { display: flex; align-items: center; gap: 8px; min-width: 0; }' +
+      // Icon, title, status, chevron. The status ("Projected over: 18,955 km · ≈ €1,516") takes the
+      // room left and wraps between words; it is never narrower than its longest word.
+      '.lease-head { display: grid; grid-template-columns: auto auto minmax(min-content, 1fr) auto; align-items: center; gap: 2px 8px; min-width: 0; }' +
       '.lease[data-lease-toggle] { cursor: pointer; }' +
       '.lease-more { cursor: default; display: flex; flex-direction: column; gap: 8px; }' +
       '.lease-icon { color: var(--rn-accent); --mdc-icon-size: 22px; flex-shrink: 0; }' +
-      '.lease-status { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 500; min-width: 0; text-align: right; overflow-wrap: anywhere; }' +
+      '.lease-status { display: flex; align-items: center; justify-content: flex-end; gap: 4px; font-size: 12px; font-weight: 500; text-align: right; overflow-wrap: break-word; }' +
       '.lease-status ha-icon { --mdc-icon-size: 16px; flex-shrink: 0; }' +
       '.lease-bar { position: relative; }' +
       '.lease .bar { background: color-mix(in srgb, var(--secondary-text-color) 18%, transparent); }' +
@@ -2236,7 +2241,20 @@ class RenaultCard extends HTMLElement {
         ' .row > ha-icon { grid-row: 1 / span 2; }' +
         ' .row .when { grid-column: 2; grid-row: 2; text-align: left; }' +
         ' .row .chev { grid-column: 3; grid-row: 1 / span 2; }' +
-        ' .tiles { grid-template-columns: repeat(auto-fit, minmax(max(84px, calc(50% - 3px)), 1fr)); }' +
+        ' .tiles { grid-template-columns: repeat(auto-fit, minmax(max(100px, calc(50% - 3px)), 1fr)); }' +
+      ' }' +
+      // Up to about 326 px of card (container sizes are the content box, inside the 12 px padding): the
+      // lease status goes under the title.
+      '@container (max-width: 300px) {' +
+        ' .lease-head { grid-template-columns: auto minmax(0, 1fr) auto; }' +
+        ' .lease-head .chev { grid-column: 3; grid-row: 1; }' +
+        ' .lease-status { grid-column: 1 / -1; grid-row: 2; justify-content: flex-start; text-align: left; }' +
+      ' }' +
+      // Under about 236 px (6 to 8 columns of a section on a phone) the name and model would be down to
+      // two or three letters beside the plate: the plate takes its own line under them.
+      '@container (max-width: 210px) {' +
+        ' .header { flex-wrap: wrap; row-gap: 6px; }' +
+        ' .plate { order: 3; flex: none; max-width: 100%; margin: 0 auto; }' +
       ' }' +
       '.btn.armed:hover { background: color-mix(in srgb, var(--rn-accent) 24%, transparent); }' +
     '</style>';
@@ -3531,7 +3549,10 @@ class RenaultMapCard extends HTMLElement {
   static _styles() {
     return [
       ':host { display: block; }',
-      'ha-card { display: block; overflow: hidden; }',
+      // The map has no width of its own: in an auto-width parent (layout-card, inline-block, grid auto
+      // column) the card would be as narrow as its title. Inline-size containment with an intrinsic
+      // width gives it 300 px there; elsewhere the parent sets the width, as before.
+      'ha-card { display: block; overflow: hidden; contain: inline-size; contain-intrinsic-inline-size: 300px; }',
       '.header { display: flex; align-items: center; gap: 10px; min-height: 36px; padding: 12px 12px 8px; font-size: 16px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color); }',
       '.brand { width: 40px; height: 40px; flex: none; background: var(--primary-text-color);' +
         ' -webkit-mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; }',
