@@ -768,7 +768,14 @@ function rnLeaseDates(lease) {
   var months = Number(lease?.duration);
   if (!m || !(months > 0) || !(Number(lease.km_per_year) > 0)) return null;
   var y = Number(m[1]), mo = Number(m[2]) - 1, d = Number(m[3]);
-  return { start: new Date(y, mo, d), end: new Date(y, mo + months, d), months: months };
+  return { start: new Date(y, mo, d), end: rnAddMonths(new Date(y, mo, d), months), months: months };
+}
+
+// date + n months, kept in the target month: 31 January + 1 month is the last day of February,
+// not 2 or 3 March (new Date(y, m + n, d) overflows into the next month).
+function rnAddMonths(date, n) {
+  var y = date.getFullYear(), mo = date.getMonth() + n;
+  return new Date(y, mo, Math.min(date.getDate(), new Date(y, mo + 1, 0).getDate()));
 }
 
 var RN_DAY = 86400000;
@@ -808,7 +815,7 @@ function rnLeaseStatus(lease, mileage, now, points) {
   var projected = ended ? driven : (rate != null ? driven + rate * left : null);
 
   // Contract year: runs from the start date, the last one ends with the lease.
-  var at = (months) => new Date(dates.start.getFullYear(), dates.start.getMonth() + months, dates.start.getDate());
+  var at = (months) => rnAddMonths(dates.start, months);
   var y = 0;
   while (12 * (y + 1) < dates.months && now >= at(12 * (y + 1)).getTime()) y++;
   var ys = at(12 * y), ye = at(Math.min(12 * (y + 1), dates.months));
@@ -1244,10 +1251,34 @@ class RenaultCard extends HTMLElement {
         '<div class="plan-info"><span>' + rnEsc(leftTxt) + '</span><span>' + rnEsc(expiryTxt) + (daysTxt ? ` · ${rnEsc(daysTxt)}` : '') + '</span></div></div>';
     }
 
-    this.shadowRoot.innerHTML = this._styles() + '<ha-card>' + header + image +
+    this._setHtml(this._styles() + '<ha-card>' + header + image +
       (chips.length ? `<div class="chips">${chips.join('')}</div>` : '') +
       (tiles.length ? `<div class="tiles">${tiles.join('')}</div>` : '') +
-      this._leaseHtml(ent) + locationHtml + planHtml + actionsHtml + '</ha-card>';
+      this._leaseHtml(ent) + locationHtml + planHtml + actionsHtml + '</ha-card>');
+  }
+
+  // Replaces the card content and gives the focus back to the same action button, tile or lease
+  // header: the re-render recreates them, so without this a keyboard user arming "Sound horn" with
+  // Enter would lose the focus and could not confirm it.
+  _setHtml(html) {
+    var root = this.shadowRoot;
+    var keyOf = (el) => {
+      var ds = el?.dataset;
+      if (!ds) return null;
+      if (ds.press) return `p:${ds.press}`;
+      if (ds.more) return `m:${ds.more}`;
+      if (ds.leaseToggle !== undefined && String(el.className).indexOf('lease-head') >= 0) return 'l';
+      return null;
+    };
+    var focusables = () => Array.prototype.slice.call(root.querySelectorAll('[data-press], [data-more], .lease-head'));
+    var key = keyOf(root.activeElement);
+    // The same entity can have several elements (tile and row): keep the rank among them.
+    var rank = key ? focusables().filter((el) => keyOf(el) === key).indexOf(root.activeElement) : -1;
+    root.innerHTML = html;
+    if (!key) return;
+    var hit = focusables().filter((el) => keyOf(el) === key);
+    var el = hit[Math.max(0, Math.min(rank, hit.length - 1))];
+    if (el) el.focus({ preventScroll: true });
   }
 
   _km(n) { return `${this._fmtNum(Math.round(n))} km`; }
@@ -1450,7 +1481,7 @@ class RenaultCard extends HTMLElement {
       '.lbl { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
       '.val { font-size: 14px; font-weight: 500; color: var(--primary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
       '.bar { height: 6px; border-radius: 3px; background: var(--secondary-background-color, rgba(128,128,128,0.15)); overflow: hidden; }' +
-      '.fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }' +
+      '.fill { height: 100%; border-radius: 3px; }' +
       '.row { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 10px; cursor: pointer;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.1)); }' +
       '.row > ha-icon { color: var(--rn-accent); --mdc-icon-size: 20px; }' +
@@ -1458,7 +1489,6 @@ class RenaultCard extends HTMLElement {
       '.when { font-size: 12px; color: var(--secondary-text-color); text-align: right; }' +
       '.chev { color: var(--secondary-text-color); --mdc-icon-size: 20px; flex-shrink: 0; }' +
       '.lease-head .plan-title { flex: 1 0 auto; }' +
-      '.lease-chev { transition: transform .2s ease; }' +
       '.lease-chev.closed { transform: rotate(-90deg); }' +
       '.plan { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 10px; cursor: pointer;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.1)); }' +
@@ -2601,7 +2631,14 @@ class RenaultMapCard extends HTMLElement {
       'ha-card.fullscreen { display: flex !important; flex-direction: column; width: 100%; height: 100vh; height: 100dvh; border-radius: 0; box-sizing: border-box; }',
       'ha-card.fullscreen .map { flex: 1; height: auto !important; }',
       'ha-card.pseudo { position: fixed; inset: 0; z-index: 9999; height: 100vh; height: 100dvh; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); box-sizing: border-box; }',
-      '.rn-fs a { display: flex; align-items: center; justify-content: center; color: #333; cursor: pointer; }',
+      '.rn-fs a { display: flex; align-items: center; justify-content: center; cursor: pointer; }',
+      // Leaflet's controls are white with black text whatever the theme: theme them like the HA map card.
+      '.leaflet-touch .leaflet-bar { border-color: var(--divider-color, rgba(0,0,0,.2)); }',
+      '.leaflet-container .leaflet-bar a { background-color: var(--card-background-color, #fff); color: var(--primary-text-color, #212121); border-bottom-color: var(--divider-color, #ccc); }',
+      '.leaflet-container .leaflet-bar a:hover, .leaflet-container .leaflet-bar a:focus { background-color: var(--secondary-background-color, #f4f4f4); }',
+      '.leaflet-container .leaflet-bar a.leaflet-disabled { background-color: var(--secondary-background-color, #f4f4f4); color: var(--disabled-text-color, #bdbdbd); }',
+      '.leaflet-container .leaflet-control-attribution { background: color-mix(in srgb, var(--card-background-color, #fff) 90%, transparent); color: var(--primary-text-color, #212121); }',
+      '.leaflet-container .leaflet-control-attribution a { color: color-mix(in srgb, var(--primary-color, #03a9f4) 50%, var(--primary-text-color, #212121)); }',
       '.leaflet-container { font: inherit; }',
       '.map.dark .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(0.95) contrast(0.9); }',
       '.rn-marker { background: none; border: none; }',

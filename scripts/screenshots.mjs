@@ -10,6 +10,11 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+// Fixed date, time zone and locale: the mock data and the rendered texts (lease, "updated 32 min ago", days
+// left) are the same on every run, so the screenshots only change when the cards do.
+process.env.TZ = "Europe/Paris";
+const NOW = new Date("2026-10-29T10:00:00+01:00").getTime();
+
 const root = fileURLToPath(new URL("..", import.meta.url));
 const cardJs = readFileSync(`${root}dist/renault-card.js`, "utf8");
 
@@ -122,7 +127,10 @@ async function retinaTile(helper, z, x, y) {
 // extra: more stand-in elements, as script source.
 export async function render(shots, { icons = {}, hass = {}, extra = "" } = {}) {
   const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
-  const context = await browser.newContext({ deviceScaleFactor: 2, viewport: { width: 1000, height: 2000 } });
+  const context = await browser.newContext({ deviceScaleFactor: 2, viewport: { width: 1000, height: 2000 }, timezoneId: "Europe/Paris", locale: "en-US" });
+  // Fake clock that keeps running (Leaflet fades the map tiles in with the current time), set back to NOW
+  // before each shot.
+  await context.clock.install({ time: NOW });
   const helper = await context.newPage();
   const errors = [];
   await context.route(`${ORIGIN}/**`, async (route) => {
@@ -145,7 +153,7 @@ export async function render(shots, { icons = {}, hass = {}, extra = "" } = {}) 
   page.on("pageerror", (err) => console.error(`${current}: ${err.message}`));
   for (const s of shots) {
     current = s.gif ? `${s.file}.gif` : s.file;
-    // No frozen clock: Leaflet fades the map tiles in with the current time.
+    await page.clock.setSystemTime(NOW);
     await page.goto(`${ORIGIN}/${s.theme}?width=${s.width}`);
     await page.addScriptTag({ content: haElements(icons) + extra });
     await page.addScriptTag({ content: cardJs });
@@ -214,9 +222,9 @@ async function leaseGif(page, s) {
     "file 'closed.png'\nduration 1.6\nfile 'open.png'\nduration 2.8\nfile 'open.png'\n");
   const out = `${root}screenshots/${s.file}.gif`;
   execFileSync("ffmpeg", [
-    "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", join(dir, "frames.txt"),
+    "-y", "-loglevel", "error", "-fflags", "+bitexact", "-f", "concat", "-safe", "0", "-i", join(dir, "frames.txt"),
     "-vf", `scale=${clip.width}:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=128[p];[b][p]paletteuse=dither=bayer:bayer_scale=4`,
-    "-loop", "0", out,
+    "-flags:v", "+bitexact", "-loop", "0", out,
   ]);
   rmSync(dir, { recursive: true });
   console.log(`screenshots/${s.file}.gif`);
@@ -262,13 +270,13 @@ const entities = {};
 const states = {};
 const add = (device, platform, id, key, state, attributes = {}) => {
   entities[id] = { entity_id: id, device_id: device, platform, translation_key: key };
-  states[id] = { entity_id: id, state, last_changed: new Date(Date.now() - 32 * 60000).toISOString(), attributes: { friendly_name: id, ...attributes } };
+  states[id] = { entity_id: id, state, last_changed: new Date(NOW - 32 * 60000).toISOString(), attributes: { friendly_name: id, ...attributes } };
 };
 const R = (...a) => add("espace", "renault", ...a);
 R("sensor.espace_mileage", "mileage", "34497", { device_class: "distance", state_class: "total_increasing", unit_of_measurement: "km" });
 R("sensor.espace_fuel_autonomy", "fuel_autonomy", "806", { unit_of_measurement: "km" });
 R("sensor.espace_fuel_quantity", "fuel_quantity", "45", { device_class: "volume", unit_of_measurement: "L" });
-R("sensor.espace_location_last_activity", "location_last_activity", new Date(Date.now() - 32 * 60000).toISOString(), { device_class: "timestamp" });
+R("sensor.espace_location_last_activity", "location_last_activity", new Date(NOW - 32 * 60000).toISOString(), { device_class: "timestamp" });
 R("device_tracker.espace_location", "location", "home", { latitude: 48.11, longitude: -1.68, friendly_name: "Espace Location" });
 R("binary_sensor.espace_lock_status", "lock_status", "off", { device_class: "lock" });
 R("button.espace_sound_horn", "start_horn", "unknown", { friendly_name: "Espace Sound horn" });
@@ -288,13 +296,13 @@ C("binary_sensor.captur_plugged_in", "plugged_in", "on", { device_class: "plug" 
 C("binary_sensor.captur_charging", "charging", "on", { device_class: "battery_charging" });
 C("sensor.captur_charging_remaining_time", "charging_remaining_time", "45", { device_class: "duration", unit_of_measurement: "min" });
 C("device_tracker.captur_location", "location", "home", { latitude: 48.11, longitude: -1.68, friendly_name: "Captur Location" });
-C("sensor.captur_location_last_activity", "location_last_activity", new Date(Date.now() - 12 * 60000).toISOString(), { device_class: "timestamp" });
+C("sensor.captur_location_last_activity", "location_last_activity", new Date(NOW - 12 * 60000).toISOString(), { device_class: "timestamp" });
 photo("captur", "Captur");
 const O = (...a) => add("orange", "orange_internet_on_the_move", ...a);
 O("sensor.orange_left_data_percentage", "left_data_percentage", "61", { unit_of_measurement: "%" });
 O("sensor.orange_left_data", "left_data", "3.1", { unit_of_measurement: "GB" });
 O("sensor.orange_initial_data", "initial_data", "5", { unit_of_measurement: "GB" });
-O("sensor.orange_expiry_date", "expiry_date", new Date(Date.now() + 18 * 86400000).toISOString(), { device_class: "timestamp" });
+O("sensor.orange_expiry_date", "expiry_date", new Date(NOW + 18 * 86400000).toISOString(), { device_class: "timestamp" });
 O("sensor.orange_plan_type", "plan_type", "recurring");
 
 const devices = {
@@ -305,13 +313,13 @@ const devices = {
 const hass = { states, entities, devices, user: { name: "Alex" } };
 
 // Lease started 22 months ago: daily mileage statistics with weekday / weekend driving.
-const leaseStart = new Date();
+const leaseStart = new Date(NOW);
 leaseStart.setMonth(leaseStart.getMonth() - 22, 1);
 leaseStart.setHours(0, 0, 0, 0);
 const lease = { start_date: `${leaseStart.getFullYear()}-${String(leaseStart.getMonth() + 1).padStart(2, "0")}-01`, duration: 37, km_per_year: 20000, start_mileage: 12, forecast: 90, extra_km_cost: 0.08 };
 const rows = [];
 let km = 12;
-for (let t = leaseStart.getTime(); t < Date.now() - 86400000; t += 86400000) {
+for (let t = leaseStart.getTime(); t < NOW - 86400000; t += 86400000) {
   const day = new Date(t);
   const summer = day.getMonth() === 7 ? 3 : 1;
   km += (day.getDay() % 6 ? 42 : 95) * summer * (0.6 + ((t / 86400000) * 7919 % 10) / 12);

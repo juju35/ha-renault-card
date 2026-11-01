@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.8.4
+
+### Fixes
+- Action buttons can now be confirmed with the keyboard: after Enter arms "Sound horn" or "Flash lights", the focus stays on the button so a second Enter presses it. Tiles and the lease header also keep the focus when the card refreshes.
+- Lease: a contract starting on the 29th, 30th or 31st now ends on the last day of the target month (31 January + 13 months ends on 28 February, not in March). The end date, months left, monthly budget and contract years follow.
+- Map card: the zoom, full screen and attribution controls follow the theme instead of staying white in dark mode.
+- Removed two transitions (gauge fill, lease chevron) that could never play.
+
+### Maintenance
+- Screenshots are rendered at a fixed date, time zone and locale, so they only change when the cards do.
+- Lint reads the Biome version from `.pre-commit-config.yaml` and checks that the hook package and `biome.json` schema use the same one; Dependabot now updates the pre-commit hooks.
+
 ## 2.8.3
 
 ### Fixes
