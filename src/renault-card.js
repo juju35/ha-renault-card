@@ -768,7 +768,14 @@ function rnLeaseDates(lease) {
   var months = Number(lease?.duration);
   if (!m || !(months > 0) || !(Number(lease.km_per_year) > 0)) return null;
   var y = Number(m[1]), mo = Number(m[2]) - 1, d = Number(m[3]);
-  return { start: new Date(y, mo, d), end: new Date(y, mo + months, d), months: months };
+  return { start: new Date(y, mo, d), end: rnAddMonths(new Date(y, mo, d), months), months: months };
+}
+
+// date + n months, kept in the target month: 31 January + 1 month is the last day of February,
+// not 2 or 3 March (new Date(y, m + n, d) overflows into the next month).
+function rnAddMonths(date, n) {
+  var y = date.getFullYear(), mo = date.getMonth() + n;
+  return new Date(y, mo, Math.min(date.getDate(), new Date(y, mo + 1, 0).getDate()));
 }
 
 var RN_DAY = 86400000;
@@ -808,7 +815,7 @@ function rnLeaseStatus(lease, mileage, now, points) {
   var projected = ended ? driven : (rate != null ? driven + rate * left : null);
 
   // Contract year: runs from the start date, the last one ends with the lease.
-  var at = (months) => new Date(dates.start.getFullYear(), dates.start.getMonth() + months, dates.start.getDate());
+  var at = (months) => rnAddMonths(dates.start, months);
   var y = 0;
   while (12 * (y + 1) < dates.months && now >= at(12 * (y + 1)).getTime()) y++;
   var ys = at(12 * y), ye = at(Math.min(12 * (y + 1), dates.months));
