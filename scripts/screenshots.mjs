@@ -1,11 +1,11 @@
 // Renders the cards with mock data and saves the README screenshots and lease.gif / lease-dark.gif.
 // Usage: npm run build && npm run screenshots  (CHROMIUM_PATH=/path/to/chrome to use another browser;
-// ffmpeg must be on the PATH for the GIF).
+// ffmpeg must be on the PATH for the GIF and the map shots' palette).
 // The map card uses the OpenStreetMap tiles kept in scripts/tiles (committed, no network needed); a tile
 // missing there, after a change of positions or zoom, is downloaded once and should be committed too.
 import { execFileSync } from "node:child_process";
 import { chromium, request } from "playwright";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -189,15 +189,29 @@ export async function render(shots, { icons = {}, hass = {}, extra = "" } = {}) 
     }
     // The card with the 16 px page padding around it, on the theme background.
     const box = await page.locator("#root").boundingBox();
+    const out = `${root}screenshots/${s.file}.png`;
     await page.screenshot({
-      path: `${root}screenshots/${s.file}.png`,
+      path: out,
       clip: { x: 0, y: 0, width: s.width + 32, height: Math.ceil(box.height) + 32 },
       animations: "disabled",
     });
+    if (s.type === "renault-map-card") quantize(out);
     console.log(`screenshots/${s.file}.png`);
   }
   await http?.dispose();
   await browser.close();
+}
+
+// The map shots are mostly map tiles: a 256 colour palette (no dithering, bit exact so a rerun gives the same
+// file) brings them from about 1 MB to under 450 KB each with no visible change. Needs ffmpeg, like the GIF.
+function quantize(file) {
+  const tmp = `${file}.tmp.png`;
+  execFileSync("ffmpeg", [
+    "-y", "-loglevel", "error", "-i", file,
+    "-vf", "split[a][b];[a]palettegen=max_colors=256:stats_mode=full[p];[b][p]paletteuse=dither=none",
+    "-fflags", "+bitexact", "-flags:v", "+bitexact", "-pred", "mixed", tmp,
+  ]);
+  renameSync(tmp, file);
 }
 
 // Records the lease section folding and unfolding as a looping screenshots/<file>.gif (needs ffmpeg
