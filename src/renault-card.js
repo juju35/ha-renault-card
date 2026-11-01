@@ -2122,10 +2122,12 @@ class RenaultCard extends HTMLElement {
 
   _styles() {
     return '<style>' +
-      ':host { display: block; height: 100%; --rn-accent: var(--primary-color, #03a9f4); }' +
       // The container queries below need an inline-size container, whose intrinsic width is 0: in an
       // auto-width parent (layout-card, inline-block, grid auto column) the card would shrink to its
       // padding. contain-intrinsic-inline-size gives it a width there; elsewhere the parent sets it.
+      // That width is also its min-content width: min-width: 0 keeps it from being a minimum in a 1fr
+      // grid track or a flex item (which would overflow instead of shrinking).
+      ':host { display: block; height: 100%; min-width: 0; --rn-accent: var(--primary-color, #03a9f4); }' +
       'ha-card { height: 100%; box-sizing: border-box; padding: 12px; display: flex; flex-direction: column; gap: 10px; container-type: inline-size; contain-intrinsic-inline-size: 300px; }' +
       '.empty { display: flex; align-items: center; gap: 10px; color: var(--secondary-text-color); }' +
       // The card gap is 10 px: the header keeps 8 px to the first body element.
@@ -2251,10 +2253,15 @@ class RenaultCard extends HTMLElement {
         ' .lease-status { grid-column: 1 / -1; grid-row: 2; justify-content: flex-start; text-align: left; }' +
       ' }' +
       // Under about 236 px (6 to 8 columns of a section on a phone) the name and model would be down to
-      // two or three letters beside the plate: the plate takes its own line under them.
+      // two or three letters beside the plate: the plate takes its own line under them. "Updated X ago"
+      // takes the whole row width under the place (beside the icon and chevron, "zaktualizowano" did not
+      // fit and was cut in two), and the tiles give their label 4 px more ("Kilometraža").
       '@container (max-width: 210px) {' +
         ' .header { flex-wrap: wrap; row-gap: 6px; }' +
         ' .plate { order: 3; flex: none; max-width: 100%; margin: 0 auto; }' +
+        ' .row > ha-icon, .row .chev { grid-row: 1; }' +
+        ' .row .when { grid-column: 1 / -1; }' +
+        ' .tile { padding-left: 8px; padding-right: 8px; }' +
       ' }' +
       '.btn.armed:hover { background: color-mix(in srgb, var(--rn-accent) 24%, transparent); }' +
     '</style>';
@@ -3548,10 +3555,11 @@ class RenaultMapCard extends HTMLElement {
 
   static _styles() {
     return [
-      ':host { display: block; }',
       // The map has no width of its own: in an auto-width parent (layout-card, inline-block, grid auto
       // column) the card would be as narrow as its title. Inline-size containment with an intrinsic
-      // width gives it 300 px there; elsewhere the parent sets the width, as before.
+      // width gives it 300 px there; elsewhere the parent sets the width, as before. min-width: 0 keeps
+      // that width from being a minimum in a 1fr grid track or a flex item.
+      ':host { display: block; min-width: 0; }',
       'ha-card { display: block; overflow: hidden; contain: inline-size; contain-intrinsic-inline-size: 300px; }',
       '.header { display: flex; align-items: center; gap: 10px; min-height: 36px; padding: 12px 12px 8px; font-size: 16px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color); }',
       '.brand { width: 40px; height: 40px; flex: none; background: var(--primary-text-color);' +
