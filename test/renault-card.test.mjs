@@ -750,3 +750,92 @@ test("map popup opened after a redraw uses the latest vehicle, with one handler 
   card._drawMarkers(L, []);
   assert.doesNotThrow(() => added[0].fire("popupopen"));
 });
+
+test("lease ending in a shorter month ends on its last day, not in the next month", () => {
+  const ymd = (d) => [d.getFullYear(), d.getMonth() + 1, d.getDate()];
+  const lease13 = { start_date: "2024-01-31", duration: 13, km_per_year: 10000 };
+  assert.deepEqual(ymd(ctx.rnLeaseDates(lease13).end), [2025, 2, 28]);
+  // Leap year: 31 January + 1 month is 29 February.
+  assert.deepEqual(ymd(ctx.rnLeaseDates({ ...lease13, duration: 1 }).end), [2024, 2, 29]);
+  // A start day that exists in every month is unchanged.
+  assert.deepEqual(ymd(ctx.rnLeaseDates({ ...lease13, start_date: "2024-01-15" }).end), [2025, 2, 15]);
+  const lease37 = { start_date: "2023-10-31", duration: 37, km_per_year: 10000, start_mileage: 0 };
+  assert.deepEqual(ymd(ctx.rnLeaseDates(lease37).end), [2026, 11, 30]);
+  // Last contract year: from 31 October 2026 to 30 November 2026.
+  const st = ctx.rnLeaseStatus(lease37, 30000, new Date(2026, 10, 15).getTime(), [[new Date(2026, 9, 30).getTime(), 29000]]);
+  assert.equal(st.year.index, 4);
+  assert.deepEqual(ymd(st.year.start), [2026, 10, 31]);
+  assert.deepEqual(ymd(st.year.end), [2026, 11, 30]);
+  // Contract year boundaries from a 30 August start: 28 February of the following years is not skipped.
+  const st2 = ctx.rnLeaseStatus({ start_date: "2024-08-30", duration: 36, km_per_year: 10000 }, 100, new Date(2025, 8, 1).getTime(), [[new Date(2025, 7, 29).getTime(), 90]]);
+  assert.deepEqual(ymd(st2.year.start), [2025, 8, 30]);
+});
+
+// Fake shadow root: setting innerHTML replaces the focusable elements, as a real re-render does.
+function fakeShadow(html) {
+  const parse = (h) =>
+    [...h.matchAll(/<(\w+)[^>]*?(data-press|data-more|data-lease-toggle)(?:="([^"]*)")?[^>]*>/g)]
+      .filter((m) => m[2] !== "data-lease-toggle" || /class="lease-head"/.test(m[0]))
+      .map((m) => {
+        const el = { tagName: m[1].toUpperCase(), dataset: {}, className: (m[0].match(/class="([^"]*)"/) || [])[1] || "" };
+        const key = { "data-press": "press", "data-more": "more", "data-lease-toggle": "leaseToggle" }[m[2]];
+        el.dataset[key] = m[3] ?? "";
+        el.focus = () => (root.activeElement = el);
+        return el;
+      });
+  const root = {
+    activeElement: null,
+    els: parse(html),
+    get innerHTML() {
+      return "";
+    },
+    set innerHTML(h) {
+      root.els = parse(h);
+      root.activeElement = null;
+    },
+    querySelectorAll: () => root.els,
+  };
+  return root;
+}
+
+test("the focused button, tile or lease header keeps the focus across a re-render", () => {
+  const card = Object.create(RenaultCard.prototype);
+  const page = (armed) =>
+    '<div class="tile" data-more="sensor.a" role="button" tabindex="0"></div>' +
+    '<div class="lease" data-lease-toggle><div class="lease-head" data-lease-toggle role="button" tabindex="0"></div></div>' +
+    '<button class="btn" data-press="button.flash"></button>' +
+    `<button class="btn${armed ? " armed" : ""}" data-press="button.horn"></button>`;
+  card.shadowRoot = fakeShadow(page(false));
+  for (const pick of [(e) => e.dataset.press === "button.horn", (e) => e.dataset.more === "sensor.a", (e) => e.dataset.leaseToggle !== undefined]) {
+    const target = card.shadowRoot.els.find(pick);
+    target.focus();
+    card._setHtml(page(true));
+    const now = card.shadowRoot.activeElement;
+    assert.ok(now, "focus lost");
+    assert.notEqual(now, target);
+    assert.ok(pick(now));
+  }
+  // Nothing focused in the card: nothing is focused after the render either.
+  card.shadowRoot.activeElement = null;
+  card._setHtml(page(false));
+  assert.equal(card.shadowRoot.activeElement, null);
+  // The focused button is gone (the entity was removed): no error, no focus.
+  card.shadowRoot.els.find((e) => e.dataset.press === "button.horn").focus();
+  card._setHtml('<button class="btn" data-press="button.flash"></button>');
+  assert.equal(card.shadowRoot.activeElement, null);
+});
+
+test("card styles declare no transition, which the full re-render could never play", () => {
+  const card = Object.create(RenaultCard.prototype);
+  assert.doesNotMatch(card._styles(), /transition/);
+});
+
+test("map controls follow the theme instead of Leaflet's fixed white", () => {
+  const css = RenaultMapCard._styles();
+  const rule = (sel) => css.split("}").find((r) => r.trim().startsWith(`${sel} {`)) || "";
+  assert.match(rule(".leaflet-container .leaflet-bar a"), /background-color: var\(--card-background-color/);
+  assert.match(rule(".leaflet-container .leaflet-bar a"), /color: var\(--primary-text-color/);
+  assert.match(rule(".leaflet-container .leaflet-control-attribution"), /var\(--card-background-color/);
+  assert.match(rule(".leaflet-container .leaflet-control-attribution"), /color: var\(--primary-text-color/);
+  assert.doesNotMatch(css, /#333/);
+});
