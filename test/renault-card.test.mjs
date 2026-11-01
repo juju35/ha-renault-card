@@ -1219,3 +1219,25 @@ test("in an auto-width container (layout-card, inline-block, grid auto column) t
   assert.match(cssRule(css, "ha-card"), /container-type: inline-size; contain-intrinsic-inline-size: 300px;/);
   assert.match(cssRule(RenaultMapCard._styles(), "ha-card"), /contain: inline-size; contain-intrinsic-inline-size: 300px;/);
 });
+
+test("the 300 px intrinsic width is no minimum: both cards shrink in a 1fr grid track or a flex item", () => {
+  // contain-intrinsic-inline-size also sets the min-content width: a grid item in a 1fr track or a flex
+  // item keeps min-width: auto, i.e. that width, and overflowed. min-width: 0 on the host lifts the floor;
+  // a fixed px min-width would bring it back.
+  for (const css of [Object.create(RenaultCard.prototype)._styles(), RenaultMapCard._styles()]) {
+    const host = cssRule(String(css).replace(/^<style>/, ""), ":host");
+    assert.match(host, /min-width: 0;/);
+    assert.doesNotMatch(host, /min-width: [1-9]/);
+  }
+});
+
+test("phone width: 'updated X ago' takes the whole row and the tile labels get 4 px more under about 236 px", () => {
+  // At 156-178 px the column beside the icon and the chevron is 54-76 px: "zaktualizowano" was cut in two.
+  // At 234 px "Kilometraža" missed 2 px in a two-column tile.
+  const css = Object.create(RenaultCard.prototype)._styles();
+  const q = css.indexOf("@container (max-width: 210px)");
+  const narrow = css.slice(q, css.indexOf("} }", q) + 3);
+  assert.match(narrow, /\.row > ha-icon, \.row \.chev \{ grid-row: 1; \}/);
+  assert.match(narrow, /\.row \.when \{ grid-column: 1 \/ -1; \}/);
+  assert.match(narrow, /\.tile \{ padding-left: 8px; padding-right: 8px; \}/);
+});
