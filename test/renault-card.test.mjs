@@ -1213,22 +1213,20 @@ test("tiles are at least 100 px so 'Akumulator' or 'Kilometraža' is not cut at 
   assert.match(cssRule(css, ".tiles"), /grid-template-columns: repeat\(auto-fit, minmax\(100px, 1fr\)\)/);
 });
 
-test("in an auto-width container (layout-card, inline-block, grid auto column) the card keeps a width", () => {
-  // container-type: inline-size makes the card's intrinsic width 0; this gives it one.
-  const css = Object.create(RenaultCard.prototype)._styles();
-  assert.match(cssRule(css, "ha-card"), /container-type: inline-size; contain-intrinsic-inline-size: 300px;/);
-  assert.match(cssRule(RenaultMapCard._styles(), "ha-card"), /contain: inline-size; contain-intrinsic-inline-size: 300px;/);
-});
-
-test("the 300 px intrinsic width is no minimum: both cards shrink in a 1fr grid track or a flex item", () => {
-  // contain-intrinsic-inline-size also sets the min-content width: a grid item in a 1fr track or a flex
-  // item keeps min-width: auto, i.e. that width, and overflowed. min-width: 0 on the host lifts the floor;
-  // a fixed px min-width would bring it back.
+test("in an auto-width container the card keeps a width that is no minimum, without contain-intrinsic-*", () => {
+  // container-type: inline-size makes the card's intrinsic width 0. contain-intrinsic-inline-size gave it
+  // 300 px but also made that its min-content width: wrapped in a div or hui-card in a 1fr grid track the
+  // card overflowed. The empty ::before grid gives 300 px max-content and 0 min-content (see
+  // intrinsic-width.render.test.mjs for the rendered widths).
   for (const css of [Object.create(RenaultCard.prototype)._styles(), RenaultMapCard._styles()]) {
+    assert.doesNotMatch(css, /contain-intrinsic/);
+    assert.match(cssRule(String(css).replace(/^<style>/, ""), ":host::before"), /display: grid; grid-template-columns: minmax\(0, 300px\); height: 0;/);
     const host = cssRule(String(css).replace(/^<style>/, ""), ":host");
     assert.match(host, /min-width: 0;/);
     assert.doesNotMatch(host, /min-width: [1-9]/);
   }
+  assert.match(cssRule(Object.create(RenaultCard.prototype)._styles(), "ha-card"), /container-type: inline-size;/);
+  assert.match(cssRule(RenaultMapCard._styles(), "ha-card"), /contain: inline-size;/);
 });
 
 test("phone width: 'updated X ago' takes the whole row and the tile labels get 4 px more under about 236 px", () => {
