@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.8.5 - 2026-11-01
+
+### Added
+- Added Serbian (Cyrillic and Latin) translations: `sr` and `sr-Latn` for the vehicle card, the map card and their editors. Home Assistant set to `sr-Latn` now picks the Latin script (the full language tag is tried before the part before the dash).
+
 ## 2.8.4
 
 ### Fixes
