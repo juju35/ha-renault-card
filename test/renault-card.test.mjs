@@ -248,17 +248,17 @@ test("map editor offers the language option", () => {
   ed._config = {};
   ed._hass = { language: "en" };
   const lang = ed._schema().find((s) => s.name === "language");
-  assert.equal(lang.selector.select.options.map((o) => o.value).join(","), "fr,en,de,es,sr,sr-Latn");
+  assert.equal(lang.selector.select.options.map((o) => o.value).join(","), "fr,en,de,es,sr,sr-Latn,it,nl,pt,pl");
   assert.equal(ctx.RnMapI18n.en.editor.language, "Language");
 });
 
-test("card editor offers fr, en, de, es, sr and sr-Latn", () => {
+test("card editor offers fr, en, de, es, sr, sr-Latn, it, nl, pt and pl", () => {
   const Editor = defined["renault-card-editor"];
   const ed = Object.create(Editor.prototype);
   ed._config = {};
   ed._hass = { language: "de" };
   const lang = ed._schema().find((s) => s.name === "language");
-  assert.equal(lang.selector.select.options.map((o) => o.value).join(","), "fr,en,de,es,sr,sr-Latn");
+  assert.equal(lang.selector.select.options.map((o) => o.value).join(","), "fr,en,de,es,sr,sr-Latn,it,nl,pt,pl");
   assert.equal(ed._lang(), "de");
 });
 
@@ -272,14 +272,15 @@ function i18nGet(obj, path) {
   return path.split(".").reduce((o, k) => o[k], obj);
 }
 for (const [name, table] of [["RnI18n", ctx.RnI18n], ["RnMapI18n", ctx.RnMapI18n]]) {
-  test(`I18N parity: ${name} has en, fr, de, es, sr and sr-Latn with the same keys and placeholders`, () => {
+  test(`I18N parity: ${name} has en, fr, de, es, sr, sr-Latn, it, nl, pt and pl with the same keys, placeholders and no empty value`, () => {
     const ref = i18nPaths(table.en);
-    for (const lang of ["fr", "de", "es", "sr", "sr-Latn"]) {
+    for (const lang of ["fr", "de", "es", "sr", "sr-Latn", "it", "nl", "pt", "pl"]) {
       assert.ok(table[lang], `${name}.${lang} is missing`);
       assert.deepEqual(i18nPaths(table[lang]), ref, `${name}.${lang} keys differ from en`);
       for (const path of ref) {
         const ph = (s) => (String(s).match(/\{[a-z]+\}/g) || []).sort().join();
         assert.equal(ph(i18nGet(table[lang], path)), ph(i18nGet(table.en, path)), `${name}.${lang}.${path} placeholders`);
+        assert.ok(String(i18nGet(table[lang], path)).trim(), `${name}.${lang}.${path} is empty`);
       }
       for (const path of i18nPaths(table.en).map((p) => p.replace(/\.\d+$/, "")).filter((p, i, a) => a.indexOf(p) === i)) {
         const v = i18nGet(table.en, path);
@@ -304,9 +305,28 @@ test("rnResolveLang: full tag, then the part before the dash, then English", () 
     assert.equal(ctx.rnResolveLang(table, "fr-FR"), "fr");
     assert.equal(ctx.rnResolveLang(table, "sr-Latn"), "sr-Latn");
     assert.equal(ctx.rnResolveLang(table, "sr"), "sr");
-    assert.equal(ctx.rnResolveLang(table, "pt-BR"), "en");
+    assert.equal(ctx.rnResolveLang(table, "pt-BR"), "pt");
     assert.equal(ctx.rnResolveLang(table, undefined), "en");
   }
+});
+
+test("rnResolveLang: it-IT, nl-BE, pt, pt-BR (European Portuguese), pl-PL, sr-Latn and ja", () => {
+  const cases = { "it-IT": "it", "nl-BE": "nl", pt: "pt", "pt-BR": "pt", "pl-PL": "pl", "sr-Latn": "sr-Latn", ja: "en" };
+  for (const table of [ctx.RnI18n, ctx.RnMapI18n]) {
+    for (const [tag, want] of Object.entries(cases)) assert.equal(ctx.rnResolveLang(table, tag), want, tag);
+  }
+  const card = Object.create(RenaultCard.prototype);
+  card._config = {};
+  card._hass = { language: "pt-BR" };
+  assert.equal(card._t("locked"), "Trancado");
+  card._hass = { language: "pl-PL" };
+  assert.equal(card._t("locked"), "Zablokowany");
+  const map = Object.create(RenaultMapCard.prototype);
+  map._hass = { language: "nl-BE" };
+  map._config = {};
+  assert.equal(map._mt().fullscreen, "Volledig scherm");
+  map._config = { language: "it" };
+  assert.equal(map._mt().fullscreen, "Schermo intero");
 });
 
 test("Home Assistant in sr-Latn picks sr-Latn on the cards and editors; the card language comes first", () => {
@@ -330,7 +350,7 @@ test("Home Assistant in sr-Latn picks sr-Latn on the cards and editors; the card
   assert.equal(map._mt().fullscreen, "Ceo ekran");
   map._config = { language: "sr" };
   assert.equal(map._mt().fullscreen, "Цео екран");
-  map._config = { language: "pt-BR" };
+  map._config = { language: "ja" };
   assert.equal(map._lang(), "en");
   assert.equal(ctx.rnMapLang({ language: "sr-Latn" }), "sr-Latn");
 });
