@@ -884,7 +884,10 @@ function fakeShadow(html) {
         const el = { tagName: m[1].toUpperCase(), dataset: {}, className: (m[0].match(/class="([^"]*)"/) || [])[1] || "" };
         const key = { "data-press": "press", "data-more": "more", "data-lease-toggle": "leaseToggle" }[m[2]];
         el.dataset[key] = m[3] ?? "";
-        el.focus = () => (root.activeElement = el);
+        el.focus = (opts) => {
+          root.activeElement = el;
+          root.focusOptions = opts;
+        };
         return el;
       });
   const root = {
@@ -918,6 +921,8 @@ test("the focused button, tile or lease header keeps the focus across a re-rende
     assert.ok(now, "focus lost");
     assert.notEqual(now, target);
     assert.ok(pick(now));
+    // A hass update must not scroll the dashboard to the card: the focus comes back without scrolling.
+    assert.equal(card.shadowRoot.focusOptions?.preventScroll, true);
   }
   // Nothing focused in the card: nothing is focused after the render either.
   card.shadowRoot.activeElement = null;
@@ -1100,7 +1105,8 @@ test("header: the plate shrinks instead of squeezing the vehicle name to nothing
   assert.match(plate, /min-width: 0/);
   assert.match(plate, /max-width: 4\d%/);
   const titles = cssRule(css, ".titles");
-  assert.match(titles, /flex: 1 1 auto/);
+  // Basis 0: the name block does not claim its full text width before the plate gets its share.
+  assert.match(titles, /flex: 1 1 0/);
   assert.match(titles, /min-width: \dch/);
   assert.match(cssRule(css, ".model"), /text-overflow: ellipsis/);
 });
@@ -1139,7 +1145,7 @@ test("narrow card: 'updated X ago' goes under the place and tiles get two column
   const narrow = css.slice(css.indexOf("@container (max-width: 360px)"));
   assert.match(narrow, /\.row \{ display: grid;/);
   assert.match(narrow, /\.row \.when \{ grid-column: 2; grid-row: 2;/);
-  assert.match(narrow, /\.tiles \{ grid-template-columns: repeat\(auto-fit, minmax\(max\(84px, calc\(50% - 3px\)\), 1fr\)\); \}/);
+  assert.match(narrow, /\.tiles \{ grid-template-columns: repeat\(auto-fit, minmax\(max\(100px, calc\(50% - 3px\)\), 1fr\)\); \}/);
 });
 
 test("armed button: inked text, accent icon", () => {
@@ -1170,4 +1176,46 @@ test("map header: the title is an ellipsed, escaped span; no title, no span", ()
   } catch (_e) {}
   assert.equal(header.innerHTML, "");
   assert.equal(header.hidden, true);
+});
+
+test("phone width (6 columns, about 156 px): the plate goes under the name, which keeps 4 letters", () => {
+  const css = Object.create(RenaultCard.prototype)._styles();
+  const q = css.indexOf("@container (max-width: 210px)");
+  assert.ok(q > 0, "no narrow header query");
+  const narrow = css.slice(q, css.indexOf(" }", css.indexOf("}", q) + 1) + 2);
+  assert.match(narrow, /\.header \{ flex-wrap: wrap;/);
+  assert.match(narrow, /\.plate \{[^}]*order: 3;[^}]*max-width: 100%;/);
+});
+
+test("lease status: wraps between words beside the title, under it when narrow, never letter by letter", () => {
+  const css = Object.create(RenaultCard.prototype)._styles();
+  const status = cssRule(css, ".lease-status");
+  assert.doesNotMatch(status, /overflow-wrap: anywhere/);
+  assert.match(status, /overflow-wrap: break-word/);
+  assert.match(cssRule(css, ".lease-head"), /display: grid; grid-template-columns: auto auto minmax\(min-content, 1fr\) auto;/);
+  assert.match(cssRule(css, ".lease-head .plan-title"), /white-space: nowrap/);
+  const narrow = css.slice(css.indexOf("@container (max-width: 300px)"));
+  assert.ok(narrow.length < css.length, "no narrow lease query");
+  // Narrow: the status gets the whole width of the head and its column no longer has a min-content floor.
+  assert.match(narrow, /\.lease-head \{ grid-template-columns: auto minmax\(0, 1fr\) auto; \}/);
+  assert.match(narrow, /\.lease-status \{ grid-column: 1 \/ -1; grid-row: 2; justify-content: flex-start; text-align: left; \}/);
+  assert.doesNotMatch(cssRule(css, ".when"), /overflow-wrap: anywhere/);
+});
+
+test("data plan percentage stays on one line", () => {
+  const css = Object.create(RenaultCard.prototype)._styles();
+  assert.match(cssRule(css, ".pct"), /white-space: nowrap/);
+  assert.match(cssRule(css, ".pct"), /flex: none/);
+});
+
+test("tiles are at least 100 px so 'Akumulator' or 'Kilometraža' is not cut at 361-420 px", () => {
+  const css = Object.create(RenaultCard.prototype)._styles();
+  assert.match(cssRule(css, ".tiles"), /grid-template-columns: repeat\(auto-fit, minmax\(100px, 1fr\)\)/);
+});
+
+test("in an auto-width container (layout-card, inline-block, grid auto column) the card keeps a width", () => {
+  // container-type: inline-size makes the card's intrinsic width 0; this gives it one.
+  const css = Object.create(RenaultCard.prototype)._styles();
+  assert.match(cssRule(css, "ha-card"), /container-type: inline-size; contain-intrinsic-inline-size: 300px;/);
+  assert.match(cssRule(RenaultMapCard._styles(), "ha-card"), /contain: inline-size; contain-intrinsic-inline-size: 300px;/);
 });
