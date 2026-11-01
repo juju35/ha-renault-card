@@ -12,7 +12,7 @@
 - Lease status and "updated X ago" wrap between words instead of letter by letter; on phone widths (up to about 236 px) "updated X ago" takes the whole width of the location row, so a long word such as "zaktualizowano" is no longer cut in two. The data plan percentage ("61 %") stays on one line.
 - Tile labels such as "Kilometraža" are no longer cut by 2 px on cards of about 234 px.
 - Tile labels such as "Akumulator" or "Kilometraža" are no longer cut on cards of 360 to 420 px: tiles are at least 100 px wide.
-- In a container that sizes cards to their content (layout-card, a grid `auto` column, an inline block) the vehicle card no longer collapses to about 26 px and the map card no longer shrinks to its title: both keep a 300 px width there. That width is not a minimum: in a `1fr` grid column (layout-card, grid card) or a flex row the cards still shrink to their share instead of overflowing.
+- In a container that sizes cards to their content (layout-card, a grid `auto` column, an inline block) the vehicle card no longer collapses to about 26 px and the map card no longer shrinks to its title: both keep a 300 px width there. That width is not a minimum: in a `1fr` grid column or a flex row the cards shrink to their share instead of overflowing, also when they are wrapped in another element (a layout-card grid places each card inside a `hui-card`).
 
 ### Maintenance
 - The map screenshots are saved with a 256 colour palette: about 450 KB each instead of 1 MB.

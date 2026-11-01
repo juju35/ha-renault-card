@@ -2124,11 +2124,13 @@ class RenaultCard extends HTMLElement {
     return '<style>' +
       // The container queries below need an inline-size container, whose intrinsic width is 0: in an
       // auto-width parent (layout-card, inline-block, grid auto column) the card would shrink to its
-      // padding. contain-intrinsic-inline-size gives it a width there; elsewhere the parent sets it.
-      // That width is also its min-content width: min-width: 0 keeps it from being a minimum in a 1fr
-      // grid track or a flex item (which would overflow instead of shrinking).
+      // padding. The empty :host::before grid gives the host a 300 px max-content width there, while its
+      // minmax(0, ...) track keeps the min-content width at 0: in a 1fr grid track or a flex item the card
+      // still shrinks, even wrapped in a div or hui-card that keeps min-width: auto
+      // (contain-intrinsic-inline-size would have made 300 px a minimum there, and the card overflowed).
       ':host { display: block; height: 100%; min-width: 0; --rn-accent: var(--primary-color, #03a9f4); }' +
-      'ha-card { height: 100%; box-sizing: border-box; padding: 12px; display: flex; flex-direction: column; gap: 10px; container-type: inline-size; contain-intrinsic-inline-size: 300px; }' +
+      ":host::before { content: ''; display: grid; grid-template-columns: minmax(0, 300px); height: 0; }" +
+      'ha-card { height: 100%; box-sizing: border-box; padding: 12px; display: flex; flex-direction: column; gap: 10px; container-type: inline-size; }' +
       '.empty { display: flex; align-items: center; gap: 10px; color: var(--secondary-text-color); }' +
       // The card gap is 10 px: the header keeps 8 px to the first body element.
       '.header { display: flex; align-items: center; gap: 10px; margin-bottom: -2px; }' +
@@ -3556,11 +3558,12 @@ class RenaultMapCard extends HTMLElement {
   static _styles() {
     return [
       // The map has no width of its own: in an auto-width parent (layout-card, inline-block, grid auto
-      // column) the card would be as narrow as its title. Inline-size containment with an intrinsic
-      // width gives it 300 px there; elsewhere the parent sets the width, as before. min-width: 0 keeps
-      // that width from being a minimum in a 1fr grid track or a flex item.
+      // column) the card would be as narrow as its title. The empty :host::before grid gives the host a
+      // 300 px max-content width there and a 0 min-content width, so in a 1fr grid track or a flex item
+      // (even wrapped in a div or hui-card) the card shrinks to its share; elsewhere the parent sets it.
       ':host { display: block; min-width: 0; }',
-      'ha-card { display: block; overflow: hidden; contain: inline-size; contain-intrinsic-inline-size: 300px; }',
+      ":host::before { content: ''; display: grid; grid-template-columns: minmax(0, 300px); height: 0; }",
+      'ha-card { display: block; overflow: hidden; contain: inline-size; }',
       '.header { display: flex; align-items: center; gap: 10px; min-height: 36px; padding: 12px 12px 8px; font-size: 16px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color); }',
       '.brand { width: 40px; height: 40px; flex: none; background: var(--primary-text-color);' +
         ' -webkit-mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; }',
