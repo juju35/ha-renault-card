@@ -238,7 +238,7 @@ The card reads the entity registry to list the entities of the chosen device, th
 npm install
 npm run build        # stamps the version of package.json into dist/renault-card.js
 npm run check        # builds and checks the card (run in CI)
-npm run screenshots  # renders the card with mock Renault vehicles into screenshots/, lease.gif and lease-dark.gif included (Playwright + ffmpeg)
+npm run screenshots  # renders the card with mock Renault vehicles into screenshots/, lease.gif and lease-dark.gif included (Playwright + ffmpeg/ffprobe); a file is only rewritten when its pixels change
 ```
 
 The map libraries in `vendor/` (Leaflet, MapLibre GL and its Leaflet adapter) are vendored as-is; the build copies them next to the card, which loads them on demand for the map card.

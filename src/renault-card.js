@@ -74,7 +74,8 @@ var RnI18n = {
     en_location: 'Position',
     lease: 'LOA',
     lease_ends: 'Fin {d}',
-    lease_months_left: '{n} mois',
+    lease_months_left_one: '{n} mois',
+    lease_months_left_other: '{n} mois',
     lease_ended: 'Terminée',
     lease_ok: 'Dans le forfait',
     lease_ok_margin: 'Marge de {k}',
@@ -176,7 +177,8 @@ var RnI18n = {
     en_location: 'Location',
     lease: 'Lease',
     lease_ends: 'Ends {d}',
-    lease_months_left: '{n} months',
+    lease_months_left_one: '{n} month',
+    lease_months_left_other: '{n} months',
     lease_ended: 'Ended',
     lease_ok: 'Within allowance',
     lease_ok_margin: '{k} to spare',
@@ -278,7 +280,8 @@ var RnI18n = {
     en_location: 'Standort',
     lease: 'Leasing',
     lease_ends: 'Ende {d}',
-    lease_months_left: '{n} Monate',
+    lease_months_left_one: '{n} Monat',
+    lease_months_left_other: '{n} Monate',
     lease_ended: 'Beendet',
     lease_ok: 'Innerhalb des Kontingents',
     lease_ok_margin: '{k} Reserve',
@@ -380,7 +383,8 @@ var RnI18n = {
     en_location: 'Ubicación',
     lease: 'Leasing',
     lease_ends: 'Termina en {d}',
-    lease_months_left: '{n} meses',
+    lease_months_left_one: '{n} mes',
+    lease_months_left_other: '{n} meses',
     lease_ended: 'Finalizado',
     lease_ok: 'Dentro del límite',
     lease_ok_margin: 'Margen de {k}',
@@ -482,7 +486,8 @@ var RnI18n = {
     en_location: 'Локација',
     lease: 'Лизинг',
     lease_ends: 'Истиче {d}',
-    lease_months_left: '{n} мес.',
+    lease_months_left_one: '{n} мес.',
+    lease_months_left_other: '{n} мес.',
     lease_ended: 'Истекао',
     lease_ok: 'У оквиру дозвољеног',
     lease_ok_margin: 'Резерва {k}',
@@ -584,7 +589,8 @@ var RnI18n = {
     en_location: 'Lokacija',
     lease: 'Lizing',
     lease_ends: 'Ističe {d}',
-    lease_months_left: '{n} mes.',
+    lease_months_left_one: '{n} mes.',
+    lease_months_left_other: '{n} mes.',
     lease_ended: 'Istekao',
     lease_ok: 'U okviru dozvoljenog',
     lease_ok_margin: 'Rezerva {k}',
@@ -686,7 +692,8 @@ var RnI18n = {
     en_location: 'Posizione',
     lease: 'Leasing',
     lease_ends: 'Fine {d}',
-    lease_months_left: 'Mesi rimanenti: {n}',
+    lease_months_left_one: 'Manca {n} mese',
+    lease_months_left_other: 'Mancano {n} mesi',
     lease_ended: 'Terminato',
     lease_ok: 'Entro il limite',
     lease_ok_margin: 'Margine di {k}',
@@ -788,7 +795,8 @@ var RnI18n = {
     en_location: 'Locatie',
     lease: 'Lease',
     lease_ends: 'Einde {d}',
-    lease_months_left: '{n} mnd',
+    lease_months_left_one: '{n} mnd',
+    lease_months_left_other: '{n} mnd',
     lease_ended: 'Beëindigd',
     lease_ok: 'Binnen het budget',
     lease_ok_margin: '{k} marge',
@@ -890,7 +898,8 @@ var RnI18n = {
     en_location: 'Localização',
     lease: 'Leasing',
     lease_ends: 'Fim {d}',
-    lease_months_left: 'Meses restantes: {n}',
+    lease_months_left_one: 'Falta {n} mês',
+    lease_months_left_other: 'Faltam {n} meses',
     lease_ended: 'Terminado',
     lease_ok: 'Dentro do limite',
     lease_ok_margin: 'Margem de {k}',
@@ -992,7 +1001,8 @@ var RnI18n = {
     en_location: 'Lokalizacja',
     lease: 'Leasing',
     lease_ends: 'Koniec: {d}',
-    lease_months_left: '{n} mies.',
+    lease_months_left_one: '{n} mies.',
+    lease_months_left_other: '{n} mies.',
     lease_ended: 'Zakończony',
     lease_ok: 'W ramach limitu',
     lease_ok_margin: 'Zapas: {k}',
@@ -1055,6 +1065,16 @@ function rnIntlLang(dict, lang, hass) {
 function rnT(lang, key) {
   var strings = RnI18n[lang] || RnI18n.en;
   return strings[key] || RnI18n.en[key] || key;
+}
+
+// key_one / key_other picked with the CLDR plural rules of `intl` (Polish and Serbian "few" and
+// "many" fall back to _other: their strings are abbreviations, the same for every number).
+function rnPlural(lang, intl, key, n) {
+  var cat = 'other';
+  try { cat = new Intl.PluralRules(intl).select(n); } catch (_e) { /* unknown locale: other */ }
+  var strings = RnI18n[lang] || RnI18n.en;
+  var s = strings[`${key}_${cat}`] || strings[`${key}_other`] || RnI18n.en[`${key}_other`];
+  return s.replace('{n}', n);
 }
 
 // "5 minutes ago", "in 2 hours"… in the given language. The formatters are cached per language
@@ -1416,6 +1436,16 @@ function rnAddMonths(date, n) {
 
 var RN_DAY = 86400000;
 
+// Text in a state colour: the pure warning / success / error colours of the default light theme are
+// 1.5 to 3.4:1 on the card. Mixed with the text colour they reach 5 to 9:1 in light and dark themes;
+// bars, gauges and chart lines keep the pure colour.
+var RN_WARN = 'var(--warning-color, #ffa600)';
+var RN_OK = 'var(--success-color, #43a047)';
+var RN_ERR = 'var(--error-color, #db4437)';
+function rnInk(color) {
+  return `color-mix(in srgb, ${color} 40%, var(--primary-text-color, #212121))`;
+}
+
 // Odometer at time t from the daily statistics ([day start, odometer at the end of that day]).
 function rnOdoAt(points, t) {
   var hit = null;
@@ -1493,6 +1523,7 @@ function rnLeaseStatus(lease, mileage, now, points) {
     // Cost of the kilometres already over the allowance (the projected cost is `cost`).
     costNow: cost && state === 'over' ? (driven - allowed) * cost : null,
     monthsLeft: Math.max(0, Math.round(left / 30.44)),
+    daysLeft: Math.max(0, Math.ceil(left)),
   };
 }
 
@@ -1939,7 +1970,7 @@ class RenaultCard extends HTMLElement {
     // The statistics feed the chart, the recent pace and the contract year: fetched once an hour,
     // once the lease has started (no statistics before).
     this._leaseFetch(dates.start, ent.mileage);
-    var color = st.state === 'over' ? 'var(--error-color, #db4437)' : st.state === 'warn' ? 'var(--warning-color, #ffa600)' : 'var(--success-color, #43a047)';
+    var color = st.state === 'over' ? RN_ERR : st.state === 'warn' ? RN_WARN : RN_OK;
     var icon = st.state === 'ok' ? 'mdi:check-circle-outline' : 'mdi:alert-circle-outline';
     var status;
     if (st.state === 'over') status = this._t('lease_over', { k: this._km(st.driven - st.allowed) });
@@ -1957,7 +1988,7 @@ class RenaultCard extends HTMLElement {
       var dev = Math.round(st.deviation);
       figs.push(this._leaseFig(this._t('lease_expected_lbl'), this._km(st.expectedOdo),
         (dev > 0 ? '+' : '−') + this._km(Math.abs(dev)), false,
-        dev > 0 ? 'var(--warning-color, #ffa600)' : 'var(--success-color, #43a047)'));
+        rnInk(dev > 0 ? RN_WARN : RN_OK)));
       if (st.month) {
         var over = st.month.left < 0;
         figs.push(this._leaseFig(this._t('lease_month_lbl'), this._km(Math.abs(st.month.left)),
@@ -1976,13 +2007,21 @@ class RenaultCard extends HTMLElement {
     return '<div class="lease lease-' + st.state + '" data-lease-toggle>' +
       '<div class="lease-head" data-lease-toggle role="button" tabindex="0" aria-expanded="' + open + '">' +
       '<ha-icon class="lease-icon" icon="mdi:file-sign"></ha-icon><span class="plan-title">' + this._t('lease') + '</span>' +
-      '<span class="lease-status" style="color:' + color + '"><ha-icon icon="' + icon + '"></ha-icon>' + rnEsc(status) + '</span>' +
+      '<span class="lease-status" style="color:' + rnInk(color) + '"><ha-icon icon="' + icon + '"></ha-icon>' + rnEsc(status) + '</span>' +
       '<ha-icon class="chev lease-chev' + (open ? '' : ' closed') + '" icon="mdi:chevron-down"></ha-icon></div>' +
       '<div class="lease-bar">' + this._bar(pct, color) + ticks + '<span class="lease-mark" style="left:' + marker.toFixed(1) + '%"></span></div>' +
       '<div class="plan-info"><span><b>' + rnEsc(this._km(st.driven)) + '</b> / ' + rnEsc(this._km(st.allowed)) + '</span>' +
-      '<span>' + rnEsc(`${this._t('lease_ends', { d: endTxt })} · ${st.ended ? this._t('lease_ended') : this._t('lease_months_left', { n: st.monthsLeft })}`) + '</span></div>' +
+      '<span>' + rnEsc(`${this._t('lease_ends', { d: endTxt })} · ${this._leaseLeft(st)}`) + '</span></div>' +
       (figs.length ? `<div class="figs">${figs.join('')}</div>` : '') +
       (open ? `<div class="lease-more">${this._leaseDetails(st)}${this._leaseChart(st, ent.mileage)}</div>` : '') + '</div>';
+  }
+
+  // "Ended", "1 month", "5 months"… and the days under a month (rounding would say "0 months" or
+  // "1 month" with two weeks left).
+  _leaseLeft(st) {
+    if (st.ended) return this._t('lease_ended');
+    if (st.daysLeft < 30) return this._t('days_left', { n: st.daysLeft });
+    return rnPlural(this._lang(), this._intl(), 'lease_months_left', st.monthsLeft);
   }
 
   // Folded until tapped, unless expand_lease is set (same as ha-carburants-france's sections).
@@ -2083,8 +2122,15 @@ class RenaultCard extends HTMLElement {
 
   _styles() {
     return '<style>' +
-      ':host { display: block; height: 100%; --rn-accent: var(--primary-color, #03a9f4); }' +
-      'ha-card { height: 100%; box-sizing: border-box; padding: 12px; display: flex; flex-direction: column; gap: 10px; }' +
+      // The container queries below need an inline-size container, whose intrinsic width is 0: in an
+      // auto-width parent (layout-card, inline-block, grid auto column) the card would shrink to its
+      // padding. The empty :host::before grid gives the host a 300 px max-content width there, while its
+      // minmax(0, ...) track keeps the min-content width at 0: in a 1fr grid track or a flex item the card
+      // still shrinks, even wrapped in a div or hui-card that keeps min-width: auto
+      // (contain-intrinsic-inline-size would have made 300 px a minimum there, and the card overflowed).
+      ':host { display: block; height: 100%; min-width: 0; --rn-accent: var(--primary-color, #03a9f4); }' +
+      ":host::before { content: ''; display: grid; grid-template-columns: minmax(0, 300px); height: 0; }" +
+      'ha-card { height: 100%; box-sizing: border-box; padding: 12px; display: flex; flex-direction: column; gap: 10px; container-type: inline-size; }' +
       '.empty { display: flex; align-items: center; gap: 10px; color: var(--secondary-text-color); }' +
       // The card gap is 10 px: the header keeps 8 px to the first body element.
       '.header { display: flex; align-items: center; gap: 10px; margin-bottom: -2px; }' +
@@ -2092,10 +2138,12 @@ class RenaultCard extends HTMLElement {
         ' background: color-mix(in srgb, var(--rn-accent) 16%, transparent); color: var(--rn-accent); --mdc-icon-size: 24px; }' +
       '.brand { width: 40px; height: 40px; flex: none; background: var(--primary-text-color);' +
         ' -webkit-mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; }' +
-      '.titles { flex: 1; min-width: 0; }' +
+      // At the 6 columns minimum (about 240 px) the plate gives way: it shrinks (its SVG keeps the
+      // proportions) so the vehicle name keeps at least a few letters.
+      '.titles { flex: 1 1 0; min-width: 5ch; }' +
       '.name { font-size: 16px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
-      '.model { font-size: 12px; color: var(--secondary-text-color); margin-top: 2px; }' +
-      '.plate { height: 32px; width: auto; flex-shrink: 0; display: block; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.25)); }' +
+      '.model { font-size: 12px; color: var(--secondary-text-color); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
+      '.plate { height: 32px; width: auto; flex: 0 1 auto; min-width: 0; max-width: 45%; display: block; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.25)); }' +
       '.image { display: flex; justify-content: center; margin: 0 0 -4px; }' +
       '.image img { max-width: 100%; max-height: 150px; object-fit: contain; }' +
       '.chips { display: flex; flex-wrap: wrap; gap: 6px; }' +
@@ -2103,15 +2151,15 @@ class RenaultCard extends HTMLElement {
         ' background: var(--secondary-background-color, rgba(128,128,128,0.12)); color: var(--secondary-text-color); }' +
       '.chip[data-more] { cursor: pointer; }' +
       '.chip ha-icon { --mdc-icon-size: 13px; }' +
-      '.chip.warn { background: color-mix(in srgb, var(--warning-color, #ffa600) 15%, transparent); color: var(--warning-color, #ffa600); }' +
-      '.chip.ok { background: color-mix(in srgb, var(--success-color, #43a047) 15%, transparent); color: var(--success-color, #43a047); }' +
-      '.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(84px, 1fr)); gap: 6px; }' +
+      '.chip.warn { background: color-mix(in srgb, ' + RN_WARN + ' 15%, transparent); color: ' + rnInk(RN_WARN) + '; }' +
+      '.chip.ok { background: color-mix(in srgb, ' + RN_OK + ' 15%, transparent); color: ' + rnInk(RN_OK) + '; }' +
+      '.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 6px; }' +
       '.tile { display: flex; flex-direction: column; gap: 2px; padding: 6px 10px; border-radius: 10px; cursor: pointer; min-width: 0;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.1)); }' +
       '.tile-head { display: flex; align-items: center; gap: 6px; min-width: 0; }' +
       '.tile ha-icon { color: var(--rn-accent); --mdc-icon-size: 18px; flex-shrink: 0; }' +
       '.tile .bar { margin-top: 4px; height: 4px; background: color-mix(in srgb, var(--secondary-text-color) 18%, transparent); }' +
-      '.tile.warn ha-icon, .tile.warn .val { color: var(--warning-color, #ffa600); }' +
+      '.tile.warn ha-icon, .tile.warn .val { color: ' + rnInk(RN_WARN) + '; }' +
       '.row-text { display: flex; flex-direction: column; min-width: 0; }' +
       '.lbl { font-size: 11px; color: var(--secondary-text-color); }' +
       '.lbl { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
@@ -2121,10 +2169,11 @@ class RenaultCard extends HTMLElement {
       '.row { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 10px; cursor: pointer;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.1)); }' +
       '.row > ha-icon { color: var(--rn-accent); --mdc-icon-size: 20px; }' +
-      '.row-text { flex: 1; }' +
-      '.when { font-size: 12px; color: var(--secondary-text-color); text-align: right; }' +
+      // The place and "updated X ago" share the row; the time wraps rather than taking it all.
+      '.row-text { flex: 1 1 auto; min-width: 0; }' +
+      '.when { flex: 0 1 auto; min-width: 0; overflow-wrap: break-word; font-size: 12px; color: var(--secondary-text-color); text-align: right; }' +
       '.chev { color: var(--secondary-text-color); --mdc-icon-size: 20px; flex-shrink: 0; }' +
-      '.lease-head .plan-title { flex: 1 0 auto; }' +
+      '.lease-head .plan-title { white-space: nowrap; }' +
       '.lease-chev.closed { transform: rotate(-90deg); }' +
       '.plan { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 10px; cursor: pointer;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.1)); }' +
@@ -2132,16 +2181,18 @@ class RenaultCard extends HTMLElement {
       '.logo-link { display: flex; flex-shrink: 0; border-radius: 3px; }' +
       '.plan-head .logo { width: 24px; height: 24px; border-radius: 3px; display: block; }' +
       '.plan-title { flex: 1; font-size: 13px; font-weight: 500; color: var(--primary-text-color); }' +
-      '.pct { font-size: 13px; font-weight: 500; color: var(--primary-text-color); }' +
+      '.pct { font-size: 13px; font-weight: 500; color: var(--primary-text-color); white-space: nowrap; flex: none; }' +
       '.plan .bar { background: color-mix(in srgb, var(--secondary-text-color) 18%, transparent); }' +
       '.plan-info { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 8px; font-size: 12px; color: var(--secondary-text-color); }' +
       '.lease { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 10px;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.1)); }' +
-      '.lease-head { display: flex; align-items: center; gap: 8px; min-width: 0; }' +
+      // Icon, title, status, chevron. The status ("Projected over: 18,955 km · ≈ €1,516") takes the
+      // room left and wraps between words; it is never narrower than its longest word.
+      '.lease-head { display: grid; grid-template-columns: auto auto minmax(min-content, 1fr) auto; align-items: center; gap: 2px 8px; min-width: 0; }' +
       '.lease[data-lease-toggle] { cursor: pointer; }' +
       '.lease-more { cursor: default; display: flex; flex-direction: column; gap: 8px; }' +
       '.lease-icon { color: var(--rn-accent); --mdc-icon-size: 22px; flex-shrink: 0; }' +
-      '.lease-status { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 500; min-width: 0; text-align: right; }' +
+      '.lease-status { display: flex; align-items: center; justify-content: flex-end; gap: 4px; font-size: 12px; font-weight: 500; text-align: right; overflow-wrap: break-word; }' +
       '.lease-status ha-icon { --mdc-icon-size: 16px; flex-shrink: 0; }' +
       '.lease-bar { position: relative; }' +
       '.lease .bar { background: color-mix(in srgb, var(--secondary-text-color) 18%, transparent); }' +
@@ -2152,8 +2203,9 @@ class RenaultCard extends HTMLElement {
       '.fig { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; border-radius: 10px; min-width: 0;' +
         ' background: color-mix(in srgb, var(--primary-text-color, #212121) 7%, transparent); }' +
       '.fig .val { font-size: 14px; white-space: normal; }' +
+      '.fig .lbl { white-space: normal; }' +
       '.fig .sub { font-size: 11px; line-height: 1.3; color: var(--secondary-text-color); }' +
-      '.fig.warn .val { color: var(--warning-color, #ffa600); }' +
+      '.fig.warn .val { color: ' + rnInk(RN_WARN) + '; }' +
       '.lease-graph { display: flex; flex-direction: column; gap: 6px; padding-top: 4px; }' +
       '.legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--secondary-text-color); }' +
       '.legend span { display: inline-flex; align-items: center; gap: 5px; }' +
@@ -2166,7 +2218,7 @@ class RenaultCard extends HTMLElement {
       '.lease-chart .grid { stroke: color-mix(in srgb, var(--secondary-text-color) 15%, transparent); stroke-width: 1; }' +
       '.lease-chart .axis { stroke: color-mix(in srgb, var(--secondary-text-color) 40%, transparent); stroke-width: 1; }' +
       '.lease-chart .limit { stroke: var(--error-color, #db4437); stroke-width: 1; stroke-opacity: 0.5; }' +
-      '.lease-chart .limit-lbl { fill: var(--error-color, #db4437); }' +
+      '.lease-chart .limit-lbl { fill: ' + rnInk(RN_ERR) + '; }' +
       '.lease-chart .allowed { fill: none; stroke: var(--secondary-text-color); stroke-width: 1.2; stroke-dasharray: 4 3; }' +
       '.lease-chart .area { fill: color-mix(in srgb, var(--rn-accent) 14%, transparent); stroke: none; }' +
       '.lease-chart .actual { fill: none; stroke: var(--rn-accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }' +
@@ -2184,7 +2236,35 @@ class RenaultCard extends HTMLElement {
         ' padding: 7px 12px; border-radius: 10px; background: var(--secondary-background-color, rgba(128,128,128,0.1)); color: var(--primary-text-color); }' +
       '.btn span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
       '.btn ha-icon { --mdc-icon-size: 20px; flex-shrink: 0; }' +
-      '.btn.armed { background: color-mix(in srgb, var(--rn-accent) 16%, transparent); color: var(--rn-accent); }' +
+      '.btn.armed { background: color-mix(in srgb, var(--rn-accent) 16%, transparent); color: ' + rnInk('var(--rn-accent)') + '; }' +
+      '.btn.armed ha-icon { color: var(--rn-accent); }' +
+      // Narrow card (1/3 of a 12 column view, 6 columns of a section): "updated X ago" goes under the
+      // place instead of beside it, and the tiles get two columns so their labels are not cut.
+      '@container (max-width: 360px) {' +
+        ' .row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; column-gap: 8px; }' +
+        ' .row > ha-icon { grid-row: 1 / span 2; }' +
+        ' .row .when { grid-column: 2; grid-row: 2; text-align: left; }' +
+        ' .row .chev { grid-column: 3; grid-row: 1 / span 2; }' +
+        ' .tiles { grid-template-columns: repeat(auto-fit, minmax(max(100px, calc(50% - 3px)), 1fr)); }' +
+      ' }' +
+      // Up to about 326 px of card (container sizes are the content box, inside the 12 px padding): the
+      // lease status goes under the title.
+      '@container (max-width: 300px) {' +
+        ' .lease-head { grid-template-columns: auto minmax(0, 1fr) auto; }' +
+        ' .lease-head .chev { grid-column: 3; grid-row: 1; }' +
+        ' .lease-status { grid-column: 1 / -1; grid-row: 2; justify-content: flex-start; text-align: left; }' +
+      ' }' +
+      // Under about 236 px (6 to 8 columns of a section on a phone) the name and model would be down to
+      // two or three letters beside the plate: the plate takes its own line under them. "Updated X ago"
+      // takes the whole row width under the place (beside the icon and chevron, "zaktualizowano" did not
+      // fit and was cut in two), and the tiles give their label 4 px more ("Kilometraža").
+      '@container (max-width: 210px) {' +
+        ' .header { flex-wrap: wrap; row-gap: 6px; }' +
+        ' .plate { order: 3; flex: none; max-width: 100%; margin: 0 auto; }' +
+        ' .row > ha-icon, .row .chev { grid-row: 1; }' +
+        ' .row .when { grid-column: 1 / -1; }' +
+        ' .tile { padding-left: 8px; padding-right: 8px; }' +
+      ' }' +
       '.btn.armed:hover { background: color-mix(in srgb, var(--rn-accent) 24%, transparent); }' +
     '</style>';
   }
@@ -3100,7 +3180,7 @@ class RenaultMapCard extends HTMLElement {
     var title = this._config.title === undefined ? mt.default_title : this._config.title;
     var icon = this._config.show_icon ? '<span class="brand" role="img" aria-label="Renault"></span>' : '';
     header.hidden = !title && !icon;
-    header.innerHTML = icon + rnEsc(title || '');
+    header.innerHTML = icon + (title ? `<span class="title">${rnEsc(title)}</span>` : '');
     var mapEl = this._root.querySelector('.map');
     mapEl.style.height = `${Math.max(150, Number(this._config.height) || 400)}px`;
     mapEl.classList.toggle('dark', this._darkTiles());
@@ -3477,11 +3557,17 @@ class RenaultMapCard extends HTMLElement {
 
   static _styles() {
     return [
-      ':host { display: block; }',
-      'ha-card { display: block; overflow: hidden; }',
+      // The map has no width of its own: in an auto-width parent (layout-card, inline-block, grid auto
+      // column) the card would be as narrow as its title. The empty :host::before grid gives the host a
+      // 300 px max-content width there and a 0 min-content width, so in a 1fr grid track or a flex item
+      // (even wrapped in a div or hui-card) the card shrinks to its share; elsewhere the parent sets it.
+      ':host { display: block; min-width: 0; }',
+      ":host::before { content: ''; display: grid; grid-template-columns: minmax(0, 300px); height: 0; }",
+      'ha-card { display: block; overflow: hidden; contain: inline-size; }',
       '.header { display: flex; align-items: center; gap: 10px; min-height: 36px; padding: 12px 12px 8px; font-size: 16px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color); }',
       '.brand { width: 40px; height: 40px; flex: none; background: var(--primary-text-color);' +
         ' -webkit-mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; }',
+      '.header .title { flex: 1 1 auto; min-width: 4ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }',
       '.header[hidden], .message[hidden] { display: none; }',
       '.message { padding: 12px 16px; color: var(--secondary-text-color); }',
       '.map { width: 100%; background: var(--secondary-background-color, #e5e5e5); z-index: 0; }',
@@ -3524,7 +3610,8 @@ class RenaultMapCard extends HTMLElement {
       '.pactions { display: flex; gap: 6px; margin-top: 10px; }',
       // Leaflet colours every link in the map: the selector must outrank '.leaflet-container a'.
       '.leaflet-container .pbtn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; padding: 7px 10px; border-radius: 16px; border: none; cursor: pointer;' +
-        ' font: inherit; font-size: 13px; font-weight: 500; text-decoration: none; background: color-mix(in srgb, var(--primary-color, #03a9f4) 16%, transparent); color: var(--primary-color, #03a9f4); }',
+        ' font: inherit; font-size: 13px; font-weight: 500; text-decoration: none; background: color-mix(in srgb, var(--primary-color, #03a9f4) 16%, transparent); color: ' + rnInk('var(--primary-color, #03a9f4)') + '; }',
+      '.leaflet-container .pbtn:not(.alt) ha-icon { color: var(--primary-color, #03a9f4); }',
       '.leaflet-container .pbtn:hover { background: color-mix(in srgb, var(--primary-color, #03a9f4) 24%, transparent); }',
       '.leaflet-container .pbtn.alt { background: var(--secondary-background-color, rgba(128,128,128,0.12)); color: var(--primary-text-color, #212121); }',
       '.pbtn ha-icon { --mdc-icon-size: 18px; }',

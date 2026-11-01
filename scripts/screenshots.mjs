@@ -1,11 +1,13 @@
 // Renders the cards with mock data and saves the README screenshots and lease.gif / lease-dark.gif.
 // Usage: npm run build && npm run screenshots  (CHROMIUM_PATH=/path/to/chrome to use another browser;
-// ffmpeg must be on the PATH for the GIF).
+// ffmpeg and ffprobe must be on the PATH: GIF, map shots' palette and the pixel comparison below).
+// A file is only rewritten when its decoded pixels change: a rerun that renders the same image (another
+// zlib or ffmpeg build gives other bytes for the same pixels) leaves the committed file untouched.
 // The map card uses the OpenStreetMap tiles kept in scripts/tiles (committed, no network needed); a tile
 // missing there, after a change of positions or zoom, is downloaded once and should be committed too.
 import { execFileSync } from "node:child_process";
 import { chromium, request } from "playwright";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -189,15 +191,58 @@ export async function render(shots, { icons = {}, hass = {}, extra = "" } = {}) 
     }
     // The card with the 16 px page padding around it, on the theme background.
     const box = await page.locator("#root").boundingBox();
+    const out = `${root}screenshots/${s.file}.png`;
+    const tmp = `${out}.new.png`;
     await page.screenshot({
-      path: `${root}screenshots/${s.file}.png`,
+      path: tmp,
       clip: { x: 0, y: 0, width: s.width + 32, height: Math.ceil(box.height) + 32 },
       animations: "disabled",
     });
-    console.log(`screenshots/${s.file}.png`);
+    if (s.type === "renault-map-card") quantize(tmp);
+    replaceIfChanged(tmp, out);
   }
   await http?.dispose();
   await browser.close();
+}
+
+// Decoded RGBA pixels of every frame, with the size: PNG and GIF files with the same image compare equal
+// whatever their bytes. A GIF also keeps its frame durations (a timing change is a change).
+function pixels(file) {
+  const probe = execFileSync("ffprobe", [
+    "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height:frame=duration_time",
+    "-of", "csv=p=0", file,
+  ]).toString();
+  const raw = execFileSync("ffmpeg", ["-v", "error", "-i", file, "-fps_mode", "passthrough", "-f", "rawvideo", "-pix_fmt", "rgba", "-"],
+    { maxBuffer: 1 << 30 });
+  return { probe, raw };
+}
+
+// Moves tmp onto out unless out already holds the same pixels, in which case tmp is dropped.
+function replaceIfChanged(tmp, out) {
+  const name = out.slice(root.length);
+  if (existsSync(out)) {
+    const a = pixels(tmp);
+    const b = pixels(out);
+    if (a.probe === b.probe && a.raw.equals(b.raw)) {
+      rmSync(tmp);
+      console.log(`${name} unchanged`);
+      return;
+    }
+  }
+  renameSync(tmp, out);
+  console.log(name);
+}
+
+// The map shots are mostly map tiles: a 256 colour palette (no dithering, bit exact so a rerun gives the same
+// file) brings them from about 1 MB to under 450 KB each with no visible change. Needs ffmpeg, like the GIF.
+function quantize(file) {
+  const tmp = `${file}.tmp.png`;
+  execFileSync("ffmpeg", [
+    "-y", "-loglevel", "error", "-i", file,
+    "-vf", "split[a][b];[a]palettegen=max_colors=256:stats_mode=full[p];[b][p]paletteuse=dither=none",
+    "-fflags", "+bitexact", "-flags:v", "+bitexact", "-pred", "mixed", tmp,
+  ]);
+  renameSync(tmp, file);
 }
 
 // Records the lease section folding and unfolding as a looping screenshots/<file>.gif (needs ffmpeg
@@ -221,13 +266,14 @@ async function leaseGif(page, s) {
   writeFileSync(join(dir, "frames.txt"),
     "file 'closed.png'\nduration 1.6\nfile 'open.png'\nduration 2.8\nfile 'open.png'\n");
   const out = `${root}screenshots/${s.file}.gif`;
+  const tmp = `${out}.new.gif`;
   execFileSync("ffmpeg", [
     "-y", "-loglevel", "error", "-fflags", "+bitexact", "-f", "concat", "-safe", "0", "-i", join(dir, "frames.txt"),
     "-vf", `scale=${clip.width}:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=128[p];[b][p]paletteuse=dither=bayer:bayer_scale=4`,
-    "-flags:v", "+bitexact", "-loop", "0", out,
+    "-flags:v", "+bitexact", "-loop", "0", tmp,
   ]);
   rmSync(dir, { recursive: true });
-  console.log(`screenshots/${s.file}.gif`);
+  replaceIfChanged(tmp, out);
 }
 
 const icons = {

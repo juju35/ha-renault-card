@@ -884,7 +884,10 @@ function fakeShadow(html) {
         const el = { tagName: m[1].toUpperCase(), dataset: {}, className: (m[0].match(/class="([^"]*)"/) || [])[1] || "" };
         const key = { "data-press": "press", "data-more": "more", "data-lease-toggle": "leaseToggle" }[m[2]];
         el.dataset[key] = m[3] ?? "";
-        el.focus = () => (root.activeElement = el);
+        el.focus = (opts) => {
+          root.activeElement = el;
+          root.focusOptions = opts;
+        };
         return el;
       });
   const root = {
@@ -918,6 +921,8 @@ test("the focused button, tile or lease header keeps the focus across a re-rende
     assert.ok(now, "focus lost");
     assert.notEqual(now, target);
     assert.ok(pick(now));
+    // A hass update must not scroll the dashboard to the card: the focus comes back without scrolling.
+    assert.equal(card.shadowRoot.focusOptions?.preventScroll, true);
   }
   // Nothing focused in the card: nothing is focused after the render either.
   card.shadowRoot.activeElement = null;
@@ -942,4 +947,295 @@ test("map controls follow the theme instead of Leaflet's fixed white", () => {
   assert.match(rule(".leaflet-container .leaflet-control-attribution"), /var\(--card-background-color/);
   assert.match(rule(".leaflet-container .leaflet-control-attribution"), /color: var\(--primary-text-color/);
   assert.doesNotMatch(css, /#333/);
+});
+
+// ── Review pass 9 ────────────────────────────────────────────────────────────
+
+// A lease of `months` months ending `days` days from today (midnight), as the card config reads it.
+function leaseEndingIn(days, months = 36) {
+  const end = new Date();
+  end.setHours(0, 0, 0, 0);
+  end.setDate(end.getDate() + days);
+  const start = new Date(end.getFullYear(), end.getMonth() - months, end.getDate());
+  const iso = `${start.getFullYear()}-${String(start.getMonth() + 1).padStart(2, "0")}-${String(start.getDate()).padStart(2, "0")}`;
+  return { start_date: iso, duration: months, km_per_year: 20000 };
+}
+function leaseLine(lang, days) {
+  const card = Object.create(RenaultCard.prototype);
+  card._config = { lease: leaseEndingIn(days), language: lang };
+  card._hass = { language: lang, config: { currency: "EUR" }, states: { "sensor.m": { state: "1000", attributes: {} } } };
+  card._leaseFetch = () => {};
+  return card._leaseHtml({ mileage: "sensor.m" });
+}
+
+test("lease end line: one month left is singular, not '1 months'", () => {
+  const html = leaseLine("en", 40);
+  assert.match(html, /· 1 month</);
+  assert.match(leaseLine("en", 70), /· 2 months</);
+  assert.match(leaseLine("de", 40), /· 1 Monat</);
+  assert.match(leaseLine("es", 40), /· 1 mes</);
+});
+
+test("lease end line: under a month shows the days left instead of '0 months'", () => {
+  const html = leaseLine("en", 10);
+  assert.doesNotMatch(html, /0 months/);
+  assert.match(html, /· \d+ d</);
+  assert.match(leaseLine("fr", 10), /· \d+ j</);
+});
+
+test("lease months left: plural forms for 1, 2, 5, 21 and 22 in every language", () => {
+  const card = Object.create(RenaultCard.prototype);
+  const want = {
+    en: ["1 month", "2 months", "5 months", "21 months", "22 months"],
+    fr: ["1 mois", "2 mois", "5 mois", "21 mois", "22 mois"],
+    de: ["1 Monat", "2 Monate", "5 Monate", "21 Monate", "22 Monate"],
+    es: ["1 mes", "2 meses", "5 meses", "21 meses", "22 meses"],
+    it: ["Manca 1 mese", "Mancano 2 mesi", "Mancano 5 mesi", "Mancano 21 mesi", "Mancano 22 mesi"],
+    pt: ["Falta 1 mês", "Faltam 2 meses", "Faltam 5 meses", "Faltam 21 meses", "Faltam 22 meses"],
+    // Abbreviations, the same for every number.
+    nl: ["1 mnd", "2 mnd", "5 mnd", "21 mnd", "22 mnd"],
+    pl: ["1 mies.", "2 mies.", "5 mies.", "21 mies.", "22 mies."],
+    sr: ["1 мес.", "2 мес.", "5 мес.", "21 мес.", "22 мес."],
+    "sr-Latn": ["1 mes.", "2 mes.", "5 mes.", "21 mes.", "22 mes."],
+  };
+  for (const [lang, texts] of Object.entries(want)) {
+    card._config = { language: lang };
+    card._hass = { language: lang };
+    [1, 2, 5, 21, 22].forEach((n, i) => {
+      assert.equal(card._leaseLeft({ ended: false, monthsLeft: n, daysLeft: Math.round(n * 30.44) }), texts[i], `${lang} ${n}`);
+    });
+  }
+});
+
+test("rnLeaseStatus gives the whole days left", () => {
+  const start = new Date(2026, 5, 15).getTime();
+  const end = new Date(2026, 6, 15).getTime();
+  const st = ctx.rnLeaseStatus({ ...lease, duration: 1 }, 100, end - 10 * DAY - 3600000, []);
+  assert.equal(st.daysLeft, 11);
+  assert.equal(ctx.rnLeaseStatus({ ...lease, duration: 1 }, 100, start, []).daysLeft, 30);
+});
+
+// WCAG contrast of the coloured texts, with Home Assistant's default themes.
+const THEMES = {
+  light: { card: "#ffffff", sec: "#e5e5e5", primary: "#212121" },
+  dark: { card: "#1c1c1c", sec: "#282828", primary: "#e1e1e1" },
+};
+const STATE = { warning: "#ffa600", success: "#43a047", error: "#db4437" };
+const hex = (c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+const mix = (a, b, p) => a.map((x, i) => x * p + b[i] * (1 - p));
+const lum = (c) => {
+  const f = (v) => ((v /= 255) <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+  return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]);
+};
+const ratio = (a, b) => {
+  const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p);
+  return (x + 0.05) / (y + 0.05);
+};
+// Resolves a CSS colour made of var(--x-color, …) and color-mix(in srgb, A p%, B) for a theme.
+function resolve(expr, theme) {
+  const t = THEMES[theme];
+  const v = (name) => (name === "primary-text-color" ? hex(t.primary) : hex(STATE[name.replace("-color", "")]));
+  const s = expr.trim();
+  const m = s.match(/^color-mix\(in srgb, var\(--([\w-]+)[^)]*\) (\d+)%, var\(--([\w-]+)[^)]*\)\)$/);
+  if (m) return mix(v(m[1]), v(m[3]), Number(m[2]) / 100);
+  const w = s.match(/^var\(--([\w-]+)/);
+  assert.ok(w, `unexpected colour ${s}`);
+  return v(w[1]);
+}
+function ruleColor(css, selector) {
+  const rule = css.split("}").find((r) => r.trim().startsWith(`${selector} {`) || r.includes(`, ${selector} {`));
+  assert.ok(rule, `no rule for ${selector}`);
+  return rule.match(/(?:^|[ ;{])color: ([^;]+);/)[1];
+}
+
+test("coloured texts reach 4.5:1 in the light and dark themes", () => {
+  const css = Object.create(RenaultCard.prototype)._styles();
+  for (const theme of ["light", "dark"]) {
+    const t = THEMES[theme];
+    for (const [sel, state] of [[".chip.warn", "warning"], [".chip.ok", "success"]]) {
+      const bg = mix(hex(STATE[state]), hex(t.card), 0.15);
+      const r = ratio(resolve(ruleColor(css, sel), theme), bg);
+      assert.ok(r >= 4.5, `${sel} ${theme}: ${r.toFixed(2)}`);
+    }
+    for (const sel of [".tile.warn .val", ".fig.warn .val"]) {
+      const r = ratio(resolve(ruleColor(css, sel), theme), hex(t.sec));
+      assert.ok(r >= 4.5, `${sel} ${theme}: ${r.toFixed(2)}`);
+    }
+  }
+});
+
+test("lease status and figure sub-texts are inked, the bar keeps the state colour", () => {
+  const card = Object.create(RenaultCard.prototype);
+  const start = new Date();
+  start.setDate(start.getDate() - 200);
+  const d = `${start.getFullYear()}-${String(start.getMonth() + 1).padStart(2, "0")}-${String(start.getDate()).padStart(2, "0")}`;
+  card._hass = { language: "en", config: { currency: "EUR" }, states: { "sensor.m": { state: "1000", attributes: {} } } };
+  card._leaseFetch = () => {};
+  // over (error), warn (warning) and ok (success) leases.
+  for (const kmYear of [100, 1500, 100000]) {
+    card._config = { lease: { start_date: d, duration: 12, km_per_year: kmYear } };
+    const html = card._leaseHtml({ mileage: "sensor.m" });
+    const status = html.match(/class="lease-status" style="color:([^"]+)"/)[1];
+    for (const theme of ["light", "dark"]) {
+      const r = ratio(resolve(status, theme), hex(THEMES[theme].sec));
+      assert.ok(r >= 4.5, `lease status ${kmYear} ${theme}: ${r.toFixed(2)}`);
+    }
+    for (const [, sub] of html.matchAll(/class="sub" style="color:([^"]+)"/g)) {
+      for (const theme of ["light", "dark"]) {
+        const figBg = mix(hex(THEMES[theme].primary), hex(THEMES[theme].sec), 0.07);
+        const r = ratio(resolve(sub, theme), figBg);
+        assert.ok(r >= 4.5, `figure sub ${theme}: ${r.toFixed(2)}`);
+      }
+    }
+    assert.match(html, /class="fill" style="width:[\d.]+%;background:var\(--(error|warning|success)-color/);
+  }
+});
+
+// Narrow cards (6 columns of the Sections view, about 240 px): the rules that keep the vehicle name and
+// the location visible. The measured widths are in the pull request; this guards the CSS.
+function cssRule(css, selector) {
+  return css.split("}").filter((r) => r.trim().startsWith(`${selector} {`)).join(" ");
+}
+
+test("header: the plate shrinks instead of squeezing the vehicle name to nothing", () => {
+  const css = Object.create(RenaultCard.prototype)._styles();
+  const plate = cssRule(css, ".plate");
+  assert.doesNotMatch(plate, /flex-shrink: 0/);
+  assert.match(plate, /flex: 0 1 auto/);
+  assert.match(plate, /min-width: 0/);
+  assert.match(plate, /max-width: 4\d%/);
+  const titles = cssRule(css, ".titles");
+  // Basis 0: the name block does not claim its full text width before the plate gets its share.
+  assert.match(titles, /flex: 1 1 0/);
+  assert.match(titles, /min-width: \dch/);
+  assert.match(cssRule(css, ".model"), /text-overflow: ellipsis/);
+});
+
+test("location row: the place keeps its share next to 'updated X ago'", () => {
+  const css = Object.create(RenaultCard.prototype)._styles();
+  assert.match(cssRule(css, ".row-text"), /flex: 1 1 auto/);
+  assert.match(cssRule(css, ".row-text"), /min-width: 0/);
+  const when = cssRule(css, ".when");
+  assert.match(when, /flex: 0 1 auto/);
+  assert.match(when, /min-width: 0/);
+});
+
+test("lease figure labels wrap instead of being cut", () => {
+  const css = Object.create(RenaultCard.prototype)._styles();
+  assert.match(cssRule(css, ".fig .lbl"), /white-space: normal/);
+});
+
+test("lease end line edge cases: 30 days is one month, 29 days in days, ended, unknown locale", () => {
+  const card = Object.create(RenaultCard.prototype);
+  card._config = { language: "en" };
+  card._hass = { language: "en" };
+  assert.equal(card._leaseLeft({ ended: false, monthsLeft: 1, daysLeft: 30 }), "1 month");
+  assert.equal(card._leaseLeft({ ended: false, monthsLeft: 1, daysLeft: 29 }), "29 d");
+  assert.equal(card._leaseLeft({ ended: false, monthsLeft: 0, daysLeft: 0 }), "0 d");
+  assert.equal(card._leaseLeft({ ended: true, monthsLeft: 0, daysLeft: 0 }), "Ended");
+  // Polish "few" / "many" and an Intl that rejects the locale fall back to _other.
+  assert.equal(ctx.rnPlural("pl", "pl", "lease_months_left", 3), "3 mies.");
+  assert.equal(ctx.rnPlural("en", "not a locale!", "lease_months_left", 1), "1 months");
+  assert.equal(ctx.rnPlural("xx", "en", "lease_months_left", 1), "1 month");
+});
+
+test("narrow card: 'updated X ago' goes under the place and tiles get two columns", () => {
+  const css = Object.create(RenaultCard.prototype)._styles();
+  assert.match(cssRule(css, "ha-card"), /container-type: inline-size/);
+  const narrow = css.slice(css.indexOf("@container (max-width: 360px)"));
+  assert.match(narrow, /\.row \{ display: grid;/);
+  assert.match(narrow, /\.row \.when \{ grid-column: 2; grid-row: 2;/);
+  assert.match(narrow, /\.tiles \{ grid-template-columns: repeat\(auto-fit, minmax\(max\(100px, calc\(50% - 3px\)\), 1fr\)\); \}/);
+});
+
+test("armed button: inked text, accent icon", () => {
+  const css = Object.create(RenaultCard.prototype)._styles();
+  assert.match(cssRule(css, ".btn.armed"), /color: color-mix\(in srgb, var\(--rn-accent\) 40%, var\(--primary-text-color/);
+  assert.match(cssRule(css, ".btn.armed ha-icon"), /color: var\(--rn-accent\)/);
+  const map = RenaultMapCard._styles();
+  assert.match(cssRule(map, ".leaflet-container .pbtn"), /; color: color-mix\(in srgb, var\(--primary-color, #03a9f4\) 40%, var\(--primary-text-color/);
+});
+
+test("map header: the title is an ellipsed, escaped span; no title, no span", () => {
+  const css = RenaultMapCard._styles();
+  const rule = css.split("}").find((r) => r.trim().startsWith(".header .title {")) || "";
+  assert.match(rule, /min-width: 4ch/);
+  assert.match(rule, /text-overflow: ellipsis/);
+  const { card } = mapCardWithVehicle();
+  const header = card._root.querySelector(".header");
+  card._config = { title: "<b>Cars</b>", show_icon: true };
+  try {
+    card._update();
+  } catch (_e) {
+    // Only the header matters here; the map part needs Leaflet.
+  }
+  assert.match(header.innerHTML, /<span class="brand"[^>]*><\/span><span class="title">&lt;b&gt;Cars&lt;\/b&gt;<\/span>/);
+  card._config = { title: "", show_icon: false };
+  try {
+    card._update();
+  } catch (_e) {}
+  assert.equal(header.innerHTML, "");
+  assert.equal(header.hidden, true);
+});
+
+test("phone width (6 columns, about 156 px): the plate goes under the name, which keeps 4 letters", () => {
+  const css = Object.create(RenaultCard.prototype)._styles();
+  const q = css.indexOf("@container (max-width: 210px)");
+  assert.ok(q > 0, "no narrow header query");
+  const narrow = css.slice(q, css.indexOf(" }", css.indexOf("}", q) + 1) + 2);
+  assert.match(narrow, /\.header \{ flex-wrap: wrap;/);
+  assert.match(narrow, /\.plate \{[^}]*order: 3;[^}]*max-width: 100%;/);
+});
+
+test("lease status: wraps between words beside the title, under it when narrow, never letter by letter", () => {
+  const css = Object.create(RenaultCard.prototype)._styles();
+  const status = cssRule(css, ".lease-status");
+  assert.doesNotMatch(status, /overflow-wrap: anywhere/);
+  assert.match(status, /overflow-wrap: break-word/);
+  assert.match(cssRule(css, ".lease-head"), /display: grid; grid-template-columns: auto auto minmax\(min-content, 1fr\) auto;/);
+  assert.match(cssRule(css, ".lease-head .plan-title"), /white-space: nowrap/);
+  const narrow = css.slice(css.indexOf("@container (max-width: 300px)"));
+  assert.ok(narrow.length < css.length, "no narrow lease query");
+  // Narrow: the status gets the whole width of the head and its column no longer has a min-content floor.
+  assert.match(narrow, /\.lease-head \{ grid-template-columns: auto minmax\(0, 1fr\) auto; \}/);
+  assert.match(narrow, /\.lease-status \{ grid-column: 1 \/ -1; grid-row: 2; justify-content: flex-start; text-align: left; \}/);
+  assert.doesNotMatch(cssRule(css, ".when"), /overflow-wrap: anywhere/);
+});
+
+test("data plan percentage stays on one line", () => {
+  const css = Object.create(RenaultCard.prototype)._styles();
+  assert.match(cssRule(css, ".pct"), /white-space: nowrap/);
+  assert.match(cssRule(css, ".pct"), /flex: none/);
+});
+
+test("tiles are at least 100 px so 'Akumulator' or 'Kilometraža' is not cut at 361-420 px", () => {
+  const css = Object.create(RenaultCard.prototype)._styles();
+  assert.match(cssRule(css, ".tiles"), /grid-template-columns: repeat\(auto-fit, minmax\(100px, 1fr\)\)/);
+});
+
+test("in an auto-width container the card keeps a width that is no minimum, without contain-intrinsic-*", () => {
+  // container-type: inline-size makes the card's intrinsic width 0. contain-intrinsic-inline-size gave it
+  // 300 px but also made that its min-content width: wrapped in a div or hui-card in a 1fr grid track the
+  // card overflowed. The empty ::before grid gives 300 px max-content and 0 min-content (see
+  // intrinsic-width.render.test.mjs for the rendered widths).
+  for (const css of [Object.create(RenaultCard.prototype)._styles(), RenaultMapCard._styles()]) {
+    assert.doesNotMatch(css, /contain-intrinsic/);
+    assert.match(cssRule(String(css).replace(/^<style>/, ""), ":host::before"), /display: grid; grid-template-columns: minmax\(0, 300px\); height: 0;/);
+    const host = cssRule(String(css).replace(/^<style>/, ""), ":host");
+    assert.match(host, /min-width: 0;/);
+    assert.doesNotMatch(host, /min-width: [1-9]/);
+  }
+  assert.match(cssRule(Object.create(RenaultCard.prototype)._styles(), "ha-card"), /container-type: inline-size;/);
+  assert.match(cssRule(RenaultMapCard._styles(), "ha-card"), /contain: inline-size;/);
+});
+
+test("phone width: 'updated X ago' takes the whole row and the tile labels get 4 px more under about 236 px", () => {
+  // At 156-178 px the column beside the icon and the chevron is 54-76 px: "zaktualizowano" was cut in two.
+  // At 234 px "Kilometraža" missed 2 px in a two-column tile.
+  const css = Object.create(RenaultCard.prototype)._styles();
+  const q = css.indexOf("@container (max-width: 210px)");
+  const narrow = css.slice(q, css.indexOf("} }", q) + 3);
+  assert.match(narrow, /\.row > ha-icon, \.row \.chev \{ grid-row: 1; \}/);
+  assert.match(narrow, /\.row \.when \{ grid-column: 1 \/ -1; \}/);
+  assert.match(narrow, /\.tile \{ padding-left: 8px; padding-right: 8px; \}/);
 });
