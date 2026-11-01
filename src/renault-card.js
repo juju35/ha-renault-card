@@ -1481,7 +1481,7 @@ class RenaultCard extends HTMLElement {
       '.lbl { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
       '.val { font-size: 14px; font-weight: 500; color: var(--primary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
       '.bar { height: 6px; border-radius: 3px; background: var(--secondary-background-color, rgba(128,128,128,0.15)); overflow: hidden; }' +
-      '.fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }' +
+      '.fill { height: 100%; border-radius: 3px; }' +
       '.row { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 10px; cursor: pointer;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.1)); }' +
       '.row > ha-icon { color: var(--rn-accent); --mdc-icon-size: 20px; }' +
@@ -1489,7 +1489,6 @@ class RenaultCard extends HTMLElement {
       '.when { font-size: 12px; color: var(--secondary-text-color); text-align: right; }' +
       '.chev { color: var(--secondary-text-color); --mdc-icon-size: 20px; flex-shrink: 0; }' +
       '.lease-head .plan-title { flex: 1 0 auto; }' +
-      '.lease-chev { transition: transform .2s ease; }' +
       '.lease-chev.closed { transform: rotate(-90deg); }' +
       '.plan { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 10px; cursor: pointer;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.1)); }' +
