@@ -248,17 +248,17 @@ test("map editor offers the language option", () => {
   ed._config = {};
   ed._hass = { language: "en" };
   const lang = ed._schema().find((s) => s.name === "language");
-  assert.equal(lang.selector.select.options.map((o) => o.value).join(","), "fr,en,de,es");
+  assert.equal(lang.selector.select.options.map((o) => o.value).join(","), "fr,en,de,es,sr,sr-Latn");
   assert.equal(ctx.RnMapI18n.en.editor.language, "Language");
 });
 
-test("card editor offers fr, en, de and es", () => {
+test("card editor offers fr, en, de, es, sr and sr-Latn", () => {
   const Editor = defined["renault-card-editor"];
   const ed = Object.create(Editor.prototype);
   ed._config = {};
   ed._hass = { language: "de" };
   const lang = ed._schema().find((s) => s.name === "language");
-  assert.equal(lang.selector.select.options.map((o) => o.value).join(","), "fr,en,de,es");
+  assert.equal(lang.selector.select.options.map((o) => o.value).join(","), "fr,en,de,es,sr,sr-Latn");
   assert.equal(ed._lang(), "de");
 });
 
@@ -272,18 +272,79 @@ function i18nGet(obj, path) {
   return path.split(".").reduce((o, k) => o[k], obj);
 }
 for (const [name, table] of [["RnI18n", ctx.RnI18n], ["RnMapI18n", ctx.RnMapI18n]]) {
-  test(`I18N parity: ${name} has en, fr, de and es with the same keys and placeholders`, () => {
+  test(`I18N parity: ${name} has en, fr, de, es, sr and sr-Latn with the same keys and placeholders`, () => {
     const ref = i18nPaths(table.en);
-    for (const lang of ["fr", "de", "es"]) {
+    for (const lang of ["fr", "de", "es", "sr", "sr-Latn"]) {
       assert.ok(table[lang], `${name}.${lang} is missing`);
       assert.deepEqual(i18nPaths(table[lang]), ref, `${name}.${lang} keys differ from en`);
       for (const path of ref) {
         const ph = (s) => (String(s).match(/\{[a-z]+\}/g) || []).sort().join();
         assert.equal(ph(i18nGet(table[lang], path)), ph(i18nGet(table.en, path)), `${name}.${lang}.${path} placeholders`);
       }
+      for (const path of i18nPaths(table.en).map((p) => p.replace(/\.\d+$/, "")).filter((p, i, a) => a.indexOf(p) === i)) {
+        const v = i18nGet(table.en, path);
+        if (Array.isArray(v)) assert.equal(i18nGet(table[lang], path).length, v.length, `${name}.${lang}.${path} length`);
+      }
+    }
+  });
+
+  // Serbian: no Latin letter in sr and no Cyrillic one in sr-Latn, apart from brands, proper nouns and units.
+  test(`I18N script: ${name}.sr is Cyrillic and ${name}.sr-Latn is Latin`, () => {
+    const allowed = /Orange Internet On the move|Home Assistant|OpenStreetMap France|OpenStreetMap|OpenTopoMap|CyclOSM|MyRenault|Renault Picture|Renault|Esri|IGN|URL|\/local\/renault\/clio\.png|\bpx\b|\{[a-z]+\}/g;
+    for (const path of i18nPaths(table.en)) {
+      const sr = String(i18nGet(table.sr, path)).replace(allowed, "");
+      assert.doesNotMatch(sr, /[A-Za-z\u00C0-\u024F]/, `${name}.sr.${path} has Latin letters: ${sr}`);
+      assert.doesNotMatch(String(i18nGet(table["sr-Latn"], path)), /[\u0400-\u04FF]/, `${name}.sr-Latn.${path} has Cyrillic letters`);
     }
   });
 }
+
+test("rnResolveLang: full tag, then the part before the dash, then English", () => {
+  for (const table of [ctx.RnI18n, ctx.RnMapI18n]) {
+    assert.equal(ctx.rnResolveLang(table, "fr-FR"), "fr");
+    assert.equal(ctx.rnResolveLang(table, "sr-Latn"), "sr-Latn");
+    assert.equal(ctx.rnResolveLang(table, "sr"), "sr");
+    assert.equal(ctx.rnResolveLang(table, "pt-BR"), "en");
+    assert.equal(ctx.rnResolveLang(table, undefined), "en");
+  }
+});
+
+test("Home Assistant in sr-Latn picks sr-Latn on the cards and editors; the card language comes first", () => {
+  const card = Object.create(RenaultCard.prototype);
+  card._hass = { language: "sr-Latn" };
+  card._config = {};
+  assert.equal(card._lang(), "sr-Latn");
+  assert.equal(card._t("locked"), "Zaključano");
+  card._config = { language: "fr" };
+  assert.equal(card._lang(), "fr");
+  card._config = {};
+  card._hass = { language: "sr" };
+  assert.equal(card._t("locked"), "Закључано");
+  const ed = Object.create(defined["renault-card-editor"].prototype);
+  ed._hass = { language: "sr-Latn" };
+  assert.equal(ed._lang(), "sr-Latn");
+  const map = Object.create(RenaultMapCard.prototype);
+  map._hass = { language: "sr-Latn" };
+  map._config = {};
+  assert.equal(map._lang(), "sr-Latn");
+  assert.equal(map._mt().fullscreen, "Ceo ekran");
+  map._config = { language: "sr" };
+  assert.equal(map._mt().fullscreen, "Цео екран");
+  map._config = { language: "pt-BR" };
+  assert.equal(map._lang(), "en");
+  assert.equal(ctx.rnMapLang({ language: "sr-Latn" }), "sr-Latn");
+});
+
+test("Intl output for sr-Latn is in the Latin script, sr in Cyrillic", () => {
+  const latin = [
+    ctx.rnRelative("sr-Latn", new Date(Date.now() - 5 * 60000)),
+    new Date(2026, 10, 1).toLocaleDateString("sr-Latn", { day: "numeric", month: "long" }),
+    new Date(2026, 10, 1).toLocaleDateString("sr-Latn", { month: "short", year: "numeric" }),
+  ];
+  for (const s of latin) assert.doesNotMatch(s, /[\u0400-\u04FF]/, s);
+  assert.match(latin[0], /[a-z]/);
+  assert.match(ctx.rnRelative("sr", new Date(Date.now() - 5 * 60000)), /[\u0400-\u04FF]/);
+});
 
 // Registries as Home Assistant sends them: unchanged (same references) while states come and go,
 // e.g. when the config entry is reloaded.
