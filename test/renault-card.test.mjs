@@ -262,6 +262,29 @@ test("card editor offers fr, en, de, es, sr, sr-Latn, it, nl, pt and pl", () => 
   assert.equal(ed._lang(), "de");
 });
 
+test("language option labels European Portuguese explicitly", () => {
+  const Editor = defined["renault-card-editor"];
+  const ed = Object.create(Editor.prototype);
+  ed._config = {};
+  ed._hass = { language: "en" };
+  const pt = ed._schema().find((s) => s.name === "language").selector.select.options.find((o) => o.value === "pt");
+  assert.equal(pt.label, "Português (Portugal)");
+});
+
+test("Intl gets Home Assistant's full locale when it matches the card language, pt-PT for bare pt", () => {
+  assert.equal(ctx.rnIntlLang(ctx.RnI18n, "pt", { language: "pt" }), "pt-PT");
+  assert.equal(ctx.rnIntlLang(ctx.RnI18n, "pt", { language: "pt-BR" }), "pt-BR");
+  assert.equal(ctx.rnIntlLang(ctx.RnI18n, "nl", { language: "nl", locale: { language: "nl-BE" } }), "nl-BE");
+  assert.equal(ctx.rnIntlLang(ctx.RnI18n, "fr", { language: "pt" }), "fr");
+  assert.equal(ctx.rnIntlLang(ctx.RnMapI18n, "en", undefined), "en");
+  const card = Object.create(RenaultCard.prototype);
+  card._config = {};
+  card._hass = { language: "pt" };
+  assert.equal(card._fmtNum(12345), (12345).toLocaleString("pt-PT"));
+  card._config = { language: "fr" };
+  assert.equal(card._intl(), "fr");
+});
+
 // Every language has exactly the English keys (nested objects included) and the same placeholders.
 function i18nPaths(obj, prefix = "") {
   return Object.keys(obj).flatMap((k) =>

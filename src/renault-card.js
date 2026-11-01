@@ -630,9 +630,9 @@ var RnI18n = {
     fuel_quantity: 'Carburante',
     battery_level: 'Batteria',
     battery_autonomy: 'Autonomia',
-    mileage: 'Chilometraggio',
+    mileage: 'Chilometri',
     outside_temperature: 'Esterno',
-    tyres: 'Pneumatici',
+    tyres: 'Gomme',
     locked: 'Bloccato',
     unlocked: 'Sbloccato',
     doors_open: 'Portiera aperta',
@@ -686,7 +686,7 @@ var RnI18n = {
     en_location: 'Posizione',
     lease: 'Leasing',
     lease_ends: 'Fine {d}',
-    lease_months_left: '{n} mesi',
+    lease_months_left: 'Mesi rimanenti: {n}',
     lease_ended: 'Terminato',
     lease_ok: 'Entro il limite',
     lease_ok_margin: 'Margine di {k}',
@@ -694,7 +694,7 @@ var RnI18n = {
     lease_over: 'Limite superato di {k}',
     lease_early: 'Troppo presto per una proiezione',
     lease_expected_lbl: 'Previsto oggi',
-    lease_month_lbl: 'Rimanenti questo mese',
+    lease_month_lbl: 'Resto del mese',
     lease_month_left: 'su {t}',
     lease_month_over: 'oltre {t}',
     lease_budget_lbl: 'Al mese',
@@ -732,7 +732,7 @@ var RnI18n = {
     fuel_quantity: 'Brandstof',
     battery_level: 'Batterij',
     battery_autonomy: 'Actieradius',
-    mileage: 'Kilometerstand',
+    mileage: 'Km-stand',
     outside_temperature: 'Buiten',
     tyres: 'Banden',
     locked: 'Vergrendeld',
@@ -750,7 +750,7 @@ var RnI18n = {
     charge_mode: 'Laadmodus',
     data_plan: 'Orange Internet On the move',
     data_left: '{l} over van {t}',
-    renews_on: 'Verlengd op {d}',
+    renews_on: 'Wordt verlengd op {d}',
     expires_on: 'Verloopt op {d}',
     days_left: '{n} d',
     expired: 'Verlopen',
@@ -790,13 +790,13 @@ var RnI18n = {
     lease_ends: 'Einde {d}',
     lease_months_left: '{n} mnd',
     lease_ended: 'Beëindigd',
-    lease_ok: 'Binnen het tegoed',
+    lease_ok: 'Binnen het budget',
     lease_ok_margin: '{k} marge',
     lease_warn: 'Verwachte overschrijding: {k}',
-    lease_over: 'Tegoed overschreden met {k}',
+    lease_over: 'Budget overschreden met {k}',
     lease_early: 'Te vroeg voor een prognose',
     lease_expected_lbl: 'Doel vandaag',
-    lease_month_lbl: 'Over deze maand',
+    lease_month_lbl: 'Rest deze maand',
     lease_month_left: 'van {t}',
     lease_month_over: 'boven {t}',
     lease_budget_lbl: 'Per maand',
@@ -810,7 +810,7 @@ var RnI18n = {
     lease_year_sub: 'van {t}',
     lease_chart: 'Kilometerregistratie',
     lease_legend_actual: 'Werkelijk',
-    lease_legend_allowed: 'Tegoed',
+    lease_legend_allowed: 'Budget',
     lease_legend_projection: 'Prognose',
     lease_no_history: 'Nog geen geschiedenis',
     ed_lease: 'Leaseopvolging',
@@ -834,7 +834,7 @@ var RnI18n = {
     fuel_quantity: 'Combustível',
     battery_level: 'Bateria',
     battery_autonomy: 'Autonomia',
-    mileage: 'Quilometragem',
+    mileage: 'Quilómetros',
     outside_temperature: 'Exterior',
     tyres: 'Pneus',
     locked: 'Trancado',
@@ -890,7 +890,7 @@ var RnI18n = {
     en_location: 'Localização',
     lease: 'Leasing',
     lease_ends: 'Fim {d}',
-    lease_months_left: '{n} meses',
+    lease_months_left: 'Meses restantes: {n}',
     lease_ended: 'Terminado',
     lease_ok: 'Dentro do limite',
     lease_ok_margin: 'Margem de {k}',
@@ -937,7 +937,7 @@ var RnI18n = {
     battery_level: 'Akumulator',
     battery_autonomy: 'Zasięg',
     mileage: 'Przebieg',
-    outside_temperature: 'Na zewnątrz',
+    outside_temperature: 'Zewn.',
     tyres: 'Opony',
     locked: 'Zablokowany',
     unlocked: 'Odblokowany',
@@ -992,7 +992,7 @@ var RnI18n = {
     en_location: 'Lokalizacja',
     lease: 'Leasing',
     lease_ends: 'Koniec: {d}',
-    lease_months_left: 'Miesiące: {n}',
+    lease_months_left: '{n} mies.',
     lease_ended: 'Zakończony',
     lease_ok: 'W ramach limitu',
     lease_ok_margin: 'Zapas: {k}',
@@ -1000,14 +1000,14 @@ var RnI18n = {
     lease_over: 'Limit przekroczony o {k}',
     lease_early: 'Za wcześnie na prognozę',
     lease_expected_lbl: 'Cel na dziś',
-    lease_month_lbl: 'Pozostało w tym miesiącu',
+    lease_month_lbl: 'W tym miesiącu',
     lease_month_left: 'z {t}',
     lease_month_over: 'ponad {t}',
     lease_budget_lbl: 'Miesięcznie',
     lease_budget_sub: 'do końca',
     lease_pace_lbl: 'Tempo',
     lease_per_year: '/rok',
-    lease_recent: 'ostatnie dni: {n}',
+    lease_recent: 'ostatnie {n} dni',
     lease_since_start: 'od początku',
     lease_projection_lbl: 'Koniec leasingu',
     lease_year: 'Rok {n}',
@@ -1041,6 +1041,15 @@ function rnResolveLang(dict, lang) {
   if (dict[l]) return l;
   l = l.split('-')[0];
   return dict[l] ? l : 'en';
+}
+
+// Locale for Intl: Home Assistant's full locale (pt-PT, nl-BE…) when it resolves to the card's
+// language, else the card's language. Home Assistant's "pt" is European Portuguese, as is the pt
+// dictionary, so bare "pt" becomes pt-PT (Intl reads "pt" as Brazilian).
+function rnIntlLang(dict, lang, hass) {
+  var full = String((hass?.locale?.language) || (hass?.language) || '');
+  var tag = full && rnResolveLang(dict, full) === lang ? full : lang;
+  return tag === 'pt' ? 'pt-PT' : tag;
 }
 
 function rnT(lang, key) {
@@ -1130,7 +1139,7 @@ var RN_LANGUAGE_FIELD = {
         { value: 'sr-Latn', label: 'Srpski (latinica)' },
         { value: 'it', label: 'Italiano' },
         { value: 'nl', label: 'Nederlands' },
-        { value: 'pt', label: 'Português' },
+        { value: 'pt', label: 'Português (Portugal)' },
         { value: 'pl', label: 'Polski' },
       ],
     },
@@ -1558,6 +1567,8 @@ class RenaultCard extends HTMLElement {
     return rnResolveLang(RnI18n, (this._config?.language) || (this._hass?.language) || document.documentElement.lang);
   }
 
+  _intl() { return rnIntlLang(RnI18n, this._lang(), this._hass); }
+
   _t(k, vars) {
     var s = rnT(this._lang(), k);
     Object.keys(vars || {}).forEach((v) => { s = s.replace(`{${v}}`, vars[v]); });
@@ -1616,7 +1627,7 @@ class RenaultCard extends HTMLElement {
   }
 
   _fmtNum(n, digits) {
-    return Number(n).toLocaleString(this._lang(), { maximumFractionDigits: digits == null ? 0 : digits });
+    return Number(n).toLocaleString(this._intl(), { maximumFractionDigits: digits == null ? 0 : digits });
   }
 
   _fmtState(id) {
@@ -1635,7 +1646,7 @@ class RenaultCard extends HTMLElement {
     return this._fmtNum(n, digits) + (u ? (u === '%' ? ' %' : ` ${u}`) : '');
   }
 
-  _relative(date) { return rnRelative(this._lang(), date); }
+  _relative(date) { return rnRelative(this._intl(), date); }
 
   // The rendered texts that depend on the clock rather than on an entity state: the location
   // "updated X ago", the data plan days left, and the lease figures (which move by the day).
@@ -1862,7 +1873,7 @@ class RenaultCard extends HTMLElement {
       var expiry = this._avail(p.expiry_date) ? new Date(this._val(p.expiry_date)) : null;
       var expiryTxt = '', daysTxt = '';
       if (expiry && !Number.isNaN(expiry.getTime())) {
-        var d = expiry.toLocaleDateString(this._lang(), { day: 'numeric', month: 'long' });
+        var d = expiry.toLocaleDateString(this._intl(), { day: 'numeric', month: 'long' });
         var recurring = String(this._val(p.plan_type) || '').toLowerCase() === 'recurring';
         expiryTxt = this._t(recurring ? 'renews_on' : 'expires_on', { d: d });
         var days = Math.ceil((expiry.getTime() - Date.now()) / 86400000);
@@ -1910,7 +1921,7 @@ class RenaultCard extends HTMLElement {
 
   _money(v) {
     var cur = (this._hass.config?.currency) || 'EUR';
-    try { return rnMoneyFormat(this._lang(), cur).format(v); }
+    try { return rnMoneyFormat(this._intl(), cur).format(v); }
     catch (_e) { return `${this._fmtNum(v)} ${cur}`; }
   }
 
@@ -1938,7 +1949,7 @@ class RenaultCard extends HTMLElement {
     // The cost follows the kilometres in the status: driven so far when over, projected when warned.
     var statusCost = st.state === 'over' ? st.costNow : st.cost;
     if (statusCost != null) status += ` · ≈ ${this._money(statusCost)}`;
-    var endTxt = st.end.toLocaleDateString(this._lang(), { month: 'short', year: 'numeric' });
+    var endTxt = st.end.toLocaleDateString(this._intl(), { month: 'short', year: 'numeric' });
 
     // Folded: theoretical mileage today, this month, and the monthly budget until the end.
     var figs = [];
@@ -2294,7 +2305,7 @@ class RenaultCardEditor extends HTMLElement {
           {
             type: 'grid', name: '', schema: [
               { name: 'start_mileage', selector: { number: { min: 0, max: 1000000, step: 1, mode: 'box', unit_of_measurement: 'km' } } },
-              { name: 'extra_km_cost', selector: { number: { min: 0, max: 5, step: 0.01, mode: 'box', unit_of_measurement: `${rnCurrencySymbol(this._lang(), this._hass?.config?.currency || 'EUR')}/km` } } },
+              { name: 'extra_km_cost', selector: { number: { min: 0, max: 5, step: 0.01, mode: 'box', unit_of_measurement: `${rnCurrencySymbol(rnIntlLang(RnI18n, this._lang(), this._hass), this._hass?.config?.currency || 'EUR')}/km` } } },
             ],
           },
           {
@@ -2688,7 +2699,7 @@ var RnMapI18n = {
   nl: {
     default_title: 'Voertuigen',
     home: 'Thuis',
-    directions: 'Routebeschrijving',
+    directions: 'Route',
     details: 'Details',
     no_vehicle: 'Geen Renault-voertuig met een locatie gevonden',
     editor: {
@@ -2994,6 +3005,8 @@ class RenaultMapCard extends HTMLElement {
   _lang() { return this._config?.language ? rnResolveLang(RnMapI18n, this._config.language) : rnMapLang(this._hass); }
 
   _mt() { return RnMapI18n[this._lang()]; }
+
+  _intl() { return rnIntlLang(RnMapI18n, this._lang(), this._hass); }
 
   _deviceIds() {
     var ids = this._config.devices;
@@ -3364,7 +3377,7 @@ class RenaultMapCard extends HTMLElement {
     var n = this._num(id);
     if (n == null) return '';
     var u = s.attributes.unit_of_measurement || '';
-    return n.toLocaleString(this._lang(), { maximumFractionDigits: 0 }) + (u ? (u === '%' ? ' %' : ` ${u}`) : '');
+    return n.toLocaleString(this._intl(), { maximumFractionDigits: 0 }) + (u ? (u === '%' ? ' %' : ` ${u}`) : '');
   }
 
   _drawMarkers(L, vehicles) {
@@ -3441,7 +3454,7 @@ class RenaultMapCard extends HTMLElement {
     var lastSt = lastId && hass.states[lastId];
     var lastOk = lastSt && lastSt.state !== 'unavailable' && lastSt.state !== 'unknown' && lastSt.state !== '';
     var last = lastOk ? new Date(lastSt.state) : new Date(v.tracker.last_updated || '');
-    var when = Number.isNaN(last.getTime()) ? '' : rnT(lang, 'updated').replace('{t}', rnRelative(lang, last));
+    var when = Number.isNaN(last.getTime()) ? '' : rnT(lang, 'updated').replace('{t}', rnRelative(this._intl(), last));
     var rows = [
       ['battery_level', 'battery_level'], ['battery_autonomy', 'battery_autonomy'],
       ['fuel_autonomy', 'fuel_autonomy'], ['fuel_quantity', 'fuel_quantity'], ['mileage', 'mileage'],
