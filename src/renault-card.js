@@ -1251,10 +1251,34 @@ class RenaultCard extends HTMLElement {
         '<div class="plan-info"><span>' + rnEsc(leftTxt) + '</span><span>' + rnEsc(expiryTxt) + (daysTxt ? ` · ${rnEsc(daysTxt)}` : '') + '</span></div></div>';
     }
 
-    this.shadowRoot.innerHTML = this._styles() + '<ha-card>' + header + image +
+    this._setHtml(this._styles() + '<ha-card>' + header + image +
       (chips.length ? `<div class="chips">${chips.join('')}</div>` : '') +
       (tiles.length ? `<div class="tiles">${tiles.join('')}</div>` : '') +
-      this._leaseHtml(ent) + locationHtml + planHtml + actionsHtml + '</ha-card>';
+      this._leaseHtml(ent) + locationHtml + planHtml + actionsHtml + '</ha-card>');
+  }
+
+  // Replaces the card content and gives the focus back to the same action button, tile or lease
+  // header: the re-render recreates them, so without this a keyboard user arming "Sound horn" with
+  // Enter would lose the focus and could not confirm it.
+  _setHtml(html) {
+    var root = this.shadowRoot;
+    var keyOf = (el) => {
+      var ds = el?.dataset;
+      if (!ds) return null;
+      if (ds.press) return `p:${ds.press}`;
+      if (ds.more) return `m:${ds.more}`;
+      if (ds.leaseToggle !== undefined && String(el.className).indexOf('lease-head') >= 0) return 'l';
+      return null;
+    };
+    var focusables = () => Array.prototype.slice.call(root.querySelectorAll('[data-press], [data-more], .lease-head'));
+    var key = keyOf(root.activeElement);
+    // The same entity can have several elements (tile and row): keep the rank among them.
+    var rank = key ? focusables().filter((el) => keyOf(el) === key).indexOf(root.activeElement) : -1;
+    root.innerHTML = html;
+    if (!key) return;
+    var hit = focusables().filter((el) => keyOf(el) === key);
+    var el = hit[Math.max(0, Math.min(rank, hit.length - 1))];
+    if (el) el.focus({ preventScroll: true });
   }
 
   _km(n) { return `${this._fmtNum(Math.round(n))} km`; }
