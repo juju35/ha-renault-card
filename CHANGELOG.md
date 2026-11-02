@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.8.7 - 2026-11-01
+
+### Fixes
+- Lease: the end line now says "1 month" instead of "1 months" (singular and plural in every language), and shows the days left in the last month instead of "0 months".
+- Warning, success and error texts (low range, unlocked, lease status, lease figures, chart limit) the armed action button and the map popup buttons are now readable in the light theme: their text mixes the state colour with the text colour (5:1 or better in light and dark themes); gauges, bars and chart lines keep the pure colour.
+- Narrow card (6 columns of a section, about 240 px): the licence plate shrinks so the vehicle name stays visible, the model no longer breaks word by word, and "updated X ago" goes under the location instead of squeezing it to nothing.
+- Long tile and lease figure labels (Polish, Serbian…) are no longer cut on narrow cards: tiles use two columns there and figure labels wrap.
+- Map card: a long title is shortened with an ellipsis.
+- Phone widths (6 to 8 columns of a section, up to about 236 px): the licence plate moves under the vehicle name, which stays readable. Up to about 326 px the lease status takes its own line under the "Lease" title instead of being squeezed to a letter per line.
+- Lease status and "updated X ago" wrap between words instead of letter by letter; on phone widths (up to about 236 px) "updated X ago" takes the whole width of the location row, so a long word such as "zaktualizowano" is no longer cut in two. The data plan percentage ("61 %") stays on one line.
+- Tile labels such as "Kilometraža" are no longer cut by 2 px on cards of about 234 px.
+- Tile labels such as "Akumulator" or "Kilometraža" are no longer cut on cards of 360 to 420 px: tiles are at least 100 px wide.
+- In a container that sizes cards to their content (layout-card, a grid `auto` column, an inline block) the vehicle card no longer collapses to about 26 px and the map card no longer shrinks to its title: both keep a 300 px width there. That width is not a minimum: in a `1fr` grid column or a flex row the cards shrink to their share instead of overflowing, also when they are wrapped in another element (a layout-card grid places each card inside a `hui-card`).
+
+### Maintenance
+- The map screenshots are saved with a 256 colour palette: about 450 KB each instead of 1 MB.
+- `npm run screenshots` only rewrites a screenshot or GIF when its decoded pixels change, so a rerun with another zlib or ffmpeg build no longer produces byte-only changes.
+
 ## 2.8.6 - 2026-11-01
 
 ### Added
