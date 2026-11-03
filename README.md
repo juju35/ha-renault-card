@@ -41,6 +41,14 @@ Pick the vehicle, the card finds all its entities by itself.
 - Base maps without API key: Home Assistant's own map (vector, light or dark), OpenStreetMap, OpenStreetMap France, IGN map and aerial photos, OpenTopoMap, CyclOSM, Esri satellite, or your own tile URL
 - Follows the light / dark theme
 
+## Supported integrations
+
+| Integration | What the cards show |
+|---|---|
+| [Renault](https://www.home-assistant.io/integrations/renault/) (built in) | Range, fuel and battery levels, mileage, charging, plug, lock, doors, air conditioning, tyre pressure, location, action buttons and charge mode; the vehicles on the map card |
+| [Renault Picture](https://github.com/juju35/ha-renault-picture) (HACS, optional) | The official MyRenault photo of the vehicle |
+| [Orange Internet On the move](https://github.com/rexave/hass-orange-internet-on-the-move) (HACS, optional) | Data left, percentage, renewal or expiry date |
+
 ## Prerequisites
 
 - Home Assistant 2024.8 or later with the [Renault](https://www.home-assistant.io/integrations/renault/) integration set up
