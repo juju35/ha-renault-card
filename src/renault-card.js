@@ -2319,9 +2319,13 @@ function rnPlural(lang, intl, key, n) {
 var RN_RTF = {};
 var RN_MONEY = {};
 
+// narrowSymbol: Romanian, Hungarian and Ukrainian would otherwise print "900 EUR" instead of "900 €".
 function rnMoneyFormat(lang, cur) {
   var key = `${lang}|${cur}`;
-  return RN_MONEY[key] || (RN_MONEY[key] = new Intl.NumberFormat(lang, { style: 'currency', currency: cur, maximumFractionDigits: 0 }));
+  return (
+    RN_MONEY[key] ||
+    (RN_MONEY[key] = new Intl.NumberFormat(lang, { style: 'currency', currency: cur, currencyDisplay: 'narrowSymbol', maximumFractionDigits: 0 }))
+  );
 }
 
 // Currency symbol of Home Assistant's configured currency, for the editor's per-km cost unit.

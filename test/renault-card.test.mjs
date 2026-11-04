@@ -216,6 +216,15 @@ test("lease status text uses the same kilometres as its cost", () => {
   assert.match(html, /Allowance exceeded by 900 km · ≈ €900/);
 });
 
+test("the lease cost shows the euro sign in Romanian, Hungarian and Ukrainian, not Intl's EUR code", () => {
+  for (const lang of ["ro", "hu", "uk"]) {
+    const card = Object.create(RenaultCard.prototype);
+    card._config = { language: lang };
+    card._hass = { language: lang, config: { currency: "EUR" }, states: {} };
+    assert.equal(card._money(900).replace(/\s/g, " "), "900 €");
+  }
+});
+
 test("_num returns null for a non numeric state", () => {
   const card = Object.create(RenaultCard.prototype);
   card._hass = { states: { "sensor.a": { state: "abc" }, "sensor.b": { state: "12.5" }, "sensor.c": { state: "unknown" } } };
