@@ -5,7 +5,7 @@
 [![Validate](https://github.com/juju35/ha-renault-card/actions/workflows/validate.yml/badge.svg)](https://github.com/juju35/ha-renault-card/actions/workflows/validate.yml)
 [![Lint](https://github.com/juju35/ha-renault-card/actions/workflows/lint.yml/badge.svg)](https://github.com/juju35/ha-renault-card/actions/workflows/lint.yml)
 [![Release](https://img.shields.io/github/v/release/juju35/ha-renault-card)](https://github.com/juju35/ha-renault-card/releases/latest)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/juju35/ha-renault-card/blob/main/LICENSE)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/julienstep9)
 
 Custom Lovelace cards for Home Assistant's [Renault](https://www.home-assistant.io/integrations/renault/) integration: a **vehicle card**, with an optional section for the [Orange Internet On the move](https://github.com/rexave/hass-orange-internet-on-the-move) data plan of the car, and a **map card** showing your vehicles.
@@ -221,18 +221,18 @@ height: 400
 | `show_fullscreen` | ❌ | `true` | Full screen button under the zoom buttons (on iPhone the card fills the screen) |
 | `language` | ❌ | Auto | Force language: `en`, `fr`, `de`, `es`, `sr`, `sr-Latn`, `it`, `nl`, `pt`, `pl`, `ro`, `da`, `sv`, `bg`, `ru`, `uk`, `hu`, `sk`, `cs`, `sl`, `lv` or `el` (auto-detects from HA settings) |
 
-The `ha` base map is the one Home Assistant's own map card uses (Home Assistant 2026.9 or later, WebGL2): OpenStreetMap vector tiles through your instance, in light or dark. On older versions or without WebGL2, the card falls back to OpenStreetMap raster tiles, also through Home Assistant when it can. Leaflet and MapLibre GL ship with the card (see [licenses](licenses)): only the map tiles come from the network.
+The `ha` base map is the one Home Assistant's own map card uses (Home Assistant 2026.9 or later, WebGL2): OpenStreetMap vector tiles through your instance, in light or dark. On older versions or without WebGL2, the card falls back to OpenStreetMap raster tiles, also through Home Assistant when it can. Leaflet and MapLibre GL ship with the card (see [licenses](https://github.com/juju35/ha-renault-card/blob/main/licenses)): only the map tiles come from the network.
 
 ## Screenshots
 
 | Espace (fuel, data plan) | Captur (plug-in hybrid, charging) |
 |---|---|
-| ![espace](screenshots/espace.png) | ![captur](screenshots/captur.png) |
-| ![espace dark](screenshots/espace-dark.png) | ![captur dark](screenshots/captur-dark.png) |
+| ![espace](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/espace.png) | ![captur](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/captur.png) |
+| ![espace dark](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/espace-dark.png) | ![captur dark](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/captur-dark.png) |
 
 | Map card | Map card, dark |
 |---|---|
-| ![map card](screenshots/map.png) | ![map card, dark](screenshots/map-dark.png) |
+| ![map card](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/map.png) | ![map card, dark](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/map-dark.png) |
 
 ## How it works
 
@@ -258,7 +258,7 @@ The map libraries in `vendor/` (Leaflet, MapLibre GL and its Leaflet adapter) ar
 ### Releasing
 
 1. Bump `version` in `package.json`
-2. Add a `## <version>` section at the top of [CHANGELOG.md](CHANGELOG.md)
+2. Add a `## <version>` section at the top of [CHANGELOG.md](https://github.com/juju35/ha-renault-card/blob/main/CHANGELOG.md)
 3. Push to `main`: the **Release** workflow builds the card, creates the tag and the GitHub release with the changelog section as notes, and attaches the files of `dist/`
 
 ## Translations
@@ -296,7 +296,7 @@ Contributions for additional languages are welcome!
 
 ## License
 
-[MIT](LICENSE)
+[MIT](https://github.com/juju35/ha-renault-card/blob/main/LICENSE)
 
 ## Support
 
