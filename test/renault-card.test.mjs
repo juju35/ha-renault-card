@@ -248,17 +248,17 @@ test("map editor offers the language option", () => {
   ed._config = {};
   ed._hass = { language: "en" };
   const lang = ed._schema().find((s) => s.name === "language");
-  assert.equal(lang.selector.select.options.map((o) => o.value).join(","), "fr,en,de,es,sr,sr-Latn,it,nl,pt,pl");
+  assert.equal(lang.selector.select.options.map((o) => o.value).join(","), "fr,en,de,es,sr,sr-Latn,it,nl,pt,pl,ro,da,sv,bg,ru,uk,hu,ga,sk,cs,sl,mt,lv,el");
   assert.equal(ctx.RnMapI18n.en.editor.language, "Language");
 });
 
-test("card editor offers fr, en, de, es, sr, sr-Latn, it, nl, pt and pl", () => {
+test("card editor offers fr, en, de, es, sr, sr-Latn, it, nl, pt, pl and the 14 languages added in 2.8.8", () => {
   const Editor = defined["renault-card-editor"];
   const ed = Object.create(Editor.prototype);
   ed._config = {};
   ed._hass = { language: "de" };
   const lang = ed._schema().find((s) => s.name === "language");
-  assert.equal(lang.selector.select.options.map((o) => o.value).join(","), "fr,en,de,es,sr,sr-Latn,it,nl,pt,pl");
+  assert.equal(lang.selector.select.options.map((o) => o.value).join(","), "fr,en,de,es,sr,sr-Latn,it,nl,pt,pl,ro,da,sv,bg,ru,uk,hu,ga,sk,cs,sl,mt,lv,el");
   assert.equal(ed._lang(), "de");
 });
 
@@ -295,9 +295,9 @@ function i18nGet(obj, path) {
   return path.split(".").reduce((o, k) => o[k], obj);
 }
 for (const [name, table] of [["RnI18n", ctx.RnI18n], ["RnMapI18n", ctx.RnMapI18n]]) {
-  test(`I18N parity: ${name} has en, fr, de, es, sr, sr-Latn, it, nl, pt and pl with the same keys, placeholders and no empty value`, () => {
+  test(`I18N parity: ${name} has en, fr, de, es, sr, sr-Latn, it, nl, pt, pl, ro, da, sv, bg, ru, uk, hu, ga, sk, cs, sl, mt, lv and el with the same keys, placeholders and no empty value`, () => {
     const ref = i18nPaths(table.en);
-    for (const lang of ["fr", "de", "es", "sr", "sr-Latn", "it", "nl", "pt", "pl"]) {
+    for (const lang of ["fr", "de", "es", "sr", "sr-Latn", "it", "nl", "pt", "pl", "ro", "da", "sv", "bg", "ru", "uk", "hu", "ga", "sk", "cs", "sl", "mt", "lv", "el"]) {
       assert.ok(table[lang], `${name}.${lang} is missing`);
       assert.deepEqual(i18nPaths(table[lang]), ref, `${name}.${lang} keys differ from en`);
       for (const path of ref) {
@@ -350,6 +350,38 @@ test("rnResolveLang: it-IT, nl-BE, pt, pt-BR (European Portuguese), pl-PL, sr-La
   assert.equal(map._mt().fullscreen, "Volledig scherm");
   map._config = { language: "it" };
   assert.equal(map._mt().fullscreen, "Schermo intero");
+});
+
+test("rnResolveLang: the 14 languages added in 2.8.8, with and without a region", () => {
+  const cases = { "ro-RO": "ro", "da-DK": "da", "sv-SE": "sv", "sv-FI": "sv", bg: "bg", "ru-RU": "ru", uk: "uk", "hu-HU": "hu", "ga-IE": "ga", "sk-SK": "sk", "cs-CZ": "cs", "sl-SI": "sl", "mt-MT": "mt", "lv-LV": "lv", "el-GR": "el", "el-CY": "el" };
+  for (const table of [ctx.RnI18n, ctx.RnMapI18n]) {
+    for (const [tag, want] of Object.entries(cases)) assert.equal(ctx.rnResolveLang(table, tag), want, tag);
+  }
+  const card = Object.create(RenaultCard.prototype);
+  card._config = {};
+  card._hass = { language: "cs" };
+  assert.equal(card._t("locked"), "Zamčeno");
+  card._hass = { language: "el-GR" };
+  assert.equal(card._t("locked"), "Κλειδωμένο");
+  const map = Object.create(RenaultMapCard.prototype);
+  map._hass = { language: "uk" };
+  map._config = {};
+  assert.equal(map._mt().fullscreen, "Повноекранний режим");
+  map._config = { language: "sv" };
+  assert.equal(map._mt().fullscreen, "Helskärm");
+});
+
+test("language option labels the 14 languages added in 2.8.8 with their native names", () => {
+  const Editor = defined["renault-card-editor"];
+  const ed = Object.create(Editor.prototype);
+  ed._config = {};
+  ed._hass = { language: "en" };
+  const opts = ed._schema().find((s) => s.name === "language").selector.select.options;
+  const label = (v) => opts.find((o) => o.value === v).label;
+  assert.deepEqual(
+    ["ro", "da", "sv", "bg", "ru", "uk", "hu", "ga", "sk", "cs", "sl", "mt", "lv", "el"].map(label),
+    ["Română", "Dansk", "Svenska", "Български", "Русский", "Українська", "Magyar", "Gaeilge", "Slovenčina", "Čeština", "Slovenščina", "Malti", "Latviešu", "Ελληνικά"],
+  );
 });
 
 test("Home Assistant in sr-Latn picks sr-Latn on the cards and editors; the card language comes first", () => {
@@ -997,6 +1029,21 @@ test("lease months left: plural forms for 1, 2, 5, 21 and 22 in every language",
     pl: ["1 mies.", "2 mies.", "5 mies.", "21 mies.", "22 mies."],
     sr: ["1 мес.", "2 мес.", "5 мес.", "21 мес.", "22 мес."],
     "sr-Latn": ["1 mes.", "2 mes.", "5 mes.", "21 mes.", "22 mes."],
+    da: ["1 måned", "2 måneder", "5 måneder", "21 måneder", "22 måneder"],
+    sv: ["1 månad", "2 månader", "5 månader", "21 månader", "22 månader"],
+    bg: ["1 месец", "2 месеца", "5 месеца", "21 месеца", "22 месеца"],
+    el: ["1 μήνας", "2 μήνες", "5 μήνες", "21 μήνες", "22 μήνες"],
+    hu: ["1 hónap", "2 hónap", "5 hónap", "21 hónap", "22 hónap"],
+    ru: ["1 мес.", "2 мес.", "5 мес.", "21 мес.", "22 мес."],
+    uk: ["1 міс.", "2 міс.", "5 міс.", "21 міс.", "22 міс."],
+    sk: ["1 mes.", "2 mes.", "5 mes.", "21 mes.", "22 mes."],
+    cs: ["1 měs.", "2 měs.", "5 měs.", "21 měs.", "22 měs."],
+    sl: ["1 mes.", "2 mes.", "5 mes.", "21 mes.", "22 mes."],
+    lv: ["1 mēn.", "2 mēn.", "5 mēn.", "21 mēn.", "22 mēn."],
+    // The number after a label, the same for every number.
+    ro: ["Luni rămase: 1", "Luni rămase: 2", "Luni rămase: 5", "Luni rămase: 21", "Luni rămase: 22"],
+    ga: ["Míonna fágtha: 1", "Míonna fágtha: 2", "Míonna fágtha: 5", "Míonna fágtha: 21", "Míonna fágtha: 22"],
+    mt: ["Xhur li fadal: 1", "Xhur li fadal: 2", "Xhur li fadal: 5", "Xhur li fadal: 21", "Xhur li fadal: 22"],
   };
   for (const [lang, texts] of Object.entries(want)) {
     card._config = { language: lang };

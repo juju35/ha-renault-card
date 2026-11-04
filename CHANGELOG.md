@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.8.8 - 2026-11-04
+
+### Added
+- Added Romanian, Danish, Swedish, Bulgarian, Russian, Ukrainian, Hungarian, Irish, Slovak, Czech, Slovenian, Maltese, Latvian and Greek translations: `ro`, `da`, `sv`, `bg`, `ru`, `uk`, `hu`, `ga`, `sk`, `cs`, `sl`, `mt`, `lv` and `el` for the vehicle card, the map card and their editors.
+
 ## 2.8.7 - 2026-11-01
 
 ### Fixes
