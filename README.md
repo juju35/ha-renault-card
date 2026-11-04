@@ -16,7 +16,7 @@ Pick the vehicle, the card finds all its entities by itself.
 
 | Espace (with Orange Internet On the move) | Captur |
 |---|---|
-| ![Renault Espace card](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/espace.png) | ![Renault Captur card](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/captur.png) |
+| <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/espace.png" alt="Renault Espace card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/captur.png" alt="Renault Captur card" width="400"> |
 
 ## Features
 
@@ -128,13 +128,13 @@ Also in the visual editor, in the **Lease tracking** panel. Without `lease`, the
 
 | Lease (details unfolded) | Dark theme |
 |---|---|
-| ![Lease tracking](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/lease.png) | ![Lease tracking, dark theme](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/lease-dark.png) |
+| <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/lease.png" alt="Lease tracking" width="387"> | <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/lease-dark.png" alt="Lease tracking, dark theme" width="387"> |
 
 The lease section unfolding on tap — pace, end-of-lease projection, contract year and the mileage chart — then folding back:
 
 | Light | Dark |
 |---|---|
-| ![Lease section unfolding and folding back](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/lease.gif) | ![Lease section unfolding and folding back, dark theme](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/lease-dark.gif) |
+| <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/lease.gif" alt="Lease section unfolding and folding back" width="387"> | <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/lease-dark.gif" alt="Lease section unfolding and folding back, dark theme" width="387"> |
 
 ### Minimal
 
@@ -227,12 +227,12 @@ The `ha` base map is the one Home Assistant's own map card uses (Home Assistant 
 
 | Espace (fuel, data plan) | Captur (plug-in hybrid, charging) |
 |---|---|
-| ![espace](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/espace.png) | ![captur](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/captur.png) |
-| ![espace dark](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/espace-dark.png) | ![captur dark](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/captur-dark.png) |
+| <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/espace.png" alt="espace" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/captur.png" alt="captur" width="400"> |
+| <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/espace-dark.png" alt="espace dark" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/captur-dark.png" alt="captur dark" width="400"> |
 
 | Map card | Map card, dark |
 |---|---|
-| ![map card](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/map.png) | ![map card, dark](https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/map-dark.png) |
+| <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/map.png" alt="map card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/map-dark.png" alt="map card, dark" width="400"> |
 
 ## How it works
 
