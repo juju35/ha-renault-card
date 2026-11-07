@@ -30,6 +30,15 @@ var RnI18n = {
     plugged: 'Branché',
     unplugged: 'Débranché',
     low_range: 'Autonomie faible',
+    tyre_0: 'AvG',
+    tyre_1: 'AvD',
+    tyre_2: 'ArG',
+    tyre_3: 'ArD',
+    low_tyre_pressure: 'Pression des pneus basse',
+    card_name: 'Carte Renault',
+    card_desc: 'Carte de véhicule Renault (autonomie, carburant, batterie, position, actions) avec forfait Orange Internet On the move en option',
+    mini_name: 'Mini-carte Renault',
+    mini_desc: 'Carte compacte de véhicule Renault (photo, batterie, autonomie, charge) avec un bouton pour afficher la carte complète',
     location: 'Position',
     updated: 'mis à jour {t}',
     confirm: 'Confirmer ?',
@@ -59,6 +68,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Affiche la jauge de carburant',
     ed_low_range: 'Seuil d\'autonomie faible',
     ed_low_range_helper: '100 km par défaut',
+    ed_low_tyre_pressure: 'Seuil de pression des pneus basse',
+    ed_low_tyre_pressure_helper: 'En bar ; vide ou 0 : pas d\'alerte',
     ed_show_plate: 'Plaque d\'immatriculation',
     ed_plate_department: 'Département de la plaque',
     ed_plate_department_helper: 'Numéro affiché à droite de la plaque, par exemple 35 (emblème régional traditionnel affiché selon le département : Bretagne, Occitanie, Île-de-France, Provence, Corse, Bourgogne)',
@@ -137,6 +148,15 @@ var RnI18n = {
     plugged: 'Plugged in',
     unplugged: 'Unplugged',
     low_range: 'Low range',
+    tyre_0: 'FL',
+    tyre_1: 'FR',
+    tyre_2: 'RL',
+    tyre_3: 'RR',
+    low_tyre_pressure: 'Low tyre pressure',
+    card_name: 'Renault Card',
+    card_desc: 'Renault vehicle card (range, fuel, battery, location, actions) with optional Orange Internet On the move data plan',
+    mini_name: 'Renault Mini Card',
+    mini_desc: 'Compact Renault vehicle card (picture, battery, range, charging) with a button to show the full card',
     location: 'Location',
     updated: 'updated {t}',
     confirm: 'Confirm?',
@@ -166,6 +186,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Shows the fuel gauge',
     ed_low_range: 'Low range threshold',
     ed_low_range_helper: 'Defaults to 100 km',
+    ed_low_tyre_pressure: 'Low tyre pressure threshold',
+    ed_low_tyre_pressure_helper: 'In bar; empty or 0 for no warning',
     ed_show_plate: 'Licence plate',
     ed_plate_department: 'Plate department',
     ed_plate_department_helper: 'Number shown on the right of the plate, for example 35 (traditional regional emblem shown by department: Brittany, Occitania, Île-de-France, Provence, Corsica, Burgundy)',
@@ -244,6 +266,15 @@ var RnI18n = {
     plugged: 'Angeschlossen',
     unplugged: 'Nicht angeschlossen',
     low_range: 'Geringe Reichweite',
+    tyre_0: 'VL',
+    tyre_1: 'VR',
+    tyre_2: 'HL',
+    tyre_3: 'HR',
+    low_tyre_pressure: 'Niedriger Reifendruck',
+    card_name: 'Renault-Karte',
+    card_desc: 'Renault-Fahrzeugkarte (Reichweite, Kraftstoff, Batterie, Position, Aktionen) mit optionalem Orange Internet On the move Datentarif',
+    mini_name: 'Renault-Minikarte',
+    mini_desc: 'Kompakte Renault-Fahrzeugkarte (Bild, Batterie, Reichweite, Laden) mit einer Schaltfläche für die vollständige Karte',
     location: 'Standort',
     updated: 'aktualisiert {t}',
     confirm: 'Bestätigen?',
@@ -273,6 +304,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Zeigt die Tankanzeige an',
     ed_low_range: 'Schwelle für geringe Reichweite',
     ed_low_range_helper: 'Standardmäßig 100 km',
+    ed_low_tyre_pressure: 'Schwelle für niedrigen Reifendruck',
+    ed_low_tyre_pressure_helper: 'In bar; leer oder 0 für keine Warnung',
     ed_show_plate: 'Kennzeichen',
     ed_plate_department: 'Département auf dem Kennzeichen',
     ed_plate_department_helper: 'Nummer rechts auf dem Kennzeichen, zum Beispiel 35 (traditionelles Regionalwappen je nach Département: Bretagne, Okzitanien, Île-de-France, Provence, Korsika, Burgund)',
@@ -351,6 +384,15 @@ var RnI18n = {
     plugged: 'Enchufado',
     unplugged: 'Desenchufado',
     low_range: 'Autonomía baja',
+    tyre_0: 'DI',
+    tyre_1: 'DD',
+    tyre_2: 'TI',
+    tyre_3: 'TD',
+    low_tyre_pressure: 'Presión de neumáticos baja',
+    card_name: 'Tarjeta Renault',
+    card_desc: 'Tarjeta de vehículo Renault (autonomía, combustible, batería, ubicación, acciones) con plan de datos Orange Internet On the move opcional',
+    mini_name: 'Minitarjeta Renault',
+    mini_desc: 'Tarjeta compacta de vehículo Renault (imagen, batería, autonomía, carga) con un botón para mostrar la tarjeta completa',
     location: 'Ubicación',
     updated: 'actualizado {t}',
     confirm: '¿Confirmar?',
@@ -380,6 +422,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Muestra el indicador de combustible',
     ed_low_range: 'Umbral de autonomía baja',
     ed_low_range_helper: '100 km por defecto',
+    ed_low_tyre_pressure: 'Umbral de presión de neumáticos baja',
+    ed_low_tyre_pressure_helper: 'En bar; vacío o 0 para no avisar',
     ed_show_plate: 'Matrícula',
     ed_plate_department: 'Departamento de la matrícula',
     ed_plate_department_helper: 'Número que aparece a la derecha de la matrícula, por ejemplo 35 (emblema regional tradicional según el departamento: Bretaña, Occitania, Isla de Francia, Provenza, Córcega, Borgoña)',
@@ -458,6 +502,15 @@ var RnI18n = {
     plugged: 'Прикључено',
     unplugged: 'Није прикључено',
     low_range: 'Мали домет',
+    tyre_0: 'ПЛ',
+    tyre_1: 'ПД',
+    tyre_2: 'ЗЛ',
+    tyre_3: 'ЗД',
+    low_tyre_pressure: 'Низак притисак у гумама',
+    card_name: 'Renault картица',
+    card_desc: 'Картица Renault возила (домет, гориво, батерија, локација, радње) са опционим Orange Internet On the move пакетом података',
+    mini_name: 'Renault мини картица',
+    mini_desc: 'Компактна картица Renault возила (слика, батерија, домет, пуњење) са дугметом за приказ целе картице',
     location: 'Локација',
     updated: 'ажурирано {t}',
     confirm: 'Потврдити?',
@@ -487,6 +540,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Приказује мерач горива',
     ed_low_range: 'Праг малог домета',
     ed_low_range_helper: 'Подразумевано 100 км',
+    ed_low_tyre_pressure: 'Праг ниског притиска у гумама',
+    ed_low_tyre_pressure_helper: 'У барима; празно или 0 без упозорења',
     ed_show_plate: 'Регистарска таблица',
     ed_plate_department: 'Департман на таблици',
     ed_plate_department_helper: 'Број приказан десно на таблици, на пример 35 (традиционални регионални амблем према департману: Бретања, Окситанија, Ил де Франс, Прованса, Корзика, Бургундија)',
@@ -565,6 +620,15 @@ var RnI18n = {
     plugged: 'Priključeno',
     unplugged: 'Nije priključeno',
     low_range: 'Mali domet',
+    tyre_0: 'PL',
+    tyre_1: 'PD',
+    tyre_2: 'ZL',
+    tyre_3: 'ZD',
+    low_tyre_pressure: 'Nizak pritisak u gumama',
+    card_name: 'Renault kartica',
+    card_desc: 'Kartica Renault vozila (domet, gorivo, baterija, lokacija, radnje) sa opcionim Orange Internet On the move paketom podataka',
+    mini_name: 'Renault mini kartica',
+    mini_desc: 'Kompaktna kartica Renault vozila (slika, baterija, domet, punjenje) sa dugmetom za prikaz cele kartice',
     location: 'Lokacija',
     updated: 'ažurirano {t}',
     confirm: 'Potvrditi?',
@@ -594,6 +658,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Prikazuje merač goriva',
     ed_low_range: 'Prag malog dometa',
     ed_low_range_helper: 'Podrazumevano 100 km',
+    ed_low_tyre_pressure: 'Prag niskog pritiska u gumama',
+    ed_low_tyre_pressure_helper: 'U barima; prazno ili 0 bez upozorenja',
     ed_show_plate: 'Registarska tablica',
     ed_plate_department: 'Departman na tablici',
     ed_plate_department_helper: 'Broj prikazan desno na tablici, na primer 35 (tradicionalni regionalni amblem prema departmanu: Bretanja, Oksitanija, Il de Frans, Provansa, Korzika, Burgundija)',
@@ -672,6 +738,15 @@ var RnI18n = {
     plugged: 'Collegato',
     unplugged: 'Scollegato',
     low_range: 'Autonomia bassa',
+    tyre_0: 'AS',
+    tyre_1: 'AD',
+    tyre_2: 'PS',
+    tyre_3: 'PD',
+    low_tyre_pressure: 'Pressione gomme bassa',
+    card_name: 'Scheda Renault',
+    card_desc: 'Scheda veicolo Renault (autonomia, carburante, batteria, posizione, azioni) con piano dati Orange Internet On the move opzionale',
+    mini_name: 'Mini scheda Renault',
+    mini_desc: 'Scheda compatta del veicolo Renault (immagine, batteria, autonomia, ricarica) con un pulsante per mostrare la scheda completa',
     location: 'Posizione',
     updated: 'aggiornato {t}',
     confirm: 'Confermare?',
@@ -701,6 +776,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Mostra l\'indicatore del carburante',
     ed_low_range: 'Soglia di autonomia bassa',
     ed_low_range_helper: '100 km per impostazione predefinita',
+    ed_low_tyre_pressure: 'Soglia di pressione gomme bassa',
+    ed_low_tyre_pressure_helper: 'In bar; vuoto o 0 per nessun avviso',
     ed_show_plate: 'Targa',
     ed_plate_department: 'Dipartimento della targa',
     ed_plate_department_helper: 'Numero mostrato a destra della targa, ad esempio 35 (emblema regionale tradizionale mostrato in base al dipartimento: Bretagna, Occitania, Île-de-France, Provenza, Corsica, Borgogna)',
@@ -779,6 +856,15 @@ var RnI18n = {
     plugged: 'Aangesloten',
     unplugged: 'Losgekoppeld',
     low_range: 'Lage actieradius',
+    tyre_0: 'LV',
+    tyre_1: 'RV',
+    tyre_2: 'LA',
+    tyre_3: 'RA',
+    low_tyre_pressure: 'Lage bandenspanning',
+    card_name: 'Renault-kaart',
+    card_desc: 'Renault-voertuigkaart (actieradius, brandstof, batterij, locatie, acties) met optionele Orange Internet On the move-databundel',
+    mini_name: 'Renault-minikaart',
+    mini_desc: 'Compacte Renault-voertuigkaart (afbeelding, batterij, actieradius, laden) met een knop om de volledige kaart te tonen',
     location: 'Locatie',
     updated: 'bijgewerkt {t}',
     confirm: 'Bevestigen?',
@@ -808,6 +894,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Toont de brandstofmeter',
     ed_low_range: 'Drempel lage actieradius',
     ed_low_range_helper: 'Standaard 100 km',
+    ed_low_tyre_pressure: 'Drempel lage bandenspanning',
+    ed_low_tyre_pressure_helper: 'In bar; leeg of 0 voor geen waarschuwing',
     ed_show_plate: 'Kenteken',
     ed_plate_department: 'Departement van het kenteken',
     ed_plate_department_helper: 'Nummer rechts op het kenteken, bijvoorbeeld 35 (traditioneel regionaal embleem volgens het departement: Bretagne, Occitanië, Île-de-France, Provence, Corsica, Bourgondië)',
@@ -886,6 +974,15 @@ var RnI18n = {
     plugged: 'Ligado à corrente',
     unplugged: 'Desligado da corrente',
     low_range: 'Autonomia baixa',
+    tyre_0: 'DE',
+    tyre_1: 'DD',
+    tyre_2: 'TE',
+    tyre_3: 'TD',
+    low_tyre_pressure: 'Pressão dos pneus baixa',
+    card_name: 'Cartão Renault',
+    card_desc: 'Cartão de veículo Renault (autonomia, combustível, bateria, localização, ações) com plano de dados Orange Internet On the move opcional',
+    mini_name: 'Minicartão Renault',
+    mini_desc: 'Cartão compacto de veículo Renault (imagem, bateria, autonomia, carregamento) com um botão para mostrar o cartão completo',
     location: 'Localização',
     updated: 'atualizado {t}',
     confirm: 'Confirmar?',
@@ -915,6 +1012,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Mostra o indicador de combustível',
     ed_low_range: 'Limite de autonomia baixa',
     ed_low_range_helper: '100 km por predefinição',
+    ed_low_tyre_pressure: 'Limite de pressão dos pneus baixa',
+    ed_low_tyre_pressure_helper: 'Em bar; vazio ou 0 para nenhum aviso',
     ed_show_plate: 'Matrícula',
     ed_plate_department: 'Departamento da matrícula',
     ed_plate_department_helper: 'Número mostrado à direita da matrícula, por exemplo 35 (emblema regional tradicional mostrado conforme o departamento: Bretanha, Occitânia, Île-de-France, Provença, Córsega, Borgonha)',
@@ -993,6 +1092,15 @@ var RnI18n = {
     plugged: 'Podłączony',
     unplugged: 'Odłączony',
     low_range: 'Niski zasięg',
+    tyre_0: 'LP',
+    tyre_1: 'PP',
+    tyre_2: 'LT',
+    tyre_3: 'PT',
+    low_tyre_pressure: 'Niskie ciśnienie w oponach',
+    card_name: 'Karta Renault',
+    card_desc: 'Karta pojazdu Renault (zasięg, paliwo, akumulator, lokalizacja, akcje) z opcjonalnym pakietem danych Orange Internet On the move',
+    mini_name: 'Mini karta Renault',
+    mini_desc: 'Kompaktowa karta pojazdu Renault (zdjęcie, akumulator, zasięg, ładowanie) z przyciskiem pokazującym pełną kartę',
     location: 'Lokalizacja',
     updated: 'zaktualizowano {t}',
     confirm: 'Potwierdzić?',
@@ -1022,6 +1130,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Pokazuje wskaźnik paliwa',
     ed_low_range: 'Próg niskiego zasięgu',
     ed_low_range_helper: 'Domyślnie 100 km',
+    ed_low_tyre_pressure: 'Próg niskiego ciśnienia w oponach',
+    ed_low_tyre_pressure_helper: 'W barach; puste lub 0 – bez ostrzeżenia',
     ed_show_plate: 'Tablica rejestracyjna',
     ed_plate_department: 'Departament na tablicy',
     ed_plate_department_helper: 'Numer wyświetlany po prawej stronie tablicy, na przykład 35 (tradycyjny herb regionu wyświetlany zależnie od departamentu: Bretania, Oksytania, Île-de-France, Prowansja, Korsyka, Burgundia)',
@@ -1100,6 +1210,15 @@ var RnI18n = {
     plugged: 'Conectat',
     unplugged: 'Deconectat',
     low_range: 'Autonomie redusă',
+    tyre_0: 'FS',
+    tyre_1: 'FD',
+    tyre_2: 'SS',
+    tyre_3: 'SD',
+    low_tyre_pressure: 'Presiune scăzută în anvelope',
+    card_name: 'Card Renault',
+    card_desc: 'Card pentru vehiculul Renault (autonomie, carburant, baterie, locație, acțiuni) cu abonament de date Orange Internet On the move opțional',
+    mini_name: 'Mini card Renault',
+    mini_desc: 'Card compact pentru vehiculul Renault (imagine, baterie, autonomie, încărcare) cu un buton pentru afișarea cardului complet',
     location: 'Locație',
     updated: 'actualizat {t}',
     confirm: 'Confirmați?',
@@ -1129,6 +1248,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Afișează indicatorul de combustibil',
     ed_low_range: 'Prag de autonomie redusă',
     ed_low_range_helper: 'Implicit 100 km',
+    ed_low_tyre_pressure: 'Prag de presiune scăzută în anvelope',
+    ed_low_tyre_pressure_helper: 'În bari; gol sau 0 pentru niciun avertisment',
     ed_show_plate: 'Număr de înmatriculare',
     ed_plate_department: 'Departamentul de pe număr',
     ed_plate_department_helper: 'Numărul afișat în dreapta plăcuței, de exemplu 35 (stema regională tradițională afișată în funcție de departament: Bretania, Occitania, Île-de-France, Provence, Corsica, Burgundia)',
@@ -1207,6 +1328,15 @@ var RnI18n = {
     plugged: 'Tilsluttet',
     unplugged: 'Ikke tilsluttet',
     low_range: 'Lav rækkevidde',
+    tyre_0: 'VF',
+    tyre_1: 'HF',
+    tyre_2: 'VB',
+    tyre_3: 'HB',
+    low_tyre_pressure: 'Lavt dæktryk',
+    card_name: 'Renault-kort',
+    card_desc: 'Renault-bilkort (rækkevidde, brændstof, batteri, position, handlinger) med valgfrit Orange Internet On the move-dataabonnement',
+    mini_name: 'Renault-minikort',
+    mini_desc: 'Kompakt Renault-bilkort (billede, batteri, rækkevidde, opladning) med en knap til at vise hele kortet',
     location: 'Placering',
     updated: 'opdateret {t}',
     confirm: 'Bekræft?',
@@ -1236,6 +1366,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Viser brændstofmåleren',
     ed_low_range: 'Grænse for lav rækkevidde',
     ed_low_range_helper: 'Standard er 100 km',
+    ed_low_tyre_pressure: 'Grænse for lavt dæktryk',
+    ed_low_tyre_pressure_helper: 'I bar; tom eller 0 for ingen advarsel',
     ed_show_plate: 'Nummerplade',
     ed_plate_department: 'Departement på nummerpladen',
     ed_plate_department_helper: 'Nummer til højre på nummerpladen, for eksempel 35 (traditionelt regionalt våbenskjold efter departement: Bretagne, Occitanien, Île-de-France, Provence, Korsika, Bourgogne)',
@@ -1314,6 +1446,15 @@ var RnI18n = {
     plugged: 'Ansluten',
     unplugged: 'Inte ansluten',
     low_range: 'Låg räckvidd',
+    tyre_0: 'VF',
+    tyre_1: 'HF',
+    tyre_2: 'VB',
+    tyre_3: 'HB',
+    low_tyre_pressure: 'Lågt däcktryck',
+    card_name: 'Renault-kort',
+    card_desc: 'Renault-bilkort (räckvidd, bränsle, batteri, position, åtgärder) med valfritt Orange Internet On the move-dataabonnemang',
+    mini_name: 'Renault-minikort',
+    mini_desc: 'Kompakt Renault-bilkort (bild, batteri, räckvidd, laddning) med en knapp för att visa hela kortet',
     location: 'Plats',
     updated: 'uppdaterad {t}',
     confirm: 'Bekräfta?',
@@ -1343,6 +1484,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Visar bränslemätaren',
     ed_low_range: 'Gräns för låg räckvidd',
     ed_low_range_helper: 'Standard är 100 km',
+    ed_low_tyre_pressure: 'Gräns för lågt däcktryck',
+    ed_low_tyre_pressure_helper: 'I bar; tomt eller 0 för ingen varning',
     ed_show_plate: 'Registreringsskylt',
     ed_plate_department: 'Departement på skylten',
     ed_plate_department_helper: 'Nummer till höger på skylten, till exempel 35 (traditionellt regionalt vapen beroende på departement: Bretagne, Occitanien, Île-de-France, Provence, Korsika, Bourgogne)',
@@ -1421,6 +1564,15 @@ var RnI18n = {
     plugged: 'Включен',
     unplugged: 'Изключен',
     low_range: 'Малък пробег',
+    tyre_0: 'ПЛ',
+    tyre_1: 'ПД',
+    tyre_2: 'ЗЛ',
+    tyre_3: 'ЗД',
+    low_tyre_pressure: 'Ниско налягане в гумите',
+    card_name: 'Карта Renault',
+    card_desc: 'Карта на автомобил Renault (пробег, гориво, батерия, местоположение, действия) с незадължителен план за данни Orange Internet On the move',
+    mini_name: 'Мини карта Renault',
+    mini_desc: 'Компактна карта на автомобил Renault (снимка, батерия, пробег, зареждане) с бутон за показване на цялата карта',
     location: 'Местоположение',
     updated: 'обновено {t}',
     confirm: 'Потвърди?',
@@ -1450,6 +1602,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Показва индикатора за гориво',
     ed_low_range: 'Праг за малък пробег',
     ed_low_range_helper: 'По подразбиране 100 km',
+    ed_low_tyre_pressure: 'Праг за ниско налягане в гумите',
+    ed_low_tyre_pressure_helper: 'В барове; празно или 0 – без предупреждение',
     ed_show_plate: 'Регистрационен номер',
     ed_plate_department: 'Департамент на номера',
     ed_plate_department_helper: 'Число вдясно на номера, например 35 (традиционен регионален герб според департамента: Бретан, Окситания, Ил дьо Франс, Прованс, Корсика, Бургундия)',
@@ -1528,6 +1682,15 @@ var RnI18n = {
     plugged: 'Подключён',
     unplugged: 'Отключён',
     low_range: 'Малый запас хода',
+    tyre_0: 'ПЛ',
+    tyre_1: 'ПП',
+    tyre_2: 'ЗЛ',
+    tyre_3: 'ЗП',
+    low_tyre_pressure: 'Низкое давление в шинах',
+    card_name: 'Карточка Renault',
+    card_desc: 'Карточка автомобиля Renault (запас хода, топливо, батарея, местоположение, действия) с необязательным тарифом Orange Internet On the move',
+    mini_name: 'Мини-карточка Renault',
+    mini_desc: 'Компактная карточка автомобиля Renault (фото, батарея, запас хода, зарядка) с кнопкой для показа полной карточки',
     location: 'Местоположение',
     updated: 'обновлено {t}',
     confirm: 'Уверены?',
@@ -1557,6 +1720,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Показывает указатель уровня топлива',
     ed_low_range: 'Порог малого запаса хода',
     ed_low_range_helper: 'По умолчанию 100 km',
+    ed_low_tyre_pressure: 'Порог низкого давления в шинах',
+    ed_low_tyre_pressure_helper: 'В барах; пусто или 0 — без предупреждения',
     ed_show_plate: 'Номерной знак',
     ed_plate_department: 'Департамент на номере',
     ed_plate_department_helper: 'Число справа на номерном знаке, например 35 (традиционный герб региона в зависимости от департамента: Бретань, Окситания, Иль-де-Франс, Прованс, Корсика, Бургундия)',
@@ -1635,6 +1800,15 @@ var RnI18n = {
     plugged: 'Підключено',
     unplugged: 'Відключено',
     low_range: 'Малий запас ходу',
+    tyre_0: 'ПЛ',
+    tyre_1: 'ПП',
+    tyre_2: 'ЗЛ',
+    tyre_3: 'ЗП',
+    low_tyre_pressure: 'Низький тиск у шинах',
+    card_name: 'Картка Renault',
+    card_desc: 'Картка автомобіля Renault (запас ходу, пальне, батарея, місцезнаходження, дії) з необов’язковим тарифом Orange Internet On the move',
+    mini_name: 'Міні-картка Renault',
+    mini_desc: 'Компактна картка автомобіля Renault (фото, батарея, запас ходу, заряджання) з кнопкою для показу повної картки',
     location: 'Розташування',
     updated: 'оновлено {t}',
     confirm: 'Впевнені?',
@@ -1664,6 +1838,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Показує покажчик рівня пального',
     ed_low_range: 'Поріг малого запасу ходу',
     ed_low_range_helper: 'Типово 100 km',
+    ed_low_tyre_pressure: 'Поріг низького тиску в шинах',
+    ed_low_tyre_pressure_helper: 'У барах; порожньо або 0 — без попередження',
     ed_show_plate: 'Номерний знак',
     ed_plate_department: 'Департамент на номері',
     ed_plate_department_helper: 'Число праворуч на номерному знаку, наприклад 35 (традиційний герб регіону залежно від департаменту: Бретань, Окситанія, Іль-де-Франс, Прованс, Корсика, Бургундія)',
@@ -1742,6 +1918,15 @@ var RnI18n = {
     plugged: 'Csatlakoztatva',
     unplugged: 'Nincs csatlakoztatva',
     low_range: 'Alacsony hatótáv',
+    tyre_0: 'BE',
+    tyre_1: 'JE',
+    tyre_2: 'BH',
+    tyre_3: 'JH',
+    low_tyre_pressure: 'Alacsony keréknyomás',
+    card_name: 'Renault kártya',
+    card_desc: 'Renault járműkártya (hatótáv, üzemanyag, akkumulátor, helyzet, műveletek) opcionális Orange Internet On the move adatcsomaggal',
+    mini_name: 'Renault mini kártya',
+    mini_desc: 'Kompakt Renault járműkártya (kép, akkumulátor, hatótáv, töltés) a teljes kártyát megjelenítő gombbal',
     location: 'Hely',
     updated: 'frissítve: {t}',
     confirm: 'Megerősíti?',
@@ -1771,6 +1956,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Megjeleníti az üzemanyagszint-jelzőt',
     ed_low_range: 'Alacsony hatótáv küszöbe',
     ed_low_range_helper: 'Alapértelmezés: 100 km',
+    ed_low_tyre_pressure: 'Alacsony keréknyomás küszöbe',
+    ed_low_tyre_pressure_helper: 'Barban; üres vagy 0: nincs figyelmeztetés',
     ed_show_plate: 'Rendszámtábla',
     ed_plate_department: 'Département a rendszámon',
     ed_plate_department_helper: 'A rendszám jobb oldalán látható szám, például 35 (a megyétől függően hagyományos regionális címer: Bretagne, Okszitánia, Île-de-France, Provence, Korzika, Burgundia)',
@@ -1849,6 +2036,15 @@ var RnI18n = {
     plugged: 'Pripojené',
     unplugged: 'Odpojené',
     low_range: 'Nízky dojazd',
+    tyre_0: 'ĽP',
+    tyre_1: 'PP',
+    tyre_2: 'ĽZ',
+    tyre_3: 'PZ',
+    low_tyre_pressure: 'Nízky tlak v pneumatikách',
+    card_name: 'Karta Renault',
+    card_desc: 'Karta vozidla Renault (dojazd, palivo, batéria, poloha, akcie) s voliteľným dátovým balíkom Orange Internet On the move',
+    mini_name: 'Mini karta Renault',
+    mini_desc: 'Kompaktná karta vozidla Renault (obrázok, batéria, dojazd, nabíjanie) s tlačidlom na zobrazenie celej karty',
     location: 'Poloha',
     updated: 'aktualizované {t}',
     confirm: 'Potvrdiť?',
@@ -1878,6 +2074,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Zobrazí ukazovateľ paliva',
     ed_low_range: 'Prah nízkeho dojazdu',
     ed_low_range_helper: 'Predvolene 100 km',
+    ed_low_tyre_pressure: 'Prah nízkeho tlaku v pneumatikách',
+    ed_low_tyre_pressure_helper: 'V baroch; prázdne alebo 0 bez upozornenia',
     ed_show_plate: 'Evidenčné číslo',
     ed_plate_department: 'Departement na tabuľke',
     ed_plate_department_helper: 'Číslo zobrazené vpravo na tabuľke, napríklad 35 (tradičný regionálny erb podľa departementu: Bretónsko, Okcitánia, Île-de-France, Provensalsko, Korzika, Burgundsko)',
@@ -1956,6 +2154,15 @@ var RnI18n = {
     plugged: 'Připojeno',
     unplugged: 'Odpojeno',
     low_range: 'Nízký dojezd',
+    tyre_0: 'LP',
+    tyre_1: 'PP',
+    tyre_2: 'LZ',
+    tyre_3: 'PZ',
+    low_tyre_pressure: 'Nízký tlak v pneumatikách',
+    card_name: 'Karta Renault',
+    card_desc: 'Karta vozidla Renault (dojezd, palivo, baterie, poloha, akce) s volitelným datovým tarifem Orange Internet On the move',
+    mini_name: 'Mini karta Renault',
+    mini_desc: 'Kompaktní karta vozidla Renault (obrázek, baterie, dojezd, nabíjení) s tlačítkem pro zobrazení celé karty',
     location: 'Poloha',
     updated: 'aktualizováno {t}',
     confirm: 'Potvrdit?',
@@ -1985,6 +2192,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Zobrazí ukazatel paliva',
     ed_low_range: 'Práh nízkého dojezdu',
     ed_low_range_helper: 'Výchozí 100 km',
+    ed_low_tyre_pressure: 'Práh nízkého tlaku v pneumatikách',
+    ed_low_tyre_pressure_helper: 'V barech; prázdné nebo 0 bez upozornění',
     ed_show_plate: 'Registrační značka',
     ed_plate_department: 'Departement na značce',
     ed_plate_department_helper: 'Číslo zobrazené vpravo na značce, například 35 (tradiční regionální znak podle departementu: Bretaň, Okcitánie, Île-de-France, Provence, Korsika, Burgundsko)',
@@ -2063,6 +2272,15 @@ var RnI18n = {
     plugged: 'Priključeno',
     unplugged: 'Odklopljeno',
     low_range: 'Nizek doseg',
+    tyre_0: 'SL',
+    tyre_1: 'SD',
+    tyre_2: 'ZL',
+    tyre_3: 'ZD',
+    low_tyre_pressure: 'Nizek tlak v pnevmatikah',
+    card_name: 'Kartica Renault',
+    card_desc: 'Kartica vozila Renault (doseg, gorivo, baterija, lokacija, dejanja) z izbirnim podatkovnim paketom Orange Internet On the move',
+    mini_name: 'Mini kartica Renault',
+    mini_desc: 'Kompaktna kartica vozila Renault (slika, baterija, doseg, polnjenje) z gumbom za prikaz celotne kartice',
     location: 'Lokacija',
     updated: 'posodobljeno {t}',
     confirm: 'Potrdite?',
@@ -2092,6 +2310,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Prikaže merilnik goriva',
     ed_low_range: 'Prag nizkega dosega',
     ed_low_range_helper: 'Privzeto 100 km',
+    ed_low_tyre_pressure: 'Prag nizkega tlaka v pnevmatikah',
+    ed_low_tyre_pressure_helper: 'V barih; prazno ali 0 brez opozorila',
     ed_show_plate: 'Registrska tablica',
     ed_plate_department: 'Departma na tablici',
     ed_plate_department_helper: 'Številka na desni strani tablice, na primer 35 (tradicionalni regionalni grb glede na departma: Bretanija, Okcitanija, Île-de-France, Provansa, Korzika, Burgundija)',
@@ -2170,6 +2390,15 @@ var RnI18n = {
     plugged: 'Pievienots',
     unplugged: 'Atvienots',
     low_range: 'Zema sniedzamība',
+    tyre_0: 'PK',
+    tyre_1: 'PL',
+    tyre_2: 'AK',
+    tyre_3: 'AL',
+    low_tyre_pressure: 'Zems riepu spiediens',
+    card_name: 'Renault karte',
+    card_desc: 'Renault transportlīdzekļa karte (sniedzamība, degviela, baterija, atrašanās vieta, darbības) ar neobligātu Orange Internet On the move datu plānu',
+    mini_name: 'Renault mini karte',
+    mini_desc: 'Kompakta Renault transportlīdzekļa karte (attēls, baterija, sniedzamība, uzlāde) ar pogu pilnās kartes parādīšanai',
     location: 'Atrašanās vieta',
     updated: 'atjaunināts {t}',
     confirm: 'Apstiprināt?',
@@ -2199,6 +2428,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Rāda degvielas līmeņa rādītāju',
     ed_low_range: 'Zemas sniedzamības slieksnis',
     ed_low_range_helper: 'Pēc noklusējuma 100 km',
+    ed_low_tyre_pressure: 'Zema riepu spiediena slieksnis',
+    ed_low_tyre_pressure_helper: 'Bāros; tukšs vai 0 – bez brīdinājuma',
     ed_show_plate: 'Numura zīme',
     ed_plate_department: 'Departaments uz numura zīmes',
     ed_plate_department_helper: 'Numurs numura zīmes labajā pusē, piemēram, 35 (tradicionālais reģiona ģerbonis atkarībā no departamenta: Bretaņa, Oksitānija, Ildefransa, Provansa, Korsika, Burgundija)',
@@ -2277,6 +2508,15 @@ var RnI18n = {
     plugged: 'Συνδεδεμένο',
     unplugged: 'Αποσυνδεδεμένο',
     low_range: 'Χαμηλή αυτονομία',
+    tyre_0: 'ΕΑ',
+    tyre_1: 'ΕΔ',
+    tyre_2: 'ΠΑ',
+    tyre_3: 'ΠΔ',
+    low_tyre_pressure: 'Χαμηλή πίεση ελαστικών',
+    card_name: 'Κάρτα Renault',
+    card_desc: 'Κάρτα οχήματος Renault (αυτονομία, καύσιμο, μπαταρία, τοποθεσία, ενέργειες) με προαιρετικό πρόγραμμα δεδομένων Orange Internet On the move',
+    mini_name: 'Μίνι κάρτα Renault',
+    mini_desc: 'Συμπαγής κάρτα οχήματος Renault (εικόνα, μπαταρία, αυτονομία, φόρτιση) με κουμπί για εμφάνιση της πλήρους κάρτας',
     location: 'Τοποθεσία',
     updated: 'ενημερώθηκε {t}',
     confirm: 'Σίγουρα;',
@@ -2306,6 +2546,8 @@ var RnI18n = {
     ed_fuel_tank_capacity_helper: 'Εμφανίζει τον δείκτη καυσίμου',
     ed_low_range: 'Όριο χαμηλής αυτονομίας',
     ed_low_range_helper: 'Προεπιλογή 100 km',
+    ed_low_tyre_pressure: 'Όριο χαμηλής πίεσης ελαστικών',
+    ed_low_tyre_pressure_helper: 'Σε bar· κενό ή 0 για καμία προειδοποίηση',
     ed_show_plate: 'Πινακίδα κυκλοφορίας',
     ed_plate_department: 'Διαμέρισμα στην πινακίδα',
     ed_plate_department_helper: 'Αριθμός στα δεξιά της πινακίδας, για παράδειγμα 35 (παραδοσιακό περιφερειακό έμβλημα ανάλογα με το διαμέρισμα: Βρετάνη, Οξιτανία, Île-de-France, Προβηγκία, Κορσική, Βουργουνδία)',
@@ -2386,6 +2628,11 @@ function rnIntlLang(dict, lang, hass) {
   return tag === 'pt' ? 'pt-PT' : tag;
 }
 
+// Language of the card picker, before any hass object: the page's (Home Assistant sets it), else the browser's.
+function rnPickerLang() {
+  return rnResolveLang(RnI18n, globalThis.document?.documentElement?.lang || globalThis.navigator?.language);
+}
+
 function rnT(lang, key) {
   var strings = RnI18n[lang] || RnI18n.en;
   return strings[key] || RnI18n.en[key] || key;
@@ -2462,6 +2709,20 @@ var RN_ROLES = {
 };
 
 var RN_TYRES = ['front_left_pressure', 'front_right_pressure', 'rear_left_pressure', 'rear_right_pressure'];
+// Position of a tyre pressure sensor (index in RN_TYRES): its translation_key, else its entity_id
+// suffix (English or French slug); -1 when neither tells.
+var RN_TYRE_IDS = [/front_left|avant_gauche/, /front_right|avant_droit/, /rear_left|arriere_gauche/, /rear_right|arriere_droit/];
+function rnTyrePos(reg, id) {
+  var k = RN_TYRES.indexOf(reg?.translation_key);
+  return k >= 0 ? k : RN_TYRE_IDS.findIndex((re) => re.test(id));
+}
+// Bar per unit of the pressure units Home Assistant converts to (low_tyre_pressure is in bar).
+var RN_BAR = { pa: 1e-5, hpa: 1e-3, kpa: 0.01, cbar: 0.01, mbar: 1e-3, bar: 1, psi: 0.0689476, mmhg: 0.00133322, inhg: 0.0338639, inh2o: 0.00249089 };
+function rnBar(value, unit) {
+  return value * (RN_BAR[String(unit || 'bar').toLowerCase()] || 1);
+}
+// Minutes per unit of a duration sensor (charging_remaining_time); minutes without a unit.
+var RN_MINUTES = { s: 1 / 60, min: 1, h: 60, d: 1440 };
 var RN_DOORS = ['hatch_status', 'rear_left_door_status', 'rear_right_door_status', 'driver_door_status', 'passenger_door_status'];
 
 var RN_PLAN_ROLES = {
@@ -2963,7 +3224,8 @@ class RenaultCard extends HTMLElement {
       ent[role] = over[role] || rnFindRole(hass, list, RN_ROLES[role]);
     });
     var byKey = (keys, dc) => list.filter((e) => keys.indexOf(e.translation_key) >= 0 || (dc && hass.states[e.entity_id].attributes.device_class === dc && e.entity_id.indexOf(dc === 'pressure' ? 'sensor.' : 'binary_sensor.') === 0)).map((e) => e.entity_id);
-    ent.tyres = byKey(RN_TYRES, 'pressure');
+    ent.tyres = byKey(RN_TYRES, 'pressure').map((id) => ({ id: id, pos: rnTyrePos(hass.entities?.[id], id) }))
+      .sort((a, b) => (a.pos < 0 ? 9 : a.pos) - (b.pos < 0 ? 9 : b.pos)).map((t) => t.id);
     ent.doors = byKey(RN_DOORS, 'door');
     ent.buttons = list.filter((e) => e.entity_id.indexOf('button.') === 0).map((e) => e.entity_id);
 
@@ -3144,16 +3406,63 @@ class RenaultCard extends HTMLElement {
     return this._tile(ent.battery_level, 'mdi:battery-high', this._t('battery_level'), this._withUnit(ent.battery_level), { bar: this._num(ent.battery_level) });
   }
 
-  // Battery or fuel range (role), in the warning colour under low_range.
+  // The car's whole range: fuel plus battery for a plug-in hybrid, the battery range of an electric
+  // car, the fuel range of a petrol one; null without either.
+  _totalRange(ent) {
+    var fuel = this._num(ent.fuel_autonomy), battery = this._num(ent.battery_autonomy);
+    if (fuel == null) return battery;
+    return fuel + (battery || 0);
+  }
+
+  // Under low_range: the whole range, not the battery range alone (a plug-in hybrid with an empty
+  // battery still has its fuel).
+  _lowRange(ent) {
+    var low = Number(this._config.low_range) || 0, total = this._totalRange(ent);
+    return !!low && total != null && total < low;
+  }
+
+  // Battery or fuel range (role). The warning colour goes on the fuel range when there is one, else
+  // on the battery range.
   _rangeTile(ent, role) {
-    var low = Number(this._config.low_range) || 0, v = this._num(ent[role]);
-    return this._tile(ent[role], 'mdi:map-marker-distance', this._t(role), this._withUnit(ent[role]), { warn: low && v != null && v < low });
+    var main = this._num(ent.fuel_autonomy) != null ? 'fuel_autonomy' : 'battery_autonomy';
+    return this._tile(ent[role], 'mdi:map-marker-distance', this._t(role), this._withUnit(ent[role]), { warn: role === main && this._lowRange(ent) });
+  }
+
+  // Remaining charging time in minutes, from the sensor's unit (s, min, h or d); null when unknown.
+  _chargeMinutes(id) {
+    var v = this._num(id);
+    if (v == null) return null;
+    var u = String(this._st(id).attributes.unit_of_measurement || 'min').toLowerCase();
+    return v * (RN_MINUTES[u] || 1);
+  }
+
+  // Tyre pressures under low_tyre_pressure (bar), in the sensors' own unit.
+  _lowTyres(tyres) {
+    var low = Number(this._config.low_tyre_pressure) || 0;
+    if (!low) return [];
+    return tyres.filter((id) => rnBar(Number(this._val(id)), this._st(id).attributes.unit_of_measurement) < low);
+  }
+
+  // One tile for the four tyres, each labelled with its position (FL, FR, RL, RR) when known; the
+  // tile and the low tyres in the warning colour.
+  _tyreTile(tyres, lowTyres) {
+    var reg = this._hass.entities || {};
+    var vals = tyres.map((id) => {
+      var pos = rnTyrePos(reg[id], id);
+      return '<span class="tyre' + (lowTyres.indexOf(id) >= 0 ? ' low' : '') + '">' + (pos >= 0 ? `<span class="tpos">${rnEsc(this._t(`tyre_${pos}`))}</span> ` : '') +
+        rnEsc(this._fmtNum(Number(this._val(id)), 1)) + '</span>';
+    });
+    var unit = this._st(tyres[0]).attributes.unit_of_measurement || '';
+    var target = lowTyres[0] || tyres[0];
+    return '<div class="tile' + (lowTyres.length ? ' warn' : '') + `" data-more="${rnEsc(target)}" role="button" tabindex="0">` +
+      `<div class="tile-head"><ha-icon icon="mdi:car-tire-alert"></ha-icon><span class="lbl">${rnEsc(this._t('tyres'))}${unit ? ` (${rnEsc(unit)})` : ''}</span></div>` +
+      `<span class="val tyres">${vals.join('')}</span></div>`;
   }
 
   // "Charging · 45 min left", else "Plugged in" / "Unplugged"; null without either sensor.
   _chargeChip(ent) {
     if (this._val(ent.charging) === 'on') {
-      var left = this._num(ent.charging_remaining_time);
+      var left = this._chargeMinutes(ent.charging_remaining_time);
       return '<span class="chip ok" data-more="' + rnEsc(ent.charging) + '" role="button" tabindex="0"><ha-icon icon="mdi:battery-charging"></ha-icon>' +
         (left ? this._t('charging_left', { t: this._duration(left) }) : this._t('charging')) + '</span>';
     }
@@ -3177,12 +3486,13 @@ class RenaultCard extends HTMLElement {
 
     // Status chips
     var chips = [];
-    var lowRange = Number(c.low_range) || 0;
-    var range = this._num(ent.fuel_autonomy);
-    var bRange = this._num(ent.battery_autonomy);
-    var minRange = [range, bRange].filter((v) => v != null && !Number.isNaN(v));
-    if (lowRange && minRange.length && Math.min.apply(null, minRange) < lowRange) {
+    if (this._lowRange(ent)) {
       chips.push(`<span class="chip warn"><ha-icon icon="mdi:gas-station-off-outline"></ha-icon>${this._t('low_range')}</span>`);
+    }
+    var tyres = ent.tyres.filter((id) => this._avail(id));
+    var lowTyres = this._lowTyres(tyres);
+    if (lowTyres.length) {
+      chips.push(`<span class="chip warn" data-more="${rnEsc(lowTyres[0])}" role="button" tabindex="0"><ha-icon icon="mdi:car-tire-alert"></ha-icon>${this._t('low_tyre_pressure')}</span>`);
     }
     if (this._avail(ent.lock_status)) {
       var unlocked = this._val(ent.lock_status) === 'on';
@@ -3214,11 +3524,7 @@ class RenaultCard extends HTMLElement {
     if (this._avail(ent.outside_temperature)) {
       tiles.push(this._tile(ent.outside_temperature, 'mdi:thermometer', this._t('outside_temperature'), this._fmtState(ent.outside_temperature)));
     }
-    var tyres = ent.tyres.filter((id) => this._avail(id));
-    if (tyres.length) {
-      tiles.push(this._tile(tyres[0], 'mdi:car-tire-alert', this._t('tyres'),
-        `${tyres.map((id) => this._fmtNum(Number(this._val(id)), 1)).join(' · ')} ${this._st(tyres[0]).attributes.unit_of_measurement || ''}`));
-    }
+    if (tyres.length) tiles.push(this._tyreTile(tyres, lowTyres));
 
     // Location
     var locationHtml = '';
@@ -3538,6 +3844,10 @@ class RenaultCard extends HTMLElement {
       '.lbl { font-size: 11px; color: var(--secondary-text-color); }' +
       '.lbl { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
       '.val { font-size: 14px; font-weight: 500; color: var(--primary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }' +
+      // Tyres: the four pressures two by two, front then rear; only the low ones in the warning colour.
+      '.tile .val.tyres { display: grid; grid-template-columns: repeat(2, max-content); column-gap: 8px; font-size: 13px; color: var(--primary-text-color); }' +
+      '.tpos { font-size: 10px; font-weight: 400; color: var(--secondary-text-color); }' +
+      '.tile .tyre.low { color: ' + rnInk(RN_WARN) + '; }' +
       '.bar { height: 6px; border-radius: 3px; background: var(--secondary-background-color, rgba(128,128,128,0.15)); overflow: hidden; }' +
       '.fill { height: 100%; border-radius: 3px; }' +
       '.row { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 10px; cursor: pointer;' +
@@ -3762,6 +4072,7 @@ class RenaultCardEditor extends HTMLElement {
         type: 'grid', name: '', schema: [
           { name: 'fuel_tank_capacity', selector: { number: { min: 0, max: 150, step: 1, mode: 'box', unit_of_measurement: 'L' } } },
           { name: 'low_range', selector: { number: { min: 0, max: 500, step: 10, mode: 'box', unit_of_measurement: 'km' } } },
+          { name: 'low_tyre_pressure', selector: { number: { min: 0, max: 5, step: 0.1, mode: 'box', unit_of_measurement: 'bar' } } },
         ],
       },
       {
@@ -3863,8 +4174,8 @@ if (!customElements.get('renault-card')) {
   window.customCards = window.customCards || [];
   window.customCards.push({
     type: 'renault-card',
-    name: 'Renault Card',
-    description: 'Renault vehicle card (range, fuel, battery, location, actions) with optional Orange Internet On the move data plan',
+    name: rnT(rnPickerLang(), 'card_name'),
+    description: rnT(rnPickerLang(), 'card_desc'),
     preview: true,
     documentationURL: 'https://github.com/juju35/ha-renault-card',
   });
@@ -3976,8 +4287,8 @@ if (!customElements.get('renault-mini-card')) {
   window.customCards = window.customCards || [];
   window.customCards.push({
     type: 'renault-mini-card',
-    name: 'Renault Mini Card',
-    description: 'Compact Renault vehicle card (picture, battery, range, charging) with a button to show the full card',
+    name: rnT(rnPickerLang(), 'mini_name'),
+    description: rnT(rnPickerLang(), 'mini_desc'),
     preview: true,
     documentationURL: 'https://github.com/juju35/ha-renault-card',
   });

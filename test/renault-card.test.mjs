@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import vm from "node:vm";
 
-function loadCard() {
+function loadCard(lang = "en") {
   const defined = {};
   const listeners = [];
   const ctx = {
@@ -27,7 +27,7 @@ function loadCard() {
       },
     },
     document: {
-      documentElement: { lang: "en" },
+      documentElement: { lang },
       createElement: () => ({}),
       querySelector: () => null,
       addEventListener: (type, fn) => listeners.push({ type, fn, on: true }),
@@ -1505,4 +1505,88 @@ test("mini card styles: 240 px in an auto-width container, an unfilled detail bu
   assert.match(css, /:host\(\[mini\]\)::before \{ grid-template-columns: minmax\(0, 240px\); \}/);
   assert.match(cssRule(css, ".zoom"), /all: unset;/);
   assert.equal(css.match(/<\/style>/g).length, 1);
+});
+
+// ── Range, charging time, tyres, card picker ──
+function fullCard(config = {}, extra = {}) {
+  const { entities, devices } = renaultRegistry();
+  const states = renaultStates(Object.keys(entities));
+  for (const [id, [key, s]] of Object.entries(extra)) {
+    entities[id] = { entity_id: id, device_id: "d1", platform: "renault", translation_key: key };
+    states[id] = s;
+  }
+  const card = new RenaultCard();
+  const root = { html: "", activeElement: null, addEventListener() {}, querySelectorAll: () => [], querySelector: () => null };
+  Object.defineProperty(root, "innerHTML", { get: () => root.html, set: (h) => (root.html = h) });
+  card.attachShadow = () => (card.shadowRoot = root);
+  card.setConfig({ device_id: "d1", show_image: false, ...config });
+  card.hass = { entities, devices, states, language: "en" };
+  return { card, root };
+}
+const km = (v) => ({ state: String(v), attributes: { unit_of_measurement: "km" } });
+const tileOf = (html, id) => html.match(new RegExp(`<div class="tile[^"]*" data-more="${id.replace(".", "\\.")}"`))?.[0] || "";
+
+test("plug-in hybrid: an empty battery alone is not a low range; fuel plus battery under low_range is", () => {
+  let { root } = fullCard({}, { "sensor.car_battery_autonomy": ["battery_autonomy", km(38)], "sensor.car_fuel_autonomy": ["fuel_autonomy", km(512)] });
+  assert.doesNotMatch(root.html, /Low range/);
+  assert.doesNotMatch(tileOf(root.html, "sensor.car_battery_autonomy"), /warn/);
+  ({ root } = fullCard({}, { "sensor.car_battery_autonomy": ["battery_autonomy", km(20)], "sensor.car_fuel_autonomy": ["fuel_autonomy", km(60)] }));
+  assert.match(root.html, /Low range/);
+  assert.match(tileOf(root.html, "sensor.car_fuel_autonomy"), /tile warn/);
+  assert.doesNotMatch(tileOf(root.html, "sensor.car_battery_autonomy"), /warn/);
+});
+
+test("electric car: the battery range under low_range warns", () => {
+  const { root } = fullCard({}, { "sensor.car_battery_autonomy": ["battery_autonomy", km(38)] });
+  assert.match(root.html, /Low range/);
+  assert.match(tileOf(root.html, "sensor.car_battery_autonomy"), /tile warn/);
+});
+
+test("charging remaining time follows the sensor's unit (s, min, h, d, none)", () => {
+  for (const [state, unit, text] of [["2700", "s", "45 min"], ["45", "min", "45 min"], ["1.5", "h", "1 h 30"], ["0.125", "d", "3 h 00"], ["20", undefined, "20 min"]]) {
+    const { root } = fullCard({}, {
+      "binary_sensor.car_charging": ["charging", { state: "on", attributes: { device_class: "battery_charging" } }],
+      "sensor.car_charging_remaining_time": ["charging_remaining_time", { state, attributes: { device_class: "duration", unit_of_measurement: unit } }],
+    });
+    assert.match(root.html, new RegExp(`Charging · ${text} left`), `${state} ${unit}`);
+  }
+});
+
+test("tyres: labelled by position in FL, FR, RL, RR order; low_tyre_pressure (bar) warns on the tile and a chip", () => {
+  const p = (v) => ({ state: v, attributes: { device_class: "pressure", unit_of_measurement: "kPa" } });
+  const tyres = {
+    "sensor.car_rear_right_pressure": ["rear_right_pressure", p("240")],
+    "sensor.car_front_left_pressure": ["front_left_pressure", p("250")],
+    "sensor.car_rear_left_pressure": ["rear_left_pressure", p("170")],
+    "sensor.car_front_right_pressure": ["front_right_pressure", p("250")],
+  };
+  let { root } = fullCard({}, tyres);
+  const tile = root.html.match(/<div class="tile[^"]*" data-more="[^"]*pressure"[\s\S]*?<\/span><\/span><\/div>/)[0];
+  assert.deepEqual([...tile.matchAll(/class="tpos">(\w+)</g)].map((m) => m[1]), ["FL", "FR", "RL", "RR"]);
+  assert.match(tile, /Tyres \(kPa\)/);
+  assert.doesNotMatch(tile, /warn|low/, "no threshold, no warning");
+  assert.doesNotMatch(root.html, /Low tyre pressure/);
+  ({ root } = fullCard({ low_tyre_pressure: 2 }, tyres));
+  assert.match(root.html, /<div class="tile warn" data-more="sensor.car_rear_left_pressure"/);
+  assert.match(root.html, /<span class="tyre low"><span class="tpos">RL<\/span> 170<\/span>/);
+  assert.equal((root.html.match(/tyre low/g) || []).length, 1);
+  assert.match(root.html, /<span class="chip warn" data-more="sensor.car_rear_left_pressure" role="button" tabindex="0"><ha-icon icon="mdi:car-tire-alert"><\/ha-icon>Low tyre pressure/);
+});
+
+test("card editor offers low_tyre_pressure in bar", () => {
+  const editor = new defined["renault-card-editor"]();
+  editor._hass = { language: "en" };
+  const field = JSON.stringify(editor._schema()).match(/\{"name":"low_tyre_pressure"[^}]*\}\}\}/);
+  assert.ok(field);
+  assert.match(field[0], /"unit_of_measurement":"bar"/);
+});
+
+test("card picker: names and descriptions in the page language", () => {
+  const en = ctx.customCards.filter((c) => c.type !== "renault-map-card");
+  assert.deepEqual([...en.map((c) => c.name)], ["Renault Card", "Renault Mini Card"]);
+  const fr = loadCard("fr").ctx.customCards;
+  assert.equal(fr.find((c) => c.type === "renault-card").name, "Carte Renault");
+  assert.equal(fr.find((c) => c.type === "renault-mini-card").name, "Mini-carte Renault");
+  assert.match(fr.find((c) => c.type === "renault-mini-card").description, /^Carte compacte/);
+  assert.equal(loadCard("de-AT").ctx.customCards[0].name, "Renault-Karte");
 });

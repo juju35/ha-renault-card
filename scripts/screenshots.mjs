@@ -327,6 +327,9 @@ R("sensor.espace_fuel_quantity", "fuel_quantity", "45", { device_class: "volume"
 R("sensor.espace_location_last_activity", "location_last_activity", new Date(NOW - 32 * 60000).toISOString(), { device_class: "timestamp" });
 R("device_tracker.espace_location", "location", "home", { latitude: 48.11, longitude: -1.68, friendly_name: "Espace Location" });
 R("binary_sensor.espace_lock_status", "lock_status", "off", { device_class: "lock" });
+for (const [pos, v] of [["front_left", "2.5"], ["front_right", "2.5"], ["rear_left", "2.4"], ["rear_right", "2.4"]]) {
+  R(`sensor.espace_${pos}_pressure`, `${pos}_pressure`, v, { device_class: "pressure", unit_of_measurement: "bar" });
+}
 R("button.espace_sound_horn", "start_horn", "unknown", { friendly_name: "Espace Sound horn" });
 R("button.espace_flash_lights", "start_lights", "unknown", { friendly_name: "Espace Flash lights" });
 // Renault Picture sensors: the MyRenault photo of each car (scripts/pictures holds the renders Renault returns).

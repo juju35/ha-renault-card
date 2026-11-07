@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.10.0 - 2026-11-07
+
+### Added
+- Tyre pressures are labelled with their position (front left, front right, rear left, rear right) and shown in that order.
+- New `low_tyre_pressure` option (bar): below it, the tyre tile and the low tyre turn to the warning colour and a "Low tyre pressure" chip opens that tyre's details.
+- The card picker shows the names and descriptions of the vehicle card and the mini card in your language.
+
+### Fixes
+- Plug-in hybrids no longer show "Low range" all the time: the warning compares the fuel plus battery range with `low_range`, and an empty battery alone no longer turns the battery range tile to the warning colour.
+- The charging time left now follows the sensor's unit (seconds, minutes, hours or days) instead of always reading minutes.
+
 ## 2.9.0 - 2026-11-07
 
 ### Added
