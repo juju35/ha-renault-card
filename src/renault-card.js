@@ -33,6 +33,8 @@ var RnI18n = {
     location: 'Position',
     updated: 'mis à jour {t}',
     confirm: 'Confirmer ?',
+    call_done: 'Fait',
+    call_failed: 'Échec : {e}',
     charge_mode: 'Mode de charge',
     data_plan: 'Orange Internet On the move',
     data_left: '{l} restants sur {t}',
@@ -136,6 +138,8 @@ var RnI18n = {
     location: 'Location',
     updated: 'updated {t}',
     confirm: 'Confirm?',
+    call_done: 'Done',
+    call_failed: 'Failed: {e}',
     charge_mode: 'Charge mode',
     data_plan: 'Orange Internet On the move',
     data_left: '{l} left of {t}',
@@ -239,6 +243,8 @@ var RnI18n = {
     location: 'Standort',
     updated: 'aktualisiert {t}',
     confirm: 'Bestätigen?',
+    call_done: 'Erledigt',
+    call_failed: 'Fehlgeschlagen: {e}',
     charge_mode: 'Lademodus',
     data_plan: 'Orange Internet On the move',
     data_left: '{l} von {t} übrig',
@@ -342,6 +348,8 @@ var RnI18n = {
     location: 'Ubicación',
     updated: 'actualizado {t}',
     confirm: '¿Confirmar?',
+    call_done: 'Hecho',
+    call_failed: 'Error: {e}',
     charge_mode: 'Modo de carga',
     data_plan: 'Orange Internet On the move',
     data_left: 'Quedan {l} de {t}',
@@ -445,6 +453,8 @@ var RnI18n = {
     location: 'Локација',
     updated: 'ажурирано {t}',
     confirm: 'Потврдити?',
+    call_done: 'Готово',
+    call_failed: 'Неуспешно: {e}',
     charge_mode: 'Режим пуњења',
     data_plan: 'Orange Internet On the move',
     data_left: 'Преостало {l} од {t}',
@@ -548,6 +558,8 @@ var RnI18n = {
     location: 'Lokacija',
     updated: 'ažurirano {t}',
     confirm: 'Potvrditi?',
+    call_done: 'Gotovo',
+    call_failed: 'Neuspešno: {e}',
     charge_mode: 'Režim punjenja',
     data_plan: 'Orange Internet On the move',
     data_left: 'Preostalo {l} od {t}',
@@ -651,6 +663,8 @@ var RnI18n = {
     location: 'Posizione',
     updated: 'aggiornato {t}',
     confirm: 'Confermare?',
+    call_done: 'Fatto',
+    call_failed: 'Non riuscito: {e}',
     charge_mode: 'Modalità di ricarica',
     data_plan: 'Orange Internet On the move',
     data_left: '{l} rimanenti su {t}',
@@ -754,6 +768,8 @@ var RnI18n = {
     location: 'Locatie',
     updated: 'bijgewerkt {t}',
     confirm: 'Bevestigen?',
+    call_done: 'Gereed',
+    call_failed: 'Mislukt: {e}',
     charge_mode: 'Laadmodus',
     data_plan: 'Orange Internet On the move',
     data_left: '{l} over van {t}',
@@ -857,6 +873,8 @@ var RnI18n = {
     location: 'Localização',
     updated: 'atualizado {t}',
     confirm: 'Confirmar?',
+    call_done: 'Feito',
+    call_failed: 'Falhou: {e}',
     charge_mode: 'Modo de carregamento',
     data_plan: 'Orange Internet On the move',
     data_left: '{l} restantes de {t}',
@@ -960,6 +978,8 @@ var RnI18n = {
     location: 'Lokalizacja',
     updated: 'zaktualizowano {t}',
     confirm: 'Potwierdzić?',
+    call_done: 'Gotowe',
+    call_failed: 'Niepowodzenie: {e}',
     charge_mode: 'Tryb ładowania',
     data_plan: 'Orange Internet On the move',
     data_left: 'Pozostało {l} z {t}',
@@ -1063,6 +1083,8 @@ var RnI18n = {
     location: 'Locație',
     updated: 'actualizat {t}',
     confirm: 'Confirmați?',
+    call_done: 'Gata',
+    call_failed: 'Eșuat: {e}',
     charge_mode: 'Mod de încărcare',
     data_plan: 'Orange Internet On the move',
     data_left: 'Rămas: {l} din {t}',
@@ -1166,6 +1188,8 @@ var RnI18n = {
     location: 'Placering',
     updated: 'opdateret {t}',
     confirm: 'Bekræft?',
+    call_done: 'Udført',
+    call_failed: 'Mislykkedes: {e}',
     charge_mode: 'Opladningstilstand',
     data_plan: 'Orange Internet On the move',
     data_left: '{l} tilbage af {t}',
@@ -1269,6 +1293,8 @@ var RnI18n = {
     location: 'Plats',
     updated: 'uppdaterad {t}',
     confirm: 'Bekräfta?',
+    call_done: 'Klart',
+    call_failed: 'Misslyckades: {e}',
     charge_mode: 'Laddningsläge',
     data_plan: 'Orange Internet On the move',
     data_left: '{l} kvar av {t}',
@@ -1372,6 +1398,8 @@ var RnI18n = {
     location: 'Местоположение',
     updated: 'обновено {t}',
     confirm: 'Потвърди?',
+    call_done: 'Готово',
+    call_failed: 'Неуспешно: {e}',
     charge_mode: 'Режим на зареждане',
     data_plan: 'Orange Internet On the move',
     data_left: 'Остават {l} от {t}',
@@ -1475,6 +1503,8 @@ var RnI18n = {
     location: 'Местоположение',
     updated: 'обновлено {t}',
     confirm: 'Уверены?',
+    call_done: 'Готово',
+    call_failed: 'Ошибка: {e}',
     charge_mode: 'Режим зарядки',
     data_plan: 'Orange Internet On the move',
     data_left: 'Осталось {l} из {t}',
@@ -1578,6 +1608,8 @@ var RnI18n = {
     location: 'Розташування',
     updated: 'оновлено {t}',
     confirm: 'Впевнені?',
+    call_done: 'Готово',
+    call_failed: 'Помилка: {e}',
     charge_mode: 'Режим заряджання',
     data_plan: 'Orange Internet On the move',
     data_left: 'Залишилось {l} з {t}',
@@ -1681,6 +1713,8 @@ var RnI18n = {
     location: 'Hely',
     updated: 'frissítve: {t}',
     confirm: 'Megerősíti?',
+    call_done: 'Kész',
+    call_failed: 'Sikertelen: {e}',
     charge_mode: 'Töltési mód',
     data_plan: 'Orange Internet On the move',
     data_left: 'Hátralévő: {l} / {t}',
@@ -1784,6 +1818,8 @@ var RnI18n = {
     location: 'Poloha',
     updated: 'aktualizované {t}',
     confirm: 'Potvrdiť?',
+    call_done: 'Hotovo',
+    call_failed: 'Zlyhalo: {e}',
     charge_mode: 'Režim nabíjania',
     data_plan: 'Orange Internet On the move',
     data_left: 'Zostáva {l} z {t}',
@@ -1887,6 +1923,8 @@ var RnI18n = {
     location: 'Poloha',
     updated: 'aktualizováno {t}',
     confirm: 'Potvrdit?',
+    call_done: 'Hotovo',
+    call_failed: 'Selhalo: {e}',
     charge_mode: 'Režim nabíjení',
     data_plan: 'Orange Internet On the move',
     data_left: 'Zbývá {l} z {t}',
@@ -1990,6 +2028,8 @@ var RnI18n = {
     location: 'Lokacija',
     updated: 'posodobljeno {t}',
     confirm: 'Potrdite?',
+    call_done: 'Opravljeno',
+    call_failed: 'Ni uspelo: {e}',
     charge_mode: 'Način polnjenja',
     data_plan: 'Orange Internet On the move',
     data_left: 'Preostane {l} od {t}',
@@ -2093,6 +2133,8 @@ var RnI18n = {
     location: 'Atrašanās vieta',
     updated: 'atjaunināts {t}',
     confirm: 'Apstiprināt?',
+    call_done: 'Gatavs',
+    call_failed: 'Neizdevās: {e}',
     charge_mode: 'Uzlādes režīms',
     data_plan: 'Orange Internet On the move',
     data_left: 'Atlikuši {l} no {t}',
@@ -2196,6 +2238,8 @@ var RnI18n = {
     location: 'Τοποθεσία',
     updated: 'ενημερώθηκε {t}',
     confirm: 'Σίγουρα;',
+    call_done: 'Έγινε',
+    call_failed: 'Απέτυχε: {e}',
     charge_mode: 'Λειτουργία φόρτισης',
     data_plan: 'Orange Internet On the move',
     data_left: 'Απομένουν {l} από {t}',
@@ -2839,7 +2883,9 @@ class RenaultCard extends HTMLElement {
   disconnectedCallback() {
     clearInterval(this._timer);
     clearTimeout(this._armTimer);
+    clearTimeout(this._resultTimer);
     this._armed = null;
+    this._result = null;
     document.removeEventListener('click', this._onOutside, true);
   }
 
@@ -2993,7 +3039,7 @@ class RenaultCard extends HTMLElement {
     var ids = [];
     Object.keys(r.ent).forEach((k) => { ids = ids.concat(r.ent[k]); });
     if (r.plan) Object.keys(RN_PLAN_ROLES).forEach((k) => { ids.push(r.plan[k]); });
-    var sig = JSON.stringify([this._lang(), r.deviceId, this._armed, this._leaseOpen, this._leaseHist?.key, this._leaseHist?.at, rnPhotoUrl(hass, r.photo), this._timeSig(r), ids.map((id) => {
+    var sig = JSON.stringify([this._lang(), r.deviceId, this._armed, this._result, this._leaseOpen, this._leaseHist?.key, this._leaseHist?.at, rnPhotoUrl(hass, r.photo), this._timeSig(r), ids.map((id) => {
       var s = id && hass.states[id];
       return s ? [id, s.state, s.attributes.options] : null;
     })]);
@@ -3131,8 +3177,11 @@ class RenaultCard extends HTMLElement {
           icon = hit ? hit[1] : 'mdi:gesture-tap-button';
         }
         var armed = this._armed === id;
-        return '<button class="btn' + (armed ? ' armed' : '') + '" data-press="' + rnEsc(id) + '"><ha-icon icon="' + rnEsc(icon) + '"></ha-icon><span>' +
-          rnEsc(armed ? this._t('confirm') : this._entityLabel(id, deviceName)) + '</span></button>';
+        var res = this._resultFor(id);
+        var text = armed ? this._t('confirm') : res ? res.text : this._entityLabel(id, deviceName);
+        return '<button class="btn' + (armed ? ' armed' : res ? ` ${res.cls}` : '') + '" data-press="' + rnEsc(id) + '"' +
+          (res ? ` title="${rnEsc(res.text)}" aria-label="${rnEsc(res.text)}"` : '') +
+          '><ha-icon icon="' + rnEsc(res && !armed ? res.icon : icon) + '"></ha-icon><span>' + rnEsc(text) + '</span></button>';
       });
       var modeHtml = '';
       if (this._avail(ent.charge_mode)) {
@@ -3140,7 +3189,9 @@ class RenaultCard extends HTMLElement {
         var opts = (s.attributes.options || []).map((o) =>
           '<option value="' + rnEsc(o) + '"' + (o === s.state ? ' selected' : '') + '>' +
           rnEsc(this._hass.formatEntityState ? this._hass.formatEntityState(s, o) : o) + '</option>').join('');
-        modeHtml = `<label class="field"><span>${this._t('charge_mode')}</span><select data-select="${rnEsc(ent.charge_mode)}">${opts}</select></label>`;
+        var res = this._resultFor(ent.charge_mode);
+        var resAttr = res ? ` class="${res.cls}" title="${rnEsc(res.text)}" aria-description="${rnEsc(res.text)}"${res.cls === 'err' ? ' aria-invalid="true"' : ''}` : '';
+        modeHtml = `<label class="field"><span>${this._t('charge_mode')}</span><select data-select="${rnEsc(ent.charge_mode)}"${resAttr}>${opts}</select></label>`;
       }
       if (btns.length || modeHtml) actionsHtml = modeHtml + (btns.length ? `<div class="actions">${btns.join('')}</div>` : '');
     }
@@ -3491,6 +3542,12 @@ class RenaultCard extends HTMLElement {
       '.btn ha-icon { --mdc-icon-size: 20px; flex-shrink: 0; }' +
       '.btn.armed { background: color-mix(in srgb, var(--rn-accent) 16%, transparent); color: ' + rnInk('var(--rn-accent)') + '; }' +
       '.btn.armed ha-icon { color: var(--rn-accent); }' +
+      '.btn.ok { background: color-mix(in srgb, ' + RN_OK + ' 15%, transparent); color: ' + rnInk(RN_OK) + '; }' +
+      '.btn.err { background: color-mix(in srgb, ' + RN_ERR + ' 15%, transparent); color: ' + rnInk(RN_ERR) + '; }' +
+      '.btn.ok ha-icon { color: ' + RN_OK + '; }' +
+      '.btn.err ha-icon { color: ' + RN_ERR + '; }' +
+      'select.ok { border-color: ' + RN_OK + '; }' +
+      'select.err { border-color: ' + RN_ERR + '; }' +
       // Narrow card (1/3 of a 12 column view, 6 columns of a section): "updated X ago" goes under the
       // place instead of beside it, and the tiles get two columns so their labels are not cut.
       '@container (max-width: 360px) {' +
@@ -3544,7 +3601,7 @@ class RenaultCard extends HTMLElement {
       } else {
         this._armed = null;
         clearTimeout(this._armTimer);
-        this._hass.callService('button', 'press', { entity_id: id });
+        this._call('button', 'press', { entity_id: id });
       }
       this._update();
       return;
@@ -3558,8 +3615,33 @@ class RenaultCard extends HTMLElement {
   _onChange(ev) {
     var el = ev.target;
     if (!el?.dataset?.select) return;
-    this._hass.callService('select', 'select_option', { entity_id: el.dataset.select, option: el.value });
+    this._call('select', 'select_option', { entity_id: el.dataset.select, option: el.value });
     el.blur();
+  }
+
+  // Runs a service call and shows its outcome on the control for a moment (HA shows its own error
+  // toast). A failure (car offline, Renault API down…) never escapes as an unhandled rejection.
+  _call(domain, service, data) {
+    var id = data.entity_id;
+    return Promise.resolve()
+      .then(() => this._hass.callService(domain, service, data))
+      .then(() => this._showResult(id, true), (err) => this._showResult(id, false, err));
+  }
+
+  _showResult(id, ok, err) {
+    var msg = ok ? '' : String(err?.message || err?.code || err || '').trim();
+    this._result = { id, ok, msg };
+    clearTimeout(this._resultTimer);
+    this._resultTimer = setTimeout(() => { this._result = null; this._update(); }, ok ? 2000 : 5000);
+    this._update();
+  }
+
+  _resultFor(id) {
+    var r = this._result;
+    if (!r || r.id !== id) return null;
+    return r.ok
+      ? { cls: 'ok', icon: 'mdi:check', text: this._t('call_done') }
+      : { cls: 'err', icon: 'mdi:alert-circle-outline', text: this._t('call_failed', { e: r.msg || '?' }) };
   }
 }
 
