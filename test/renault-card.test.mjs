@@ -1418,3 +1418,91 @@ test("button feedback colours reach 4.5:1 in the light and dark themes", () => {
     }
   }
 });
+
+// ── renault-mini-card ──
+const RenaultMiniCard = defined["renault-mini-card"];
+
+function miniCard(config = {}) {
+  const { entities, devices } = renaultRegistry();
+  const reg = (entity_id, translation_key) => ({ entity_id, device_id: "d1", platform: "renault", translation_key });
+  const extra = {
+    "sensor.car_battery_autonomy": [reg("sensor.car_battery_autonomy", "battery_autonomy"), { state: "38", attributes: { unit_of_measurement: "km" } }],
+    "sensor.car_fuel_autonomy": [reg("sensor.car_fuel_autonomy", "fuel_autonomy"), { state: "512", attributes: { unit_of_measurement: "km" } }],
+    "binary_sensor.car_plugged_in": [reg("binary_sensor.car_plugged_in", "plugged_in"), { state: "on", attributes: { device_class: "plug" } }],
+    "binary_sensor.car_charging": [reg("binary_sensor.car_charging", "charging"), { state: "on", attributes: { device_class: "battery_charging" } }],
+    "sensor.car_charging_remaining_time": [reg("sensor.car_charging_remaining_time", "charging_remaining_time"), { state: "45", attributes: { device_class: "duration" } }],
+    "sensor.car_picture": [{ entity_id: "sensor.car_picture", device_id: "d1", platform: "renault_picture" }, { state: "available", attributes: { entity_picture: "/pic.webp" } }],
+  };
+  const states = renaultStates(Object.keys(entities));
+  for (const [id, [r, s]] of Object.entries(extra)) {
+    entities[id] = r;
+    states[id] = s;
+  }
+  devices.d1.name = "AB123CD";
+  const card = new RenaultMiniCard();
+  const attrs = {};
+  card.setAttribute = (n, v) => (attrs[n] = v);
+  const root = { html: "", activeElement: null, addEventListener() {}, querySelectorAll: () => [], querySelector: () => null };
+  Object.defineProperty(root, "innerHTML", { get: () => root.html, set: (h) => (root.html = h) });
+  card.attachShadow = () => (card.shadowRoot = root);
+  card.setConfig({ device_id: "d1", ...config });
+  card.hass = { entities, devices, states, language: "en" };
+  return { card, root, attrs, states };
+}
+
+const outsideClick = (path) => ({ composedPath: () => path });
+
+test("mini card: picture, battery level, battery range and charging state, with a detail button and no plate", () => {
+  const { card, root, attrs } = miniCard();
+  assert.equal(attrs.mini, "");
+  const html = root.html;
+  assert.match(html, /<ha-card class="mini">/);
+  assert.match(html, /<span class="brand"/, "the header keeps its 40 px icon");
+  assert.match(html, /<button class="zoom" title="Show the full card"/);
+  assert.match(html, /<div class="mimg"><img src="\/pic.webp"/);
+  assert.match(html, /data-more="sensor.car_battery_level"/);
+  assert.match(html, /data-more="sensor.car_battery_autonomy"/);
+  assert.doesNotMatch(html, /sensor.car_fuel_autonomy/, "the battery range comes first");
+  assert.match(html, /Charging · 45 min left/);
+  assert.doesNotMatch(html, /class="plate"/);
+  assert.doesNotMatch(html, /sensor.car_mileage/, "the full card's other tiles stay hidden");
+  assert.deepEqual(JSON.parse(JSON.stringify(card.getGridOptions())), { columns: 6, min_columns: 6, rows: "auto" });
+  assert.equal(card.getCardSize(), 3);
+});
+
+test("mini card: the plug state when not charging, the fuel range without a battery range, the car icon without logo", () => {
+  const { card, root, states } = miniCard({ show_logo: false });
+  states["binary_sensor.car_charging"] = { state: "off", attributes: {} };
+  delete states["sensor.car_battery_autonomy"];
+  card.hass = { ...card._hass, states: { ...states } };
+  assert.match(root.html, /mdi:power-plug"><\/ha-icon>Plugged in/);
+  assert.match(root.html, /data-more="sensor.car_fuel_autonomy"/);
+  assert.match(root.html, /<div class="badge"><ha-icon icon="mdi:car">/);
+});
+
+test("mini card: the detail button shows the full card, a click outside (not in a dialog) folds it back", () => {
+  const { card, root } = miniCard();
+  card.connectedCallback();
+  const outside = listeners.filter((l) => l.on && l.type === "click").at(-1).fn;
+  card._onClick({ composedPath: () => [{ classList: { contains: (c) => c === "zoom" } }], stopPropagation() {}, detail: 1 });
+  assert.match(root.html, /<ha-card>/);
+  assert.match(root.html, /class="plate"/);
+  assert.match(root.html, /data-more="sensor.car_mileage"/);
+  assert.match(root.html, /<button class="zoom" title="Back to the compact view"/);
+  assert.equal(card.getCardSize(), 6);
+  assert.deepEqual(JSON.parse(JSON.stringify(card.getGridOptions())), { columns: 12, min_columns: 6 });
+  outside(outsideClick([card]));
+  outside(outsideClick([{ localName: "ha-more-info-dialog" }]));
+  assert.match(root.html, /<ha-card>/, "a click in the card or in a dialog keeps it open");
+  outside(outsideClick([{ localName: "div" }]));
+  assert.match(root.html, /<ha-card class="mini">/);
+  card.disconnectedCallback();
+  assert.ok(!listeners.some((l) => l.on && l.fn === outside));
+});
+
+test("mini card styles: 240 px in an auto-width container, an unfilled detail button", () => {
+  const css = Object.create(RenaultMiniCard.prototype)._styles();
+  assert.match(css, /:host\(\[mini\]\)::before \{ grid-template-columns: minmax\(0, 240px\); \}/);
+  assert.match(cssRule(css, ".zoom"), /all: unset;/);
+  assert.equal(css.match(/<\/style>/g).length, 1);
+});

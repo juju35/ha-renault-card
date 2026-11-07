@@ -35,6 +35,12 @@ Pick the vehicle, the card finds all its entities by itself.
 - Light and dark theme compatible
 - Ready for the Marketplace, no CDN: the map libraries ship with the card
 
+**Mini card** (`custom:renault-mini-card`)
+
+- The picture, battery level, range (battery, or fuel without a battery) and charging or plug state in half a row
+- A button at the top right shows the full card; a click outside the card brings the compact view back
+- Same options and visual editor as the vehicle card
+
 **Map card** (`custom:renault-map-card`)
 
 - All your Renault vehicles on one map (or the ones you pick), each with its picture, name and range
@@ -193,6 +199,19 @@ entities:
 | `language` | ❌ | Auto | Force language: `en`, `fr`, `de`, `es`, `sr`, `sr-Latn`, `it`, `nl`, `pt`, `pl`, `ro`, `da`, `sv`, `bg`, `ru`, `uk`, `hu`, `sk`, `cs`, `sl`, `lv` or `el` (auto-detects from HA settings) |
 | `entities` | ❌ | Auto | Override detected entities: `mileage`, `fuel_autonomy`, `fuel_quantity`, `battery_level`, `battery_autonomy`, `location` |
 
+## Mini card
+
+Add it from the dashboard (**Add card → Renault Mini Card**). It takes the same options as the vehicle card, which it shows in full when you press the button at the top right; a click outside the card folds it back.
+
+```yaml
+type: custom:renault-mini-card
+device_id: 5a8c1932ddf3f29163a275f06789b1bf
+```
+
+| Mini card | Mini card, dark |
+|---|---|
+| <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/mini.png" alt="Renault mini card" width="280"> | <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/mini-dark.png" alt="Renault mini card, dark theme" width="280"> |
+
 ## Map card
 
 Add it from the dashboard (**Add card → Renault Map Card**). With no vehicle selected it shows all the Renault vehicles that have a location.
@@ -229,6 +248,10 @@ The `ha` base map is the one Home Assistant's own map card uses (Home Assistant 
 |---|---|
 | <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/espace.png" alt="espace" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/captur.png" alt="captur" width="400"> |
 | <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/espace-dark.png" alt="espace dark" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/captur-dark.png" alt="captur dark" width="400"> |
+
+| Mini card | Mini card, dark |
+|---|---|
+| <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/mini.png" alt="mini card" width="280"> | <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/mini-dark.png" alt="mini card, dark" width="280"> |
 
 | Map card | Map card, dark |
 |---|---|

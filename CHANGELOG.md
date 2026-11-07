@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.9.0 - 2026-11-07
+
+### Added
+- New mini card (`custom:renault-mini-card`): the vehicle picture, battery level, range and charging or plug state in a compact card, with a button at the top right that shows the full card until you click outside it.
+
 ## 2.8.10 - 2026-11-07
 
 ### Fixes
