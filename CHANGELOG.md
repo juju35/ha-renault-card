@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.8.10 - 2026-11-07
+
+### Fixes
+- Action buttons and the charge mode selector now show whether the request worked: a check for a moment on success, or an error state with Home Assistant's message in the tooltip on failure, instead of failing silently with an unhandled error in the console.
+
 ## 2.8.9 - 2026-11-04
 
 ### Documentation

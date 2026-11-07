@@ -238,17 +238,20 @@ test("rnRelative formats in the given language", () => {
   assert.equal(ctx.rnRelative("fr", new Date(Date.now() - 2 * 3600000)), "il y a 2 heures");
 });
 
-test("disconnecting the card cancels the armed button timer", () => {
+test("disconnecting the card cancels the armed button and call feedback timers", () => {
   const cleared = [];
   const card = Object.create(RenaultCard.prototype);
   const orig = ctx.clearTimeout;
   ctx.clearTimeout = (t) => cleared.push(t);
   card._armTimer = 42;
+  card._resultTimer = 43;
   card._armed = "button.horn";
+  card._result = { id: "button.horn", ok: true, msg: "" };
   card.disconnectedCallback();
   ctx.clearTimeout = orig;
-  assert.deepEqual(cleared, [42]);
+  assert.deepEqual(cleared, [42, 43]);
   assert.equal(card._armed, null);
+  assert.equal(card._result, null);
 });
 
 test("map editor offers the language option", () => {
@@ -1292,4 +1295,126 @@ test("phone width: 'updated X ago' takes the whole row and the tile labels get 4
   assert.match(narrow, /\.row > ha-icon, \.row \.chev \{ grid-row: 1; \}/);
   assert.match(narrow, /\.row \.when \{ grid-column: 1 \/ -1; \}/);
   assert.match(narrow, /\.tile \{ padding-left: 8px; padding-right: 8px; \}/);
+});
+
+// ── Service call errors ──────────────────────────────────────────────────────
+
+// A rendered card with a horn button and a charge mode select, whose callService is `call`.
+function cardWithActions(call) {
+  const { entities, devices } = renaultRegistry();
+  const reg = (entity_id, translation_key) => ({ entity_id, device_id: "d1", platform: "renault", translation_key });
+  entities["button.car_horn"] = reg("button.car_horn", "start_horn");
+  entities["select.car_charge_mode"] = reg("select.car_charge_mode", "charge_mode");
+  const states = {
+    ...renaultStates(Object.keys(renaultRegistry().entities)),
+    "button.car_horn": { state: "unknown", attributes: { friendly_name: "Car Horn" } },
+    "select.car_charge_mode": { state: "always", attributes: { options: ["always", "scheduled"] } },
+  };
+  const card = Object.create(RenaultCard.prototype);
+  card._config = { device_id: "d1", show_actions: true };
+  card._hass = { entities, devices, states, language: "en", callService: call };
+  const root = {
+    html: "",
+    activeElement: null,
+    querySelectorAll: () => [],
+    get innerHTML() {
+      return root.html;
+    },
+    set innerHTML(h) {
+      root.html = h;
+    },
+  };
+  card.shadowRoot = root;
+  card._update();
+  const press = () => card._onClick({ composedPath: () => [{ tagName: "BUTTON", dataset: { press: "button.car_horn" } }] });
+  const select = () => card._onChange({ target: { dataset: { select: "select.car_charge_mode" }, value: "scheduled", blur() {} } });
+  const button = () => root.html.match(/<button[^>]*data-press="button\.car_horn"[^>]*>.*?<\/button>/)[0];
+  const selectTag = () => root.html.match(/<select[^>]*>/)[0];
+  return { card, press, select, button, selectTag };
+}
+
+test("a failed button press shows the error on the button, without an unhandled rejection", async () => {
+  const unhandled = [];
+  const onUnhandled = (e) => unhandled.push(e);
+  process.on("unhandledRejection", onUnhandled);
+  try {
+    const calls = [];
+    const c = cardWithActions((...a) => {
+      calls.push(a);
+      return Promise.reject({ code: "home_assistant_error", message: "Vehicle unreachable" });
+    });
+    assert.match(c.button(), /Car Horn|Horn/);
+    c.press();
+    assert.equal(calls.length, 0, "the first tap only arms the button");
+    assert.match(c.button(), /class="btn armed"/);
+    c.press();
+    await flush();
+    assert.equal(calls.length, 1);
+    assert.equal(JSON.stringify(calls[0]), JSON.stringify(["button", "press", { entity_id: "button.car_horn" }]));
+    const b = c.button();
+    assert.match(b, /class="btn err"/);
+    assert.match(b, /title="Failed: Vehicle unreachable"/);
+    assert.match(b, /aria-label="Failed: Vehicle unreachable"/);
+    assert.match(b, /mdi:alert-circle-outline/);
+    // A synchronous throw is caught too.
+    const s = cardWithActions(() => {
+      throw new Error("Not connected");
+    });
+    s.press();
+    s.press();
+    await flush();
+    assert.match(s.button(), /title="Failed: Not connected"/);
+    await flush();
+    assert.deepEqual(unhandled, []);
+  } finally {
+    process.off("unhandledRejection", onUnhandled);
+  }
+});
+
+test("a successful button press briefly shows a check, then the label comes back", async () => {
+  const c = cardWithActions(async () => {});
+  c.press();
+  c.press();
+  await flush();
+  assert.match(c.button(), /class="btn ok"/);
+  assert.match(c.button(), /mdi:check/);
+  assert.match(c.button(), /aria-label="Done"/);
+  c.card._result = null;
+  c.card._update();
+  assert.doesNotMatch(c.button(), /class="btn (ok|err)"|title=/);
+});
+
+test("charge mode select: failure and success are shown on the select", async () => {
+  const unhandled = [];
+  const onUnhandled = (e) => unhandled.push(e);
+  process.on("unhandledRejection", onUnhandled);
+  try {
+    const bad = cardWithActions(() => Promise.reject(new Error("Renault API error")));
+    bad.select();
+    await flush();
+    assert.match(bad.selectTag(), /class="err"/);
+    assert.match(bad.selectTag(), /title="Failed: Renault API error"/);
+    assert.match(bad.selectTag(), /aria-invalid="true"/);
+    // The select shows the entity's real (unchanged) option again.
+    assert.match(bad.card.shadowRoot.html, /<option value="always" selected>/);
+    const good = cardWithActions(async () => {});
+    good.select();
+    await flush();
+    assert.match(good.selectTag(), /class="ok"/);
+    await flush();
+    assert.deepEqual(unhandled, []);
+  } finally {
+    process.off("unhandledRejection", onUnhandled);
+  }
+});
+
+test("button feedback colours reach 4.5:1 in the light and dark themes", () => {
+  const css = Object.create(RenaultCard.prototype)._styles();
+  for (const theme of ["light", "dark"]) {
+    for (const [sel, state] of [[".btn.ok", "success"], [".btn.err", "error"]]) {
+      const bg = mix(hex(STATE[state]), hex(THEMES[theme].card), 0.15);
+      const r = ratio(resolve(ruleColor(css, sel), theme), bg);
+      assert.ok(r >= 4.5, `${sel} ${theme}: ${r.toFixed(2)}`);
+    }
+  }
 });
