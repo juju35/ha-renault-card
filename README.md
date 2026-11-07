@@ -1,6 +1,6 @@
 # ha-renault-card
 
-[![HACS](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
+[![Marketplace](https://img.shields.io/badge/Marketplace-Custom-41BDF5.svg)](https://www.home-assistant.io/integrations/marketplace/)
 [![HACS Validation](https://github.com/juju35/ha-renault-card/actions/workflows/hacs.yml/badge.svg)](https://github.com/juju35/ha-renault-card/actions/workflows/hacs.yml)
 [![Validate](https://github.com/juju35/ha-renault-card/actions/workflows/validate.yml/badge.svg)](https://github.com/juju35/ha-renault-card/actions/workflows/validate.yml)
 [![Lint](https://github.com/juju35/ha-renault-card/actions/workflows/lint.yml/badge.svg)](https://github.com/juju35/ha-renault-card/actions/workflows/lint.yml)
@@ -12,7 +12,7 @@ Custom Lovelace cards for Home Assistant's [Renault](https://www.home-assistant.
 
 Pick the vehicle, the card finds all its entities by itself.
 
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=juju35&repository=ha-renault-card&category=plugin)
+[![Open your Home Assistant instance and open a repository inside the Marketplace.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/marketplace_repository/?owner=juju35&repository=ha-renault-card&category=plugin)
 
 | Espace (with Orange Internet On the move) | Captur |
 |---|---|
@@ -33,7 +33,7 @@ Pick the vehicle, the card finds all its entities by itself.
 - Visual editor in the dashboard UI (no YAML needed)
 - English, French, German, Spanish, Serbian (Cyrillic and Latin), Italian, Dutch, European Portuguese, Polish, Romanian, Danish, Swedish, Bulgarian, Russian, Ukrainian, Hungarian, Slovak, Czech, Slovenian, Latvian and Greek, follows the Home Assistant language
 - Light and dark theme compatible
-- HACS-ready, no CDN: the map libraries ship with the card
+- Ready for the Marketplace, no CDN: the map libraries ship with the card
 
 **Map card** (`custom:renault-map-card`)
 
@@ -48,8 +48,8 @@ Pick the vehicle, the card finds all its entities by itself.
 | Integration | What the cards show |
 |---|---|
 | [Renault](https://www.home-assistant.io/integrations/renault/) (built in) | Range, fuel and battery levels, mileage, charging, plug, lock, doors, air conditioning, tyre pressure, location, action buttons and charge mode; the vehicles on the map card |
-| [Renault Picture](https://github.com/juju35/ha-renault-picture) (HACS, optional) | The official MyRenault photo of the vehicle |
-| [Orange Internet On the move](https://github.com/rexave/hass-orange-internet-on-the-move) (HACS, optional) | Data left, percentage, renewal or expiry date |
+| [Renault Picture](https://github.com/juju35/ha-renault-picture) (Marketplace, optional) | The official MyRenault photo of the vehicle |
+| [Orange Internet On the move](https://github.com/rexave/hass-orange-internet-on-the-move) (Marketplace, optional) | Data left, percentage, renewal or expiry date |
 
 ## Prerequisites
 
@@ -58,20 +58,20 @@ Pick the vehicle, the card finds all its entities by itself.
 
 ## Installation
 
-### Via HACS (recommended)
+### Via the Marketplace (recommended)
 
 Click the button below to add the repository directly:
 
-[![Add to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=juju35&repository=ha-renault-card&category=plugin)
+[![Add to the Marketplace](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/marketplace_repository/?owner=juju35&repository=ha-renault-card&category=plugin)
 
 Or manually:
 
-1. Open HACS → **⋮** (top right) → **Custom repositories**
+1. Open **Settings → Marketplace → Add from link** (top right; this needs a GitHub account connected)
 2. Add `https://github.com/juju35/ha-renault-card` — Type: **Dashboard**
-3. Search for **Renault Card** and install it (both cards come in the same package)
+3. Open **Renault Card** and click **Install** (both cards come in the same package)
 4. Clear your browser cache and refresh
 
-HACS registers the dashboard resource for you.
+The Marketplace registers the dashboard resource for you.
 
 ### Manual
 
@@ -253,7 +253,7 @@ npm run screenshots  # renders the card with mock Renault vehicles into screensh
 
 The map libraries in `vendor/` (Leaflet, MapLibre GL and its Leaflet adapter) are vendored as-is; the build copies them next to the card, which loads them on demand for the map card.
 
-`dist/` is not committed: `npm run build` creates it locally, CI builds it on every push, and the release workflow attaches the built file to the release, which is where HACS downloads it from.
+`dist/` is not committed: `npm run build` creates it locally, CI builds it on every push, and the release workflow attaches the built file to the release, which is where the Marketplace installs it from.
 
 ### Releasing
 
