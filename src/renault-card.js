@@ -45,6 +45,8 @@ var RnI18n = {
     unit_gb: 'Go',
     unit_mb: 'Mo',
     no_vehicle: 'Aucun véhicule Renault trouvé',
+    zoom_in: 'Afficher la carte complète',
+    zoom_out: 'Revenir à la vue compacte',
     ed_device_id: 'Véhicule',
     ed_device_id_helper: 'Appareil de l\'intégration Renault',
     ed_name: 'Nom',
@@ -150,6 +152,8 @@ var RnI18n = {
     unit_gb: 'GB',
     unit_mb: 'MB',
     no_vehicle: 'No Renault vehicle found',
+    zoom_in: 'Show the full card',
+    zoom_out: 'Back to the compact view',
     ed_device_id: 'Vehicle',
     ed_device_id_helper: 'Device from the Renault integration',
     ed_name: 'Name',
@@ -255,6 +259,8 @@ var RnI18n = {
     unit_gb: 'GB',
     unit_mb: 'MB',
     no_vehicle: 'Kein Renault-Fahrzeug gefunden',
+    zoom_in: 'Vollständige Karte anzeigen',
+    zoom_out: 'Zurück zur kompakten Ansicht',
     ed_device_id: 'Fahrzeug',
     ed_device_id_helper: 'Gerät der Renault-Integration',
     ed_name: 'Name',
@@ -360,6 +366,8 @@ var RnI18n = {
     unit_gb: 'GB',
     unit_mb: 'MB',
     no_vehicle: 'No se ha encontrado ningún vehículo Renault',
+    zoom_in: 'Mostrar la tarjeta completa',
+    zoom_out: 'Volver a la vista compacta',
     ed_device_id: 'Vehículo',
     ed_device_id_helper: 'Dispositivo de la integración Renault',
     ed_name: 'Nombre',
@@ -465,6 +473,8 @@ var RnI18n = {
     unit_gb: 'ГБ',
     unit_mb: 'МБ',
     no_vehicle: 'Није пронађено ниједно Renault возило',
+    zoom_in: 'Прикажи целу картицу',
+    zoom_out: 'Назад на компактни приказ',
     ed_device_id: 'Возило',
     ed_device_id_helper: 'Уређај из Renault интеграције',
     ed_name: 'Назив',
@@ -570,6 +580,8 @@ var RnI18n = {
     unit_gb: 'GB',
     unit_mb: 'MB',
     no_vehicle: 'Nije pronađeno nijedno Renault vozilo',
+    zoom_in: 'Prikaži celu karticu',
+    zoom_out: 'Nazad na kompaktni prikaz',
     ed_device_id: 'Vozilo',
     ed_device_id_helper: 'Uređaj iz Renault integracije',
     ed_name: 'Naziv',
@@ -675,6 +687,8 @@ var RnI18n = {
     unit_gb: 'GB',
     unit_mb: 'MB',
     no_vehicle: 'Nessun veicolo Renault trovato',
+    zoom_in: 'Mostra la scheda completa',
+    zoom_out: 'Torna alla vista compatta',
     ed_device_id: 'Veicolo',
     ed_device_id_helper: 'Dispositivo dell\'integrazione Renault',
     ed_name: 'Nome',
@@ -780,6 +794,8 @@ var RnI18n = {
     unit_gb: 'GB',
     unit_mb: 'MB',
     no_vehicle: 'Geen Renault-voertuig gevonden',
+    zoom_in: 'Volledige kaart tonen',
+    zoom_out: 'Terug naar de compacte weergave',
     ed_device_id: 'Voertuig',
     ed_device_id_helper: 'Apparaat van de Renault-integratie',
     ed_name: 'Naam',
@@ -885,6 +901,8 @@ var RnI18n = {
     unit_gb: 'GB',
     unit_mb: 'MB',
     no_vehicle: 'Nenhum veículo Renault encontrado',
+    zoom_in: 'Mostrar o cartão completo',
+    zoom_out: 'Voltar à vista compacta',
     ed_device_id: 'Veículo',
     ed_device_id_helper: 'Dispositivo da integração Renault',
     ed_name: 'Nome',
@@ -990,6 +1008,8 @@ var RnI18n = {
     unit_gb: 'GB',
     unit_mb: 'MB',
     no_vehicle: 'Nie znaleziono pojazdu Renault',
+    zoom_in: 'Pokaż pełną kartę',
+    zoom_out: 'Wróć do widoku kompaktowego',
     ed_device_id: 'Pojazd',
     ed_device_id_helper: 'Urządzenie z integracji Renault',
     ed_name: 'Nazwa',
@@ -1095,6 +1115,8 @@ var RnI18n = {
     unit_gb: 'GB',
     unit_mb: 'MB',
     no_vehicle: 'Niciun vehicul Renault găsit',
+    zoom_in: 'Afișează cardul complet',
+    zoom_out: 'Înapoi la vizualizarea compactă',
     ed_device_id: 'Vehicul',
     ed_device_id_helper: 'Dispozitiv din integrarea Renault',
     ed_name: 'Nume',
@@ -1200,6 +1222,8 @@ var RnI18n = {
     unit_gb: 'GB',
     unit_mb: 'MB',
     no_vehicle: 'Intet Renault-køretøj fundet',
+    zoom_in: 'Vis hele kortet',
+    zoom_out: 'Tilbage til kompakt visning',
     ed_device_id: 'Køretøj',
     ed_device_id_helper: 'Enhed fra Renault-integrationen',
     ed_name: 'Navn',
@@ -1305,6 +1329,8 @@ var RnI18n = {
     unit_gb: 'GB',
     unit_mb: 'MB',
     no_vehicle: 'Inget Renault-fordon hittades',
+    zoom_in: 'Visa hela kortet',
+    zoom_out: 'Tillbaka till kompakt vy',
     ed_device_id: 'Fordon',
     ed_device_id_helper: 'Enhet från Renault-integrationen',
     ed_name: 'Namn',
@@ -1410,6 +1436,8 @@ var RnI18n = {
     unit_gb: 'GB',
     unit_mb: 'MB',
     no_vehicle: 'Не е намерен автомобил Renault',
+    zoom_in: 'Покажи цялата карта',
+    zoom_out: 'Обратно към компактния изглед',
     ed_device_id: 'Автомобил',
     ed_device_id_helper: 'Устройство от интеграцията Renault',
     ed_name: 'Име',
@@ -1515,6 +1543,8 @@ var RnI18n = {
     unit_gb: 'GB',
     unit_mb: 'MB',
     no_vehicle: 'Автомобиль Renault не найден',
+    zoom_in: 'Показать полную карточку',
+    zoom_out: 'Вернуться к компактному виду',
     ed_device_id: 'Автомобиль',
     ed_device_id_helper: 'Устройство из интеграции Renault',
     ed_name: 'Название',
@@ -1620,6 +1650,8 @@ var RnI18n = {
     unit_gb: 'GB',
     unit_mb: 'MB',
     no_vehicle: 'Автомобіль Renault не знайдено',
+    zoom_in: 'Показати повну картку',
+    zoom_out: 'Повернутися до компактного вигляду',
     ed_device_id: 'Автомобіль',
     ed_device_id_helper: 'Пристрій з інтеграції Renault',
     ed_name: 'Назва',
@@ -1725,6 +1757,8 @@ var RnI18n = {
     unit_gb: 'GB',
     unit_mb: 'MB',
     no_vehicle: 'Nem található Renault jármű',
+    zoom_in: 'Teljes kártya megjelenítése',
+    zoom_out: 'Vissza a kompakt nézethez',
     ed_device_id: 'Jármű',
     ed_device_id_helper: 'Eszköz a Renault integrációból',
     ed_name: 'Név',
@@ -1830,6 +1864,8 @@ var RnI18n = {
     unit_gb: 'GB',
     unit_mb: 'MB',
     no_vehicle: 'Nenašlo sa žiadne vozidlo Renault',
+    zoom_in: 'Zobraziť celú kartu',
+    zoom_out: 'Späť na kompaktné zobrazenie',
     ed_device_id: 'Vozidlo',
     ed_device_id_helper: 'Zariadenie z integrácie Renault',
     ed_name: 'Názov',
@@ -1935,6 +1971,8 @@ var RnI18n = {
     unit_gb: 'GB',
     unit_mb: 'MB',
     no_vehicle: 'Nebylo nalezeno žádné vozidlo Renault',
+    zoom_in: 'Zobrazit celou kartu',
+    zoom_out: 'Zpět na kompaktní zobrazení',
     ed_device_id: 'Vozidlo',
     ed_device_id_helper: 'Zařízení z integrace Renault',
     ed_name: 'Název',
@@ -2040,6 +2078,8 @@ var RnI18n = {
     unit_gb: 'GB',
     unit_mb: 'MB',
     no_vehicle: 'Vozilo Renault ni bilo najdeno',
+    zoom_in: 'Prikaži celotno kartico',
+    zoom_out: 'Nazaj na kompaktni pogled',
     ed_device_id: 'Vozilo',
     ed_device_id_helper: 'Naprava iz integracije Renault',
     ed_name: 'Ime',
@@ -2145,6 +2185,8 @@ var RnI18n = {
     unit_gb: 'GB',
     unit_mb: 'MB',
     no_vehicle: 'Nav atrasta Renault automašīna',
+    zoom_in: 'Rādīt pilno karti',
+    zoom_out: 'Atpakaļ uz kompakto skatu',
     ed_device_id: 'Transportlīdzeklis',
     ed_device_id_helper: 'Ierīce no Renault integrācijas',
     ed_name: 'Nosaukums',
@@ -2250,6 +2292,8 @@ var RnI18n = {
     unit_gb: 'GB',
     unit_mb: 'MB',
     no_vehicle: 'Δεν βρέθηκε όχημα Renault',
+    zoom_in: 'Εμφάνιση πλήρους κάρτας',
+    zoom_out: 'Επιστροφή στη συμπαγή προβολή',
     ed_device_id: 'Όχημα',
     ed_device_id_helper: 'Συσκευή από την ενσωμάτωση Renault',
     ed_name: 'Όνομα',
@@ -3068,26 +3112,67 @@ class RenaultCard extends HTMLElement {
     return 'var(--rn-accent)';
   }
 
+  // Logo (or car icon when there is neither logo nor picture), name and model, plate, then the
+  // mini card's detail button (_headerAction).
+  _header(name, model, plate, imgSrc) {
+    var c = this._config;
+    return '<div class="header">' +
+      (c.show_logo ? '<span class="brand" role="img" aria-label="Renault"></span>' :
+        (imgSrc ? '' : '<div class="badge"><ha-icon icon="mdi:car"></ha-icon></div>')) +
+      '<div class="titles"><div class="name">' + rnEsc(name) + '</div>' + (model ? `<div class="model">${rnEsc(model)}</div>` : '') + '</div>' +
+      (plate ? rnPlateSvg(plate, c.plate_department) : '') + this._headerAction() +
+      '</div>';
+  }
+
+  // Overridden by the mini card: its detail button.
+  _headerAction() { return ''; }
+
+  // Device name (name_by_user, else the plate the integration names it after), shown name, model and
+  // picture (custom image, else the MyRenault photo), shared by the full and mini cards.
+  _identity(r) {
+    var c = this._config, dev = r.device;
+    var deviceName = dev ? String(dev.name_by_user || dev.name || '').trim() : '';
+    return {
+      deviceName: deviceName,
+      name: c.name || deviceName || this._t('vehicle'),
+      model: dev?.model ? `Renault ${rnModel(dev.model)}` : '',
+      imgSrc: c.show_image ? (c.image || rnPhotoUrl(this._hass, r.photo)) : null,
+    };
+  }
+
+  _batteryTile(ent) {
+    return this._tile(ent.battery_level, 'mdi:battery-high', this._t('battery_level'), this._withUnit(ent.battery_level), { bar: this._num(ent.battery_level) });
+  }
+
+  // Battery or fuel range (role), in the warning colour under low_range.
+  _rangeTile(ent, role) {
+    var low = Number(this._config.low_range) || 0, v = this._num(ent[role]);
+    return this._tile(ent[role], 'mdi:map-marker-distance', this._t(role), this._withUnit(ent[role]), { warn: low && v != null && v < low });
+  }
+
+  // "Charging · 45 min left", else "Plugged in" / "Unplugged"; null without either sensor.
+  _chargeChip(ent) {
+    if (this._val(ent.charging) === 'on') {
+      var left = this._num(ent.charging_remaining_time);
+      return '<span class="chip ok" data-more="' + rnEsc(ent.charging) + '" role="button" tabindex="0"><ha-icon icon="mdi:battery-charging"></ha-icon>' +
+        (left ? this._t('charging_left', { t: this._duration(left) }) : this._t('charging')) + '</span>';
+    }
+    if (!this._avail(ent.plugged_in)) return null;
+    var plugged = this._val(ent.plugged_in) === 'on';
+    return `<span class="chip" data-more="${rnEsc(ent.plugged_in)}" role="button" tabindex="0"><ha-icon icon="${plugged ? 'mdi:power-plug' : 'mdi:power-plug-off-outline'}"></ha-icon>${this._t(plugged ? 'plugged' : 'unplugged')}</span>`;
+  }
+
   _render(r) {
     var c = this._config, ent = r.ent, dev = r.device;
     if (!r.deviceId) {
       this.shadowRoot.innerHTML = `${this._styles()}<ha-card><div class="empty"><ha-icon icon="mdi:car-off"></ha-icon>${this._t('no_vehicle')}</div></ha-card>`;
       return;
     }
-    var deviceName = dev ? String(dev.name_by_user || dev.name || '').trim() : '';
-    var name = c.name || deviceName || this._t('vehicle');
-    var model = dev?.model ? `Renault ${rnModel(dev.model)}` : '';
+    var id = this._identity(r);
+    var deviceName = id.deviceName, name = id.name, model = id.model, imgSrc = id.imgSrc;
     var plate = c.show_plate && dev ? rnPlate(dev.name) : null;
-    var imgSrc = c.show_image ? (c.image || rnPhotoUrl(this._hass, r.photo)) : null;
 
-    // Header
-    var header = '<div class="header">' +
-      (c.show_logo ? '<span class="brand" role="img" aria-label="Renault"></span>' :
-        (imgSrc ? '' : '<div class="badge"><ha-icon icon="mdi:car"></ha-icon></div>')) +
-      '<div class="titles"><div class="name">' + rnEsc(name) + '</div>' + (model ? `<div class="model">${rnEsc(model)}</div>` : '') + '</div>' +
-      (plate ? rnPlateSvg(plate, c.plate_department) : '') +
-      '</div>';
-
+    var header = this._header(name, model, plate, imgSrc);
     var image = imgSrc ? `<div class="image"><img src="${rnEsc(imgSrc)}" alt="${rnEsc(name)}"></div>` : '';
 
     // Status chips
@@ -3106,32 +3191,17 @@ class RenaultCard extends HTMLElement {
     if (ent.doors.some((id) => this._val(id) === 'on')) {
       chips.push(`<span class="chip warn"><ha-icon icon="mdi:car-door"></ha-icon>${this._t('doors_open')}</span>`);
     }
-    if (this._val(ent.charging) === 'on') {
-      var left = this._num(ent.charging_remaining_time);
-      chips.push('<span class="chip ok" data-more="' + rnEsc(ent.charging) + '" role="button" tabindex="0"><ha-icon icon="mdi:battery-charging"></ha-icon>' +
-        (left ? this._t('charging_left', { t: this._duration(left) }) : this._t('charging')) + '</span>');
-    } else if (this._avail(ent.plugged_in)) {
-      var plugged = this._val(ent.plugged_in) === 'on';
-      chips.push(`<span class="chip" data-more="${rnEsc(ent.plugged_in)}" role="button" tabindex="0"><ha-icon icon="${plugged ? 'mdi:power-plug' : 'mdi:power-plug-off-outline'}"></ha-icon>${this._t(plugged ? 'plugged' : 'unplugged')}</span>`);
-    }
+    var charge = this._chargeChip(ent);
+    if (charge) chips.push(charge);
     if (this._val(ent.hvac_status) === 'on') {
       chips.push(`<span class="chip ok"><ha-icon icon="mdi:air-conditioner"></ha-icon>${this._t('hvac_on')}</span>`);
     }
 
     // Stat tiles
     var tiles = [];
-    if (this._avail(ent.battery_level)) {
-      tiles.push(this._tile(ent.battery_level, 'mdi:battery-high', this._t('battery_level'), this._withUnit(ent.battery_level),
-        { bar: this._num(ent.battery_level) }));
-    }
-    if (this._avail(ent.battery_autonomy)) {
-      tiles.push(this._tile(ent.battery_autonomy, 'mdi:map-marker-distance', this._t('battery_autonomy'), this._withUnit(ent.battery_autonomy),
-        { warn: lowRange && bRange != null && bRange < lowRange }));
-    }
-    if (this._avail(ent.fuel_autonomy)) {
-      tiles.push(this._tile(ent.fuel_autonomy, 'mdi:map-marker-distance', this._t('fuel_autonomy'), this._withUnit(ent.fuel_autonomy),
-        { warn: lowRange && range != null && range < lowRange }));
-    }
+    if (this._avail(ent.battery_level)) tiles.push(this._batteryTile(ent));
+    if (this._avail(ent.battery_autonomy)) tiles.push(this._rangeTile(ent, 'battery_autonomy'));
+    if (this._avail(ent.fuel_autonomy)) tiles.push(this._rangeTile(ent, 'fuel_autonomy'));
     var tank = Number(c.fuel_tank_capacity) || 0;
     var fuel = this._num(ent.fuel_quantity);
     if (fuel != null) {
@@ -3795,6 +3865,119 @@ if (!customElements.get('renault-card')) {
     type: 'renault-card',
     name: 'Renault Card',
     description: 'Renault vehicle card (range, fuel, battery, location, actions) with optional Orange Internet On the move data plan',
+    preview: true,
+    documentationURL: 'https://github.com/juju35/ha-renault-card',
+  });
+}
+
+// ── renault-mini-card ────────────────────────────────────────────────────────
+// A click in a more-info or other dialog opened from the card is not "outside" it.
+function rnInDialog(ev) {
+  return ev.composedPath().some((n) => ['ha-more-info-dialog', 'ha-dialog', 'dialog'].indexOf(n.localName) >= 0);
+}
+
+/**
+ * Compact vehicle card: logo, name and model, the picture beside the battery level and range, and the
+ * charging or plug state. Its detail button (top right) switches it to the full card and back; a click
+ * outside the card brings the compact view back. Same options and editor as renault-card.
+ */
+class RenaultMiniCard extends RenaultCard {
+  constructor() {
+    super();
+    this._zoomed = false;
+    this._onZoomOutside = (ev) => {
+      if (this._zoomed && ev.composedPath().indexOf(this) === -1 && !rnInDialog(ev)) this._setZoom(false);
+    };
+  }
+
+  setConfig(config) {
+    // The host attribute behind the mini card's styles; never set in the constructor.
+    this.setAttribute?.('mini', '');
+    super.setConfig(config);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    document.addEventListener('click', this._onZoomOutside, true);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener('click', this._onZoomOutside, true);
+  }
+
+  getCardSize() { return this._zoomed ? super.getCardSize() : 3; }
+
+  getGridOptions() { return this._zoomed ? super.getGridOptions() : { columns: 6, min_columns: 6, rows: 'auto' }; }
+
+  _setZoom(zoomed) {
+    this._zoomed = zoomed;
+    this._sig = null;
+    this._update();
+  }
+
+  _headerAction() {
+    var label = rnEsc(this._t(this._zoomed ? 'zoom_out' : 'zoom_in'));
+    return `<button class="zoom" title="${label}" aria-label="${label}"><ha-icon icon="mdi:${this._zoomed ? 'arrow-collapse' : 'arrow-expand'}"></ha-icon></button>`;
+  }
+
+  _render(r) {
+    if (this._zoomed || !r.deviceId) {
+      super._render(r);
+      return;
+    }
+    var ent = r.ent, id = this._identity(r);
+    var tiles = [];
+    if (this._avail(ent.battery_level)) tiles.push(this._batteryTile(ent));
+    // The battery range of an electric or plug-in hybrid car, else the fuel range.
+    var range = ['battery_autonomy', 'fuel_autonomy'].find((role) => this._avail(ent[role]));
+    if (range) tiles.push(this._rangeTile(ent, range));
+    var img = id.imgSrc ? `<div class="mimg"><img src="${rnEsc(id.imgSrc)}" alt="${rnEsc(id.name)}"></div>` : '';
+    var charge = this._chargeChip(ent);
+    // No picture in the header: the logo, or the car icon, keeps the header's 40 px icon.
+    this._setHtml(this._styles() + '<ha-card class="mini">' + this._header(id.name, id.model, null, null) +
+      (img || tiles.length ? `<div class="mb${img && tiles.length ? '' : ' solo'}">${img}${tiles.length ? `<div class="mstats">${tiles.join('')}</div>` : ''}</div>` : '') +
+      (charge ? `<div class="chips">${charge}</div>` : '') + '</ha-card>');
+  }
+
+  _styles() {
+    return super._styles().replace('</style>',
+      // Only 240 px in an auto-width container (6 columns of a section), still no minimum.
+      ':host([mini])::before { grid-template-columns: minmax(0, 240px); }' +
+      'ha-card.mini { gap: 8px; }' +
+      '.zoom { all: unset; flex: none; cursor: pointer; width: 24px; height: 24px; margin: -4px -4px -4px 0; border-radius: 50%; align-self: flex-start;' +
+        ' display: grid; place-items: center; color: var(--secondary-text-color); --mdc-icon-size: 16px; }' +
+      '.zoom:hover { background: color-mix(in srgb, var(--secondary-text-color) 14%, transparent); color: var(--primary-text-color); }' +
+      '.zoom:focus-visible { outline: 2px solid var(--rn-accent); outline-offset: 1px; }' +
+      '.mb { display: grid; grid-template-columns: minmax(0, 45%) minmax(0, 1fr); gap: 8px; align-items: center; }' +
+      '.mb.solo { grid-template-columns: minmax(0, 1fr); }' +
+      '.mimg { display: flex; justify-content: center; min-width: 0; }' +
+      '.mimg img { max-width: 100%; max-height: 96px; object-fit: contain; }' +
+      '.mstats { display: flex; flex-direction: column; gap: 6px; min-width: 0; }' +
+      // A phone at 6 columns (about 156 px): the picture goes above the tiles.
+      '@container (max-width: 200px) { .mb { grid-template-columns: minmax(0, 1fr); } }' +
+      '</style>');
+  }
+
+  _onClick(ev) {
+    if (ev.composedPath().some((n) => n.classList?.contains('zoom'))) {
+      ev.stopPropagation();
+      this._setZoom(!this._zoomed);
+      // Keyboard use (Enter / Space: no click count) keeps the focus on the button, without scrolling the page.
+      if (!ev.detail) this.shadowRoot.querySelector('.zoom')?.focus({ preventScroll: true });
+      return;
+    }
+    super._onClick(ev);
+  }
+}
+
+if (!customElements.get('renault-mini-card')) {
+  customElements.define('renault-mini-card', RenaultMiniCard);
+  window.customCards = window.customCards || [];
+  window.customCards.push({
+    type: 'renault-mini-card',
+    name: 'Renault Mini Card',
+    description: 'Compact Renault vehicle card (picture, battery, range, charging) with a button to show the full card',
     preview: true,
     documentationURL: 'https://github.com/juju35/ha-renault-card',
   });
