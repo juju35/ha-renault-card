@@ -20,8 +20,8 @@ Pick the vehicle, the card finds all its entities by itself.
 
 ## Features
 
-- Range, fuel level, battery level, mileage, outside temperature and tyre pressure: whatever your car exposes
-- Fuel gauge when you set the tank capacity, and a low range warning
+- Range, fuel level, battery level, mileage, outside temperature and tyre pressure (front left, front right, rear left, rear right): whatever your car exposes
+- Fuel gauge when you set the tank capacity, a low range warning (fuel plus battery range on a plug-in hybrid) and an optional low tyre pressure warning
 - Charging status and time left, plug, lock, door and air conditioning status
 - Location with the time of the last update; tap it to open the map
 - Action buttons for every button of the vehicle (horn, flash lights, air conditioning, start/stop charge), pressed with a confirmation tap, and the charge mode picker for electric cars
@@ -159,6 +159,7 @@ device_id: 5a8c1932ddf3f29163a275f06789b1bf
 name: Espace
 fuel_tank_capacity: 55
 low_range: 100
+low_tyre_pressure: 2.2
 show_plate: true
 plate_department: "35"
 show_location: true
@@ -187,7 +188,8 @@ entities:
 | `show_logo` | ❌ | `true` | Show the Renault logo next to the name (follows the theme text colour) |
 | `show_image` | ❌ | `true` | Show the vehicle picture |
 | `fuel_tank_capacity` | ❌ | — | Tank capacity in litres; shows the fuel gauge |
-| `low_range` | ❌ | `100` | Range (km) below which the card shows a low range warning; `0` turns it off |
+| `low_range` | ❌ | `100` | Range (km) below which the card shows a low range warning; `0` turns it off. On a plug-in hybrid it is compared with the fuel plus battery range, so an empty battery alone does not warn |
+| `low_tyre_pressure` | ❌ | — | Tyre pressure (bar, whatever unit the sensors use) below which the tyre tile and a chip show a warning; empty or `0` turns it off |
 | `show_plate` | ❌ | `true` | Show the licence plate (when the device name is a French plate) |
 | `plate_department` | ❌ | — | Department number on the right of the plate, e.g. `35`; departments of Brittany, Occitania, Île-de-France, Provence, Corsica and Burgundy get their traditional regional emblem |
 | `show_location` | ❌ | `true` | Show the location row |
