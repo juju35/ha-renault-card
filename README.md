@@ -188,7 +188,7 @@ entities:
 | `show_logo` | ❌ | `true` | Show the Renault logo next to the name (follows the theme text colour) |
 | `show_image` | ❌ | `true` | Show the vehicle picture |
 | `fuel_tank_capacity` | ❌ | — | Tank capacity in litres; shows the fuel gauge |
-| `low_range` | ❌ | `100` | Range (km) below which the card shows a low range warning; `0` turns it off. On a plug-in hybrid it is compared with the fuel plus battery range, so an empty battery alone does not warn |
+| `low_range` | ❌ | `100` | Range (km) below which the card shows a low range warning; `0` turns it off. Converted when the range sensor reads miles. On a plug-in hybrid it is compared with the fuel plus battery range, so an empty battery alone does not warn |
 | `low_tyre_pressure` | ❌ | — | Tyre pressure (bar, whatever unit the sensors use) below which the tyre tile and a chip show a warning; empty or `0` turns it off |
 | `show_plate` | ❌ | `true` | Show the licence plate (when the device name is a French plate) |
 | `plate_department` | ❌ | — | Department number on the right of the plate, e.g. `35`; departments of Brittany, Occitania, Île-de-France, Provence, Corsica and Burgundy get their traditional regional emblem |

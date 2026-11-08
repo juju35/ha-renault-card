@@ -1542,6 +1542,65 @@ test("electric car: the battery range under low_range warns", () => {
   assert.match(tileOf(root.html, "sensor.car_battery_autonomy"), /tile warn/);
 });
 
+test("low_range (km) is converted when the range sensor reads miles", () => {
+  const mi = (v) => ({ state: String(v), attributes: { unit_of_measurement: "mi" } });
+  // 70 mi is about 113 km: over the default 100 km.
+  let { root } = fullCard({}, { "sensor.car_battery_autonomy": ["battery_autonomy", mi(70)] });
+  assert.doesNotMatch(root.html, /Low range/);
+  // 55 mi is about 89 km: under it.
+  ({ root } = fullCard({}, { "sensor.car_battery_autonomy": ["battery_autonomy", mi(55)] }));
+  assert.match(root.html, /Low range/);
+  assert.match(tileOf(root.html, "sensor.car_battery_autonomy"), /tile warn/);
+});
+
+test("mini card: a plug-in hybrid under low_range warns on the battery range tile it shows", () => {
+  const { card, root, states } = miniCard();
+  assert.doesNotMatch(tileOf(root.html, "sensor.car_battery_autonomy"), /warn/);
+  states["sensor.car_battery_autonomy"] = { state: "20", attributes: { unit_of_measurement: "km" } };
+  states["sensor.car_fuel_autonomy"] = { state: "60", attributes: { unit_of_measurement: "km" } };
+  card.hass = { ...card._hass, states: { ...states } };
+  assert.match(tileOf(root.html, "sensor.car_battery_autonomy"), /tile warn/);
+  // The full card keeps the warning on the fuel range.
+  card._setZoom(true);
+  assert.match(tileOf(root.html, "sensor.car_fuel_autonomy"), /tile warn/);
+  assert.doesNotMatch(tileOf(root.html, "sensor.car_battery_autonomy"), /warn/);
+});
+
+test("photo: the renault_picture sensor wins over its image entity, whose rotating token does not re-render", () => {
+  const sensor = { entity_id: "sensor.car_picture", device_id: "d1", platform: "renault_picture" };
+  const image = { entity_id: "image.car_picture", device_id: "d1", platform: "renault_picture" };
+  assert.equal(ctx.rnPhotoEntity({ entities: { "image.car_picture": image, "sensor.car_picture": sensor } }, "d1"), "sensor.car_picture");
+  assert.equal(ctx.rnPhotoEntity({ entities: { "image.car_picture": image } }, "d1"), "image.car_picture");
+  assert.equal(ctx.rnPhotoKey("/api/image_proxy/image.car_picture?token=abc"), "/api/image_proxy/image.car_picture");
+  assert.equal(ctx.rnPhotoKey("/x?a=1&token=abc&b=2"), "/x?a=1&b=2");
+  assert.equal(ctx.rnPhotoKey("/x?a=1&token=abc"), "/x?a=1");
+  assert.equal(ctx.rnPhotoKey(null), null);
+
+  // Image entity only: a new token keeps the main card and the map signature.
+  const { entities, devices } = renaultRegistry();
+  entities["image.car_picture"] = image;
+  const pic = (token) => ({ state: "2026-11-08T10:00:00", attributes: { entity_picture: `/api/image_proxy/image.car_picture?token=${token}` } });
+  const states = { ...renaultStates(Object.keys(renaultRegistry().entities)), "image.car_picture": pic("t1") };
+  const card = new RenaultCard();
+  let renders = 0;
+  const root = { html: "", activeElement: null, addEventListener() {}, querySelectorAll: () => [], querySelector: () => null };
+  Object.defineProperty(root, "innerHTML", { get: () => root.html, set: (h) => { renders++; root.html = h; } });
+  card.attachShadow = () => (card.shadowRoot = root);
+  card.setConfig({ device_id: "d1" });
+  card.hass = { entities, devices, states, language: "en" };
+  assert.match(root.html, /token=t1/);
+  const before = renders;
+  card.hass = { entities, devices, states: { ...states, "image.car_picture": pic("t2") }, language: "en" };
+  assert.equal(renders, before);
+
+  const map = Object.create(RenaultMapCard.prototype);
+  map._config = { language: "en" };
+  map._hass = { entities, devices, states };
+  const sig = map._signature();
+  map._hass = { entities, devices, states: { ...states, "image.car_picture": pic("t2") } };
+  assert.equal(map._signature(), sig);
+});
+
 test("charging remaining time follows the sensor's unit (s, min, h, d, none)", () => {
   for (const [state, unit, text] of [["2700", "s", "45 min"], ["45", "min", "45 min"], ["1.5", "h", "1 h 30"], ["0.125", "d", "3 h 00"], ["20", undefined, "20 min"]]) {
     const { root } = fullCard({}, {
