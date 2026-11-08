@@ -2723,6 +2723,7 @@ function rnBar(value, unit) {
 }
 // Minutes per unit of a duration sensor (charging_remaining_time); minutes without a unit.
 var RN_MINUTES = { s: 1 / 60, min: 1, h: 60, d: 1440 };
+var RN_KM_PER_MILE = 1.609344;
 var RN_DOORS = ['hatch_status', 'rear_left_door_status', 'rear_right_door_status', 'driver_door_status', 'passenger_door_status'];
 
 var RN_PLAN_ROLES = {
@@ -2845,10 +2846,19 @@ function rnFindDataPlan(hass, vehicleDevice) {
 // Official MyRenault photo exposed by the renault_picture integration: a sensor on the same device
 // as the renault integration, holding the picture URL. The entity walk is split out so the main
 // card can resolve it once (in _resolve, cached by _resolved) and only read its state afterwards.
+// The sensor comes first: the integration's image entity has an entity_picture whose access token
+// changes every few minutes.
 function rnPhotoEntity(hass, deviceId) {
   if (!hass?.entities || !deviceId) return null;
-  var entry = Object.values(hass.entities).find((e) => e.device_id === deviceId && e.platform === 'renault_picture');
+  var entries = Object.values(hass.entities).filter((e) => e.device_id === deviceId && e.platform === 'renault_picture');
+  var entry = entries.find((e) => e.entity_id.indexOf('sensor.') === 0) || entries[0];
   return entry ? entry.entity_id : null;
+}
+
+// The picture URL without its rotating access token, for render signatures: a new token alone
+// shows the same picture and must not redraw the card or the map markers.
+function rnPhotoKey(url) {
+  return url ? String(url).replace(/([?&])token=[^&#]*&?/, '$1').replace(/[?&]$/, '') : url;
 }
 
 function rnPhotoUrl(hass, entityId) {
@@ -3345,7 +3355,7 @@ class RenaultCard extends HTMLElement {
     var ids = [];
     Object.keys(r.ent).forEach((k) => { ids = ids.concat(r.ent[k]); });
     if (r.plan) Object.keys(RN_PLAN_ROLES).forEach((k) => { ids.push(r.plan[k]); });
-    var sig = JSON.stringify([this._lang(), r.deviceId, this._armed, this._result, this._leaseOpen, this._leaseHist?.key, this._leaseHist?.at, rnPhotoUrl(hass, r.photo), this._timeSig(r), ids.map((id) => {
+    var sig = JSON.stringify([this._lang(), r.deviceId, this._armed, this._result, this._leaseOpen, this._leaseHist?.key, this._leaseHist?.at, rnPhotoKey(rnPhotoUrl(hass, r.photo)), this._timeSig(r), ids.map((id) => {
       var s = id && hass.states[id];
       return s ? [id, s.state, s.attributes.options] : null;
     })]);
@@ -3415,16 +3425,20 @@ class RenaultCard extends HTMLElement {
   }
 
   // Under low_range: the whole range, not the battery range alone (a plug-in hybrid with an empty
-  // battery still has its fuel).
+  // battery still has its fuel). low_range is in km: converted when the range sensor reads miles.
   _lowRange(ent) {
     var low = Number(this._config.low_range) || 0, total = this._totalRange(ent);
-    return !!low && total != null && total < low;
+    if (!low || total == null) return false;
+    var id = this._num(ent.fuel_autonomy) != null ? ent.fuel_autonomy : ent.battery_autonomy;
+    var unit = String(this._st(id)?.attributes.unit_of_measurement || '').toLowerCase();
+    if (unit === 'mi') low /= RN_KM_PER_MILE;
+    return total < low;
   }
 
-  // Battery or fuel range (role). The warning colour goes on the fuel range when there is one, else
-  // on the battery range.
-  _rangeTile(ent, role) {
-    var main = this._num(ent.fuel_autonomy) != null ? 'fuel_autonomy' : 'battery_autonomy';
+  // Battery or fuel range (role). The warning colour goes on warnRole when given (the mini card's
+  // only range tile), else on the fuel range when there is one, else on the battery range.
+  _rangeTile(ent, role, warnRole) {
+    var main = warnRole || (this._num(ent.fuel_autonomy) != null ? 'fuel_autonomy' : 'battery_autonomy');
     return this._tile(ent[role], 'mdi:map-marker-distance', this._t(role), this._withUnit(ent[role]), { warn: role === main && this._lowRange(ent) });
   }
 
@@ -4242,7 +4256,7 @@ class RenaultMiniCard extends RenaultCard {
     if (this._avail(ent.battery_level)) tiles.push(this._batteryTile(ent));
     // The battery range of an electric or plug-in hybrid car, else the fuel range.
     var range = ['battery_autonomy', 'fuel_autonomy'].find((role) => this._avail(ent[role]));
-    if (range) tiles.push(this._rangeTile(ent, range));
+    if (range) tiles.push(this._rangeTile(ent, range, range));
     var img = id.imgSrc ? `<div class="mimg"><img src="${rnEsc(id.imgSrc)}" alt="${rnEsc(id.name)}"></div>` : '';
     var charge = this._chargeChip(ent);
     // No picture in the header: the logo, or the car icon, keeps the header's 40 px icon.
@@ -5399,7 +5413,7 @@ class RenaultMapCard extends HTMLElement {
   _signature() {
     if (!this._hass || !this._config) return '';
     var hass = this._hass;
-    return JSON.stringify([this._lang(), this._vehicles().map((v) => [v.deviceId, v.lat, v.lon, v.tracker.state, v.name, v.image,
+    return JSON.stringify([this._lang(), this._vehicles().map((v) => [v.deviceId, v.lat, v.lon, v.tracker.state, v.name, rnPhotoKey(v.image),
         ['fuel_autonomy', 'battery_autonomy', 'battery_level', 'fuel_quantity', 'mileage', 'location_last_activity'].map((r) => {
           var s = v.ent[r] && hass.states[v.ent[r]];
           return s ? s.state : null;

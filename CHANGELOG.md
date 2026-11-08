@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.10.1 - 2026-11-08
+
+### Fixes
+- The MyRenault picture uses the renault_picture sensor rather than its image entity, and a new access token in the image entity's address no longer redraws the card or the map markers every few minutes.
+- `low_range` (km) is converted when the range sensor reads miles, and the mini card now shows the low range warning on the range tile it displays, plug-in hybrids included.
+
 ## 2.10.0 - 2026-11-07
 
 ### Added
