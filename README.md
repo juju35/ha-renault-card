@@ -81,7 +81,7 @@ The Marketplace registers the dashboard resource for you.
 
 ### Manual
 
-1. Download all the `.js` files from the [latest release](https://github.com/juju35/ha-renault-card/releases/latest): `renault-card.js` and the map libraries (`leaflet.js`, `leaflet-maplibre-gl.js`, `maplibre-gl.js`, `maplibre-gl-worker.js`, `maplibre-gl-css.js`)
+1. Download all the `.js` files from the [latest release](https://github.com/juju35/ha-renault-card/releases/latest): `renault-card.js`, the map libraries (`leaflet.js`, `leaflet-maplibre-gl.js`, `maplibre-gl.js`, `maplibre-gl-worker.js`, `maplibre-gl-css.js`) and the translation files (`renault-card.i18n.*.js`)
 2. Copy them all to the same folder, for example `/config/www/` (the map card loads the libraries from the folder `renault-card.js` comes from)
 3. Go to **Settings → Dashboards → Resources** → Add resource:
    - URL: `/local/renault-card.js`
