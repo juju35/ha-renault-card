@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.1 - 2026-11-11
+
+### Changes
+- **`renault-card.js` is no longer shipped**: the file is `vehicle-card.js`, which the Marketplace now registers (`hacs.json`). If you added the dashboard resource by hand (`/local/renault-card.js`…), point it to `vehicle-card.js`, and remove any resource that still loads `renault-card.js`. The `custom:renault-card`, `custom:renault-mini-card` and `custom:renault-map-card` card types still work.
+
 ## 3.0.0 - 2026-11-11
 
 **ha-renault-card is now ha-vehicle-card** ([#60](https://github.com/juju35/ha-vehicle-card/issues/60)): the cards work with connected cars of any brand. Existing dashboards keep working: `custom:renault-card`, `custom:renault-mini-card` and `custom:renault-map-card` are still defined with the same options, and `renault-card.js` is still shipped next to `vehicle-card.js`.
