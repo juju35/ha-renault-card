@@ -277,6 +277,12 @@ async function leaseGif(page, s) {
 }
 
 const icons = {
+  "access-point-network": "M4.93,3.93C3.12,5.74 2,8.24 2,11C2,13.76 3.12,16.26 4.93,18.07L6.34,16.66C4.89,15.22 4,13.22 4,11C4,8.79 4.89,6.78 6.34,5.34L4.93,3.93M19.07,3.93L17.66,5.34C19.11,6.78 20,8.79 20,11C20,13.22 19.11,15.22 17.66,16.66L19.07,18.07C20.88,16.26 22,13.76 22,11C22,8.24 20.88,5.74 19.07,3.93M7.76,6.76C6.67,7.85 6,9.35 6,11C6,12.65 6.67,14.15 7.76,15.24L9.17,13.83C8.45,13.11 8,12.11 8,11C8,9.89 8.45,8.89 9.17,8.17L7.76,6.76M16.24,6.76L14.83,8.17C15.55,8.89 16,9.89 16,11C16,12.11 15.55,13.11 14.83,13.83L16.24,15.24C17.33,14.15 18,12.65 18,11C18,9.35 17.33,7.85 16.24,6.76M12,9A2,2 0 0,0 10,11A2,2 0 0,0 12,13A2,2 0 0,0 14,11A2,2 0 0,0 12,9M11,15V19H10A1,1 0 0,0 9,20H2V22H9A1,1 0 0,0 10,23H14A1,1 0 0,0 15,22H22V20H15A1,1 0 0,0 14,19H13V15H11Z",
+  "access-point-network-off": "M14.83,13.83C15.55,13.11 16,12.11 16,11C16,9.89 15.55,8.89 14.83,8.17L16.24,6.76C17.33,7.85 18,9.35 18,11C18,12.65 17.33,14.15 16.24,15.24L14.83,13.83M14,11A2,2 0 0,0 12,9C11.4,9 10.87,9.27 10.5,9.68L13.32,12.5C13.73,12.13 14,11.6 14,11M17.66,16.66L19.07,18.07C20.88,16.26 22,13.76 22,11C22,8.24 20.88,5.74 19.07,3.93L17.66,5.34C19.11,6.78 20,8.79 20,11C20,13.22 19.11,15.22 17.66,16.66M22,21.18V20H20.82L22,21.18M20.27,22L21,22.73L19.73,24L17.73,22H15A1,1 0 0,1 14,23H10A1,1 0 0,1 9,22H2V20H9A1,1 0 0,1 10,19H11V15.27L8.34,12.61C8.54,13.07 8.82,13.5 9.17,13.83L7.76,15.24C6.67,14.15 6,12.65 6,11C6,10.77 6,10.54 6.04,10.31L4.37,8.64C4.14,9.39 4,10.18 4,11C4,13.22 4.89,15.22 6.34,16.66L4.93,18.07C3.12,16.26 2,13.76 2,11C2,9.61 2.29,8.28 2.81,7.08L1,5.27L2.28,4L3.7,5.42L5.15,6.87L6.63,8.35V8.35L8.17,9.9L10.28,12L11,12.71L18.27,20H18.28L20.28,22H20.27M15.73,20L13,17.27V19H14A1,1 0 0,1 15,20H15.73Z",
+  "check": "M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z",
+  "engine": "M7,4V6H10V8H7L5,10V13H3V10H1V18H3V15H5V18H8L10,20H18V16H20V19H23V9H20V12H18V8H12V6H15V4H7Z",
+  "engine-off": "M3.78,2.5L21.5,20.22L20.23,21.5L18,19.27V20H10L8,18H5V15H3V18H1V10H3V13H5V10L6.87,8.14L2.5,3.77L3.78,2.5M20,9V12H18V8H12V6H15V4H7.82L22.82,19H23V9H20Z",
+  "refresh": "M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z",
   "arrow-expand": "M10,21V19H6.41L10.91,14.5L9.5,13.09L5,17.59V14H3V21H10M14.5,10.91L19,6.41V10H21V3H14V5H17.59L13.09,9.5L14.5,10.91Z",
   "arrow-collapse": "M19.5,3.09L15,7.59V4H13V11H20V9H16.41L20.91,4.5L19.5,3.09M4,13V15H7.59L3.09,19.5L4.5,20.91L9,16.41V20H11V13H4Z",
   "air-conditioner": "M6.59,0.66C8.93,-1.15 11.47,1.06 12.04,4.5C12.47,4.5 12.89,4.62 13.27,4.84C13.79,4.24 14.25,3.42 14.07,2.5C13.65,0.35 16.06,-1.39 18.35,1.58C20.16,3.92 17.95,6.46 14.5,7.03C14.5,7.46 14.39,7.89 14.16,8.27C14.76,8.78 15.58,9.24 16.5,9.06C18.63,8.64 20.38,11.04 17.41,13.34C15.07,15.15 12.53,12.94 11.96,9.5C11.53,9.5 11.11,9.37 10.74,9.15C10.22,9.75 9.75,10.58 9.93,11.5C10.35,13.64 7.94,15.39 5.65,12.42C3.83,10.07 6.05,7.53 9.5,6.97C9.5,6.54 9.63,6.12 9.85,5.74C9.25,5.23 8.43,4.76 7.5,4.94C5.37,5.36 3.62,2.96 6.59,0.66M5,16H7A2,2 0 0,1 9,18V24H7V22H5V24H3V18A2,2 0 0,1 5,16M5,18V20H7V18H5M12.93,16H15L12.07,24H10L12.93,16M18,16H21V18H18V22H21V24H18A2,2 0 0,1 16,22V18A2,2 0 0,1 18,16Z",
@@ -365,6 +371,102 @@ T("device_tracker.model_3_location", "location", "home", { latitude: 48.11, long
 T("button.model_3_honk_horn", "honk", "unknown", { friendly_name: "Model 3 Honk horn" });
 T("button.model_3_flash_lights", "flash_lights", "unknown", { friendly_name: "Model 3 Flash lights" });
 add("wallbox", "wallbox", "switch.wallbox_pause_resume", "pause_resume", "on", { friendly_name: "Wallbox", icon: "mdi:ev-station" });
+// One vehicle per car integration, with the translation keys (or, for mbapi2020, the entity IDs) the integration
+// gives, to show what the card reads from each brand (README, "Brands"). No picture: those integrations' pictures are
+// the makers' own renders.
+const tracker = (dev, platform, key, state) => add(dev, platform, `device_tracker.${dev}_location`, key, state, { latitude: 48.11, longitude: -1.68, friendly_name: "Location" });
+const btn = (dev, platform, key, name) => add(dev, platform, `button.${dev}_${key}`, key, "unknown", { friendly_name: name });
+const rangeKm = () => ({ device_class: "distance", unit_of_measurement: "km" });
+const odo = { device_class: "distance", state_class: "total_increasing", unit_of_measurement: "km" };
+const pct = { unit_of_measurement: "%" };
+const batt = { device_class: "battery", unit_of_measurement: "%" };
+// Volvo XC60 Recharge (volvo, built in): plug-in hybrid.
+const V = (...a) => add("xc60", "volvo", ...a);
+V("sensor.xc60_odometer", "odometer", "38210", odo);
+V("sensor.xc60_distance_to_empty_tank", "distance_to_empty_tank", "520", rangeKm());
+V("sensor.xc60_fuel_amount", "fuel_amount", "38", { device_class: "volume", unit_of_measurement: "L" });
+V("sensor.xc60_battery_charge_level", "battery_charge_level", "85", batt);
+V("sensor.xc60_distance_to_empty_battery", "distance_to_empty_battery", "62", rangeKm());
+V("lock.xc60_lock", "lock", "locked", { friendly_name: "XC60 Lock" });
+tracker("xc60", "volvo", "location", "home");
+for (const [k, n] of [["climatization_start", "XC60 Start climatization"], ["honk_flash", "XC60 Honk and flash"], ["engine_start", "XC60 Start engine"]]) btn("xc60", "volvo", k, n);
+// Škoda Octavia (myskoda): petrol.
+const S = (...a) => add("octavia", "myskoda", ...a);
+S("sensor.octavia_mileage", "mileage", "52310", odo);
+S("sensor.octavia_fuel_level", "fuel_level", "64", pct);
+S("sensor.octavia_outside_temperature", "outside_temperature", "11", { device_class: "temperature", unit_of_measurement: "°C" });
+S("lock.octavia_door_lock", "door_lock", "unlocked", { friendly_name: "Octavia Door lock" });
+tracker("octavia", "myskoda", "location", "Work");
+for (const [k, n] of [["honk_flash", "Octavia Honk and flash"], ["flash", "Octavia Flash"], ["wakeup", "Octavia Wake up"]]) btn("octavia", "myskoda", k, n);
+// Subaru Outback (subaru, built in): petrol.
+const U = (...a) => add("outback", "subaru", ...a);
+U("sensor.outback_odometer", "odometer", "61200", odo);
+U("sensor.outback_fuel_level", "fuel_level", "48", pct);
+U("lock.outback_door_locks", "door_locks", "locked", { friendly_name: "Outback Door locks" });
+tracker("outback", "subaru", "location", "home");
+for (const [k, n] of [["remote_start", "Outback Remote start"], ["remote_stop", "Outback Remote stop"]]) btn("outback", "subaru", k, n);
+// Peugeot e-208 (stellantis_vehicles): electric, plugged in.
+const P = (...a) => add("e208", "stellantis_vehicles", ...a);
+P("sensor.e_208_mileage", "mileage", "22140", odo);
+P("sensor.e_208_battery", "battery", "72", batt);
+P("sensor.e_208_autonomy", "autonomy", "268", rangeKm());
+P("binary_sensor.e_208_battery_plugged", "battery_plugged", "on", { device_class: "plug" });
+P("binary_sensor.e_208_battery_charging", "battery_charging", "off", { device_class: "battery_charging" });
+P("binary_sensor.e_208_preconditioning", "preconditioning", "on", {});
+tracker("e208", "stellantis_vehicles", "vehicle", "home");
+for (const [k, n] of [["horn", "e-208 Horn"], ["lights", "e-208 Lights"], ["charge_start", "e-208 Start charge"], ["doors_lock", "e-208 Lock doors"]]) btn("e208", "stellantis_vehicles", k, n);
+// Kia EV6 (kia_uvo): electric, charging.
+const K = (...a) => add("ev6", "kia_uvo", ...a);
+K("sensor.ev6_odometer", "odometer", "30450", odo);
+K("sensor.ev6_ev_battery_percentage", "ev_battery_percentage", "58", batt);
+K("sensor.ev6_ev_driving_range", "ev_driving_range", "290", rangeKm());
+K("sensor.ev6_ev_estimated_current_charge_duration", "ev_estimated_current_charge_duration", "75", { device_class: "duration", unit_of_measurement: "min" });
+K("sensor.ev6_outside_temperature", "outside_temperature", "8", { device_class: "temperature", unit_of_measurement: "°C" });
+K("binary_sensor.ev6_ev_battery_is_plugged_in", "ev_battery_is_plugged_in", "on", { device_class: "plug" });
+K("binary_sensor.ev6_ev_battery_is_charging", "ev_battery_is_charging", "on", { device_class: "battery_charging" });
+K("lock.ev6_door_lock", "door_lock", "locked", { friendly_name: "EV6 Door lock" });
+tracker("ev6", "kia_uvo", "location", "home");
+for (const [k, n] of [["force_refresh", "EV6 Force refresh"], ["start_hazard_lights", "EV6 Hazard lights"]]) btn("ev6", "kia_uvo", k, n);
+// Toyota C-HR Hybrid (toyota): petrol hybrid.
+const Y = (...a) => add("chr", "toyota", ...a);
+Y("sensor.c_hr_odometer", "odometer", "44870", odo);
+Y("sensor.c_hr_fuel_range", "fuel_range", "455", rangeKm());
+Y("sensor.c_hr_fuel_level", "fuel_level", "70", pct);
+Y("lock.c_hr_door_lock", "door_lock", "locked", { friendly_name: "C-HR Door lock" });
+tracker("chr", "toyota", "parking_location", "Station");
+for (const [k, n] of [["refresh_vehicle_status", "C-HR Refresh vehicle status"], ["sound_buzzer", "C-HR Sound buzzer"]]) btn("chr", "toyota", k, n);
+// Volkswagen ID.4 (vag_connect): electric.
+const W = (...a) => add("id4", "vag_connect", ...a);
+W("sensor.id_4_odometer_km", "odometer_km", "18200", odo);
+W("sensor.id_4_battery_soc", "battery_soc", "81", batt);
+W("sensor.id_4_electric_range_km", "electric_range_km", "342", rangeKm());
+W("sensor.id_4_outside_temp", "outside_temp", "7", { device_class: "temperature", unit_of_measurement: "°C" });
+W("binary_sensor.id_4_is_charging", "is_charging", "off", { device_class: "battery_charging" });
+W("lock.id_4_door_lock", "door_lock", "locked", { friendly_name: "ID.4 Door lock" });
+tracker("id4", "vag_connect", "position", "home");
+for (const [k, n] of [["flash_button", "ID.4 Flash"], ["refresh_button", "ID.4 Refresh"], ["wake_button", "ID.4 Wake up"]]) btn("id4", "vag_connect", k, n);
+// CUPRA Formentor e-HYBRID (vag_connect): plug-in hybrid, connected services ending in three weeks.
+const X = (...a) => add("formentor", "vag_connect", ...a);
+X("sensor.formentor_odometer_km", "odometer_km", "27630", odo);
+X("sensor.formentor_combustion_range_km", "combustion_range_km", "610", rangeKm());
+X("sensor.formentor_fuel_level", "fuel_level", "55", pct);
+X("sensor.formentor_battery_soc", "battery_soc", "100", batt);
+X("sensor.formentor_electric_range_km", "electric_range_km", "52", rangeKm());
+X("sensor.formentor_subscription_expiry_at", "subscription_expiry_at", new Date(NOW + 21 * 86400000).toISOString(), { device_class: "timestamp" });
+X("binary_sensor.formentor_subscription_active", "subscription_active", "on", {});
+X("lock.formentor_door_lock", "door_lock", "locked", { friendly_name: "Formentor Door lock" });
+tracker("formentor", "vag_connect", "position", "home");
+for (const [k, n] of [["flash_button", "Formentor Flash"], ["refresh_button", "Formentor Refresh"]]) btn("formentor", "vag_connect", k, n);
+// Mercedes-Benz GLC 300 e (mbapi2020): plug-in hybrid; its sensors have no translation keys, read by their entity IDs.
+const M = (...a) => add("glc", "mbapi2020", ...a);
+M("sensor.glc_odometer", undefined, "35980", odo);
+M("sensor.glc_range_liquid", undefined, "480", rangeKm());
+M("sensor.glc_fuel_level", undefined, "61", pct);
+M("sensor.glc_state_of_charge", undefined, "47", batt);
+M("sensor.glc_range_electric", undefined, "48", rangeKm());
+M("binary_sensor.glc_charging_active", "chargingactive", "off", { device_class: "battery_charging" });
+tracker("glc", "mbapi2020", undefined, "home");
+for (const [k, n] of [["btn_preheat_start_now", "GLC Start preheating"], ["btn_sigpos_horn_start_now", "GLC Horn"]]) btn("glc", "mbapi2020", k, n);
 const O = (...a) => add("orange", "orange_internet_on_the_move", ...a);
 O("sensor.orange_left_data_percentage", "left_data_percentage", "61", { unit_of_measurement: "%" });
 O("sensor.orange_left_data", "left_data", "3.1", { unit_of_measurement: "GB" });
@@ -377,6 +479,15 @@ const devices = {
   captur: { id: "captur", name: "EF456GH", name_by_user: "Captur", model: "Captur ii", manufacturer: "Renault" },
   tesla: { id: "tesla", name: "Model 3", model: "Model 3", manufacturer: "Tesla" },
   wallbox: { id: "wallbox", name: "Wallbox", manufacturer: "Wallbox" },
+  xc60: { id: "xc60", name: "XC60", model: "XC60 Recharge", manufacturer: "Volvo" },
+  octavia: { id: "octavia", name: "Octavia", model: "Octavia Combi", manufacturer: "Škoda" },
+  outback: { id: "outback", name: "Outback", model: "Outback", manufacturer: "Subaru" },
+  e208: { id: "e208", name: "e-208", model: "e-208", manufacturer: "Peugeot" },
+  ev6: { id: "ev6", name: "EV6", model: "EV6", manufacturer: "Kia" },
+  chr: { id: "chr", name: "C-HR", model: "C-HR Hybrid", manufacturer: "Toyota" },
+  id4: { id: "id4", name: "ID.4", model: "ID.4 Pro", manufacturer: "Volkswagen" },
+  formentor: { id: "formentor", name: "Formentor", model: "Formentor e-HYBRID", manufacturer: "CUPRA" },
+  glc: { id: "glc", name: "GLC", model: "GLC 300 e", manufacturer: "Mercedes-Benz" },
   orange: { id: "orange", name: "RENAULT Espace", model: "Espace", manufacturer: "Orange" },
 };
 const hass = { states, entities, devices, user: { name: "Alex" } };
@@ -401,7 +512,7 @@ const leaseHass = { mockStatistics: { "sensor.espace_mileage": rows } };
 // Map card: the Captur charging at home, the Espace parked in town, the Model 3 in the centre (vehicles of two
 // brands: the car icon in the header). OpenStreetMap raster tiles (like
 // map_style: osm) from scripts/tiles; the positions stay inside the area those tiles cover.
-const MAP_CONFIG = { zoom: 13, map_style: "custom", tile_url: `${ORIGIN}/tiles/{z}/{x}/{y}.png`, tile_attribution: "&copy; OpenStreetMap contributors" };
+const MAP_CONFIG = { devices: ["espace", "captur", "tesla"], zoom: 13, map_style: "custom", tile_url: `${ORIGIN}/tiles/{z}/{x}/{y}.png`, tile_attribution: "&copy; OpenStreetMap contributors" };
 const mapHass = {
   states: {
     ...states,
@@ -423,6 +534,14 @@ await render(
     { file: "captur-dark", type: "vehicle-card", theme: "dark", width: 460, config: { device_id: "captur", plate_department: "35", show_data_plan: false } },
     { file: "tesla", type: "vehicle-card", theme: "light", width: 460, config: { device_id: "tesla", buttons: ["switch.wallbox_pause_resume"] } },
     { file: "tesla-dark", type: "vehicle-card", theme: "dark", width: 460, config: { device_id: "tesla", buttons: ["switch.wallbox_pause_resume"] } },
+    { file: "mini-tesla", type: "vehicle-mini-card", theme: "light", width: 280, config: { device_id: "tesla" } },
+    { file: "mini-tesla-dark", type: "vehicle-mini-card", theme: "dark", width: 280, config: { device_id: "tesla" } },
+    ...["xc60", "octavia", "outback", "e208", "ev6", "chr", "id4", "formentor", "glc"].flatMap((d) => [
+      { file: d, type: "vehicle-card", theme: "light", width: 460, config: { device_id: d } },
+      { file: `${d}-dark`, type: "vehicle-card", theme: "dark", width: 460, config: { device_id: d } },
+      { file: `mini-${d}`, type: "vehicle-mini-card", theme: "light", width: 280, config: { device_id: d } },
+      { file: `mini-${d}-dark`, type: "vehicle-mini-card", theme: "dark", width: 280, config: { device_id: d } },
+    ]),
     { file: "mini", type: "vehicle-mini-card", theme: "light", width: 280, config: { device_id: "captur" } },
     { file: "mini-dark", type: "vehicle-mini-card", theme: "dark", width: 280, config: { device_id: "captur" } },
     { file: "map", type: "vehicle-map-card", theme: "light", width: 420, config: MAP_CONFIG, hass: mapHass },

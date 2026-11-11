@@ -1662,14 +1662,21 @@ test("multi-brand: the vehicle-* elements are the cards, renault-* stay as alias
 });
 
 test("multi-brand: the brand comes from the manufacturer, else from the integration", () => {
-  const hass = { entities: { "device_tracker.t": { entity_id: "device_tracker.t", device_id: "t", platform: "teslemetry" } } };
+  const hass = {
+    entities: {
+      "device_tracker.t": { entity_id: "device_tracker.t", device_id: "t", platform: "teslemetry" },
+      "device_tracker.r": { entity_id: "device_tracker.r", device_id: "r", platform: "renault" },
+    },
+  };
   assert.equal(ctx.rnBrandKey(hass, "x", { manufacturer: "Škoda" }), "skoda");
   assert.equal(ctx.rnBrandKey(hass, "x", { manufacturer: "Volkswagen AG" }), "volkswagen");
   assert.equal(ctx.rnBrandKey(hass, "x", { manufacturer: "DS" }), "dsautomobiles");
   assert.equal(ctx.rnBrandKey(hass, "x", { manufacturer: "PEUGEOT" }), "peugeot");
   assert.equal(ctx.rnBrandKey(hass, "t", {}), "tesla");
   assert.equal(ctx.rnBrandKey(hass, "x", { manufacturer: "Lada" }), null);
-  assert.equal(ctx.rnModelLabel(hass, "x", { manufacturer: "Renault", model: "Espace vi" }), "Renault Espace VI");
+  assert.equal(ctx.rnModelLabel(hass, "r", { manufacturer: "Renault", model: "Espace vi" }), "Renault Espace VI");
+  // Only Renault's models are recased: the others keep the maker's own spelling.
+  assert.equal(ctx.rnModelLabel(hass, "x", { manufacturer: "Peugeot", model: "e-208" }), "Peugeot e-208");
   assert.equal(ctx.rnModelLabel(hass, "t", { model: "Model 3" }), "Tesla Model 3");
   assert.equal(ctx.rnModelLabel(hass, "x", { manufacturer: "Kia", model: "Kia EV6" }), "Kia EV6");
   assert.equal(ctx.rnModelLabel(hass, "x", {}), "");
@@ -1724,6 +1731,12 @@ test("multi-brand: Volvo's picture comes from volvo.get_image_url, asked once", 
 
 test("buttons option: extra entities join the actions; a tap presses, runs, locks or toggles them", async () => {
   assert.deepEqual([...ctx.rnPressService("button.x")], ["button", "press"]);
+  const icon = (k) => ctx.RN_BUTTON_ICONS.find((p) => p[0].test(k))?.[1];
+  assert.equal(icon("charge_stop"), "mdi:power-plug-off");
+  assert.equal(icon("doors_unlock"), "mdi:lock-open-variant-outline");
+  assert.equal(icon("remote_start"), "mdi:engine");
+  assert.equal(icon("btn_preheat_start_now"), "mdi:air-conditioner");
+  assert.equal(icon("force_refresh"), "mdi:refresh");
   assert.deepEqual([...ctx.rnPressService("script.x")], ["script", "turn_on"]);
   assert.deepEqual([...ctx.rnPressService("lock.x", { state: "locked" })], ["lock", "unlock"]);
   assert.deepEqual([...ctx.rnPressService("lock.x", { state: "unlocked" })], ["lock", "lock"]);

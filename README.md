@@ -277,20 +277,116 @@ The `ha` base map is the one Home Assistant's own map card uses (Home Assistant 
 
 ## Screenshots
 
-| Espace (fuel, data plan) | Captur (plug-in hybrid, charging) |
-|---|---|
-| <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/espace.png" alt="espace" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/captur.png" alt="captur" width="400"> |
-| <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/espace-dark.png" alt="espace dark" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/captur-dark.png" alt="captur dark" width="400"> |
+The cards below use one vehicle per integration, to show what each one gives. Each card shows only what the car and its integration expose, and picks up the brand's logo (a car icon for a brand without one).
 
-| Tesla Model 3 (Teslemetry, extra Wallbox button) | Tesla Model 3, dark |
-|---|---|
-| <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/tesla.png" alt="tesla" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/tesla-dark.png" alt="tesla dark" width="400"> |
+### Renault
+
+Espace (fuel, with Orange Internet On the move) and Captur (plug-in hybrid, charging) with the built-in [Renault](https://www.home-assistant.io/integrations/renault/) integration and [Renault Picture](https://github.com/juju35/ha-renault-picture): range, fuel, battery, mileage, tyre pressure, lock, charging, location and its buttons.
+
+| | Espace | Captur |
+|---|---|---|
+| Light | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/espace.png" alt="espace" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/captur.png" alt="captur" width="400"> |
+| Dark | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/espace-dark.png" alt="espace dark" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/captur-dark.png" alt="captur dark" width="400"> |
 
 | Mini card | Mini card, dark |
 |---|---|
 | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini.png" alt="mini card" width="280"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-dark.png" alt="mini card, dark" width="280"> |
 
-| Map card (two brands) | Map card, dark |
+### Tesla
+
+Model 3 with [Teslemetry](https://www.home-assistant.io/integrations/teslemetry/) (also Tesla Fleet and Tessie, built in): battery, range, mileage, outside temperature, lock, charging and time left, location, its buttons, and an extra Wallbox switch from the `buttons` option.
+
+| | Card | Mini card |
+|---|---|---|
+| Light | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/tesla.png" alt="tesla card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-tesla.png" alt="tesla mini card" width="280"> |
+| Dark | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/tesla-dark.png" alt="tesla card dark" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-tesla-dark.png" alt="tesla mini card dark" width="280"> |
+
+### Volvo
+
+XC60 Recharge (plug-in hybrid) with the built-in [Volvo](https://www.home-assistant.io/integrations/volvo/) integration: battery and electric range, fuel range and volume, mileage, lock, location and its buttons (climatization, honk and flash, engine start). The picture comes from the `volvo.get_image_url` action (not shown here).
+
+| | Card | Mini card |
+|---|---|---|
+| Light | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/xc60.png" alt="xc60 card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-xc60.png" alt="xc60 mini card" width="280"> |
+| Dark | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/xc60-dark.png" alt="xc60 card dark" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-xc60-dark.png" alt="xc60 mini card dark" width="280"> |
+
+### Škoda
+
+Octavia Combi (petrol) with [MySkoda](https://github.com/skodaconnect/homeassistant-myskoda): fuel level, mileage, outside temperature, an unlocked car, location and its buttons.
+
+| | Card | Mini card |
+|---|---|---|
+| Light | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/octavia.png" alt="octavia card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-octavia.png" alt="octavia mini card" width="280"> |
+| Dark | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/octavia-dark.png" alt="octavia card dark" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-octavia-dark.png" alt="octavia mini card dark" width="280"> |
+
+### Subaru
+
+Outback with the built-in [Subaru](https://www.home-assistant.io/integrations/subaru/) integration: fuel level, mileage, lock, location, remote start and stop.
+
+| | Card | Mini card |
+|---|---|---|
+| Light | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/outback.png" alt="outback card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-outback.png" alt="outback mini card" width="280"> |
+| Dark | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/outback-dark.png" alt="outback card dark" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-outback-dark.png" alt="outback mini card dark" width="280"> |
+
+### Peugeot (Stellantis)
+
+e-208 (electric) with [Stellantis Vehicles](https://github.com/andreadegiovine/homeassistant-stellantis-vehicles), also for Citroën, DS, Opel, Fiat, Jeep…: battery, range, mileage, plugged in, air conditioning, location and its buttons (horn, lights, charge, lock). The picture comes from the vehicle's tracker (not shown here).
+
+| | Card | Mini card |
+|---|---|---|
+| Light | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/e208.png" alt="e208 card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-e208.png" alt="e208 mini card" width="280"> |
+| Dark | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/e208-dark.png" alt="e208 card dark" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-e208-dark.png" alt="e208 mini card dark" width="280"> |
+
+### Kia / Hyundai
+
+EV6 (electric, charging) with [Kia / Hyundai](https://github.com/Hyundai-Kia-Connect/kia_uvo): battery, range, mileage, outside temperature, charging and time left, lock, location and its buttons.
+
+| | Card | Mini card |
+|---|---|---|
+| Light | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/ev6.png" alt="ev6 card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-ev6.png" alt="ev6 mini card" width="280"> |
+| Dark | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/ev6-dark.png" alt="ev6 card dark" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-ev6-dark.png" alt="ev6 mini card dark" width="280"> |
+
+### Toyota
+
+C-HR Hybrid with [Toyota](https://github.com/pytoyoda/ha_toyota): fuel range and level, mileage, lock, the parking location and its buttons. The picture comes from the vehicle's tracker (not shown here).
+
+| | Card | Mini card |
+|---|---|---|
+| Light | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/chr.png" alt="chr card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-chr.png" alt="chr mini card" width="280"> |
+| Dark | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/chr-dark.png" alt="chr card dark" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-chr-dark.png" alt="chr mini card dark" width="280"> |
+
+### Volkswagen (VW Group)
+
+ID.4 (electric) with [VW Group Connect](https://github.com/its-me-prash/vwgroup-connect-ha), also for Audi, SEAT, CUPRA and Škoda: battery, electric range, mileage, outside temperature, lock, location and its buttons. The picture comes from the integration's render (not shown here).
+
+| | Card | Mini card |
+|---|---|---|
+| Light | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/id4.png" alt="id4 card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-id4.png" alt="id4 mini card" width="280"> |
+| Dark | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/id4-dark.png" alt="id4 card dark" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-id4-dark.png" alt="id4 mini card dark" width="280"> |
+
+### CUPRA (VW Group)
+
+Formentor e-HYBRID (plug-in hybrid) with [VW Group Connect](https://github.com/its-me-prash/vwgroup-connect-ha): battery and electric range, fuel range and level, mileage, lock, location, and the **connected services** subscription ending in three weeks.
+
+| | Card | Mini card |
+|---|---|---|
+| Light | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/formentor.png" alt="formentor card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-formentor.png" alt="formentor mini card" width="280"> |
+| Dark | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/formentor-dark.png" alt="formentor card dark" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-formentor-dark.png" alt="formentor mini card dark" width="280"> |
+
+### Mercedes-Benz
+
+GLC 300 e (plug-in hybrid) with [Mercedes-Benz (mbapi2020)](https://github.com/ReneNulschDE/mbapi2020), whose sensors are read by their entity IDs: battery and electric range, fuel range and level, mileage, location, preheating and horn.
+
+| | Card | Mini card |
+|---|---|---|
+| Light | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/glc.png" alt="glc card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-glc.png" alt="glc mini card" width="280"> |
+| Dark | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/glc-dark.png" alt="glc card dark" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-glc-dark.png" alt="glc mini card dark" width="280"> |
+
+### Map card
+
+Vehicles of two brands (Renault and Tesla): the header shows a car icon instead of a brand logo.
+
+| Light | Dark |
 |---|---|
 | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/map.png" alt="map card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/map-dark.png" alt="map card, dark" width="400"> |
 
