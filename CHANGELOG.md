@@ -8,7 +8,7 @@
 - Action buttons get a matching icon for more integrations: engine start and stop, preheating and climatization, locking, unlocking, refresh and wake up, hazard lights, charge stop (Stellantis), buzzer (Toyota).
 
 ### Documentation
-- **Screenshots per brand**: a card and a mini card, light and dark, for Renault, Tesla, Volvo, Škoda, Subaru, Peugeot (Stellantis), Kia, Toyota, Volkswagen, CUPRA and Mercedes-Benz, each set up with its integration's own entities, to show what the card displays for each brand.
+- **Screenshots per brand**: a card and a mini card, light and dark, for Renault, Tesla, Volvo, Škoda, Subaru, Peugeot (Stellantis), Kia, Toyota, Volkswagen, CUPRA and Mercedes-Benz, each set up with its integration's own entities, to show what the card displays for each brand, with the makers' renders of the models.
 
 ## 3.0.1 - 2026-11-11
 

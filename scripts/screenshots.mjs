@@ -165,7 +165,8 @@ export async function render(shots, { icons = {}, hass = {}, extra = "" } = {}) 
         el.setConfig({ type: `custom:${type}`, ...config });
         el.hass = { states: {}, entities: {}, devices: {}, language: "en", locale: { language: "en" },
                     themes: { darkMode: dark }, callService: async () => {},
-                    callWS: async (msg) => (msg.type === "recorder/statistics_during_period" && hass.mockStatistics) || ({}), ...hass };
+                    callWS: async (msg) => (msg.type === "recorder/statistics_during_period" && hass.mockStatistics) ||
+                      (msg.type === "call_service" && msg.service === "get_image_url" && hass.mockVolvoImage && { response: { images: [{ type: "exterior_front_left", url: hass.mockVolvoImage }] } }) || ({}), ...hass };
         document.getElementById("root").appendChild(el);
       },
       { type: s.type, config: s.config || {}, hass: { ...hass, ...(s.hass || {}) }, dark: s.theme === "dark" }
@@ -372,9 +373,13 @@ T("button.model_3_honk_horn", "honk", "unknown", { friendly_name: "Model 3 Honk 
 T("button.model_3_flash_lights", "flash_lights", "unknown", { friendly_name: "Model 3 Flash lights" });
 add("wallbox", "wallbox", "switch.wallbox_pause_resume", "pause_resume", "on", { friendly_name: "Wallbox", icon: "mdi:ev-station" });
 // One vehicle per car integration, with the translation keys (or, for mbapi2020, the entity IDs) the integration
-// gives, to show what the card reads from each brand (README, "Brands"). No picture: those integrations' pictures are
-// the makers' own renders.
-const tracker = (dev, platform, key, state) => add(dev, platform, `device_tracker.${dev}_location`, key, state, { latitude: 48.11, longitude: -1.68, friendly_name: "Location" });
+// gives, to show what the card reads from each brand (README, "Screenshots"). The pictures are the makers' renders
+// (scripts/pictures), given the way each integration
+// gives its own: the Volvo action, an image entity (VW Group), the tracker's picture (Stellantis, Toyota), else the
+// card's `image` option.
+const photoUrl = (dev) => `${ORIGIN}/pictures/${dev}.webp`;
+const tracker = (dev, platform, key, state, picture) =>
+  add(dev, platform, `device_tracker.${dev}_location`, key, state, { latitude: 48.11, longitude: -1.68, friendly_name: "Location", ...(picture ? { entity_picture: photoUrl(dev) } : {}) });
 const btn = (dev, platform, key, name) => add(dev, platform, `button.${dev}_${key}`, key, "unknown", { friendly_name: name });
 const rangeKm = () => ({ device_class: "distance", unit_of_measurement: "km" });
 const odo = { device_class: "distance", state_class: "total_increasing", unit_of_measurement: "km" };
@@ -413,7 +418,7 @@ P("sensor.e_208_autonomy", "autonomy", "268", rangeKm());
 P("binary_sensor.e_208_battery_plugged", "battery_plugged", "on", { device_class: "plug" });
 P("binary_sensor.e_208_battery_charging", "battery_charging", "off", { device_class: "battery_charging" });
 P("binary_sensor.e_208_preconditioning", "preconditioning", "on", {});
-tracker("e208", "stellantis_vehicles", "vehicle", "home");
+tracker("e208", "stellantis_vehicles", "vehicle", "home", true);
 for (const [k, n] of [["horn", "e-208 Horn"], ["lights", "e-208 Lights"], ["charge_start", "e-208 Start charge"], ["doors_lock", "e-208 Lock doors"]]) btn("e208", "stellantis_vehicles", k, n);
 // Kia EV6 (kia_uvo): electric, charging.
 const K = (...a) => add("ev6", "kia_uvo", ...a);
@@ -433,7 +438,7 @@ Y("sensor.c_hr_odometer", "odometer", "44870", odo);
 Y("sensor.c_hr_fuel_range", "fuel_range", "455", rangeKm());
 Y("sensor.c_hr_fuel_level", "fuel_level", "70", pct);
 Y("lock.c_hr_door_lock", "door_lock", "locked", { friendly_name: "C-HR Door lock" });
-tracker("chr", "toyota", "parking_location", "Station");
+tracker("chr", "toyota", "parking_location", "Station", true);
 for (const [k, n] of [["refresh_vehicle_status", "C-HR Refresh vehicle status"], ["sound_buzzer", "C-HR Sound buzzer"]]) btn("chr", "toyota", k, n);
 // Volkswagen ID.4 (vag_connect): electric.
 const W = (...a) => add("id4", "vag_connect", ...a);
@@ -444,6 +449,7 @@ W("sensor.id_4_outside_temp", "outside_temp", "7", { device_class: "temperature"
 W("binary_sensor.id_4_is_charging", "is_charging", "off", { device_class: "battery_charging" });
 W("lock.id_4_door_lock", "door_lock", "locked", { friendly_name: "ID.4 Door lock" });
 tracker("id4", "vag_connect", "position", "home");
+W("image.id_4_vehicle_render", "vehicle_render", new Date(NOW).toISOString(), { entity_picture: photoUrl("id4") });
 for (const [k, n] of [["flash_button", "ID.4 Flash"], ["refresh_button", "ID.4 Refresh"], ["wake_button", "ID.4 Wake up"]]) btn("id4", "vag_connect", k, n);
 // CUPRA Formentor e-HYBRID (vag_connect): plug-in hybrid, connected services ending in three weeks.
 const X = (...a) => add("formentor", "vag_connect", ...a);
@@ -456,6 +462,7 @@ X("sensor.formentor_subscription_expiry_at", "subscription_expiry_at", new Date(
 X("binary_sensor.formentor_subscription_active", "subscription_active", "on", {});
 X("lock.formentor_door_lock", "door_lock", "locked", { friendly_name: "Formentor Door lock" });
 tracker("formentor", "vag_connect", "position", "home");
+X("image.formentor_vehicle_render", "vehicle_render", new Date(NOW).toISOString(), { entity_picture: photoUrl("formentor") });
 for (const [k, n] of [["flash_button", "Formentor Flash"], ["refresh_button", "Formentor Refresh"]]) btn("formentor", "vag_connect", k, n);
 // Mercedes-Benz GLC 300 e (mbapi2020): plug-in hybrid; its sensors have no translation keys, read by their entity IDs.
 const M = (...a) => add("glc", "mbapi2020", ...a);
@@ -467,6 +474,8 @@ M("sensor.glc_range_electric", undefined, "48", rangeKm());
 M("binary_sensor.glc_charging_active", "chargingactive", "off", { device_class: "battery_charging" });
 tracker("glc", "mbapi2020", undefined, "home");
 for (const [k, n] of [["btn_preheat_start_now", "GLC Start preheating"], ["btn_sigpos_horn_start_now", "GLC Horn"]]) btn("glc", "mbapi2020", k, n);
+// The integrations without a picture of the car get the card's `image` option.
+const brandConfig = (d) => ({ device_id: d, ...(["tesla", "octavia", "outback", "ev6", "glc"].includes(d) ? { image: photoUrl(d) } : {}) });
 const O = (...a) => add("orange", "orange_internet_on_the_move", ...a);
 O("sensor.orange_left_data_percentage", "left_data_percentage", "61", { unit_of_measurement: "%" });
 O("sensor.orange_left_data", "left_data", "3.1", { unit_of_measurement: "GB" });
@@ -479,7 +488,7 @@ const devices = {
   captur: { id: "captur", name: "EF456GH", name_by_user: "Captur", model: "Captur ii", manufacturer: "Renault" },
   tesla: { id: "tesla", name: "Model 3", model: "Model 3", manufacturer: "Tesla" },
   wallbox: { id: "wallbox", name: "Wallbox", manufacturer: "Wallbox" },
-  xc60: { id: "xc60", name: "XC60", model: "XC60 Recharge", manufacturer: "Volvo" },
+  xc60: { id: "xc60", name: "XC60", model: "XC60 Recharge", manufacturer: "Volvo", config_entries: ["volvo_entry"] },
   octavia: { id: "octavia", name: "Octavia", model: "Octavia Combi", manufacturer: "Škoda" },
   outback: { id: "outback", name: "Outback", model: "Outback", manufacturer: "Subaru" },
   e208: { id: "e208", name: "e-208", model: "e-208", manufacturer: "Peugeot" },
@@ -490,7 +499,7 @@ const devices = {
   glc: { id: "glc", name: "GLC", model: "GLC 300 e", manufacturer: "Mercedes-Benz" },
   orange: { id: "orange", name: "RENAULT Espace", model: "Espace", manufacturer: "Orange" },
 };
-const hass = { states, entities, devices, user: { name: "Alex" } };
+const hass = { states, entities, devices, user: { name: "Alex" }, services: { volvo: { get_image_url: {} } }, mockVolvoImage: `${ORIGIN}/pictures/xc60.webp` };
 
 // Lease started 22 months ago: daily mileage statistics with weekday / weekend driving.
 const leaseStart = new Date(NOW);
@@ -532,15 +541,15 @@ await render(
     { file: "lease-dark", gif: true, type: "vehicle-card", theme: "dark", width: 460, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, lease }, hass: leaseHass },
     { file: "captur", type: "vehicle-card", theme: "light", width: 460, config: { device_id: "captur", plate_department: "35", show_data_plan: false } },
     { file: "captur-dark", type: "vehicle-card", theme: "dark", width: 460, config: { device_id: "captur", plate_department: "35", show_data_plan: false } },
-    { file: "tesla", type: "vehicle-card", theme: "light", width: 460, config: { device_id: "tesla", buttons: ["switch.wallbox_pause_resume"] } },
-    { file: "tesla-dark", type: "vehicle-card", theme: "dark", width: 460, config: { device_id: "tesla", buttons: ["switch.wallbox_pause_resume"] } },
-    { file: "mini-tesla", type: "vehicle-mini-card", theme: "light", width: 280, config: { device_id: "tesla" } },
-    { file: "mini-tesla-dark", type: "vehicle-mini-card", theme: "dark", width: 280, config: { device_id: "tesla" } },
+    { file: "tesla", type: "vehicle-card", theme: "light", width: 460, config: { ...brandConfig("tesla"), buttons: ["switch.wallbox_pause_resume"] } },
+    { file: "tesla-dark", type: "vehicle-card", theme: "dark", width: 460, config: { ...brandConfig("tesla"), buttons: ["switch.wallbox_pause_resume"] } },
+    { file: "mini-tesla", type: "vehicle-mini-card", theme: "light", width: 280, config: brandConfig("tesla") },
+    { file: "mini-tesla-dark", type: "vehicle-mini-card", theme: "dark", width: 280, config: brandConfig("tesla") },
     ...["xc60", "octavia", "outback", "e208", "ev6", "chr", "id4", "formentor", "glc"].flatMap((d) => [
-      { file: d, type: "vehicle-card", theme: "light", width: 460, config: { device_id: d } },
-      { file: `${d}-dark`, type: "vehicle-card", theme: "dark", width: 460, config: { device_id: d } },
-      { file: `mini-${d}`, type: "vehicle-mini-card", theme: "light", width: 280, config: { device_id: d } },
-      { file: `mini-${d}-dark`, type: "vehicle-mini-card", theme: "dark", width: 280, config: { device_id: d } },
+      { file: d, type: "vehicle-card", theme: "light", width: 460, config: brandConfig(d) },
+      { file: `${d}-dark`, type: "vehicle-card", theme: "dark", width: 460, config: brandConfig(d) },
+      { file: `mini-${d}`, type: "vehicle-mini-card", theme: "light", width: 280, config: brandConfig(d) },
+      { file: `mini-${d}-dark`, type: "vehicle-mini-card", theme: "dark", width: 280, config: brandConfig(d) },
     ]),
     { file: "mini", type: "vehicle-mini-card", theme: "light", width: 280, config: { device_id: "captur" } },
     { file: "mini-dark", type: "vehicle-mini-card", theme: "dark", width: 280, config: { device_id: "captur" } },

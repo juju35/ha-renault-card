@@ -277,7 +277,7 @@ The `ha` base map is the one Home Assistant's own map card uses (Home Assistant 
 
 ## Screenshots
 
-The cards below use one vehicle per integration, to show what each one gives. Each card shows only what the car and its integration expose, and picks up the brand's logo (a car icon for a brand without one).
+The cards below use one vehicle per integration, to show what each one gives (see [Pictures](#pictures)). Each card shows only what the car and its integration expose, and picks up the brand's logo (a car icon for a brand without one).
 
 ### Renault
 
@@ -294,7 +294,7 @@ Espace (fuel, with Orange Internet On the move) and Captur (plug-in hybrid, char
 
 ### Tesla
 
-Model 3 with [Teslemetry](https://www.home-assistant.io/integrations/teslemetry/) (also Tesla Fleet and Tessie, built in): battery, range, mileage, outside temperature, lock, charging and time left, location, its buttons, and an extra Wallbox switch from the `buttons` option.
+Model 3 with [Teslemetry](https://www.home-assistant.io/integrations/teslemetry/) (also Tesla Fleet and Tessie, built in): battery, range, mileage, outside temperature, lock, charging and time left, location, its buttons, an extra Wallbox switch from the `buttons` option and a picture from the `image` option.
 
 | | Card | Mini card |
 |---|---|---|
@@ -303,7 +303,7 @@ Model 3 with [Teslemetry](https://www.home-assistant.io/integrations/teslemetry/
 
 ### Volvo
 
-XC60 Recharge (plug-in hybrid) with the built-in [Volvo](https://www.home-assistant.io/integrations/volvo/) integration: battery and electric range, fuel range and volume, mileage, lock, location and its buttons (climatization, honk and flash, engine start). The picture comes from the `volvo.get_image_url` action (not shown here).
+XC60 Recharge (plug-in hybrid) with the built-in [Volvo](https://www.home-assistant.io/integrations/volvo/) integration: battery and electric range, fuel range and volume, mileage, lock, location and its buttons (climatization, honk and flash, engine start). The picture comes from the `volvo.get_image_url` action.
 
 | | Card | Mini card |
 |---|---|---|
@@ -312,7 +312,7 @@ XC60 Recharge (plug-in hybrid) with the built-in [Volvo](https://www.home-assist
 
 ### Škoda
 
-Octavia Combi (petrol) with [MySkoda](https://github.com/skodaconnect/homeassistant-myskoda): fuel level, mileage, outside temperature, an unlocked car, location and its buttons.
+Octavia Combi (petrol) with [MySkoda](https://github.com/skodaconnect/homeassistant-myskoda): fuel level, mileage, outside temperature, an unlocked car, location and its buttons. The integration gives no picture: this one is the card's `image` option.
 
 | | Card | Mini card |
 |---|---|---|
@@ -321,7 +321,7 @@ Octavia Combi (petrol) with [MySkoda](https://github.com/skodaconnect/homeassist
 
 ### Subaru
 
-Outback with the built-in [Subaru](https://www.home-assistant.io/integrations/subaru/) integration: fuel level, mileage, lock, location, remote start and stop.
+Outback with the built-in [Subaru](https://www.home-assistant.io/integrations/subaru/) integration: fuel level, mileage, lock, location, remote start and stop, and a picture from the `image` option.
 
 | | Card | Mini card |
 |---|---|---|
@@ -330,7 +330,7 @@ Outback with the built-in [Subaru](https://www.home-assistant.io/integrations/su
 
 ### Peugeot (Stellantis)
 
-e-208 (electric) with [Stellantis Vehicles](https://github.com/andreadegiovine/homeassistant-stellantis-vehicles), also for Citroën, DS, Opel, Fiat, Jeep…: battery, range, mileage, plugged in, air conditioning, location and its buttons (horn, lights, charge, lock). The picture comes from the vehicle's tracker (not shown here).
+e-208 (electric) with [Stellantis Vehicles](https://github.com/andreadegiovine/homeassistant-stellantis-vehicles), also for Citroën, DS, Opel, Fiat, Jeep…: battery, range, mileage, plugged in, air conditioning, location and its buttons (horn, lights, charge, lock). The picture comes from the vehicle's tracker.
 
 | | Card | Mini card |
 |---|---|---|
@@ -339,7 +339,7 @@ e-208 (electric) with [Stellantis Vehicles](https://github.com/andreadegiovine/h
 
 ### Kia / Hyundai
 
-EV6 (electric, charging) with [Kia / Hyundai](https://github.com/Hyundai-Kia-Connect/kia_uvo): battery, range, mileage, outside temperature, charging and time left, lock, location and its buttons.
+EV6 (electric, charging) with [Kia / Hyundai](https://github.com/Hyundai-Kia-Connect/kia_uvo): battery, range, mileage, outside temperature, charging and time left, lock, location and its buttons, and a picture from the `image` option.
 
 | | Card | Mini card |
 |---|---|---|
@@ -348,7 +348,7 @@ EV6 (electric, charging) with [Kia / Hyundai](https://github.com/Hyundai-Kia-Con
 
 ### Toyota
 
-C-HR Hybrid with [Toyota](https://github.com/pytoyoda/ha_toyota): fuel range and level, mileage, lock, the parking location and its buttons. The picture comes from the vehicle's tracker (not shown here).
+C-HR Hybrid with [Toyota](https://github.com/pytoyoda/ha_toyota): fuel range and level, mileage, lock, the parking location and its buttons. The picture comes from the vehicle's tracker.
 
 | | Card | Mini card |
 |---|---|---|
@@ -357,7 +357,7 @@ C-HR Hybrid with [Toyota](https://github.com/pytoyoda/ha_toyota): fuel range and
 
 ### Volkswagen (VW Group)
 
-ID.4 (electric) with [VW Group Connect](https://github.com/its-me-prash/vwgroup-connect-ha), also for Audi, SEAT, CUPRA and Škoda: battery, electric range, mileage, outside temperature, lock, location and its buttons. The picture comes from the integration's render (not shown here).
+ID.4 (electric) with [VW Group Connect](https://github.com/its-me-prash/vwgroup-connect-ha), also for Audi, SEAT, CUPRA and Škoda: battery, electric range, mileage, outside temperature, lock, location and its buttons. The picture comes from the integration's render (an `image` entity).
 
 | | Card | Mini card |
 |---|---|---|
@@ -366,7 +366,7 @@ ID.4 (electric) with [VW Group Connect](https://github.com/its-me-prash/vwgroup-
 
 ### CUPRA (VW Group)
 
-Formentor e-HYBRID (plug-in hybrid) with [VW Group Connect](https://github.com/its-me-prash/vwgroup-connect-ha): battery and electric range, fuel range and level, mileage, lock, location, and the **connected services** subscription ending in three weeks.
+Formentor e-HYBRID (plug-in hybrid) with [VW Group Connect](https://github.com/its-me-prash/vwgroup-connect-ha): battery and electric range, fuel range and level, mileage, lock, location, and the **connected services** subscription ending in three weeks; the picture comes from the integration's render.
 
 | | Card | Mini card |
 |---|---|---|
@@ -375,7 +375,7 @@ Formentor e-HYBRID (plug-in hybrid) with [VW Group Connect](https://github.com/i
 
 ### Mercedes-Benz
 
-GLC 300 e (plug-in hybrid) with [Mercedes-Benz (mbapi2020)](https://github.com/ReneNulschDE/mbapi2020), whose sensors are read by their entity IDs: battery and electric range, fuel range and level, mileage, location, preheating and horn.
+GLC 300 e (plug-in hybrid) with [Mercedes-Benz (mbapi2020)](https://github.com/ReneNulschDE/mbapi2020), whose sensors are read by their entity IDs: battery and electric range, fuel range and level, mileage, location, preheating and horn, and a picture from the `image` option.
 
 | | Card | Mini card |
 |---|---|---|
@@ -389,6 +389,10 @@ Vehicles of two brands (Renault and Tesla): the header shows a car icon instead 
 | Light | Dark |
 |---|---|
 | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/map.png" alt="map card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/map-dark.png" alt="map card, dark" width="400"> |
+
+### Pictures
+
+The pictures of the screenshots are the makers' renders (MyRenault for the Renault cars), used only in this README to illustrate the cards.
 
 ## Migrating from ha-renault-card
 
