@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.4 - 2026-11-12
+
+### Documentation
+- `show_picture` of the map card: the vehicle picture is the one the integration gives, else the `entity_picture` of its device tracker, which can be set with customize (the Tesla Model 3 of the map screenshots).
+
 ## 3.0.3 - 2026-11-12
 
 ### Features
