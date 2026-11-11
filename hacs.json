@@ -1,5 +1,5 @@
 {
-  "name": "Renault Card",
+  "name": "Vehicle Card",
   "render_readme": true,
   "content_in_root": false,
   "filename": "renault-card.js",

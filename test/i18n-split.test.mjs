@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { after, test } from "node:test";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-const MAIN = "renault-card.js";
+const MAIN = "vehicle-card.js";
 const STEM = MAIN.replace(/\.js$/, "");
 // Built in a copy of the repository, so that tests reading dist/ meanwhile never see a half-written file.
 const repo = fileURLToPath(new URL("../", import.meta.url));

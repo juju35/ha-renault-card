@@ -1,12 +1,12 @@
 {
-  "name": "ha-renault-card",
-  "version": "2.11.1",
-  "description": "Lovelace cards for the Renault integration in Home Assistant, with an optional Orange Internet On the move section.",
+  "name": "ha-vehicle-card",
+  "version": "3.0.0",
+  "description": "Lovelace cards for connected vehicles of any brand in Home Assistant (Renault, Tesla, Volvo, Stellantis, VW Group, Kia, Hyundai, Toyota, Mercedes…), with an optional Orange Internet On the move section.",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "check": "node scripts/build.mjs && node --check dist/renault-card.js",
+    "check": "node scripts/build.mjs && node --check dist/vehicle-card.js",
     "screenshots": "node scripts/screenshots.mjs",
     "test": "node --test test/*.test.mjs"
   },

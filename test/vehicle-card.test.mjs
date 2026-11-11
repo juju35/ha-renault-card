@@ -1,7 +1,7 @@
-// Unit tests for the pure parts of src/renault-card.js, loaded in a VM with minimal browser stubs.
+// Unit tests for the pure parts of src/vehicle-card.js, loaded in a VM with minimal browser stubs.
 // Run with: npm test
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { test } from "node:test";
 import vm from "node:vm";
 
@@ -45,7 +45,7 @@ function loadCard(lang = "en") {
   };
   ctx.window = ctx;
   vm.createContext(ctx);
-  vm.runInContext(readFileSync(new URL("../src/renault-card.js", import.meta.url), "utf8"), ctx);
+  vm.runInContext(readFileSync(new URL("../src/vehicle-card.js", import.meta.url), "utf8"), ctx);
   return { ctx, defined, listeners };
 }
 
@@ -326,7 +326,7 @@ for (const [name, table] of [["RnI18n", ctx.RnI18n], ["RnMapI18n", ctx.RnMapI18n
 
   // Serbian: no Latin letter in sr and no Cyrillic one in sr-Latn, apart from brands, proper nouns and units.
   test(`I18N script: ${name}.sr is Cyrillic and ${name}.sr-Latn is Latin`, () => {
-    const allowed = /Orange Internet On the move|Home Assistant|OpenStreetMap France|OpenStreetMap|OpenTopoMap|CyclOSM|MyRenault|Renault Picture|Renault|Esri|IGN|URL|\/local\/renault\/clio\.png|\bpx\b|\{[a-z]+\}/g;
+    const allowed = /Orange Internet On the move|Home Assistant|OpenStreetMap France|OpenStreetMap|OpenTopoMap|CyclOSM|MyRenault|Renault Picture|Renault|Tesla|Volvo|Stellantis|VW|Kia|Hyundai|Toyota|Mercedes|Esri|IGN|URL|\/local\/renault\/clio\.png|\/local\/auto\.png|\bpx\b|\{[a-z]+\}/g;
     for (const path of i18nPaths(table.en)) {
       const sr = String(i18nGet(table.sr, path)).replace(allowed, "");
       assert.doesNotMatch(sr, /[A-Za-z\u00C0-\u024F]/, `${name}.sr.${path} has Latin letters: ${sr}`);
@@ -527,7 +527,8 @@ test("no statistics request before the lease has started", () => {
 test("map card clears stale markers when no vehicle has a position any more", () => {
   const card = Object.create(RenaultMapCard.prototype);
   card._config = {};
-  card._hass = { states: {}, language: "en" };
+  card._hass = { states: {}, language: "en", devices: { d1: { manufacturer: "Renault" } } };
+  card._discovered = () => ({ ids: ["d1"] });
   card._ensureShell = () => {};
   card._reloadTilesIfNeeded = () => {};
   card._darkTiles = () => false;
@@ -696,7 +697,8 @@ const flush = () => new Promise((r) => setTimeout(r, 0));
 function mapCardWithVehicle() {
   const card = Object.create(RenaultMapCard.prototype);
   card._config = {};
-  card._hass = { states: {}, language: "en" };
+  card._hass = { states: {}, language: "en", devices: { d1: { manufacturer: "Renault" } } };
+  card._discovered = () => ({ ids: ["d1"] });
   card._ensureShell = () => {};
   card._reloadTilesIfNeeded = () => {};
   card._darkTiles = () => false;
@@ -1641,11 +1643,138 @@ test("card editor offers low_tyre_pressure in bar", () => {
 });
 
 test("card picker: names and descriptions in the page language", () => {
-  const en = ctx.customCards.filter((c) => c.type !== "renault-map-card");
-  assert.deepEqual([...en.map((c) => c.name)], ["Renault Card", "Renault Mini Card"]);
+  const en = ctx.customCards.filter((c) => c.type !== "vehicle-map-card");
+  assert.deepEqual([...en.map((c) => c.name)], ["Vehicle Card", "Vehicle Mini Card"]);
+  // The former renault-* elements still work for existing dashboards, without a picker entry.
+  assert.equal(ctx.customCards.some((c) => c.type.indexOf("renault") === 0), false);
   const fr = loadCard("fr").ctx.customCards;
-  assert.equal(fr.find((c) => c.type === "renault-card").name, "Carte Renault");
-  assert.equal(fr.find((c) => c.type === "renault-mini-card").name, "Mini-carte Renault");
-  assert.match(fr.find((c) => c.type === "renault-mini-card").description, /^Carte compacte/);
-  assert.equal(loadCard("de-AT").ctx.customCards[0].name, "Renault-Karte");
+  assert.equal(fr.find((c) => c.type === "vehicle-card").name, "Carte Véhicule");
+  assert.equal(fr.find((c) => c.type === "vehicle-mini-card").name, "Mini-carte Véhicule");
+  assert.match(fr.find((c) => c.type === "vehicle-mini-card").description, /^Carte compacte/);
+  assert.equal(loadCard("de-AT").ctx.customCards[0].name, "Fahrzeugkarte");
+});
+
+test("multi-brand: the vehicle-* elements are the cards, renault-* stay as aliases", () => {
+  for (const n of ["vehicle-card", "vehicle-mini-card", "vehicle-map-card", "renault-card", "renault-mini-card", "renault-map-card"]) assert.ok(defined[n], n);
+  // Both extend the same card class, so they behave alike.
+  assert.equal(Object.getPrototypeOf(defined["vehicle-card"]), Object.getPrototypeOf(defined["renault-card"]));
+  assert.equal(Object.getPrototypeOf(defined["vehicle-map-card"]), Object.getPrototypeOf(defined["renault-map-card"]));
+});
+
+test("multi-brand: the brand comes from the manufacturer, else from the integration", () => {
+  const hass = { entities: { "device_tracker.t": { entity_id: "device_tracker.t", device_id: "t", platform: "teslemetry" } } };
+  assert.equal(ctx.rnBrandKey(hass, "x", { manufacturer: "Škoda" }), "skoda");
+  assert.equal(ctx.rnBrandKey(hass, "x", { manufacturer: "Volkswagen AG" }), "volkswagen");
+  assert.equal(ctx.rnBrandKey(hass, "x", { manufacturer: "DS" }), "dsautomobiles");
+  assert.equal(ctx.rnBrandKey(hass, "x", { manufacturer: "PEUGEOT" }), "peugeot");
+  assert.equal(ctx.rnBrandKey(hass, "t", {}), "tesla");
+  assert.equal(ctx.rnBrandKey(hass, "x", { manufacturer: "Lada" }), null);
+  assert.equal(ctx.rnModelLabel(hass, "x", { manufacturer: "Renault", model: "Espace vi" }), "Renault Espace VI");
+  assert.equal(ctx.rnModelLabel(hass, "t", { model: "Model 3" }), "Tesla Model 3");
+  assert.equal(ctx.rnModelLabel(hass, "x", { manufacturer: "Kia", model: "Kia EV6" }), "Kia EV6");
+  assert.equal(ctx.rnModelLabel(hass, "x", {}), "");
+});
+
+test("multi-brand: every brand of RN_BRANDS has its logo in images/brands", () => {
+  const files = readdirSync(new URL("../images/brands", import.meta.url)).filter((f) => f.endsWith(".svg")).map((f) => f.slice(0, -4)).sort();
+  assert.deepEqual([...ctx.RN_BRANDS].sort(), files);
+});
+
+test("multi-brand: header logo — Renault bundled, others once vehicle-card-brands.js is loaded, else the car icon", () => {
+  assert.match(ctx.rnBrandHtml("renault", () => {}), /class="brand"/);
+  assert.equal(ctx.rnBrandHtml(null, () => {}), null);
+  assert.equal(ctx.rnBrandHtml("lada", () => {}), null);
+  ctx.__rnBrands = { tesla: { t: "Tesla", d: "M0 0h24" } };
+  try {
+    assert.equal(ctx.rnBrandHtml("tesla", () => {}), '<svg class="brand-svg" viewBox="0 0 24 24" role="img" aria-label="Tesla"><path d="M0 0h24"/></svg>');
+  } finally {
+    delete ctx.__rnBrands;
+  }
+});
+
+test("multi-brand: picture from renault_picture, else an image entity (not kia_uvo's cameras), else the tracker's picture", () => {
+  const e = (entity_id, platform, translation_key) => ({ entity_id, device_id: "d1", platform, translation_key });
+  const states = { "device_tracker.car": { state: "home", attributes: { entity_picture: "/car.png" } } };
+  assert.equal(ctx.rnPhotoEntity({ states, entities: { "image.render": e("image.render", "vag_connect", "vehicle_render"), "device_tracker.car": e("device_tracker.car", "vag_connect") } }, "d1"), "image.render");
+  assert.equal(ctx.rnPhotoEntity({ states, entities: { "image.svm": e("image.svm", "kia_uvo"), "device_tracker.car": e("device_tracker.car", "kia_uvo") } }, "d1"), "device_tracker.car");
+  assert.equal(ctx.rnPhotoEntity({ states: {}, entities: { "device_tracker.car": e("device_tracker.car", "tesla_fleet") } }, "d1"), null);
+});
+
+test("multi-brand: Volvo's picture comes from volvo.get_image_url, asked once", async () => {
+  const calls = [];
+  const hass = {
+    services: { volvo: { get_image_url: {} } },
+    callWS: (msg) => {
+      calls.push(msg);
+      return Promise.resolve({ response: { images: [{ type: "exterior_front_left", url: "https://volvo/ex.png" }] } });
+    },
+  };
+  let redrawn = 0;
+  const dev = { config_entries: ["entry1"] };
+  assert.equal(ctx.rnVolvoPicture(hass, dev, () => redrawn++), null);
+  assert.equal(ctx.rnVolvoPicture(hass, dev, () => redrawn++), null);
+  await flush();
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].service_data.entry, "entry1");
+  assert.equal(calls[0].return_response, true);
+  assert.equal(redrawn, 2);
+  assert.equal(ctx.rnVolvoPicture(hass, dev, () => {}), "https://volvo/ex.png");
+  assert.equal(ctx.rnVolvoPicture({ ...hass, services: {} }, { config_entries: ["e2"] }, () => {}), null);
+});
+
+test("buttons option: extra entities join the actions; a tap presses, runs, locks or toggles them", async () => {
+  assert.deepEqual([...ctx.rnPressService("button.x")], ["button", "press"]);
+  assert.deepEqual([...ctx.rnPressService("script.x")], ["script", "turn_on"]);
+  assert.deepEqual([...ctx.rnPressService("lock.x", { state: "locked" })], ["lock", "unlock"]);
+  assert.deepEqual([...ctx.rnPressService("lock.x", { state: "unlocked" })], ["lock", "lock"]);
+  assert.deepEqual([...ctx.rnPressService("switch.x", { state: "on" })], ["homeassistant", "toggle"]);
+  assert.equal(ctx.rnIsOn("script.x", { state: "off" }), null);
+  assert.equal(ctx.rnIsOn("climate.x", { state: "heat_cool" }), true);
+  const calls = [];
+  const c = cardWithActions((...a) => {
+    calls.push(a);
+    return Promise.resolve();
+  });
+  c.card._hass.states["switch.preheat"] = { state: "on", attributes: { friendly_name: "Preheat" } };
+  c.card._config = { ...c.card._config, buttons: ["switch.preheat", { entity: "switch.missing" }] };
+  c.card._sig = null;
+  c.card._res = null;
+  c.card._update();
+  const html = c.card.shadowRoot.innerHTML;
+  assert.match(html, /<button class="btn on" data-press="switch\.preheat" aria-pressed="true" title="Preheat · On"/);
+  assert.doesNotMatch(html, /switch\.missing/);
+  for (let i = 0; i < 2; i++) c.card._onClick({ composedPath: () => [{ tagName: "BUTTON", dataset: { press: "switch.preheat" } }] });
+  await flush();
+  assert.deepEqual(JSON.parse(JSON.stringify(calls)), [["homeassistant", "toggle", { entity_id: "switch.preheat" }]]);
+});
+
+test("connected services (VW group) row and the offline chip (Teslemetry)", () => {
+  const { entities, devices } = renaultRegistry();
+  const reg = (entity_id, translation_key) => ({ entity_id, device_id: "d1", platform: "vag_connect", translation_key });
+  entities["sensor.car_subscription"] = reg("sensor.car_subscription", "subscription_expiry_at");
+  entities["binary_sensor.car_subscription_active"] = reg("binary_sensor.car_subscription_active", "subscription_active");
+  entities["binary_sensor.car_cellular"] = reg("binary_sensor.car_cellular", "cellular");
+  entities["binary_sensor.car_wifi"] = reg("binary_sensor.car_wifi", "wifi");
+  const states = {
+    ...renaultStates(Object.keys(renaultRegistry().entities)),
+    "sensor.car_subscription": { state: new Date(Date.now() + 10 * 86400000).toISOString(), attributes: { device_class: "timestamp" } },
+    "binary_sensor.car_subscription_active": { state: "on", attributes: {} },
+    "binary_sensor.car_cellular": { state: "off", attributes: {} },
+    "binary_sensor.car_wifi": { state: "off", attributes: {} },
+  };
+  const card = Object.create(RenaultCard.prototype);
+  card._config = { device_id: "d1", show_data_plan: true, show_actions: true };
+  card._hass = { entities, devices, states, language: "en" };
+  const root = { html: "", activeElement: null, querySelectorAll: () => [] };
+  Object.defineProperty(root, "innerHTML", { get: () => root.html, set: (h) => { root.html = h; } });
+  card.shadowRoot = root;
+  card._update();
+  assert.match(root.html, /<div class="row warn" data-more="sensor\.car_subscription"[^>]*>.*Connected services.*10 d/);
+  assert.match(root.html, /access-point-network-off"><\/ha-icon>Offline/);
+  states["binary_sensor.car_wifi"] = { state: "on", attributes: {} };
+  states["sensor.car_subscription"] = { state: new Date(Date.now() + 200 * 86400000).toISOString(), attributes: {} };
+  card._sig = null;
+  card._update();
+  assert.doesNotMatch(root.html, /Offline/);
+  assert.match(root.html, /<div class="row" data-more="sensor\.car_subscription"/);
 });

@@ -31,7 +31,7 @@ If applicable, add screenshots to help explain your problem.
 
 **Card configuration:**
 ```yaml
-type: custom:renault-card
+type: custom:vehicle-card
 device_id: ...
 ```
 

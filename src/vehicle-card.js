@@ -16,6 +16,10 @@ var RnI18n = {
     vehicle: 'Véhicule',
     fuel_autonomy: 'Autonomie',
     fuel_quantity: 'Carburant',
+    fuel_level: 'Niveau de carburant',
+    ed_buttons: 'Boutons supplémentaires (interrupteurs, boutons, scripts, serrures, climatisation…)',
+    on_state: 'Allumé',
+    off_state: 'Éteint',
     battery_level: 'Batterie',
     battery_autonomy: 'Autonomie',
     mileage: 'Kilométrage',
@@ -35,10 +39,10 @@ var RnI18n = {
     tyre_2: 'ArG',
     tyre_3: 'ArD',
     low_tyre_pressure: 'Pression des pneus basse',
-    card_name: 'Carte Renault',
-    card_desc: 'Carte de véhicule Renault (autonomie, carburant, batterie, position, actions) avec forfait Orange Internet On the move en option',
-    mini_name: 'Mini-carte Renault',
-    mini_desc: 'Carte compacte de véhicule Renault (photo, batterie, autonomie, charge) avec un bouton pour afficher la carte complète',
+    card_name: 'Carte Véhicule',
+    card_desc: 'Carte de véhicule connecté de toute marque (autonomie, carburant, batterie, charge, position, actions) avec forfait Orange Internet On the move en option',
+    mini_name: 'Mini-carte Véhicule',
+    mini_desc: 'Carte compacte de véhicule (photo, batterie, autonomie, charge) avec un bouton pour afficher la carte complète',
     location: 'Position',
     updated: 'mis à jour {t}',
     confirm: 'Confirmer ?',
@@ -49,21 +53,24 @@ var RnI18n = {
     data_left: '{l} restants sur {t}',
     renews_on: 'Renouvellement le {d}',
     expires_on: 'Expire le {d}',
+    services: 'Services connectés',
+    offline: 'Hors ligne',
+    services_inactive: 'Inactifs',
     days_left: '{n} j',
     expired: 'Expiré',
     unit_gb: 'Go',
     unit_mb: 'Mo',
-    no_vehicle: 'Aucun véhicule Renault trouvé',
+    no_vehicle: 'Aucun véhicule trouvé',
     zoom_in: 'Afficher la carte complète',
     zoom_out: 'Revenir à la vue compacte',
     ed_device_id: 'Véhicule',
-    ed_device_id_helper: 'Appareil de l\'intégration Renault',
+    ed_device_id_helper: 'L\'appareil du véhicule (Renault, Tesla, Volvo, Stellantis, groupe VW, Kia, Hyundai, Toyota, Mercedes… ou tout appareil avec une position)',
     ed_name: 'Nom',
     ed_name_helper: 'Laisser vide pour le nom de l\'appareil',
     ed_image: 'Image personnalisée',
-    ed_image_helper: 'Laisser vide pour la photo MyRenault (intégration Renault Picture) ; sinon une URL, par exemple /local/renault/clio.png',
+    ed_image_helper: 'Laisser vide pour la photo du véhicule (Renault Picture, ou l\'image fournie par son intégration) ; sinon une URL, par exemple /local/voiture.png',
     ed_show_image: 'Image du véhicule',
-    ed_show_logo: 'Logo Renault',
+    ed_show_logo: 'Logo de la marque',
     ed_fuel_tank_capacity: 'Capacité du réservoir',
     ed_fuel_tank_capacity_helper: 'Affiche la jauge de carburant',
     ed_low_range: 'Seuil d\'autonomie faible',
@@ -84,6 +91,7 @@ var RnI18n = {
     en_mileage: 'Kilométrage',
     en_fuel_autonomy: 'Autonomie carburant',
     en_fuel_quantity: 'Quantité de carburant',
+    en_fuel_level: 'Niveau de carburant',
     en_battery_level: 'Niveau de batterie',
     en_battery_autonomy: 'Autonomie batterie',
     en_location: 'Position',
@@ -134,6 +142,10 @@ var RnI18n = {
     vehicle: 'Vehicle',
     fuel_autonomy: 'Range',
     fuel_quantity: 'Fuel',
+    fuel_level: 'Fuel level',
+    ed_buttons: 'Extra buttons (switches, buttons, scripts, locks, climate…)',
+    on_state: 'On',
+    off_state: 'Off',
     battery_level: 'Battery',
     battery_autonomy: 'Range',
     mileage: 'Mileage',
@@ -153,10 +165,10 @@ var RnI18n = {
     tyre_2: 'RL',
     tyre_3: 'RR',
     low_tyre_pressure: 'Low tyre pressure',
-    card_name: 'Renault Card',
-    card_desc: 'Renault vehicle card (range, fuel, battery, location, actions) with optional Orange Internet On the move data plan',
-    mini_name: 'Renault Mini Card',
-    mini_desc: 'Compact Renault vehicle card (picture, battery, range, charging) with a button to show the full card',
+    card_name: 'Vehicle Card',
+    card_desc: 'Connected vehicle card of any brand (range, fuel, battery, charging, location, actions) with optional Orange Internet On the move data plan',
+    mini_name: 'Vehicle Mini Card',
+    mini_desc: 'Compact vehicle card (picture, battery, range, charging) with a button to show the full card',
     location: 'Location',
     updated: 'updated {t}',
     confirm: 'Confirm?',
@@ -167,21 +179,24 @@ var RnI18n = {
     data_left: '{l} left of {t}',
     renews_on: 'Renews on {d}',
     expires_on: 'Expires on {d}',
+    services: 'Connected services',
+    offline: 'Offline',
+    services_inactive: 'Inactive',
     days_left: '{n} d',
     expired: 'Expired',
     unit_gb: 'GB',
     unit_mb: 'MB',
-    no_vehicle: 'No Renault vehicle found',
+    no_vehicle: 'No vehicle found',
     zoom_in: 'Show the full card',
     zoom_out: 'Back to the compact view',
     ed_device_id: 'Vehicle',
-    ed_device_id_helper: 'Device from the Renault integration',
+    ed_device_id_helper: 'The vehicle\'s device (Renault, Tesla, Volvo, Stellantis, VW Group, Kia, Hyundai, Toyota, Mercedes… or any device with a location)',
     ed_name: 'Name',
     ed_name_helper: 'Leave empty to use the device name',
     ed_image: 'Custom picture',
-    ed_image_helper: 'Leave empty for the MyRenault photo (Renault Picture integration); otherwise a URL, for example /local/renault/clio.png',
+    ed_image_helper: 'Leave empty for the vehicle\'s picture (Renault Picture, or the image its integration gives); otherwise a URL, for example /local/car.png',
     ed_show_image: 'Vehicle picture',
-    ed_show_logo: 'Renault logo',
+    ed_show_logo: 'Brand logo',
     ed_fuel_tank_capacity: 'Fuel tank capacity',
     ed_fuel_tank_capacity_helper: 'Shows the fuel gauge',
     ed_low_range: 'Low range threshold',
@@ -202,6 +217,7 @@ var RnI18n = {
     en_mileage: 'Mileage',
     en_fuel_autonomy: 'Fuel range',
     en_fuel_quantity: 'Fuel quantity',
+    en_fuel_level: 'Fuel level',
     en_battery_level: 'Battery level',
     en_battery_autonomy: 'Battery range',
     en_location: 'Location',
@@ -252,6 +268,10 @@ var RnI18n = {
     vehicle: 'Fahrzeug',
     fuel_autonomy: 'Reichweite',
     fuel_quantity: 'Kraftstoff',
+    fuel_level: 'Kraftstoffstand',
+    ed_buttons: 'Zusätzliche Schaltflächen (Schalter, Tasten, Skripte, Schlösser, Klima…)',
+    on_state: 'An',
+    off_state: 'Aus',
     battery_level: 'Batterie',
     battery_autonomy: 'Reichweite',
     mileage: 'Kilometerstand',
@@ -271,10 +291,10 @@ var RnI18n = {
     tyre_2: 'HL',
     tyre_3: 'HR',
     low_tyre_pressure: 'Niedriger Reifendruck',
-    card_name: 'Renault-Karte',
-    card_desc: 'Renault-Fahrzeugkarte (Reichweite, Kraftstoff, Batterie, Position, Aktionen) mit optionalem Orange Internet On the move Datentarif',
-    mini_name: 'Renault-Minikarte',
-    mini_desc: 'Kompakte Renault-Fahrzeugkarte (Bild, Batterie, Reichweite, Laden) mit einer Schaltfläche für die vollständige Karte',
+    card_name: 'Fahrzeugkarte',
+    card_desc: 'Karte für vernetzte Fahrzeuge jeder Marke (Reichweite, Kraftstoff, Batterie, Laden, Position, Aktionen) mit optionalem Orange Internet On the move Datentarif',
+    mini_name: 'Fahrzeug-Minikarte',
+    mini_desc: 'Kompakte Fahrzeugkarte (Bild, Batterie, Reichweite, Laden) mit einer Schaltfläche für die vollständige Karte',
     location: 'Standort',
     updated: 'aktualisiert {t}',
     confirm: 'Bestätigen?',
@@ -285,21 +305,24 @@ var RnI18n = {
     data_left: '{l} von {t} übrig',
     renews_on: 'Verlängerung am {d}',
     expires_on: 'Läuft am {d} ab',
+    services: 'Vernetzte Dienste',
+    offline: 'Offline',
+    services_inactive: 'Inaktiv',
     days_left: '{n} Tg.',
     expired: 'Abgelaufen',
     unit_gb: 'GB',
     unit_mb: 'MB',
-    no_vehicle: 'Kein Renault-Fahrzeug gefunden',
+    no_vehicle: 'Kein Fahrzeug gefunden',
     zoom_in: 'Vollständige Karte anzeigen',
     zoom_out: 'Zurück zur kompakten Ansicht',
     ed_device_id: 'Fahrzeug',
-    ed_device_id_helper: 'Gerät der Renault-Integration',
+    ed_device_id_helper: 'Das Gerät des Fahrzeugs (Renault, Tesla, Volvo, Stellantis, VW-Konzern, Kia, Hyundai, Toyota, Mercedes… oder jedes Gerät mit Standort)',
     ed_name: 'Name',
     ed_name_helper: 'Leer lassen, um den Gerätenamen zu verwenden',
     ed_image: 'Eigenes Bild',
-    ed_image_helper: 'Leer lassen für das MyRenault-Foto (Integration Renault Picture); sonst eine URL, zum Beispiel /local/renault/clio.png',
+    ed_image_helper: 'Leer lassen für das Bild des Fahrzeugs (Renault Picture oder das Bild seiner Integration); sonst eine URL, zum Beispiel /local/auto.png',
     ed_show_image: 'Fahrzeugbild',
-    ed_show_logo: 'Renault-Logo',
+    ed_show_logo: 'Markenlogo',
     ed_fuel_tank_capacity: 'Tankvolumen',
     ed_fuel_tank_capacity_helper: 'Zeigt die Tankanzeige an',
     ed_low_range: 'Schwelle für geringe Reichweite',
@@ -320,6 +343,7 @@ var RnI18n = {
     en_mileage: 'Kilometerstand',
     en_fuel_autonomy: 'Kraftstoffreichweite',
     en_fuel_quantity: 'Kraftstoffmenge',
+    en_fuel_level: 'Kraftstoffstand',
     en_battery_level: 'Batteriestand',
     en_battery_autonomy: 'Batteriereichweite',
     en_location: 'Standort',
@@ -370,6 +394,10 @@ var RnI18n = {
     vehicle: 'Vehículo',
     fuel_autonomy: 'Autonomía',
     fuel_quantity: 'Combustible',
+    fuel_level: 'Nivel de combustible',
+    ed_buttons: 'Botones adicionales (interruptores, botones, scripts, cerraduras, climatización…)',
+    on_state: 'Encendido',
+    off_state: 'Apagado',
     battery_level: 'Batería',
     battery_autonomy: 'Autonomía',
     mileage: 'Kilometraje',
@@ -389,10 +417,10 @@ var RnI18n = {
     tyre_2: 'TI',
     tyre_3: 'TD',
     low_tyre_pressure: 'Presión de neumáticos baja',
-    card_name: 'Tarjeta Renault',
-    card_desc: 'Tarjeta de vehículo Renault (autonomía, combustible, batería, ubicación, acciones) con plan de datos Orange Internet On the move opcional',
-    mini_name: 'Minitarjeta Renault',
-    mini_desc: 'Tarjeta compacta de vehículo Renault (imagen, batería, autonomía, carga) con un botón para mostrar la tarjeta completa',
+    card_name: 'Tarjeta de vehículo',
+    card_desc: 'Tarjeta de vehículo conectado de cualquier marca (autonomía, combustible, batería, carga, ubicación, acciones) con plan de datos Orange Internet On the move opcional',
+    mini_name: 'Minitarjeta de vehículo',
+    mini_desc: 'Tarjeta compacta de vehículo (imagen, batería, autonomía, carga) con un botón para mostrar la tarjeta completa',
     location: 'Ubicación',
     updated: 'actualizado {t}',
     confirm: '¿Confirmar?',
@@ -403,21 +431,24 @@ var RnI18n = {
     data_left: 'Quedan {l} de {t}',
     renews_on: 'Se renueva el {d}',
     expires_on: 'Caduca el {d}',
+    services: 'Servicios conectados',
+    offline: 'Sin conexión',
+    services_inactive: 'Inactivos',
     days_left: '{n} d',
     expired: 'Caducado',
     unit_gb: 'GB',
     unit_mb: 'MB',
-    no_vehicle: 'No se ha encontrado ningún vehículo Renault',
+    no_vehicle: 'No se ha encontrado ningún vehículo',
     zoom_in: 'Mostrar la tarjeta completa',
     zoom_out: 'Volver a la vista compacta',
     ed_device_id: 'Vehículo',
-    ed_device_id_helper: 'Dispositivo de la integración Renault',
+    ed_device_id_helper: 'El dispositivo del vehículo (Renault, Tesla, Volvo, Stellantis, grupo VW, Kia, Hyundai, Toyota, Mercedes… o cualquier dispositivo con ubicación)',
     ed_name: 'Nombre',
     ed_name_helper: 'Déjalo vacío para usar el nombre del dispositivo',
     ed_image: 'Imagen personalizada',
-    ed_image_helper: 'Déjalo vacío para usar la foto de MyRenault (integración Renault Picture); si no, una URL, por ejemplo /local/renault/clio.png',
+    ed_image_helper: 'Déjalo vacío para la imagen del vehículo (Renault Picture, o la imagen de su integración); si no, una URL, por ejemplo /local/coche.png',
     ed_show_image: 'Imagen del vehículo',
-    ed_show_logo: 'Logotipo de Renault',
+    ed_show_logo: 'Logotipo de la marca',
     ed_fuel_tank_capacity: 'Capacidad del depósito',
     ed_fuel_tank_capacity_helper: 'Muestra el indicador de combustible',
     ed_low_range: 'Umbral de autonomía baja',
@@ -438,6 +469,7 @@ var RnI18n = {
     en_mileage: 'Kilometraje',
     en_fuel_autonomy: 'Autonomía de combustible',
     en_fuel_quantity: 'Cantidad de combustible',
+    en_fuel_level: 'Nivel de combustible',
     en_battery_level: 'Nivel de batería',
     en_battery_autonomy: 'Autonomía de batería',
     en_location: 'Ubicación',
@@ -488,6 +520,10 @@ var RnI18n = {
     vehicle: 'Возило',
     fuel_autonomy: 'Домет',
     fuel_quantity: 'Гориво',
+    fuel_level: 'Ниво горива',
+    ed_buttons: 'Додатна дугмад (прекидачи, тастери, скрипте, браве, климатизација…)',
+    on_state: 'Укључено',
+    off_state: 'Искључено',
     battery_level: 'Батерија',
     battery_autonomy: 'Домет',
     mileage: 'Километража',
@@ -507,10 +543,10 @@ var RnI18n = {
     tyre_2: 'ЗЛ',
     tyre_3: 'ЗД',
     low_tyre_pressure: 'Низак притисак у гумама',
-    card_name: 'Renault картица',
-    card_desc: 'Картица Renault возила (домет, гориво, батерија, локација, радње) са опционим Orange Internet On the move пакетом података',
-    mini_name: 'Renault мини картица',
-    mini_desc: 'Компактна картица Renault возила (слика, батерија, домет, пуњење) са дугметом за приказ целе картице',
+    card_name: 'Картица возила',
+    card_desc: 'Картица повезаног возила било које марке (домет, гориво, батерија, пуњење, локација, радње) са опционим Orange Internet On the move пакетом података',
+    mini_name: 'Мини картица возила',
+    mini_desc: 'Компактна картица возила (слика, батерија, домет, пуњење) са дугметом за приказ целе картице',
     location: 'Локација',
     updated: 'ажурирано {t}',
     confirm: 'Потврдити?',
@@ -521,21 +557,24 @@ var RnI18n = {
     data_left: 'Преостало {l} од {t}',
     renews_on: 'Обнавља се {d}',
     expires_on: 'Истиче {d}',
+    services: 'Повезане услуге',
+    offline: 'Ван мреже',
+    services_inactive: 'Неактивне',
     days_left: '{n} д',
     expired: 'Истекло',
     unit_gb: 'ГБ',
     unit_mb: 'МБ',
-    no_vehicle: 'Није пронађено ниједно Renault возило',
+    no_vehicle: 'Није пронађено ниједно возило',
     zoom_in: 'Прикажи целу картицу',
     zoom_out: 'Назад на компактни приказ',
     ed_device_id: 'Возило',
-    ed_device_id_helper: 'Уређај из Renault интеграције',
+    ed_device_id_helper: 'Уређај возила (Renault, Tesla, Volvo, Stellantis, VW група, Kia, Hyundai, Toyota, Mercedes… или било који уређај са локацијом)',
     ed_name: 'Назив',
     ed_name_helper: 'Оставите празно да бисте користили назив уређаја',
     ed_image: 'Прилагођена слика',
-    ed_image_helper: 'Оставите празно за MyRenault фотографију (интеграција Renault Picture); иначе URL, на пример /local/renault/clio.png',
+    ed_image_helper: 'Оставите празно за слику возила (Renault Picture или слика из његове интеграције); иначе URL, на пример /local/auto.png',
     ed_show_image: 'Слика возила',
-    ed_show_logo: 'Renault лого',
+    ed_show_logo: 'Лого марке',
     ed_fuel_tank_capacity: 'Запремина резервоара',
     ed_fuel_tank_capacity_helper: 'Приказује мерач горива',
     ed_low_range: 'Праг малог домета',
@@ -556,6 +595,7 @@ var RnI18n = {
     en_mileage: 'Километража',
     en_fuel_autonomy: 'Домет на гориво',
     en_fuel_quantity: 'Количина горива',
+    en_fuel_level: 'Ниво горива',
     en_battery_level: 'Ниво батерије',
     en_battery_autonomy: 'Домет на батерију',
     en_location: 'Локација',
@@ -606,6 +646,10 @@ var RnI18n = {
     vehicle: 'Vozilo',
     fuel_autonomy: 'Domet',
     fuel_quantity: 'Gorivo',
+    fuel_level: 'Nivo goriva',
+    ed_buttons: 'Dodatna dugmad (prekidači, tasteri, skripte, brave, klimatizacija…)',
+    on_state: 'Uključeno',
+    off_state: 'Isključeno',
     battery_level: 'Baterija',
     battery_autonomy: 'Domet',
     mileage: 'Kilometraža',
@@ -625,10 +669,10 @@ var RnI18n = {
     tyre_2: 'ZL',
     tyre_3: 'ZD',
     low_tyre_pressure: 'Nizak pritisak u gumama',
-    card_name: 'Renault kartica',
-    card_desc: 'Kartica Renault vozila (domet, gorivo, baterija, lokacija, radnje) sa opcionim Orange Internet On the move paketom podataka',
-    mini_name: 'Renault mini kartica',
-    mini_desc: 'Kompaktna kartica Renault vozila (slika, baterija, domet, punjenje) sa dugmetom za prikaz cele kartice',
+    card_name: 'Kartica vozila',
+    card_desc: 'Kartica povezanog vozila bilo koje marke (domet, gorivo, baterija, punjenje, lokacija, radnje) sa opcionim Orange Internet On the move paketom podataka',
+    mini_name: 'Mini kartica vozila',
+    mini_desc: 'Kompaktna kartica vozila (slika, baterija, domet, punjenje) sa dugmetom za prikaz cele kartice',
     location: 'Lokacija',
     updated: 'ažurirano {t}',
     confirm: 'Potvrditi?',
@@ -639,21 +683,24 @@ var RnI18n = {
     data_left: 'Preostalo {l} od {t}',
     renews_on: 'Obnavlja se {d}',
     expires_on: 'Ističe {d}',
+    services: 'Povezane usluge',
+    offline: 'Van mreže',
+    services_inactive: 'Neaktivne',
     days_left: '{n} d',
     expired: 'Isteklo',
     unit_gb: 'GB',
     unit_mb: 'MB',
-    no_vehicle: 'Nije pronađeno nijedno Renault vozilo',
+    no_vehicle: 'Nije pronađeno nijedno vozilo',
     zoom_in: 'Prikaži celu karticu',
     zoom_out: 'Nazad na kompaktni prikaz',
     ed_device_id: 'Vozilo',
-    ed_device_id_helper: 'Uređaj iz Renault integracije',
+    ed_device_id_helper: 'Uređaj vozila (Renault, Tesla, Volvo, Stellantis, VW grupa, Kia, Hyundai, Toyota, Mercedes… ili bilo koji uređaj sa lokacijom)',
     ed_name: 'Naziv',
     ed_name_helper: 'Ostavite prazno da biste koristili naziv uređaja',
     ed_image: 'Prilagođena slika',
-    ed_image_helper: 'Ostavite prazno za MyRenault fotografiju (integracija Renault Picture); inače URL, na primer /local/renault/clio.png',
+    ed_image_helper: 'Ostavite prazno za sliku vozila (Renault Picture ili slika iz njegove integracije); inače URL, na primer /local/auto.png',
     ed_show_image: 'Slika vozila',
-    ed_show_logo: 'Renault logo',
+    ed_show_logo: 'Logo marke',
     ed_fuel_tank_capacity: 'Zapremina rezervoara',
     ed_fuel_tank_capacity_helper: 'Prikazuje merač goriva',
     ed_low_range: 'Prag malog dometa',
@@ -674,6 +721,7 @@ var RnI18n = {
     en_mileage: 'Kilometraža',
     en_fuel_autonomy: 'Domet na gorivo',
     en_fuel_quantity: 'Količina goriva',
+    en_fuel_level: 'Nivo goriva',
     en_battery_level: 'Nivo baterije',
     en_battery_autonomy: 'Domet na bateriju',
     en_location: 'Lokacija',
@@ -724,6 +772,10 @@ var RnI18n = {
     vehicle: 'Veicolo',
     fuel_autonomy: 'Autonomia',
     fuel_quantity: 'Carburante',
+    fuel_level: 'Livello carburante',
+    ed_buttons: 'Pulsanti aggiuntivi (interruttori, pulsanti, script, serrature, climatizzazione…)',
+    on_state: 'Acceso',
+    off_state: 'Spento',
     battery_level: 'Batteria',
     battery_autonomy: 'Autonomia',
     mileage: 'Chilometri',
@@ -743,10 +795,10 @@ var RnI18n = {
     tyre_2: 'PS',
     tyre_3: 'PD',
     low_tyre_pressure: 'Pressione gomme bassa',
-    card_name: 'Scheda Renault',
-    card_desc: 'Scheda veicolo Renault (autonomia, carburante, batteria, posizione, azioni) con piano dati Orange Internet On the move opzionale',
-    mini_name: 'Mini scheda Renault',
-    mini_desc: 'Scheda compatta del veicolo Renault (immagine, batteria, autonomia, ricarica) con un pulsante per mostrare la scheda completa',
+    card_name: 'Scheda veicolo',
+    card_desc: 'Scheda del veicolo connesso di qualsiasi marca (autonomia, carburante, batteria, ricarica, posizione, azioni) con piano dati Orange Internet On the move opzionale',
+    mini_name: 'Mini scheda veicolo',
+    mini_desc: 'Scheda compatta del veicolo (immagine, batteria, autonomia, ricarica) con un pulsante per mostrare la scheda completa',
     location: 'Posizione',
     updated: 'aggiornato {t}',
     confirm: 'Confermare?',
@@ -757,21 +809,24 @@ var RnI18n = {
     data_left: '{l} rimanenti su {t}',
     renews_on: 'Rinnovo il {d}',
     expires_on: 'Scade il {d}',
+    services: 'Servizi connessi',
+    offline: 'Offline',
+    services_inactive: 'Inattivi',
     days_left: '{n} g',
     expired: 'Scaduto',
     unit_gb: 'GB',
     unit_mb: 'MB',
-    no_vehicle: 'Nessun veicolo Renault trovato',
+    no_vehicle: 'Nessun veicolo trovato',
     zoom_in: 'Mostra la scheda completa',
     zoom_out: 'Torna alla vista compatta',
     ed_device_id: 'Veicolo',
-    ed_device_id_helper: 'Dispositivo dell\'integrazione Renault',
+    ed_device_id_helper: 'Il dispositivo del veicolo (Renault, Tesla, Volvo, Stellantis, gruppo VW, Kia, Hyundai, Toyota, Mercedes… o qualsiasi dispositivo con una posizione)',
     ed_name: 'Nome',
     ed_name_helper: 'Lasciare vuoto per usare il nome del dispositivo',
     ed_image: 'Immagine personalizzata',
-    ed_image_helper: 'Lasciare vuoto per la foto MyRenault (integrazione Renault Picture); altrimenti un URL, ad esempio /local/renault/clio.png',
+    ed_image_helper: 'Lasciare vuoto per l\'immagine del veicolo (Renault Picture, o l\'immagine della sua integrazione); altrimenti un URL, ad esempio /local/auto.png',
     ed_show_image: 'Immagine del veicolo',
-    ed_show_logo: 'Logo Renault',
+    ed_show_logo: 'Logo del marchio',
     ed_fuel_tank_capacity: 'Capacità del serbatoio',
     ed_fuel_tank_capacity_helper: 'Mostra l\'indicatore del carburante',
     ed_low_range: 'Soglia di autonomia bassa',
@@ -792,6 +847,7 @@ var RnI18n = {
     en_mileage: 'Chilometraggio',
     en_fuel_autonomy: 'Autonomia carburante',
     en_fuel_quantity: 'Quantità di carburante',
+    en_fuel_level: 'Livello carburante',
     en_battery_level: 'Livello della batteria',
     en_battery_autonomy: 'Autonomia batteria',
     en_location: 'Posizione',
@@ -842,6 +898,10 @@ var RnI18n = {
     vehicle: 'Voertuig',
     fuel_autonomy: 'Actieradius',
     fuel_quantity: 'Brandstof',
+    fuel_level: 'Brandstofniveau',
+    ed_buttons: 'Extra knoppen (schakelaars, knoppen, scripts, sloten, klimaat…)',
+    on_state: 'Aan',
+    off_state: 'Uit',
     battery_level: 'Batterij',
     battery_autonomy: 'Actieradius',
     mileage: 'Km-stand',
@@ -861,10 +921,10 @@ var RnI18n = {
     tyre_2: 'LA',
     tyre_3: 'RA',
     low_tyre_pressure: 'Lage bandenspanning',
-    card_name: 'Renault-kaart',
-    card_desc: 'Renault-voertuigkaart (actieradius, brandstof, batterij, locatie, acties) met optionele Orange Internet On the move-databundel',
-    mini_name: 'Renault-minikaart',
-    mini_desc: 'Compacte Renault-voertuigkaart (afbeelding, batterij, actieradius, laden) met een knop om de volledige kaart te tonen',
+    card_name: 'Voertuigkaart',
+    card_desc: 'Kaart voor verbonden voertuigen van elk merk (bereik, brandstof, batterij, laden, locatie, acties) met optioneel Orange Internet On the move databundel',
+    mini_name: 'Voertuig-minikaart',
+    mini_desc: 'Compacte voertuigkaart (afbeelding, batterij, bereik, laden) met een knop om de volledige kaart te tonen',
     location: 'Locatie',
     updated: 'bijgewerkt {t}',
     confirm: 'Bevestigen?',
@@ -875,21 +935,24 @@ var RnI18n = {
     data_left: '{l} over van {t}',
     renews_on: 'Wordt verlengd op {d}',
     expires_on: 'Verloopt op {d}',
+    services: 'Verbonden diensten',
+    offline: 'Offline',
+    services_inactive: 'Inactief',
     days_left: '{n} d',
     expired: 'Verlopen',
     unit_gb: 'GB',
     unit_mb: 'MB',
-    no_vehicle: 'Geen Renault-voertuig gevonden',
+    no_vehicle: 'Geen voertuig gevonden',
     zoom_in: 'Volledige kaart tonen',
     zoom_out: 'Terug naar de compacte weergave',
     ed_device_id: 'Voertuig',
-    ed_device_id_helper: 'Apparaat van de Renault-integratie',
+    ed_device_id_helper: 'Het apparaat van het voertuig (Renault, Tesla, Volvo, Stellantis, VW-groep, Kia, Hyundai, Toyota, Mercedes… of elk apparaat met een locatie)',
     ed_name: 'Naam',
     ed_name_helper: 'Leeg laten om de apparaatnaam te gebruiken',
     ed_image: 'Aangepaste afbeelding',
-    ed_image_helper: 'Leeg laten voor de MyRenault-foto (Renault Picture-integratie); anders een URL, bijvoorbeeld /local/renault/clio.png',
+    ed_image_helper: 'Leeg laten voor de afbeelding van het voertuig (Renault Picture, of de afbeelding van zijn integratie); anders een URL, bijvoorbeeld /local/auto.png',
     ed_show_image: 'Afbeelding van het voertuig',
-    ed_show_logo: 'Renault-logo',
+    ed_show_logo: 'Merklogo',
     ed_fuel_tank_capacity: 'Inhoud van de brandstoftank',
     ed_fuel_tank_capacity_helper: 'Toont de brandstofmeter',
     ed_low_range: 'Drempel lage actieradius',
@@ -910,6 +973,7 @@ var RnI18n = {
     en_mileage: 'Kilometerstand',
     en_fuel_autonomy: 'Actieradius brandstof',
     en_fuel_quantity: 'Hoeveelheid brandstof',
+    en_fuel_level: 'Brandstofniveau',
     en_battery_level: 'Batterijniveau',
     en_battery_autonomy: 'Actieradius batterij',
     en_location: 'Locatie',
@@ -960,6 +1024,10 @@ var RnI18n = {
     vehicle: 'Veículo',
     fuel_autonomy: 'Autonomia',
     fuel_quantity: 'Combustível',
+    fuel_level: 'Nível de combustível',
+    ed_buttons: 'Botões adicionais (interruptores, botões, scripts, fechaduras, climatização…)',
+    on_state: 'Ligado',
+    off_state: 'Desligado',
     battery_level: 'Bateria',
     battery_autonomy: 'Autonomia',
     mileage: 'Quilómetros',
@@ -979,10 +1047,10 @@ var RnI18n = {
     tyre_2: 'TE',
     tyre_3: 'TD',
     low_tyre_pressure: 'Pressão dos pneus baixa',
-    card_name: 'Cartão Renault',
-    card_desc: 'Cartão de veículo Renault (autonomia, combustível, bateria, localização, ações) com plano de dados Orange Internet On the move opcional',
-    mini_name: 'Minicartão Renault',
-    mini_desc: 'Cartão compacto de veículo Renault (imagem, bateria, autonomia, carregamento) com um botão para mostrar o cartão completo',
+    card_name: 'Cartão de veículo',
+    card_desc: 'Cartão de veículo conectado de qualquer marca (autonomia, combustível, bateria, carregamento, localização, ações) com plano de dados Orange Internet On the move opcional',
+    mini_name: 'Minicartão de veículo',
+    mini_desc: 'Cartão compacto de veículo (imagem, bateria, autonomia, carregamento) com um botão para mostrar o cartão completo',
     location: 'Localização',
     updated: 'atualizado {t}',
     confirm: 'Confirmar?',
@@ -993,21 +1061,24 @@ var RnI18n = {
     data_left: '{l} restantes de {t}',
     renews_on: 'Renova a {d}',
     expires_on: 'Expira a {d}',
+    services: 'Serviços conectados',
+    offline: 'Offline',
+    services_inactive: 'Inativos',
     days_left: '{n} d',
     expired: 'Expirado',
     unit_gb: 'GB',
     unit_mb: 'MB',
-    no_vehicle: 'Nenhum veículo Renault encontrado',
+    no_vehicle: 'Nenhum veículo encontrado',
     zoom_in: 'Mostrar o cartão completo',
     zoom_out: 'Voltar à vista compacta',
     ed_device_id: 'Veículo',
-    ed_device_id_helper: 'Dispositivo da integração Renault',
+    ed_device_id_helper: 'O dispositivo do veículo (Renault, Tesla, Volvo, Stellantis, grupo VW, Kia, Hyundai, Toyota, Mercedes… ou qualquer dispositivo com localização)',
     ed_name: 'Nome',
     ed_name_helper: 'Deixar vazio para usar o nome do dispositivo',
     ed_image: 'Imagem personalizada',
-    ed_image_helper: 'Deixar vazio para a fotografia MyRenault (integração Renault Picture); caso contrário, um URL, por exemplo /local/renault/clio.png',
+    ed_image_helper: 'Deixe vazio para a imagem do veículo (Renault Picture, ou a imagem da sua integração); caso contrário um URL, por exemplo /local/carro.png',
     ed_show_image: 'Imagem do veículo',
-    ed_show_logo: 'Logótipo Renault',
+    ed_show_logo: 'Logótipo da marca',
     ed_fuel_tank_capacity: 'Capacidade do depósito',
     ed_fuel_tank_capacity_helper: 'Mostra o indicador de combustível',
     ed_low_range: 'Limite de autonomia baixa',
@@ -1028,6 +1099,7 @@ var RnI18n = {
     en_mileage: 'Quilometragem',
     en_fuel_autonomy: 'Autonomia de combustível',
     en_fuel_quantity: 'Quantidade de combustível',
+    en_fuel_level: 'Nível de combustível',
     en_battery_level: 'Nível da bateria',
     en_battery_autonomy: 'Autonomia da bateria',
     en_location: 'Localização',
@@ -1078,6 +1150,10 @@ var RnI18n = {
     vehicle: 'Pojazd',
     fuel_autonomy: 'Zasięg',
     fuel_quantity: 'Paliwo',
+    fuel_level: 'Poziom paliwa',
+    ed_buttons: 'Dodatkowe przyciski (przełączniki, przyciski, skrypty, zamki, klimatyzacja…)',
+    on_state: 'Włączone',
+    off_state: 'Wyłączone',
     battery_level: 'Akumulator',
     battery_autonomy: 'Zasięg',
     mileage: 'Przebieg',
@@ -1097,10 +1173,10 @@ var RnI18n = {
     tyre_2: 'LT',
     tyre_3: 'PT',
     low_tyre_pressure: 'Niskie ciśnienie w oponach',
-    card_name: 'Karta Renault',
-    card_desc: 'Karta pojazdu Renault (zasięg, paliwo, akumulator, lokalizacja, akcje) z opcjonalnym pakietem danych Orange Internet On the move',
-    mini_name: 'Mini karta Renault',
-    mini_desc: 'Kompaktowa karta pojazdu Renault (zdjęcie, akumulator, zasięg, ładowanie) z przyciskiem pokazującym pełną kartę',
+    card_name: 'Karta pojazdu',
+    card_desc: 'Karta połączonego pojazdu dowolnej marki (zasięg, paliwo, akumulator, ładowanie, lokalizacja, akcje) z opcjonalnym pakietem danych Orange Internet On the move',
+    mini_name: 'Minikarta pojazdu',
+    mini_desc: 'Kompaktowa karta pojazdu (zdjęcie, akumulator, zasięg, ładowanie) z przyciskiem pokazującym pełną kartę',
     location: 'Lokalizacja',
     updated: 'zaktualizowano {t}',
     confirm: 'Potwierdzić?',
@@ -1111,21 +1187,24 @@ var RnI18n = {
     data_left: 'Pozostało {l} z {t}',
     renews_on: 'Odnowienie: {d}',
     expires_on: 'Wygasa: {d}',
+    services: 'Usługi online',
+    offline: 'Offline',
+    services_inactive: 'Nieaktywne',
     days_left: '{n} dn.',
     expired: 'Wygasł',
     unit_gb: 'GB',
     unit_mb: 'MB',
-    no_vehicle: 'Nie znaleziono pojazdu Renault',
+    no_vehicle: 'Nie znaleziono pojazdu',
     zoom_in: 'Pokaż pełną kartę',
     zoom_out: 'Wróć do widoku kompaktowego',
     ed_device_id: 'Pojazd',
-    ed_device_id_helper: 'Urządzenie z integracji Renault',
+    ed_device_id_helper: 'Urządzenie pojazdu (Renault, Tesla, Volvo, Stellantis, grupa VW, Kia, Hyundai, Toyota, Mercedes… lub dowolne urządzenie z lokalizacją)',
     ed_name: 'Nazwa',
     ed_name_helper: 'Pozostaw puste, aby użyć nazwy urządzenia',
     ed_image: 'Własny obraz',
-    ed_image_helper: 'Pozostaw puste, aby użyć zdjęcia MyRenault (integracja Renault Picture); w przeciwnym razie adres URL, na przykład /local/renault/clio.png',
+    ed_image_helper: 'Pozostaw puste dla zdjęcia pojazdu (Renault Picture lub obraz z jego integracji); w przeciwnym razie URL, na przykład /local/auto.png',
     ed_show_image: 'Obraz pojazdu',
-    ed_show_logo: 'Logo Renault',
+    ed_show_logo: 'Logo marki',
     ed_fuel_tank_capacity: 'Pojemność zbiornika paliwa',
     ed_fuel_tank_capacity_helper: 'Pokazuje wskaźnik paliwa',
     ed_low_range: 'Próg niskiego zasięgu',
@@ -1146,6 +1225,7 @@ var RnI18n = {
     en_mileage: 'Przebieg',
     en_fuel_autonomy: 'Zasięg na paliwie',
     en_fuel_quantity: 'Ilość paliwa',
+    en_fuel_level: 'Poziom paliwa',
     en_battery_level: 'Poziom naładowania akumulatora',
     en_battery_autonomy: 'Zasięg na akumulatorze',
     en_location: 'Lokalizacja',
@@ -1196,6 +1276,10 @@ var RnI18n = {
     vehicle: 'Vehicul',
     fuel_autonomy: 'Autonomie',
     fuel_quantity: 'Combustibil',
+    fuel_level: 'Nivel combustibil',
+    ed_buttons: 'Butoane suplimentare (întrerupătoare, butoane, scripturi, încuietori, climatizare…)',
+    on_state: 'Pornit',
+    off_state: 'Oprit',
     battery_level: 'Baterie',
     battery_autonomy: 'Autonomie',
     mileage: 'Kilometraj',
@@ -1215,10 +1299,10 @@ var RnI18n = {
     tyre_2: 'SS',
     tyre_3: 'SD',
     low_tyre_pressure: 'Presiune scăzută în anvelope',
-    card_name: 'Card Renault',
-    card_desc: 'Card pentru vehiculul Renault (autonomie, carburant, baterie, locație, acțiuni) cu abonament de date Orange Internet On the move opțional',
-    mini_name: 'Mini card Renault',
-    mini_desc: 'Card compact pentru vehiculul Renault (imagine, baterie, autonomie, încărcare) cu un buton pentru afișarea cardului complet',
+    card_name: 'Card vehicul',
+    card_desc: 'Card pentru vehicul conectat de orice marcă (autonomie, combustibil, baterie, încărcare, locație, acțiuni) cu abonament de date Orange Internet On the move opțional',
+    mini_name: 'Mini card vehicul',
+    mini_desc: 'Card compact de vehicul (imagine, baterie, autonomie, încărcare) cu un buton pentru afișarea cardului complet',
     location: 'Locație',
     updated: 'actualizat {t}',
     confirm: 'Confirmați?',
@@ -1229,21 +1313,24 @@ var RnI18n = {
     data_left: 'Rămas: {l} din {t}',
     renews_on: 'Se reînnoiește pe {d}',
     expires_on: 'Expiră pe {d}',
+    services: 'Servicii conectate',
+    offline: 'Offline',
+    services_inactive: 'Inactive',
     days_left: '{n} z',
     expired: 'Expirat',
     unit_gb: 'GB',
     unit_mb: 'MB',
-    no_vehicle: 'Niciun vehicul Renault găsit',
+    no_vehicle: 'Niciun vehicul găsit',
     zoom_in: 'Afișează cardul complet',
     zoom_out: 'Înapoi la vizualizarea compactă',
     ed_device_id: 'Vehicul',
-    ed_device_id_helper: 'Dispozitiv din integrarea Renault',
+    ed_device_id_helper: 'Dispozitivul vehiculului (Renault, Tesla, Volvo, Stellantis, grupul VW, Kia, Hyundai, Toyota, Mercedes… sau orice dispozitiv cu locație)',
     ed_name: 'Nume',
     ed_name_helper: 'Lăsați gol pentru a folosi numele dispozitivului',
     ed_image: 'Imagine personalizată',
-    ed_image_helper: 'Lăsați gol pentru fotografia MyRenault (integrarea Renault Picture); altfel un URL, de exemplu /local/renault/clio.png',
+    ed_image_helper: 'Lăsați gol pentru imaginea vehiculului (Renault Picture sau imaginea integrării sale); altfel un URL, de exemplu /local/masina.png',
     ed_show_image: 'Imaginea vehiculului',
-    ed_show_logo: 'Logo Renault',
+    ed_show_logo: 'Logo-ul mărcii',
     ed_fuel_tank_capacity: 'Capacitatea rezervorului',
     ed_fuel_tank_capacity_helper: 'Afișează indicatorul de combustibil',
     ed_low_range: 'Prag de autonomie redusă',
@@ -1264,6 +1351,7 @@ var RnI18n = {
     en_mileage: 'Kilometraj',
     en_fuel_autonomy: 'Autonomie combustibil',
     en_fuel_quantity: 'Cantitate de combustibil',
+    en_fuel_level: 'Nivel combustibil',
     en_battery_level: 'Nivelul bateriei',
     en_battery_autonomy: 'Autonomie baterie',
     en_location: 'Locație',
@@ -1314,6 +1402,10 @@ var RnI18n = {
     vehicle: 'Køretøj',
     fuel_autonomy: 'Rækkevidde',
     fuel_quantity: 'Brændstof',
+    fuel_level: 'Brændstofniveau',
+    ed_buttons: 'Ekstra knapper (kontakter, knapper, scripts, låse, klima…)',
+    on_state: 'Tændt',
+    off_state: 'Slukket',
     battery_level: 'Batteri',
     battery_autonomy: 'Rækkevidde',
     mileage: 'Kilometertal',
@@ -1333,10 +1425,10 @@ var RnI18n = {
     tyre_2: 'VB',
     tyre_3: 'HB',
     low_tyre_pressure: 'Lavt dæktryk',
-    card_name: 'Renault-kort',
-    card_desc: 'Renault-bilkort (rækkevidde, brændstof, batteri, position, handlinger) med valgfrit Orange Internet On the move-dataabonnement',
-    mini_name: 'Renault-minikort',
-    mini_desc: 'Kompakt Renault-bilkort (billede, batteri, rækkevidde, opladning) med en knap til at vise hele kortet',
+    card_name: 'Køretøjskort',
+    card_desc: 'Kort for forbundne køretøjer af alle mærker (rækkevidde, brændstof, batteri, opladning, placering, handlinger) med valgfrit Orange Internet On the move dataabonnement',
+    mini_name: 'Køretøjs-minikort',
+    mini_desc: 'Kompakt køretøjskort (billede, batteri, rækkevidde, opladning) med en knap til at vise hele kortet',
     location: 'Placering',
     updated: 'opdateret {t}',
     confirm: 'Bekræft?',
@@ -1347,21 +1439,24 @@ var RnI18n = {
     data_left: '{l} tilbage af {t}',
     renews_on: 'Fornyes {d}',
     expires_on: 'Udløber {d}',
+    services: 'Forbundne tjenester',
+    offline: 'Offline',
+    services_inactive: 'Inaktive',
     days_left: '{n} d.',
     expired: 'Udløbet',
     unit_gb: 'GB',
     unit_mb: 'MB',
-    no_vehicle: 'Intet Renault-køretøj fundet',
+    no_vehicle: 'Intet køretøj fundet',
     zoom_in: 'Vis hele kortet',
     zoom_out: 'Tilbage til kompakt visning',
     ed_device_id: 'Køretøj',
-    ed_device_id_helper: 'Enhed fra Renault-integrationen',
+    ed_device_id_helper: 'Køretøjets enhed (Renault, Tesla, Volvo, Stellantis, VW-koncernen, Kia, Hyundai, Toyota, Mercedes… eller enhver enhed med placering)',
     ed_name: 'Navn',
     ed_name_helper: 'Lad feltet stå tomt for at bruge enhedens navn',
     ed_image: 'Eget billede',
-    ed_image_helper: 'Lad feltet stå tomt for MyRenault-billedet (integrationen Renault Picture); ellers en URL, for eksempel /local/renault/clio.png',
+    ed_image_helper: 'Lad stå tom for køretøjets billede (Renault Picture, eller billedet fra dets integration); ellers en URL, for eksempel /local/bil.png',
     ed_show_image: 'Billede af køretøjet',
-    ed_show_logo: 'Renault-logo',
+    ed_show_logo: 'Mærkelogo',
     ed_fuel_tank_capacity: 'Tankkapacitet',
     ed_fuel_tank_capacity_helper: 'Viser brændstofmåleren',
     ed_low_range: 'Grænse for lav rækkevidde',
@@ -1382,6 +1477,7 @@ var RnI18n = {
     en_mileage: 'Kilometertal',
     en_fuel_autonomy: 'Rækkevidde på brændstof',
     en_fuel_quantity: 'Brændstofmængde',
+    en_fuel_level: 'Brændstofniveau',
     en_battery_level: 'Batteriniveau',
     en_battery_autonomy: 'Rækkevidde på batteri',
     en_location: 'Placering',
@@ -1432,6 +1528,10 @@ var RnI18n = {
     vehicle: 'Fordon',
     fuel_autonomy: 'Räckvidd',
     fuel_quantity: 'Bränsle',
+    fuel_level: 'Bränslenivå',
+    ed_buttons: 'Extra knappar (brytare, knappar, skript, lås, klimat…)',
+    on_state: 'På',
+    off_state: 'Av',
     battery_level: 'Batteri',
     battery_autonomy: 'Räckvidd',
     mileage: 'Mätarställning',
@@ -1451,10 +1551,10 @@ var RnI18n = {
     tyre_2: 'VB',
     tyre_3: 'HB',
     low_tyre_pressure: 'Lågt däcktryck',
-    card_name: 'Renault-kort',
-    card_desc: 'Renault-bilkort (räckvidd, bränsle, batteri, position, åtgärder) med valfritt Orange Internet On the move-dataabonnemang',
-    mini_name: 'Renault-minikort',
-    mini_desc: 'Kompakt Renault-bilkort (bild, batteri, räckvidd, laddning) med en knapp för att visa hela kortet',
+    card_name: 'Fordonskort',
+    card_desc: 'Kort för uppkopplade fordon av alla märken (räckvidd, bränsle, batteri, laddning, plats, åtgärder) med valfritt Orange Internet On the move dataabonnemang',
+    mini_name: 'Fordons-minikort',
+    mini_desc: 'Kompakt fordonskort (bild, batteri, räckvidd, laddning) med en knapp för att visa hela kortet',
     location: 'Plats',
     updated: 'uppdaterad {t}',
     confirm: 'Bekräfta?',
@@ -1465,21 +1565,24 @@ var RnI18n = {
     data_left: '{l} kvar av {t}',
     renews_on: 'Förnyas {d}',
     expires_on: 'Upphör {d}',
+    services: 'Uppkopplade tjänster',
+    offline: 'Offline',
+    services_inactive: 'Inaktiva',
     days_left: '{n} d',
     expired: 'Utgånget',
     unit_gb: 'GB',
     unit_mb: 'MB',
-    no_vehicle: 'Inget Renault-fordon hittades',
+    no_vehicle: 'Inget fordon hittades',
     zoom_in: 'Visa hela kortet',
     zoom_out: 'Tillbaka till kompakt vy',
     ed_device_id: 'Fordon',
-    ed_device_id_helper: 'Enhet från Renault-integrationen',
+    ed_device_id_helper: 'Fordonets enhet (Renault, Tesla, Volvo, Stellantis, VW-koncernen, Kia, Hyundai, Toyota, Mercedes… eller vilken enhet som helst med plats)',
     ed_name: 'Namn',
     ed_name_helper: 'Lämna tomt för att använda enhetens namn',
     ed_image: 'Egen bild',
-    ed_image_helper: 'Lämna tomt för MyRenault-fotot (integrationen Renault Picture); annars en URL, till exempel /local/renault/clio.png',
+    ed_image_helper: 'Lämna tomt för fordonets bild (Renault Picture, eller bilden från dess integration); annars en URL, till exempel /local/bil.png',
     ed_show_image: 'Fordonsbild',
-    ed_show_logo: 'Renault-logotyp',
+    ed_show_logo: 'Märkeslogotyp',
     ed_fuel_tank_capacity: 'Tankvolym',
     ed_fuel_tank_capacity_helper: 'Visar bränslemätaren',
     ed_low_range: 'Gräns för låg räckvidd',
@@ -1500,6 +1603,7 @@ var RnI18n = {
     en_mileage: 'Mätarställning',
     en_fuel_autonomy: 'Räckvidd på bränsle',
     en_fuel_quantity: 'Bränslemängd',
+    en_fuel_level: 'Bränslenivå',
     en_battery_level: 'Batterinivå',
     en_battery_autonomy: 'Räckvidd på batteri',
     en_location: 'Plats',
@@ -1550,6 +1654,10 @@ var RnI18n = {
     vehicle: 'Автомобил',
     fuel_autonomy: 'Пробег',
     fuel_quantity: 'Гориво',
+    fuel_level: 'Ниво на горивото',
+    ed_buttons: 'Допълнителни бутони (ключове, бутони, скриптове, ключалки, климатик…)',
+    on_state: 'Вкл.',
+    off_state: 'Изкл.',
     battery_level: 'Батерия',
     battery_autonomy: 'Пробег',
     mileage: 'Километраж',
@@ -1569,10 +1677,10 @@ var RnI18n = {
     tyre_2: 'ЗЛ',
     tyre_3: 'ЗД',
     low_tyre_pressure: 'Ниско налягане в гумите',
-    card_name: 'Карта Renault',
-    card_desc: 'Карта на автомобил Renault (пробег, гориво, батерия, местоположение, действия) с незадължителен план за данни Orange Internet On the move',
-    mini_name: 'Мини карта Renault',
-    mini_desc: 'Компактна карта на автомобил Renault (снимка, батерия, пробег, зареждане) с бутон за показване на цялата карта',
+    card_name: 'Карта на превозно средство',
+    card_desc: 'Карта на свързано превозно средство от всяка марка (пробег до празен резервоар, гориво, батерия, зареждане, местоположение, действия) с незадължителен план за данни Orange Internet On the move',
+    mini_name: 'Мини карта на превозно средство',
+    mini_desc: 'Компактна карта на превозно средство (снимка, батерия, пробег, зареждане) с бутон за показване на пълната карта',
     location: 'Местоположение',
     updated: 'обновено {t}',
     confirm: 'Потвърди?',
@@ -1583,21 +1691,24 @@ var RnI18n = {
     data_left: 'Остават {l} от {t}',
     renews_on: 'Подновява се на {d}',
     expires_on: 'Изтича на {d}',
+    services: 'Свързани услуги',
+    offline: 'Офлайн',
+    services_inactive: 'Неактивни',
     days_left: '{n} д',
     expired: 'Изтекъл',
     unit_gb: 'GB',
     unit_mb: 'MB',
-    no_vehicle: 'Не е намерен автомобил Renault',
+    no_vehicle: 'Не е намерено превозно средство',
     zoom_in: 'Покажи цялата карта',
     zoom_out: 'Обратно към компактния изглед',
     ed_device_id: 'Автомобил',
-    ed_device_id_helper: 'Устройство от интеграцията Renault',
+    ed_device_id_helper: 'Устройството на превозното средство (Renault, Tesla, Volvo, Stellantis, група VW, Kia, Hyundai, Toyota, Mercedes… или всяко устройство с местоположение)',
     ed_name: 'Име',
     ed_name_helper: 'Оставете празно, за да се използва името на устройството',
     ed_image: 'Собствено изображение',
-    ed_image_helper: 'Оставете празно за снимката от MyRenault (интеграция Renault Picture); иначе URL адрес, например /local/renault/clio.png',
+    ed_image_helper: 'Оставете празно за снимката на превозното средство (Renault Picture или изображението от интеграцията му); иначе URL, например /local/kola.png',
     ed_show_image: 'Изображение на автомобила',
-    ed_show_logo: 'Лого на Renault',
+    ed_show_logo: 'Лого на марката',
     ed_fuel_tank_capacity: 'Обем на резервоара',
     ed_fuel_tank_capacity_helper: 'Показва индикатора за гориво',
     ed_low_range: 'Праг за малък пробег',
@@ -1618,6 +1729,7 @@ var RnI18n = {
     en_mileage: 'Километраж',
     en_fuel_autonomy: 'Пробег с гориво',
     en_fuel_quantity: 'Количество гориво',
+    en_fuel_level: 'Ниво на горивото',
     en_battery_level: 'Ниво на батерията',
     en_battery_autonomy: 'Пробег с батерията',
     en_location: 'Местоположение',
@@ -1668,6 +1780,10 @@ var RnI18n = {
     vehicle: 'Автомобиль',
     fuel_autonomy: 'Запас хода',
     fuel_quantity: 'Топливо',
+    fuel_level: 'Уровень топлива',
+    ed_buttons: 'Дополнительные кнопки (выключатели, кнопки, скрипты, замки, климат…)',
+    on_state: 'Вкл.',
+    off_state: 'Выкл.',
     battery_level: 'Батарея',
     battery_autonomy: 'Запас хода',
     mileage: 'Пробег',
@@ -1687,10 +1803,10 @@ var RnI18n = {
     tyre_2: 'ЗЛ',
     tyre_3: 'ЗП',
     low_tyre_pressure: 'Низкое давление в шинах',
-    card_name: 'Карточка Renault',
-    card_desc: 'Карточка автомобиля Renault (запас хода, топливо, батарея, местоположение, действия) с необязательным тарифом Orange Internet On the move',
-    mini_name: 'Мини-карточка Renault',
-    mini_desc: 'Компактная карточка автомобиля Renault (фото, батарея, запас хода, зарядка) с кнопкой для показа полной карточки',
+    card_name: 'Карточка автомобиля',
+    card_desc: 'Карточка подключённого автомобиля любой марки (запас хода, топливо, батарея, зарядка, местоположение, действия) с дополнительным тарифом Orange Internet On the move',
+    mini_name: 'Мини-карточка автомобиля',
+    mini_desc: 'Компактная карточка автомобиля (фото, батарея, запас хода, зарядка) с кнопкой для показа полной карточки',
     location: 'Местоположение',
     updated: 'обновлено {t}',
     confirm: 'Уверены?',
@@ -1701,21 +1817,24 @@ var RnI18n = {
     data_left: 'Осталось {l} из {t}',
     renews_on: 'Продление {d}',
     expires_on: 'Истекает {d}',
+    services: 'Онлайн-сервисы',
+    offline: 'Не в сети',
+    services_inactive: 'Неактивны',
     days_left: '{n} дн.',
     expired: 'Истёк',
     unit_gb: 'GB',
     unit_mb: 'MB',
-    no_vehicle: 'Автомобиль Renault не найден',
+    no_vehicle: 'Автомобиль не найден',
     zoom_in: 'Показать полную карточку',
     zoom_out: 'Вернуться к компактному виду',
     ed_device_id: 'Автомобиль',
-    ed_device_id_helper: 'Устройство из интеграции Renault',
+    ed_device_id_helper: 'Устройство автомобиля (Renault, Tesla, Volvo, Stellantis, группа VW, Kia, Hyundai, Toyota, Mercedes… или любое устройство с местоположением)',
     ed_name: 'Название',
     ed_name_helper: 'Оставьте пустым, чтобы использовать название устройства',
     ed_image: 'Своё изображение',
-    ed_image_helper: 'Оставьте пустым для фото MyRenault (интеграция Renault Picture); иначе URL, например /local/renault/clio.png',
+    ed_image_helper: 'Оставьте пустым для фото автомобиля (Renault Picture или изображение из его интеграции); иначе URL, например /local/car.png',
     ed_show_image: 'Изображение автомобиля',
-    ed_show_logo: 'Логотип Renault',
+    ed_show_logo: 'Логотип марки',
     ed_fuel_tank_capacity: 'Объём топливного бака',
     ed_fuel_tank_capacity_helper: 'Показывает указатель уровня топлива',
     ed_low_range: 'Порог малого запаса хода',
@@ -1736,6 +1855,7 @@ var RnI18n = {
     en_mileage: 'Пробег',
     en_fuel_autonomy: 'Запас хода на топливе',
     en_fuel_quantity: 'Количество топлива',
+    en_fuel_level: 'Уровень топлива',
     en_battery_level: 'Уровень заряда батареи',
     en_battery_autonomy: 'Запас хода на батарее',
     en_location: 'Местоположение',
@@ -1786,6 +1906,10 @@ var RnI18n = {
     vehicle: 'Автомобіль',
     fuel_autonomy: 'Запас ходу',
     fuel_quantity: 'Пальне',
+    fuel_level: 'Рівень пального',
+    ed_buttons: 'Додаткові кнопки (вимикачі, кнопки, скрипти, замки, клімат…)',
+    on_state: 'Увімк.',
+    off_state: 'Вимк.',
     battery_level: 'Батарея',
     battery_autonomy: 'Запас ходу',
     mileage: 'Пробіг',
@@ -1805,10 +1929,10 @@ var RnI18n = {
     tyre_2: 'ЗЛ',
     tyre_3: 'ЗП',
     low_tyre_pressure: 'Низький тиск у шинах',
-    card_name: 'Картка Renault',
-    card_desc: 'Картка автомобіля Renault (запас ходу, пальне, батарея, місцезнаходження, дії) з необов’язковим тарифом Orange Internet On the move',
-    mini_name: 'Міні-картка Renault',
-    mini_desc: 'Компактна картка автомобіля Renault (фото, батарея, запас ходу, заряджання) з кнопкою для показу повної картки',
+    card_name: 'Картка автомобіля',
+    card_desc: 'Картка підключеного автомобіля будь-якої марки (запас ходу, пальне, батарея, заряджання, розташування, дії) з додатковим тарифом Orange Internet On the move',
+    mini_name: 'Міні-картка автомобіля',
+    mini_desc: 'Компактна картка автомобіля (фото, батарея, запас ходу, заряджання) з кнопкою для показу повної картки',
     location: 'Розташування',
     updated: 'оновлено {t}',
     confirm: 'Впевнені?',
@@ -1819,21 +1943,24 @@ var RnI18n = {
     data_left: 'Залишилось {l} з {t}',
     renews_on: 'Поновлення {d}',
     expires_on: 'Спливає {d}',
+    services: 'Онлайн-сервіси',
+    offline: 'Не в мережі',
+    services_inactive: 'Неактивні',
     days_left: '{n} дн.',
     expired: 'Сплив',
     unit_gb: 'GB',
     unit_mb: 'MB',
-    no_vehicle: 'Автомобіль Renault не знайдено',
+    no_vehicle: 'Автомобіль не знайдено',
     zoom_in: 'Показати повну картку',
     zoom_out: 'Повернутися до компактного вигляду',
     ed_device_id: 'Автомобіль',
-    ed_device_id_helper: 'Пристрій з інтеграції Renault',
+    ed_device_id_helper: 'Пристрій автомобіля (Renault, Tesla, Volvo, Stellantis, група VW, Kia, Hyundai, Toyota, Mercedes… або будь-який пристрій з розташуванням)',
     ed_name: 'Назва',
     ed_name_helper: 'Залиште порожнім, щоб використати назву пристрою',
     ed_image: 'Власне зображення',
-    ed_image_helper: 'Залиште порожнім для фото MyRenault (інтеграція Renault Picture); інакше URL, наприклад /local/renault/clio.png',
+    ed_image_helper: 'Залиште порожнім для фото автомобіля (Renault Picture або зображення з його інтеграції); інакше URL, наприклад /local/car.png',
     ed_show_image: 'Зображення автомобіля',
-    ed_show_logo: 'Логотип Renault',
+    ed_show_logo: 'Логотип марки',
     ed_fuel_tank_capacity: 'Об’єм паливного бака',
     ed_fuel_tank_capacity_helper: 'Показує покажчик рівня пального',
     ed_low_range: 'Поріг малого запасу ходу',
@@ -1854,6 +1981,7 @@ var RnI18n = {
     en_mileage: 'Пробіг',
     en_fuel_autonomy: 'Запас ходу на пальному',
     en_fuel_quantity: 'Кількість пального',
+    en_fuel_level: 'Рівень пального',
     en_battery_level: 'Рівень заряду батареї',
     en_battery_autonomy: 'Запас ходу на батареї',
     en_location: 'Розташування',
@@ -1904,6 +2032,10 @@ var RnI18n = {
     vehicle: 'Jármű',
     fuel_autonomy: 'Hatótáv',
     fuel_quantity: 'Üzemanyag',
+    fuel_level: 'Üzemanyagszint',
+    ed_buttons: 'További gombok (kapcsolók, gombok, szkriptek, zárak, klíma…)',
+    on_state: 'Be',
+    off_state: 'Ki',
     battery_level: 'Akku',
     battery_autonomy: 'Hatótáv',
     mileage: 'Futott km',
@@ -1923,10 +2055,10 @@ var RnI18n = {
     tyre_2: 'BH',
     tyre_3: 'JH',
     low_tyre_pressure: 'Alacsony keréknyomás',
-    card_name: 'Renault kártya',
-    card_desc: 'Renault járműkártya (hatótáv, üzemanyag, akkumulátor, helyzet, műveletek) opcionális Orange Internet On the move adatcsomaggal',
-    mini_name: 'Renault mini kártya',
-    mini_desc: 'Kompakt Renault járműkártya (kép, akkumulátor, hatótáv, töltés) a teljes kártyát megjelenítő gombbal',
+    card_name: 'Járműkártya',
+    card_desc: 'Bármely márkájú csatlakoztatott jármű kártyája (hatótáv, üzemanyag, akkumulátor, töltés, helyzet, műveletek) opcionális Orange Internet On the move adatcsomaggal',
+    mini_name: 'Jármű minikártya',
+    mini_desc: 'Kompakt járműkártya (kép, akkumulátor, hatótáv, töltés) a teljes kártya megjelenítésére szolgáló gombbal',
     location: 'Hely',
     updated: 'frissítve: {t}',
     confirm: 'Megerősíti?',
@@ -1937,21 +2069,24 @@ var RnI18n = {
     data_left: 'Hátralévő: {l} / {t}',
     renews_on: 'Megújul: {d}',
     expires_on: 'Lejár: {d}',
+    services: 'Online szolgáltatások',
+    offline: 'Offline',
+    services_inactive: 'Inaktív',
     days_left: '{n} nap',
     expired: 'Lejárt',
     unit_gb: 'GB',
     unit_mb: 'MB',
-    no_vehicle: 'Nem található Renault jármű',
+    no_vehicle: 'Nem található jármű',
     zoom_in: 'Teljes kártya megjelenítése',
     zoom_out: 'Vissza a kompakt nézethez',
     ed_device_id: 'Jármű',
-    ed_device_id_helper: 'Eszköz a Renault integrációból',
+    ed_device_id_helper: 'A jármű eszköze (Renault, Tesla, Volvo, Stellantis, VW-csoport, Kia, Hyundai, Toyota, Mercedes… vagy bármely helyadattal rendelkező eszköz)',
     ed_name: 'Név',
     ed_name_helper: 'Hagyja üresen az eszköz nevének használatához',
     ed_image: 'Egyéni kép',
-    ed_image_helper: 'Hagyja üresen a MyRenault fotóhoz (Renault Picture integráció); egyébként egy URL, például /local/renault/clio.png',
+    ed_image_helper: 'Hagyja üresen a jármű képéhez (Renault Picture vagy az integráció által adott kép); egyébként egy URL, például /local/auto.png',
     ed_show_image: 'Jármű képe',
-    ed_show_logo: 'Renault logó',
+    ed_show_logo: 'Márkalogó',
     ed_fuel_tank_capacity: 'Üzemanyagtartály térfogata',
     ed_fuel_tank_capacity_helper: 'Megjeleníti az üzemanyagszint-jelzőt',
     ed_low_range: 'Alacsony hatótáv küszöbe',
@@ -1972,6 +2107,7 @@ var RnI18n = {
     en_mileage: 'Futásteljesítmény',
     en_fuel_autonomy: 'Üzemanyagos hatótáv',
     en_fuel_quantity: 'Üzemanyag mennyisége',
+    en_fuel_level: 'Üzemanyagszint',
     en_battery_level: 'Akkumulátor töltöttsége',
     en_battery_autonomy: 'Akkumulátoros hatótáv',
     en_location: 'Hely',
@@ -2022,6 +2158,10 @@ var RnI18n = {
     vehicle: 'Vozidlo',
     fuel_autonomy: 'Dojazd',
     fuel_quantity: 'Palivo',
+    fuel_level: 'Hladina paliva',
+    ed_buttons: 'Ďalšie tlačidlá (spínače, tlačidlá, skripty, zámky, klimatizácia…)',
+    on_state: 'Zap.',
+    off_state: 'Vyp.',
     battery_level: 'Batéria',
     battery_autonomy: 'Dojazd',
     mileage: 'Najazdené km',
@@ -2041,10 +2181,10 @@ var RnI18n = {
     tyre_2: 'ĽZ',
     tyre_3: 'PZ',
     low_tyre_pressure: 'Nízky tlak v pneumatikách',
-    card_name: 'Karta Renault',
-    card_desc: 'Karta vozidla Renault (dojazd, palivo, batéria, poloha, akcie) s voliteľným dátovým balíkom Orange Internet On the move',
-    mini_name: 'Mini karta Renault',
-    mini_desc: 'Kompaktná karta vozidla Renault (obrázok, batéria, dojazd, nabíjanie) s tlačidlom na zobrazenie celej karty',
+    card_name: 'Karta vozidla',
+    card_desc: 'Karta pripojeného vozidla akejkoľvek značky (dojazd, palivo, batéria, nabíjanie, poloha, akcie) s voliteľným dátovým balíkom Orange Internet On the move',
+    mini_name: 'Minikarta vozidla',
+    mini_desc: 'Kompaktná karta vozidla (obrázok, batéria, dojazd, nabíjanie) s tlačidlom na zobrazenie celej karty',
     location: 'Poloha',
     updated: 'aktualizované {t}',
     confirm: 'Potvrdiť?',
@@ -2055,21 +2195,24 @@ var RnI18n = {
     data_left: 'Zostáva {l} z {t}',
     renews_on: 'Obnovenie {d}',
     expires_on: 'Platí do {d}',
+    services: 'Pripojené služby',
+    offline: 'Offline',
+    services_inactive: 'Neaktívne',
     days_left: '{n} d',
     expired: 'Platnosť skončila',
     unit_gb: 'GB',
     unit_mb: 'MB',
-    no_vehicle: 'Nenašlo sa žiadne vozidlo Renault',
+    no_vehicle: 'Nenašlo sa žiadne vozidlo',
     zoom_in: 'Zobraziť celú kartu',
     zoom_out: 'Späť na kompaktné zobrazenie',
     ed_device_id: 'Vozidlo',
-    ed_device_id_helper: 'Zariadenie z integrácie Renault',
+    ed_device_id_helper: 'Zariadenie vozidla (Renault, Tesla, Volvo, Stellantis, skupina VW, Kia, Hyundai, Toyota, Mercedes… alebo akékoľvek zariadenie s polohou)',
     ed_name: 'Názov',
     ed_name_helper: 'Nechajte prázdne, ak chcete použiť názov zariadenia',
     ed_image: 'Vlastný obrázok',
-    ed_image_helper: 'Nechajte prázdne pre fotografiu MyRenault (integrácia Renault Picture); inak URL, napríklad /local/renault/clio.png',
+    ed_image_helper: 'Nechajte prázdne pre obrázok vozidla (Renault Picture alebo obrázok z jeho integrácie); inak URL, napríklad /local/auto.png',
     ed_show_image: 'Obrázok vozidla',
-    ed_show_logo: 'Logo Renault',
+    ed_show_logo: 'Logo značky',
     ed_fuel_tank_capacity: 'Objem palivovej nádrže',
     ed_fuel_tank_capacity_helper: 'Zobrazí ukazovateľ paliva',
     ed_low_range: 'Prah nízkeho dojazdu',
@@ -2090,6 +2233,7 @@ var RnI18n = {
     en_mileage: 'Najazdené km',
     en_fuel_autonomy: 'Dojazd na palivo',
     en_fuel_quantity: 'Množstvo paliva',
+    en_fuel_level: 'Hladina paliva',
     en_battery_level: 'Úroveň nabitia batérie',
     en_battery_autonomy: 'Dojazd na batériu',
     en_location: 'Poloha',
@@ -2140,6 +2284,10 @@ var RnI18n = {
     vehicle: 'Vozidlo',
     fuel_autonomy: 'Dojezd',
     fuel_quantity: 'Palivo',
+    fuel_level: 'Hladina paliva',
+    ed_buttons: 'Další tlačítka (spínače, tlačítka, skripty, zámky, klimatizace…)',
+    on_state: 'Zap.',
+    off_state: 'Vyp.',
     battery_level: 'Baterie',
     battery_autonomy: 'Dojezd',
     mileage: 'Najeto',
@@ -2159,10 +2307,10 @@ var RnI18n = {
     tyre_2: 'LZ',
     tyre_3: 'PZ',
     low_tyre_pressure: 'Nízký tlak v pneumatikách',
-    card_name: 'Karta Renault',
-    card_desc: 'Karta vozidla Renault (dojezd, palivo, baterie, poloha, akce) s volitelným datovým tarifem Orange Internet On the move',
-    mini_name: 'Mini karta Renault',
-    mini_desc: 'Kompaktní karta vozidla Renault (obrázek, baterie, dojezd, nabíjení) s tlačítkem pro zobrazení celé karty',
+    card_name: 'Karta vozidla',
+    card_desc: 'Karta připojeného vozidla jakékoli značky (dojezd, palivo, baterie, nabíjení, poloha, akce) s volitelným datovým tarifem Orange Internet On the move',
+    mini_name: 'Minikarta vozidla',
+    mini_desc: 'Kompaktní karta vozidla (obrázek, baterie, dojezd, nabíjení) s tlačítkem pro zobrazení celé karty',
     location: 'Poloha',
     updated: 'aktualizováno {t}',
     confirm: 'Potvrdit?',
@@ -2173,21 +2321,24 @@ var RnI18n = {
     data_left: 'Zbývá {l} z {t}',
     renews_on: 'Obnovení {d}',
     expires_on: 'Platnost do {d}',
+    services: 'Připojené služby',
+    offline: 'Offline',
+    services_inactive: 'Neaktivní',
     days_left: '{n} d',
     expired: 'Vypršelo',
     unit_gb: 'GB',
     unit_mb: 'MB',
-    no_vehicle: 'Nebylo nalezeno žádné vozidlo Renault',
+    no_vehicle: 'Nebylo nalezeno žádné vozidlo',
     zoom_in: 'Zobrazit celou kartu',
     zoom_out: 'Zpět na kompaktní zobrazení',
     ed_device_id: 'Vozidlo',
-    ed_device_id_helper: 'Zařízení z integrace Renault',
+    ed_device_id_helper: 'Zařízení vozidla (Renault, Tesla, Volvo, Stellantis, skupina VW, Kia, Hyundai, Toyota, Mercedes… nebo jakékoli zařízení s polohou)',
     ed_name: 'Název',
     ed_name_helper: 'Ponechte prázdné pro použití názvu zařízení',
     ed_image: 'Vlastní obrázek',
-    ed_image_helper: 'Ponechte prázdné pro fotografii MyRenault (integrace Renault Picture); jinak URL, například /local/renault/clio.png',
+    ed_image_helper: 'Nechte prázdné pro obrázek vozidla (Renault Picture nebo obrázek z jeho integrace); jinak URL, například /local/auto.png',
     ed_show_image: 'Obrázek vozidla',
-    ed_show_logo: 'Logo Renault',
+    ed_show_logo: 'Logo značky',
     ed_fuel_tank_capacity: 'Objem palivové nádrže',
     ed_fuel_tank_capacity_helper: 'Zobrazí ukazatel paliva',
     ed_low_range: 'Práh nízkého dojezdu',
@@ -2208,6 +2359,7 @@ var RnI18n = {
     en_mileage: 'Najeto',
     en_fuel_autonomy: 'Dojezd na palivo',
     en_fuel_quantity: 'Množství paliva',
+    en_fuel_level: 'Hladina paliva',
     en_battery_level: 'Úroveň nabití baterie',
     en_battery_autonomy: 'Dojezd na baterii',
     en_location: 'Poloha',
@@ -2258,6 +2410,10 @@ var RnI18n = {
     vehicle: 'Vozilo',
     fuel_autonomy: 'Doseg',
     fuel_quantity: 'Gorivo',
+    fuel_level: 'Raven goriva',
+    ed_buttons: 'Dodatni gumbi (stikala, gumbi, skripte, ključavnice, klimatizacija…)',
+    on_state: 'Vklopljeno',
+    off_state: 'Izklopljeno',
     battery_level: 'Baterija',
     battery_autonomy: 'Doseg',
     mileage: 'Prevoženi km',
@@ -2277,10 +2433,10 @@ var RnI18n = {
     tyre_2: 'ZL',
     tyre_3: 'ZD',
     low_tyre_pressure: 'Nizek tlak v pnevmatikah',
-    card_name: 'Kartica Renault',
-    card_desc: 'Kartica vozila Renault (doseg, gorivo, baterija, lokacija, dejanja) z izbirnim podatkovnim paketom Orange Internet On the move',
-    mini_name: 'Mini kartica Renault',
-    mini_desc: 'Kompaktna kartica vozila Renault (slika, baterija, doseg, polnjenje) z gumbom za prikaz celotne kartice',
+    card_name: 'Kartica vozila',
+    card_desc: 'Kartica povezanega vozila katere koli znamke (doseg, gorivo, baterija, polnjenje, lokacija, dejanja) z izbirnim podatkovnim paketom Orange Internet On the move',
+    mini_name: 'Mini kartica vozila',
+    mini_desc: 'Kompaktna kartica vozila (slika, baterija, doseg, polnjenje) z gumbom za prikaz celotne kartice',
     location: 'Lokacija',
     updated: 'posodobljeno {t}',
     confirm: 'Potrdite?',
@@ -2291,21 +2447,24 @@ var RnI18n = {
     data_left: 'Preostane {l} od {t}',
     renews_on: 'Podaljšanje {d}',
     expires_on: 'Poteče {d}',
+    services: 'Povezane storitve',
+    offline: 'Brez povezave',
+    services_inactive: 'Neaktivne',
     days_left: '{n} d',
     expired: 'Poteklo',
     unit_gb: 'GB',
     unit_mb: 'MB',
-    no_vehicle: 'Vozilo Renault ni bilo najdeno',
+    no_vehicle: 'Vozilo ni bilo najdeno',
     zoom_in: 'Prikaži celotno kartico',
     zoom_out: 'Nazaj na kompaktni pogled',
     ed_device_id: 'Vozilo',
-    ed_device_id_helper: 'Naprava iz integracije Renault',
+    ed_device_id_helper: 'Naprava vozila (Renault, Tesla, Volvo, Stellantis, skupina VW, Kia, Hyundai, Toyota, Mercedes… ali katera koli naprava z lokacijo)',
     ed_name: 'Ime',
     ed_name_helper: 'Pustite prazno za uporabo imena naprave',
     ed_image: 'Slika po meri',
-    ed_image_helper: 'Pustite prazno za fotografijo MyRenault (integracija Renault Picture); sicer URL, na primer /local/renault/clio.png',
+    ed_image_helper: 'Pustite prazno za sliko vozila (Renault Picture ali slika iz njegove integracije); sicer URL, na primer /local/avto.png',
     ed_show_image: 'Slika vozila',
-    ed_show_logo: 'Logotip Renault',
+    ed_show_logo: 'Logotip znamke',
     ed_fuel_tank_capacity: 'Prostornina rezervoarja za gorivo',
     ed_fuel_tank_capacity_helper: 'Prikaže merilnik goriva',
     ed_low_range: 'Prag nizkega dosega',
@@ -2326,6 +2485,7 @@ var RnI18n = {
     en_mileage: 'Prevoženi km',
     en_fuel_autonomy: 'Doseg z gorivom',
     en_fuel_quantity: 'Količina goriva',
+    en_fuel_level: 'Raven goriva',
     en_battery_level: 'Raven napolnjenosti baterije',
     en_battery_autonomy: 'Doseg z baterijo',
     en_location: 'Lokacija',
@@ -2376,6 +2536,10 @@ var RnI18n = {
     vehicle: 'Transportlīdzeklis',
     fuel_autonomy: 'Rādiuss',
     fuel_quantity: 'Degviela',
+    fuel_level: 'Degvielas līmenis',
+    ed_buttons: 'Papildu pogas (slēdži, pogas, skripti, slēdzenes, klimats…)',
+    on_state: 'Ieslēgts',
+    off_state: 'Izslēgts',
     battery_level: 'Baterija',
     battery_autonomy: 'Rādiuss',
     mileage: 'Nobraukums',
@@ -2395,10 +2559,10 @@ var RnI18n = {
     tyre_2: 'AK',
     tyre_3: 'AL',
     low_tyre_pressure: 'Zems riepu spiediens',
-    card_name: 'Renault karte',
-    card_desc: 'Renault transportlīdzekļa karte (sniedzamība, degviela, baterija, atrašanās vieta, darbības) ar neobligātu Orange Internet On the move datu plānu',
-    mini_name: 'Renault mini karte',
-    mini_desc: 'Kompakta Renault transportlīdzekļa karte (attēls, baterija, sniedzamība, uzlāde) ar pogu pilnās kartes parādīšanai',
+    card_name: 'Transportlīdzekļa kartīte',
+    card_desc: 'Jebkuras markas savienota transportlīdzekļa kartīte (nobraukums līdz tukšai tvertnei, degviela, akumulators, uzlāde, atrašanās vieta, darbības) ar izvēles Orange Internet On the move datu plānu',
+    mini_name: 'Transportlīdzekļa minikartīte',
+    mini_desc: 'Kompakta transportlīdzekļa kartīte (attēls, akumulators, nobraukums, uzlāde) ar pogu pilnās kartītes parādīšanai',
     location: 'Atrašanās vieta',
     updated: 'atjaunināts {t}',
     confirm: 'Apstiprināt?',
@@ -2409,21 +2573,24 @@ var RnI18n = {
     data_left: 'Atlikuši {l} no {t}',
     renews_on: 'Atjaunojas {d}',
     expires_on: 'Beidzas {d}',
+    services: 'Pieslēgtie pakalpojumi',
+    offline: 'Bezsaistē',
+    services_inactive: 'Neaktīvi',
     days_left: '{n} d.',
     expired: 'Beidzies',
     unit_gb: 'GB',
     unit_mb: 'MB',
-    no_vehicle: 'Nav atrasta Renault automašīna',
+    no_vehicle: 'Transportlīdzeklis nav atrasts',
     zoom_in: 'Rādīt pilno karti',
     zoom_out: 'Atpakaļ uz kompakto skatu',
     ed_device_id: 'Transportlīdzeklis',
-    ed_device_id_helper: 'Ierīce no Renault integrācijas',
+    ed_device_id_helper: 'Transportlīdzekļa ierīce (Renault, Tesla, Volvo, Stellantis, VW grupa, Kia, Hyundai, Toyota, Mercedes… vai jebkura ierīce ar atrašanās vietu)',
     ed_name: 'Nosaukums',
     ed_name_helper: 'Atstājiet tukšu, lai izmantotu ierīces nosaukumu',
     ed_image: 'Pielāgots attēls',
-    ed_image_helper: 'Atstājiet tukšu MyRenault fotoattēlam (integrācija Renault Picture); citādi URL, piemēram, /local/renault/clio.png',
+    ed_image_helper: 'Atstājiet tukšu transportlīdzekļa attēlam (Renault Picture vai tā integrācijas attēls); citādi URL, piemēram, /local/auto.png',
     ed_show_image: 'Transportlīdzekļa attēls',
-    ed_show_logo: 'Renault logotips',
+    ed_show_logo: 'Zīmola logotips',
     ed_fuel_tank_capacity: 'Degvielas tvertnes tilpums',
     ed_fuel_tank_capacity_helper: 'Rāda degvielas līmeņa rādītāju',
     ed_low_range: 'Zemas sniedzamības slieksnis',
@@ -2444,6 +2611,7 @@ var RnI18n = {
     en_mileage: 'Nobraukums',
     en_fuel_autonomy: 'Sniedzamība ar degvielu',
     en_fuel_quantity: 'Degvielas daudzums',
+    en_fuel_level: 'Degvielas līmenis',
     en_battery_level: 'Akumulatora uzlādes līmenis',
     en_battery_autonomy: 'Sniedzamība ar akumulatoru',
     en_location: 'Atrašanās vieta',
@@ -2494,6 +2662,10 @@ var RnI18n = {
     vehicle: 'Όχημα',
     fuel_autonomy: 'Αυτονομία',
     fuel_quantity: 'Καύσιμο',
+    fuel_level: 'Στάθμη καυσίμου',
+    ed_buttons: 'Επιπλέον κουμπιά (διακόπτες, κουμπιά, σενάρια, κλειδαριές, κλιματισμός…)',
+    on_state: 'Ανοιχτό',
+    off_state: 'Κλειστό',
     battery_level: 'Μπαταρία',
     battery_autonomy: 'Αυτονομία',
     mileage: 'Χιλιόμετρα',
@@ -2513,10 +2685,10 @@ var RnI18n = {
     tyre_2: 'ΠΑ',
     tyre_3: 'ΠΔ',
     low_tyre_pressure: 'Χαμηλή πίεση ελαστικών',
-    card_name: 'Κάρτα Renault',
-    card_desc: 'Κάρτα οχήματος Renault (αυτονομία, καύσιμο, μπαταρία, τοποθεσία, ενέργειες) με προαιρετικό πρόγραμμα δεδομένων Orange Internet On the move',
-    mini_name: 'Μίνι κάρτα Renault',
-    mini_desc: 'Συμπαγής κάρτα οχήματος Renault (εικόνα, μπαταρία, αυτονομία, φόρτιση) με κουμπί για εμφάνιση της πλήρους κάρτας',
+    card_name: 'Κάρτα οχήματος',
+    card_desc: 'Κάρτα συνδεδεμένου οχήματος οποιασδήποτε μάρκας (αυτονομία, καύσιμο, μπαταρία, φόρτιση, τοποθεσία, ενέργειες) με προαιρετικό πακέτο δεδομένων Orange Internet On the move',
+    mini_name: 'Μίνι κάρτα οχήματος',
+    mini_desc: 'Συμπαγής κάρτα οχήματος (εικόνα, μπαταρία, αυτονομία, φόρτιση) με κουμπί για την εμφάνιση της πλήρους κάρτας',
     location: 'Τοποθεσία',
     updated: 'ενημερώθηκε {t}',
     confirm: 'Σίγουρα;',
@@ -2527,21 +2699,24 @@ var RnI18n = {
     data_left: 'Απομένουν {l} από {t}',
     renews_on: 'Ανανέωση στις {d}',
     expires_on: 'Λήγει στις {d}',
+    services: 'Συνδεδεμένες υπηρεσίες',
+    offline: 'Εκτός σύνδεσης',
+    services_inactive: 'Ανενεργές',
     days_left: '{n} ημ.',
     expired: 'Έληξε',
     unit_gb: 'GB',
     unit_mb: 'MB',
-    no_vehicle: 'Δεν βρέθηκε όχημα Renault',
+    no_vehicle: 'Δεν βρέθηκε όχημα',
     zoom_in: 'Εμφάνιση πλήρους κάρτας',
     zoom_out: 'Επιστροφή στη συμπαγή προβολή',
     ed_device_id: 'Όχημα',
-    ed_device_id_helper: 'Συσκευή από την ενσωμάτωση Renault',
+    ed_device_id_helper: 'Η συσκευή του οχήματος (Renault, Tesla, Volvo, Stellantis, όμιλος VW, Kia, Hyundai, Toyota, Mercedes… ή οποιαδήποτε συσκευή με τοποθεσία)',
     ed_name: 'Όνομα',
     ed_name_helper: 'Αφήστε κενό για να χρησιμοποιηθεί το όνομα της συσκευής',
     ed_image: 'Προσαρμοσμένη εικόνα',
-    ed_image_helper: 'Αφήστε κενό για τη φωτογραφία MyRenault (ενσωμάτωση Renault Picture)· διαφορετικά ένα URL, για παράδειγμα /local/renault/clio.png',
+    ed_image_helper: 'Αφήστε κενό για την εικόνα του οχήματος (Renault Picture ή η εικόνα της ενσωμάτωσής του); αλλιώς ένα URL, για παράδειγμα /local/car.png',
     ed_show_image: 'Εικόνα οχήματος',
-    ed_show_logo: 'Λογότυπο Renault',
+    ed_show_logo: 'Λογότυπο μάρκας',
     ed_fuel_tank_capacity: 'Χωρητικότητα ρεζερβουάρ',
     ed_fuel_tank_capacity_helper: 'Εμφανίζει τον δείκτη καυσίμου',
     ed_low_range: 'Όριο χαμηλής αυτονομίας',
@@ -2562,6 +2737,7 @@ var RnI18n = {
     en_mileage: 'Χιλιόμετρα',
     en_fuel_autonomy: 'Αυτονομία καυσίμου',
     en_fuel_quantity: 'Ποσότητα καυσίμου',
+    en_fuel_level: 'Στάθμη καυσίμου',
     en_battery_level: 'Επίπεδο μπαταρίας',
     en_battery_autonomy: 'Αυτονομία μπαταρίας',
     en_location: 'Τοποθεσία',
@@ -2686,27 +2862,51 @@ function rnEsc(s) {
 }
 
 // ── Entity discovery ─────────────────────────────────────────────────────────
-// Each role is matched by the entity registry translation_key first, then the
-// entity_id suffix (English and French slugs), then attributes.
+// Each role is matched by the entity registry translation_key first (those of every supported integration: the
+// keys do not clash from one to the other), then the entity_id suffix (English and French slugs, and the names of
+// the integrations without translation keys), then attributes.
 function rnDc(v) { return (s) => s.attributes.device_class === v; }
 
 var RN_ROLES = {
-  mileage: { domain: 'sensor', keys: ['mileage'], id: /(mileage|kilometrage)$/,
+  mileage: { domain: 'sensor', keys: ['mileage', 'vehicle_state_odometer', 'odometer', 'odometer_km'], id: /(mileage|kilometrage|odometer|odometer_km)$/,
     test: (s) => s.attributes.device_class === 'distance' && s.attributes.state_class === 'total_increasing' },
-  fuel_autonomy: { domain: 'sensor', keys: ['fuel_autonomy'], id: /(fuel_autonomy|autonomie_en_carburant|autonomie_carburant)$/ },
-  fuel_quantity: { domain: 'sensor', keys: ['fuel_quantity'], id: /(fuel_quantity|quantite_de_carburant)$/, test: rnDc('volume') },
-  battery_level: { domain: 'sensor', keys: ['battery_level'], id: /(battery_level|niveau_de_batterie|niveau_de_la_batterie)$/, test: rnDc('battery') },
-  battery_autonomy: { domain: 'sensor', keys: ['battery_autonomy'], id: /(battery_autonomy|autonomie_de_la_batterie|autonomie_batterie)$/ },
-  charging_remaining_time: { domain: 'sensor', keys: ['charging_remaining_time'], id: /(charging_remaining_time|temps_de_charge_restant)$/, test: rnDc('duration') },
-  outside_temperature: { domain: 'sensor', keys: ['outside_temperature'], id: /(outside_temperature|temperature_exterieure)$/, test: rnDc('temperature') },
+  fuel_autonomy: { domain: 'sensor', keys: ['fuel_autonomy', 'distance_to_empty_tank', 'fuel_driving_range', 'fuel_range', 'combustion_range_km'],
+    id: /(fuel_autonomy|autonomie_en_carburant|autonomie_carburant|range_liquid|fuel_range|range_gas|driving_range_gas)$/ },
+  fuel_quantity: { domain: 'sensor', keys: ['fuel_quantity', 'fuel_amount', 'fuel_level_liters'], id: /(fuel_quantity|quantite_de_carburant)$/, test: rnDc('volume') },
+  // The fuel level in % of the tank (no volume): Stellantis, Kia / Hyundai, Toyota, VW Group, Mercedes, Subaru
+  fuel_level: { domain: 'sensor', keys: ['fuel_level', 'fuel'], id: /(fuel_level|tanklevelpercent)$/ },
+  battery_level: { domain: 'sensor', keys: ['battery_level', 'charge_state_battery_level', 'charge_state_usable_battery_level', 'battery_charge_level',
+    'ev_battery_level', 'ev_battery_percentage', 'battery_soc', 'battery'],
+    id: /(battery_level|niveau_de_batterie|niveau_de_la_batterie|state_of_charge|ev_battery_level|hvbattery_charge)$/, test: rnDc('battery') },
+  battery_autonomy: { domain: 'sensor', keys: ['battery_autonomy', 'charge_state_battery_range', 'charge_state_est_battery_range', 'distance_to_empty_battery',
+    'ev_range', 'ev_driving_range', 'battery_range', 'electric_range_km', 'autonomy'],
+    id: /(battery_autonomy|autonomie_de_la_batterie|autonomie_batterie|range_electric|ev_range|electric_range)$/ },
+  charging_remaining_time: { domain: 'sensor', keys: ['charging_remaining_time', 'charge_state_minutes_to_full_charge', 'estimated_charging_time',
+    'ev_time_to_full_charge', 'remaining_charge_time', 'ev_estimated_current_charge_duration'], id: /(charging_remaining_time|temps_de_charge_restant)$/, test: rnDc('duration') },
+  outside_temperature: { domain: 'sensor', keys: ['outside_temperature', 'climate_state_outside_temp', 'outside_temp'],
+    id: /(outside_temperature|temperature_exterieure|outside_temp)$/, test: rnDc('temperature') },
   location_last_activity: { domain: 'sensor', keys: ['location_last_activity'], id: /(location_last_activity|derniere_activite_de_localisation)$/ },
-  location: { domain: 'device_tracker', keys: ['location'], test: () => true },
-  plugged_in: { domain: 'binary_sensor', keys: ['plugged_in'], id: /(plugged_in|branche)$/, test: rnDc('plug') },
-  charging: { domain: 'binary_sensor', keys: ['charging'], id: /(_charging|en_charge)$/, test: rnDc('battery_charging') },
+  location: { domain: 'device_tracker', keys: ['location', 'vehicle', 'parking_location', 'position'], test: () => true },
+  plugged_in: { domain: 'binary_sensor', keys: ['plugged_in', 'charge_state_conn_charge_cable', 'ev_is_plugged_in', 'battery_plugged', 'ev_battery_is_plugged_in'],
+    id: /(plugged_in|branche)$/, test: rnDc('plug') },
+  charging: { domain: 'binary_sensor', keys: ['charging', 'is_charging', 'battery_charging', 'ev_battery_is_charging', 'chargingactive'],
+    id: /(_charging|en_charge)$/, test: rnDc('battery_charging') },
   lock_status: { domain: 'binary_sensor', keys: ['lock_status'], id: /(lock_status|verrouillage)$/, test: rnDc('lock') },
-  hvac_status: { domain: 'binary_sensor', keys: ['hvac_status'], id: /(hvac_status|climatisation)$/ },
+  // The integrations without a lock binary sensor have a lock entity: locked / unlocked
+  lock: { domain: 'lock', keys: ['vehicle_state_locked', 'lock', 'door_locks', 'door_lock'], test: () => true },
+  hvac_status: { domain: 'binary_sensor', keys: ['hvac_status', 'climate_state_is_preconditioning', 'preconditioning'], id: /(hvac_status|climatisation)$/ },
   charge_mode: { domain: 'select', keys: ['charge_mode'], id: /(charge_mode|mode_de_charge)$/ },
+  // The car's connected services (VW group: SEAT, CUPRA…) and its connection (Teslemetry).
+  services_expiry: { domain: 'sensor', keys: ['subscription_expiry_at'] },
+  services_active: { domain: 'binary_sensor', keys: ['subscription_active'] },
+  cellular: { domain: 'binary_sensor', keys: ['cellular'] },
+  wifi: { domain: 'binary_sensor', keys: ['wifi'] },
 };
+
+// The integrations of connected vehicles the card finds by itself (built in, then of the Marketplace). Any other
+// device with a device_tracker can be picked in the editor, its values read by their names or set in `entities`.
+var RN_PLATFORMS = ['renault', 'tesla_fleet', 'teslemetry', 'tessie', 'volvo', 'skoda', 'subaru', 'nissan_leaf', 'stellantis_vehicles',
+  'kia_uvo', 'mbapi2020', 'toyota', 'vag_connect', 'volkswagencarnet', 'myskoda', 'uconnect', 'polestar_api', 'fordpass'];
 
 var RN_TYRES = ['front_left_pressure', 'front_right_pressure', 'rear_left_pressure', 'rear_right_pressure'];
 // Position of a tyre pressure sensor (index in RN_TYRES): its translation_key, else its entity_id
@@ -2768,7 +2968,7 @@ var RN_LANGUAGE_FIELD = {
     },
   },
 };
-var RN_OVERRIDABLE = ['mileage', 'fuel_autonomy', 'fuel_quantity', 'battery_level', 'battery_autonomy', 'location'];
+var RN_OVERRIDABLE = ['mileage', 'fuel_autonomy', 'fuel_quantity', 'fuel_level', 'battery_level', 'battery_autonomy', 'location'];
 
 // The device's visible entities from the registry, with or without a state.
 function rnRegistryEntities(hass, deviceId) {
@@ -2817,9 +3017,76 @@ function rnDevicesOf(hass, platform) {
   return ids;
 }
 
-// From the registry only, so that the vehicle is found even while its states are missing.
+// From the registry only, so that the vehicle is found even while its states are missing: the first vehicle of
+// the supported integrations, in their order (Renault first).
 function rnFindVehicle(hass) {
-  return rnDevicesOf(hass, 'renault').find((id) => rnRegistryEntities(hass, id).some((e) => e.entity_id.indexOf('device_tracker.') === 0 || e.entity_id.indexOf('sensor.') === 0));
+  return rnVehicles(hass)[0];
+}
+
+// Every vehicle of the supported integrations: a device with a sensor or a device_tracker.
+function rnVehicles(hass) {
+  var out = [];
+  RN_PLATFORMS.forEach((p) => {
+    rnDevicesOf(hass, p).forEach((id) => {
+      if (out.indexOf(id) < 0 && rnRegistryEntities(hass, id).some((e) => e.entity_id.indexOf('device_tracker.') === 0 || e.entity_id.indexOf('sensor.') === 0)) out.push(id);
+    });
+  });
+  return out;
+}
+
+// The integration of a vehicle: that of its device_tracker, else of its first entity.
+function rnPlatformOf(hass, deviceId) {
+  var list = rnRegistryEntities(hass, deviceId);
+  var hit = list.find((e) => e.entity_id.indexOf('device_tracker.') === 0) || list[0];
+  return hit ? hit.platform : null;
+}
+
+// Brand of a vehicle: its device's manufacturer, else the integration's own brand. The logos
+// (Simple Icons, CC0) other than Renault's sit in vehicle-card-brands.js, loaded on first use.
+var RN_BRANDS = ['audi', 'bentley', 'bmw', 'chrysler', 'citroen', 'dacia', 'dsautomobiles', 'fiat', 'ford', 'hyundai', 'jeep', 'kia', 'maserati', 'mazda', 'mg', 'mini', 'nissan', 'opel', 'peugeot', 'polestar', 'porsche', 'ram', 'renault', 'seat', 'skoda', 'smart', 'subaru', 'tesla', 'toyota', 'vauxhall', 'volkswagen', 'volvo'];
+var RN_BRAND_ALIASES = { ds: 'dsautomobiles', vw: 'volkswagen', vwgroup: 'volkswagen', kiamotors: 'kia', mgmotor: 'mg', teslamotors: 'tesla', cupra: 'seat' };
+var RN_PLATFORM_BRAND = { renault: 'renault', tesla_fleet: 'tesla', teslemetry: 'tesla', tessie: 'tesla', volvo: 'volvo', skoda: 'skoda', myskoda: 'skoda', subaru: 'subaru', nissan_leaf: 'nissan', polestar_api: 'polestar', fordpass: 'ford', toyota: 'toyota' };
+var RN_PLATFORM_MAKER = { renault: 'Renault', tesla_fleet: 'Tesla', teslemetry: 'Tesla', tessie: 'Tesla', volvo: 'Volvo', skoda: 'Škoda', myskoda: 'Škoda', subaru: 'Subaru', nissan_leaf: 'Nissan', polestar_api: 'Polestar', fordpass: 'Ford', toyota: 'Toyota', mbapi2020: 'Mercedes-Benz' };
+
+function rnBrandKey(hass, deviceId, device) {
+  var maker = String(device?.manufacturer || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  if (maker) {
+    if (RN_BRAND_ALIASES[maker]) return RN_BRAND_ALIASES[maker];
+    var hit = RN_BRANDS.find((b) => maker === b || maker.indexOf(b) === 0);
+    if (hit) return hit;
+  }
+  return RN_PLATFORM_BRAND[rnPlatformOf(hass, deviceId)] || null;
+}
+
+// "Renault Espace VI": the maker before the model, unless the model already names it.
+function rnModelLabel(hass, deviceId, device) {
+  if (!device?.model) return '';
+  var model = rnModel(device.model);
+  var maker = String(device.manufacturer || RN_PLATFORM_MAKER[rnPlatformOf(hass, deviceId)] || '').trim();
+  if (!maker || model.toLowerCase().indexOf(maker.toLowerCase()) === 0) return model;
+  return `${maker} ${model}`;
+}
+
+var rnBrandsPromise = null;
+function rnLoadBrands() {
+  if (!rnBrandsPromise) {
+    rnBrandsPromise = rnLoadScript('vehicle-card-brands.js', () => !!window.__rnBrands).catch((err) => {
+      setTimeout(() => { rnBrandsPromise = null; }, 30000);
+      throw err;
+    });
+  }
+  return rnBrandsPromise;
+}
+
+// The header logo: Renault's diamond (bundled), another brand's logo once vehicle-card-brands.js is
+// there (redraw() runs when it arrives), else null for the car icon.
+function rnBrandHtml(key, redraw) {
+  if (key === 'renault') return '<span class="brand" role="img" aria-label="Renault"></span>';
+  if (!key || RN_BRANDS.indexOf(key) < 0) return null;
+  var logo = window.__rnBrands?.[key];
+  if (logo) return `<svg class="brand-svg" viewBox="0 0 24 24" role="img" aria-label="${rnEsc(logo.t)}"><path d="${rnEsc(logo.d)}"/></svg>`;
+  rnLoadBrands().then(redraw, () => {});
+  return null;
 }
 
 // "Espace vi" → "Espace VI"
@@ -2848,11 +3115,47 @@ function rnFindDataPlan(hass, vehicleDevice) {
 // card can resolve it once (in _resolve, cached by _resolved) and only read its state afterwards.
 // The sensor comes first: the integration's image entity has an entity_picture whose access token
 // changes every few minutes.
+// Other integrations: an image entity of the car (the renders of vag_connect, the picture of
+// uconnect; not the surround view cameras of kia_uvo), else the device tracker's entity_picture
+// (stellantis_vehicles, toyota). Volvo only gives it through an action (rnVolvoPicture).
+var RN_PICTURE_SKIP = ['kia_uvo'];
 function rnPhotoEntity(hass, deviceId) {
   if (!hass?.entities || !deviceId) return null;
-  var entries = Object.values(hass.entities).filter((e) => e.device_id === deviceId && e.platform === 'renault_picture');
+  var mine = Object.values(hass.entities).filter((e) => e.device_id === deviceId);
+  var entries = mine.filter((e) => e.platform === 'renault_picture');
   var entry = entries.find((e) => e.entity_id.indexOf('sensor.') === 0) || entries[0];
-  return entry ? entry.entity_id : null;
+  if (entry) return entry.entity_id;
+  var images = mine.filter((e) => e.entity_id.indexOf('image.') === 0 && RN_PICTURE_SKIP.indexOf(e.platform) < 0 && !e.disabled_by);
+  var image = images.find((e) => /render|picture|image|vehicle|car/.test(`${e.translation_key || ''} ${e.entity_id}`)) || images[0];
+  if (image) return image.entity_id;
+  var tracker = mine.find((e) => e.entity_id.indexOf('device_tracker.') === 0 && hass.states?.[e.entity_id]?.attributes.entity_picture);
+  return tracker ? tracker.entity_id : null;
+}
+
+// Volvo: the volvo.get_image_url action returns the picture URLs of the car (Home Assistant 2025.9+).
+// Asked once per config entry and page; done() redraws the card when the answer comes.
+var rnVolvoPictures = {};
+function rnVolvoPicture(hass, device, done) {
+  var entry = device?.config_entries?.[0];
+  if (!entry || !hass.callWS || !hass.services?.volvo?.get_image_url) return null;
+  var hit = rnVolvoPictures[entry];
+  if (hit) {
+    if (hit.url !== undefined) return hit.url;
+    hit.waiters.push(done);
+    return null;
+  }
+  rnVolvoPictures[entry] = { waiters: [done] };
+  hass.callWS({ type: 'call_service', domain: 'volvo', service: 'get_image_url', service_data: { entry: entry, images: ['exterior_front_left', 'exterior_side_left', 'exterior_front'] }, return_response: true })
+    .then((res) => {
+      var images = res?.response?.images || [];
+      return images.length ? images[0].url || null : null;
+    }, () => null)
+    .then((url) => {
+      var waiters = rnVolvoPictures[entry].waiters;
+      rnVolvoPictures[entry] = { url: url };
+      if (url) waiters.forEach((fn) => { fn(); });
+    });
+  return null;
 }
 
 // The picture URL without its rotating access token, for render signatures: a new token alone
@@ -3022,7 +3325,7 @@ function rnPlate(text) {
 }
 
 var RN_BUTTON_ICONS = [
-  [/(horn|klaxon)/, 'mdi:bullhorn'],
+  [/(horn|honk|klaxon)/, 'mdi:bullhorn'],
   [/(flash|light|phare)/, 'mdi:car-light-high'],
   [/(air_conditioner|climatisation|hvac)/, 'mdi:air-conditioner'],
   [/(stop_charge|arreter_la_charge)/, 'mdi:power-plug-off'],
@@ -3238,6 +3541,11 @@ class RenaultCard extends HTMLElement {
       .sort((a, b) => (a.pos < 0 ? 9 : a.pos) - (b.pos < 0 ? 9 : b.pos)).map((t) => t.id);
     ent.doors = byKey(RN_DOORS, 'door');
     ent.buttons = list.filter((e) => e.entity_id.indexOf('button.') === 0).map((e) => e.entity_id);
+    // buttons: extra entities of any brand or device (a switch, a script, a lock…), after the car's own.
+    (Array.isArray(c.buttons) ? c.buttons : []).forEach((b) => {
+      var id = typeof b === 'string' ? b : b?.entity;
+      if (id && ent.buttons.indexOf(id) < 0 && hass.states[id]) ent.buttons.push(id);
+    });
 
     var plan = null;
     if (c.show_data_plan) {
@@ -3257,7 +3565,7 @@ class RenaultCard extends HTMLElement {
         }
       }
     }
-    return { deviceId: deviceId, device: device, ent: ent, plan: plan, photo: rnPhotoEntity(hass, deviceId), stateless: rnStateless(hass, regIds) };
+    return { deviceId: deviceId, device: device, brand: rnBrandKey(hass, deviceId, device), ent: ent, plan: plan, photo: rnPhotoEntity(hass, deviceId), stateless: rnStateless(hass, regIds) };
   }
 
   _st(id) { return id && this._hass.states[id]; }
@@ -3308,6 +3616,10 @@ class RenaultCard extends HTMLElement {
     if (r.plan && this._avail(r.plan.expiry_date)) {
       var expiry = new Date(this._val(r.plan.expiry_date));
       if (!Number.isNaN(expiry.getTime())) out.push(Math.ceil((expiry.getTime() - Date.now()) / 86400000));
+    }
+    if (this._avail(ent.services_expiry)) {
+      var end = new Date(this._val(ent.services_expiry));
+      if (!Number.isNaN(end.getTime())) out.push(Math.ceil((end.getTime() - Date.now()) / 86400000));
     }
     return out;
   }
@@ -3389,8 +3701,8 @@ class RenaultCard extends HTMLElement {
   _header(name, model, plate, imgSrc) {
     var c = this._config;
     return '<div class="header">' +
-      (c.show_logo ? '<span class="brand" role="img" aria-label="Renault"></span>' :
-        (imgSrc ? '' : '<div class="badge"><ha-icon icon="mdi:car"></ha-icon></div>')) +
+      ((c.show_logo && rnBrandHtml(this._r?.brand, () => { this._sig = null; this._update(); })) ||
+        (imgSrc && !c.show_logo ? '' : '<div class="badge"><ha-icon icon="mdi:car"></ha-icon></div>')) +
       '<div class="titles"><div class="name">' + rnEsc(name) + '</div>' + (model ? `<div class="model">${rnEsc(model)}</div>` : '') + '</div>' +
       (plate ? rnPlateSvg(plate, c.plate_department) : '') + this._headerAction() +
       '</div>';
@@ -3407,8 +3719,8 @@ class RenaultCard extends HTMLElement {
     return {
       deviceName: deviceName,
       name: c.name || deviceName || this._t('vehicle'),
-      model: dev?.model ? `Renault ${rnModel(dev.model)}` : '',
-      imgSrc: c.show_image ? (c.image || rnPhotoUrl(this._hass, r.photo)) : null,
+      model: rnModelLabel(this._hass, r.deviceId, dev),
+      imgSrc: c.show_image ? (c.image || rnPhotoUrl(this._hass, r.photo) || (r.brand === 'volvo' ? rnVolvoPicture(this._hass, dev, () => { this._sig = null; this._update(); }) : null)) : null,
     };
   }
 
@@ -3508,9 +3820,11 @@ class RenaultCard extends HTMLElement {
     if (lowTyres.length) {
       chips.push(`<span class="chip warn" data-more="${rnEsc(lowTyres[0])}" role="button" tabindex="0"><ha-icon icon="mdi:car-tire-alert"></ha-icon>${this._t('low_tyre_pressure')}</span>`);
     }
-    if (this._avail(ent.lock_status)) {
-      var unlocked = this._val(ent.lock_status) === 'on';
-      chips.push(`<span class="chip${unlocked ? ' warn' : ''}" data-more="${rnEsc(ent.lock_status)}" role="button" tabindex="0"><ha-icon icon="${unlocked ? 'mdi:lock-open-variant-outline' : 'mdi:lock-outline'}"></ha-icon>${this._t(unlocked ? 'unlocked' : 'locked')}</span>`);
+    // The lock: Renault's binary sensor (on = unlocked), else the lock entity of the other integrations
+    var lockId = this._avail(ent.lock_status) ? ent.lock_status : this._avail(ent.lock) && /^(locked|unlocked)$/.test(this._val(ent.lock)) ? ent.lock : null;
+    if (lockId) {
+      var unlocked = lockId === ent.lock_status ? this._val(lockId) === 'on' : this._val(lockId) === 'unlocked';
+      chips.push(`<span class="chip${unlocked ? ' warn' : ''}" data-more="${rnEsc(lockId)}" role="button" tabindex="0"><ha-icon icon="${unlocked ? 'mdi:lock-open-variant-outline' : 'mdi:lock-outline'}"></ha-icon>${this._t(unlocked ? 'unlocked' : 'locked')}</span>`);
     }
     if (ent.doors.some((id) => this._val(id) === 'on')) {
       chips.push(`<span class="chip warn"><ha-icon icon="mdi:car-door"></ha-icon>${this._t('doors_open')}</span>`);
@@ -3519,6 +3833,10 @@ class RenaultCard extends HTMLElement {
     if (charge) chips.push(charge);
     if (this._val(ent.hvac_status) === 'on') {
       chips.push(`<span class="chip ok"><ha-icon icon="mdi:air-conditioner"></ha-icon>${this._t('hvac_on')}</span>`);
+    }
+    // Neither mobile network nor Wi-Fi: the car does not answer, its values may be old.
+    if (this._val(ent.cellular) === 'off' && this._val(ent.wifi) !== 'on') {
+      chips.push(`<span class="chip warn" data-more="${rnEsc(ent.cellular)}" role="button" tabindex="0"><ha-icon icon="mdi:access-point-network-off"></ha-icon>${this._t('offline')}</span>`);
     }
 
     // Stat tiles
@@ -3531,6 +3849,11 @@ class RenaultCard extends HTMLElement {
     if (fuel != null) {
       tiles.push(this._tile(ent.fuel_quantity, 'mdi:gas-station', this._t('fuel_quantity'), this._withUnit(ent.fuel_quantity),
         tank ? { bar: fuel / tank * 100 } : null));
+    }
+    // The fuel level in % of the tank, when there is no volume
+    var level = fuel == null ? this._num(ent.fuel_level) : null;
+    if (level != null) {
+      tiles.push(this._tile(ent.fuel_level, 'mdi:gas-station', this._t('fuel_level'), this._withUnit(ent.fuel_level), { bar: Math.max(0, Math.min(100, level)) }));
     }
     if (this._avail(ent.mileage)) {
       tiles.push(this._tile(ent.mileage, 'mdi:counter', this._t('mileage'), this._withUnit(ent.mileage)));
@@ -3569,8 +3892,11 @@ class RenaultCard extends HTMLElement {
         var armed = this._armed === id;
         var res = this._resultFor(id);
         var text = armed ? this._t('confirm') : res ? res.text : this._entityLabel(id, deviceName);
-        return '<button class="btn' + (armed ? ' armed' : res ? ` ${res.cls}` : '') + '" data-press="' + rnEsc(id) + '"' +
-          (res ? ` title="${rnEsc(res.text)}" aria-label="${rnEsc(res.text)}"` : '') +
+        var on = rnIsOn(id, st);
+        var title = res ? res.text : on == null ? '' : `${this._entityLabel(id, deviceName)} · ${this._t(on ? 'on_state' : 'off_state')}`;
+        return '<button class="btn' + (armed ? ' armed' : res ? ` ${res.cls}` : on ? ' on' : '') + '" data-press="' + rnEsc(id) + '"' +
+          (on == null ? '' : ` aria-pressed="${on}"`) +
+          (title ? ` title="${rnEsc(title)}" aria-label="${rnEsc(title)}"` : '') +
           '><ha-icon icon="' + rnEsc(res && !armed ? res.icon : icon) + '"></ha-icon><span>' + rnEsc(text) + '</span></button>';
       });
       var modeHtml = '';
@@ -3615,7 +3941,23 @@ class RenaultCard extends HTMLElement {
     this._setHtml(this._styles() + '<ha-card>' + header + image +
       (chips.length ? `<div class="chips">${chips.join('')}</div>` : '') +
       (tiles.length ? `<div class="tiles">${tiles.join('')}</div>` : '') +
-      this._leaseHtml(ent) + locationHtml + planHtml + actionsHtml + '</ha-card>');
+      this._leaseHtml(ent) + locationHtml + planHtml + this._servicesHtml(ent) + actionsHtml + '</ha-card>');
+  }
+
+  // The car's connected services subscription (VW group integrations): its end date and days left,
+  // in the warning colour when inactive, expired or ending within 30 days.
+  _servicesHtml(ent) {
+    if (!this._config.show_data_plan || !this._avail(ent.services_expiry)) return '';
+    var end = new Date(this._val(ent.services_expiry));
+    if (Number.isNaN(end.getTime())) return '';
+    var days = Math.ceil((end.getTime() - Date.now()) / 86400000);
+    var inactive = this._val(ent.services_active) === 'off';
+    var warn = inactive || days < 30;
+    var when = inactive ? this._t('services_inactive') : days < 0 ? this._t('expired') : this._t('days_left', { n: days });
+    return `<div class="row${warn ? ' warn' : ''}" data-more="${rnEsc(ent.services_expiry)}" role="button" tabindex="0">` +
+      '<ha-icon icon="mdi:access-point-network"></ha-icon>' +
+      `<div class="row-text"><span class="lbl">${this._t('services')}</span><span class="val">${rnEsc(this._t('expires_on', { d: end.toLocaleDateString(this._intl(), { day: 'numeric', month: 'long', year: 'numeric' }) }))}</span></div>` +
+      `<span class="when">${rnEsc(when)}</span><ha-icon class="chev" icon="mdi:chevron-right"></ha-icon></div>`;
   }
 
   // Replaces the card content and gives the focus back to the same action button, tile or lease
@@ -3832,6 +4174,7 @@ class RenaultCard extends HTMLElement {
         ' background: color-mix(in srgb, var(--rn-accent) 16%, transparent); color: var(--rn-accent); --mdc-icon-size: 24px; }' +
       '.brand { width: 40px; height: 40px; flex: none; background: var(--primary-text-color);' +
         ' -webkit-mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; }' +
+      '.brand-svg { width: 32px; height: 32px; padding: 4px; flex: none; fill: var(--primary-text-color); }' +
       // At the 6 columns minimum (about 240 px) the plate gives way: it shrinks (its SVG keeps the
       // proportions) so the vehicle name keeps at least a few letters.
       '.titles { flex: 1 1 0; min-width: 5ch; }' +
@@ -3867,6 +4210,7 @@ class RenaultCard extends HTMLElement {
       '.row { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 10px; cursor: pointer;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.1)); }' +
       '.row > ha-icon { color: var(--rn-accent); --mdc-icon-size: 20px; }' +
+      '.row.warn > ha-icon, .row.warn .when { color: var(--warning-color, #ffa600); }' +
       // The place and "updated X ago" share the row; the time wraps rather than taking it all.
       '.row-text { flex: 1 1 auto; min-width: 0; }' +
       '.when { flex: 0 1 auto; min-width: 0; overflow-wrap: break-word; font-size: 12px; color: var(--secondary-text-color); text-align: right; }' +
@@ -3936,6 +4280,7 @@ class RenaultCard extends HTMLElement {
       '.btn ha-icon { --mdc-icon-size: 20px; flex-shrink: 0; }' +
       '.btn.armed { background: color-mix(in srgb, var(--rn-accent) 16%, transparent); color: ' + rnInk('var(--rn-accent)') + '; }' +
       '.btn.armed ha-icon { color: var(--rn-accent); }' +
+      '.btn.on ha-icon { color: var(--rn-accent); }' +
       '.btn.ok { background: color-mix(in srgb, ' + RN_OK + ' 15%, transparent); color: ' + rnInk(RN_OK) + '; }' +
       '.btn.err { background: color-mix(in srgb, ' + RN_ERR + ' 15%, transparent); color: ' + rnInk(RN_ERR) + '; }' +
       '.btn.ok ha-icon { color: ' + RN_OK + '; }' +
@@ -3995,7 +4340,8 @@ class RenaultCard extends HTMLElement {
       } else {
         this._armed = null;
         clearTimeout(this._armTimer);
-        this._call('button', 'press', { entity_id: id });
+        var svc = rnPressService(id, this._hass.states[id]);
+        this._call(svc[0], svc[1], { entity_id: id });
       }
       this._update();
       return;
@@ -4039,6 +4385,28 @@ class RenaultCard extends HTMLElement {
   }
 }
 
+// What a tap on an action does: press a button, run a script or scene, lock or unlock a lock,
+// toggle anything else (a switch, a climate, a light…).
+function rnPressService(id, st) {
+  var domain = id.split('.')[0];
+  if (domain === 'button' || domain === 'input_button') return [domain, 'press'];
+  if (domain === 'script' || domain === 'scene') return [domain, 'turn_on'];
+  if (domain === 'automation') return [domain, 'trigger'];
+  if (domain === 'lock') return ['lock', st?.state === 'locked' ? 'unlock' : 'lock'];
+  return ['homeassistant', 'toggle'];
+}
+
+// On or off for the entities an action toggles (null for the ones it presses or runs).
+function rnIsOn(id, st) {
+  if (!st) return null;
+  var domain = id.split('.')[0];
+  if (['button', 'input_button', 'script', 'scene', 'automation'].indexOf(domain) >= 0) return null;
+  if (domain === 'lock') return st.state === 'unlocked' || st.state === 'open';
+  if (domain === 'climate') return st.state !== 'off' && st.state !== 'unavailable';
+  if (domain === 'cover') return st.state === 'open';
+  return st.state === 'on';
+}
+
 // ── renault-card-editor (visual editor, built on HA's ha-form) ───────────────
 // Creates the editor's ha-form once (shared by both editors).
 function rnEnsureForm(editor) {
@@ -4075,7 +4443,8 @@ class RenaultCardEditor extends HTMLElement {
     var domains = { mileage: 'sensor', fuel_autonomy: 'sensor', fuel_quantity: 'sensor', battery_level: 'sensor',
       battery_autonomy: 'sensor', location: 'device_tracker' };
     return [
-      { name: 'device_id', selector: { device: { integration: 'renault' } } },
+      // Any vehicle: a device with a device_tracker (the supported integrations are found without it)
+      { name: 'device_id', selector: { device: { entity: [{ domain: 'device_tracker' }] } } },
       {
         type: 'grid', name: '', schema: [
           { name: 'name', selector: { text: {} } },
@@ -4100,6 +4469,7 @@ class RenaultCardEditor extends HTMLElement {
           { name: 'expand_lease', selector: { boolean: {} } },
         ],
       },
+      { name: 'buttons', selector: { entity: { multiple: true, domain: ['button', 'input_button', 'switch', 'input_boolean', 'script', 'scene', 'automation', 'lock', 'climate', 'light', 'fan', 'cover'] } } },
       { name: 'plate_department', selector: { text: {} } },
       { name: 'data_plan_device_id', selector: { device: { integration: 'orange_internet_on_the_move' } } },
       {
@@ -4183,17 +4553,19 @@ if (!customElements.get('renault-card-editor')) {
   customElements.define('renault-card-editor', RenaultCardEditor);
 }
 
-if (!customElements.get('renault-card')) {
-  customElements.define('renault-card', RenaultCard);
+// vehicle-… since the cards cover every brand; renault-… (their former name) stays defined for the dashboards that use it.
+if (!customElements.get('vehicle-card')) {
+  customElements.define('vehicle-card', class extends RenaultCard {});
   window.customCards = window.customCards || [];
   window.customCards.push({
-    type: 'renault-card',
+    type: 'vehicle-card',
     name: rnT(rnPickerLang(), 'card_name'),
     description: rnT(rnPickerLang(), 'card_desc'),
     preview: true,
-    documentationURL: 'https://github.com/juju35/ha-renault-card',
+    documentationURL: 'https://github.com/juju35/ha-vehicle-card',
   });
 }
+if (!customElements.get('renault-card')) customElements.define('renault-card', class extends RenaultCard {});
 
 // ── renault-mini-card ────────────────────────────────────────────────────────
 // A click in a more-info or other dialog opened from the card is not "outside" it.
@@ -4296,17 +4668,19 @@ class RenaultMiniCard extends RenaultCard {
   }
 }
 
-if (!customElements.get('renault-mini-card')) {
-  customElements.define('renault-mini-card', RenaultMiniCard);
+// vehicle-… since the cards cover every brand; renault-… (their former name) stays defined for the dashboards that use it.
+if (!customElements.get('vehicle-mini-card')) {
+  customElements.define('vehicle-mini-card', class extends RenaultMiniCard {});
   window.customCards = window.customCards || [];
   window.customCards.push({
-    type: 'renault-mini-card',
+    type: 'vehicle-mini-card',
     name: rnT(rnPickerLang(), 'mini_name'),
     description: rnT(rnPickerLang(), 'mini_desc'),
     preview: true,
-    documentationURL: 'https://github.com/juju35/ha-renault-card',
+    documentationURL: 'https://github.com/juju35/ha-vehicle-card',
   });
 }
+if (!customElements.get('renault-mini-card')) customElements.define('renault-mini-card', class extends RenaultMiniCard {});
 
 // ── renault-map-card ─────────────────────────────────────────────────────────
 // Leaflet and MapLibre ship with the card in dist/ (all .js, so HACS downloads them): no CDN,
@@ -4365,7 +4739,7 @@ var RnMapI18n = {
     home: 'Domicile',
     directions: 'Itinéraire',
     details: 'Détails',
-    no_vehicle: 'Aucun véhicule Renault avec une position trouvé',
+    no_vehicle: 'Aucun véhicule avec une position trouvé',
     editor: {
       devices: 'Véhicules (vide = tous)',
       title: 'Titre (vide pour aucun)',
@@ -4376,7 +4750,7 @@ var RnMapI18n = {
       tile_url: 'URL des tuiles ({z}, {x}, {y})',
       tile_attribution: 'Attribution des tuiles',
       language: 'Langue',
-      show_icon: 'Logo Renault',
+      show_icon: 'Logo de la marque',
       show_home: 'Domicile',
       show_name: 'Nom sur les repères',
       show_picture: 'Photo sur les repères',
@@ -4402,7 +4776,7 @@ var RnMapI18n = {
     home: 'Home',
     directions: 'Directions',
     details: 'Details',
-    no_vehicle: 'No Renault vehicle with a location found',
+    no_vehicle: 'No vehicle with a location found',
     editor: {
       devices: 'Vehicles (empty = all)',
       title: 'Title (empty for none)',
@@ -4413,7 +4787,7 @@ var RnMapI18n = {
       tile_url: 'Tile URL ({z}, {x}, {y})',
       tile_attribution: 'Tile attribution',
       language: 'Language',
-      show_icon: 'Renault logo',
+      show_icon: 'Brand logo',
       show_home: 'Home',
       show_name: 'Names on markers',
       show_picture: 'Pictures on markers',
@@ -4439,7 +4813,7 @@ var RnMapI18n = {
     home: 'Zuhause',
     directions: 'Route',
     details: 'Details',
-    no_vehicle: 'Kein Renault-Fahrzeug mit Standort gefunden',
+    no_vehicle: 'Kein Fahrzeug mit Standort gefunden',
     editor: {
       devices: 'Fahrzeuge (leer = alle)',
       title: 'Titel (leer für keinen)',
@@ -4450,7 +4824,7 @@ var RnMapI18n = {
       tile_url: 'Kachel-URL ({z}, {x}, {y})',
       tile_attribution: 'Kachel-Quellenangabe',
       language: 'Sprache',
-      show_icon: 'Renault-Logo',
+      show_icon: 'Markenlogo',
       show_home: 'Zuhause',
       show_name: 'Namen auf den Markierungen',
       show_picture: 'Bilder auf den Markierungen',
@@ -4476,7 +4850,7 @@ var RnMapI18n = {
     home: 'Casa',
     directions: 'Cómo llegar',
     details: 'Detalles',
-    no_vehicle: 'No se ha encontrado ningún vehículo Renault con ubicación',
+    no_vehicle: 'No se ha encontrado ningún vehículo con ubicación',
     editor: {
       devices: 'Vehículos (vacío = todos)',
       title: 'Título (vacío para ninguno)',
@@ -4487,7 +4861,7 @@ var RnMapI18n = {
       tile_url: 'URL de las teselas ({z}, {x}, {y})',
       tile_attribution: 'Atribución de las teselas',
       language: 'Idioma',
-      show_icon: 'Logotipo de Renault',
+      show_icon: 'Logotipo de la marca',
       show_home: 'Casa',
       show_name: 'Nombres en los marcadores',
       show_picture: 'Imágenes en los marcadores',
@@ -4513,7 +4887,7 @@ var RnMapI18n = {
     home: 'Кућа',
     directions: 'Упутства за пут',
     details: 'Детаљи',
-    no_vehicle: 'Није пронађено ниједно Renault возило са локацијом',
+    no_vehicle: 'Није пронађено ниједно возило са локацијом',
     editor: {
       devices: 'Возила (празно = сва)',
       title: 'Наслов (празно = без наслова)',
@@ -4524,7 +4898,7 @@ var RnMapI18n = {
       tile_url: 'URL плочица ({z}, {x}, {y})',
       tile_attribution: 'Атрибуција плочица',
       language: 'Језик',
-      show_icon: 'Renault лого',
+      show_icon: 'Лого марке',
       show_home: 'Кућа',
       show_name: 'Називи на ознакама',
       show_picture: 'Слике на ознакама',
@@ -4550,7 +4924,7 @@ var RnMapI18n = {
     home: 'Kuća',
     directions: 'Uputstva za put',
     details: 'Detalji',
-    no_vehicle: 'Nije pronađeno nijedno Renault vozilo sa lokacijom',
+    no_vehicle: 'Nije pronađeno nijedno vozilo sa lokacijom',
     editor: {
       devices: 'Vozila (prazno = sva)',
       title: 'Naslov (prazno = bez naslova)',
@@ -4561,7 +4935,7 @@ var RnMapI18n = {
       tile_url: 'URL pločica ({z}, {x}, {y})',
       tile_attribution: 'Atribucija pločica',
       language: 'Jezik',
-      show_icon: 'Renault logo',
+      show_icon: 'Logo marke',
       show_home: 'Kuća',
       show_name: 'Nazivi na oznakama',
       show_picture: 'Slike na oznakama',
@@ -4587,7 +4961,7 @@ var RnMapI18n = {
     home: 'Casa',
     directions: 'Indicazioni',
     details: 'Dettagli',
-    no_vehicle: 'Nessun veicolo Renault con una posizione trovato',
+    no_vehicle: 'Nessun veicolo con una posizione trovato',
     editor: {
       devices: 'Veicoli (vuoto = tutti)',
       title: 'Titolo (vuoto per nessuno)',
@@ -4598,7 +4972,7 @@ var RnMapI18n = {
       tile_url: 'URL dei riquadri ({z}, {x}, {y})',
       tile_attribution: 'Attribuzione dei riquadri',
       language: 'Lingua',
-      show_icon: 'Logo Renault',
+      show_icon: 'Logo del marchio',
       show_home: 'Casa',
       show_name: 'Nomi sugli indicatori',
       show_picture: 'Immagini sugli indicatori',
@@ -4624,7 +4998,7 @@ var RnMapI18n = {
     home: 'Thuis',
     directions: 'Route',
     details: 'Details',
-    no_vehicle: 'Geen Renault-voertuig met een locatie gevonden',
+    no_vehicle: 'Geen voertuig met een locatie gevonden',
     editor: {
       devices: 'Voertuigen (leeg = alle)',
       title: 'Titel (leeg voor geen)',
@@ -4635,7 +5009,7 @@ var RnMapI18n = {
       tile_url: 'Tegel-URL ({z}, {x}, {y})',
       tile_attribution: 'Tegelbronvermelding',
       language: 'Taal',
-      show_icon: 'Renault-logo',
+      show_icon: 'Merklogo',
       show_home: 'Thuis',
       show_name: 'Namen op de markeringen',
       show_picture: 'Afbeeldingen op de markeringen',
@@ -4661,7 +5035,7 @@ var RnMapI18n = {
     home: 'Casa',
     directions: 'Direções',
     details: 'Detalhes',
-    no_vehicle: 'Nenhum veículo Renault com localização encontrado',
+    no_vehicle: 'Nenhum veículo com localização encontrado',
     editor: {
       devices: 'Veículos (vazio = todos)',
       title: 'Título (vazio para nenhum)',
@@ -4672,7 +5046,7 @@ var RnMapI18n = {
       tile_url: 'URL dos mosaicos ({z}, {x}, {y})',
       tile_attribution: 'Atribuição dos mosaicos',
       language: 'Idioma',
-      show_icon: 'Logótipo Renault',
+      show_icon: 'Logótipo da marca',
       show_home: 'Casa',
       show_name: 'Nomes nos marcadores',
       show_picture: 'Imagens nos marcadores',
@@ -4698,7 +5072,7 @@ var RnMapI18n = {
     home: 'Dom',
     directions: 'Wskazówki dojazdu',
     details: 'Szczegóły',
-    no_vehicle: 'Nie znaleziono pojazdu Renault z lokalizacją',
+    no_vehicle: 'Nie znaleziono pojazdu z lokalizacją',
     editor: {
       devices: 'Pojazdy (puste = wszystkie)',
       title: 'Tytuł (puste = brak)',
@@ -4709,7 +5083,7 @@ var RnMapI18n = {
       tile_url: 'URL kafelków ({z}, {x}, {y})',
       tile_attribution: 'Atrybucja kafelków',
       language: 'Język',
-      show_icon: 'Logo Renault',
+      show_icon: 'Logo marki',
       show_home: 'Dom',
       show_name: 'Nazwy na znacznikach',
       show_picture: 'Zdjęcia na znacznikach',
@@ -4735,7 +5109,7 @@ var RnMapI18n = {
     home: 'Acasă',
     directions: 'Indicații',
     details: 'Detalii',
-    no_vehicle: 'Niciun vehicul Renault cu locație găsit',
+    no_vehicle: 'Niciun vehicul cu locație găsit',
     editor: {
       devices: 'Vehicule (gol = toate)',
       title: 'Titlu (gol = fără)',
@@ -4746,7 +5120,7 @@ var RnMapI18n = {
       tile_url: 'URL dale ({z}, {x}, {y})',
       tile_attribution: 'Atribuire dale',
       language: 'Limbă',
-      show_icon: 'Logo Renault',
+      show_icon: 'Logo-ul mărcii',
       show_home: 'Acasă',
       show_name: 'Nume pe marcaje',
       show_picture: 'Imagini pe marcaje',
@@ -4772,7 +5146,7 @@ var RnMapI18n = {
     home: 'Hjem',
     directions: 'Rutevejledning',
     details: 'Detaljer',
-    no_vehicle: 'Intet Renault-køretøj med placering fundet',
+    no_vehicle: 'Intet køretøj med placering fundet',
     editor: {
       devices: 'Køretøjer (tom = alle)',
       title: 'Titel (tom = ingen)',
@@ -4783,7 +5157,7 @@ var RnMapI18n = {
       tile_url: 'Fliser-URL ({z}, {x}, {y})',
       tile_attribution: 'Kildeangivelse for fliser',
       language: 'Sprog',
-      show_icon: 'Renault-logo',
+      show_icon: 'Mærkelogo',
       show_home: 'Hjem',
       show_name: 'Navne på markører',
       show_picture: 'Billeder på markører',
@@ -4809,7 +5183,7 @@ var RnMapI18n = {
     home: 'Hem',
     directions: 'Vägbeskrivning',
     details: 'Detaljer',
-    no_vehicle: 'Inget Renault-fordon med plats hittades',
+    no_vehicle: 'Inget fordon med plats hittades',
     editor: {
       devices: 'Fordon (tomt = alla)',
       title: 'Titel (tomt = ingen)',
@@ -4820,7 +5194,7 @@ var RnMapI18n = {
       tile_url: 'Plattor-URL ({z}, {x}, {y})',
       tile_attribution: 'Källhänvisning för plattor',
       language: 'Språk',
-      show_icon: 'Renault-logotyp',
+      show_icon: 'Märkeslogotyp',
       show_home: 'Hem',
       show_name: 'Namn på markörer',
       show_picture: 'Bilder på markörer',
@@ -4846,7 +5220,7 @@ var RnMapI18n = {
     home: 'Вкъщи',
     directions: 'Упътвания',
     details: 'Подробности',
-    no_vehicle: 'Не е намерен автомобил Renault с местоположение',
+    no_vehicle: 'Не е намерено превозно средство с местоположение',
     editor: {
       devices: 'Автомобили (празно = всички)',
       title: 'Заглавие (празно = без)',
@@ -4857,7 +5231,7 @@ var RnMapI18n = {
       tile_url: 'URL на плочките ({z}, {x}, {y})',
       tile_attribution: 'Източник на плочките',
       language: 'Език',
-      show_icon: 'Лого на Renault',
+      show_icon: 'Лого на марката',
       show_home: 'Вкъщи',
       show_name: 'Имена на маркерите',
       show_picture: 'Снимки на маркерите',
@@ -4883,7 +5257,7 @@ var RnMapI18n = {
     home: 'Дом',
     directions: 'Маршрут',
     details: 'Подробнее',
-    no_vehicle: 'Автомобиль Renault на карте не найден',
+    no_vehicle: 'Автомобиль с местоположением не найден',
     editor: {
       devices: 'Автомобили (пусто = все)',
       title: 'Заголовок (пусто = без заголовка)',
@@ -4894,7 +5268,7 @@ var RnMapI18n = {
       tile_url: 'URL тайлов ({z}, {x}, {y})',
       tile_attribution: 'Атрибуция тайлов',
       language: 'Язык',
-      show_icon: 'Логотип Renault',
+      show_icon: 'Логотип марки',
       show_home: 'Дом',
       show_name: 'Названия на маркерах',
       show_picture: 'Изображения на маркерах',
@@ -4920,7 +5294,7 @@ var RnMapI18n = {
     home: 'Дім',
     directions: 'Маршрут',
     details: 'Докладно',
-    no_vehicle: 'Автомобіль Renault з розташуванням не знайдено',
+    no_vehicle: 'Автомобіль з розташуванням не знайдено',
     editor: {
       devices: 'Автомобілі (порожньо = усі)',
       title: 'Заголовок (порожньо = без заголовка)',
@@ -4931,7 +5305,7 @@ var RnMapI18n = {
       tile_url: 'URL тайлів ({z}, {x}, {y})',
       tile_attribution: 'Атрибуція тайлів',
       language: 'Мова',
-      show_icon: 'Логотип Renault',
+      show_icon: 'Логотип марки',
       show_home: 'Дім',
       show_name: 'Назви на маркерах',
       show_picture: 'Зображення на маркерах',
@@ -4957,7 +5331,7 @@ var RnMapI18n = {
     home: 'Otthon',
     directions: 'Útvonaltervezés',
     details: 'Részletek',
-    no_vehicle: 'Nem található helyadattal rendelkező Renault jármű',
+    no_vehicle: 'Nem található helyadattal rendelkező jármű',
     editor: {
       devices: 'Járművek (üres = mind)',
       title: 'Cím (üres = nincs)',
@@ -4968,7 +5342,7 @@ var RnMapI18n = {
       tile_url: 'Csempe URL ({z}, {x}, {y})',
       tile_attribution: 'Csempék forrásmegjelölése',
       language: 'Nyelv',
-      show_icon: 'Renault logó',
+      show_icon: 'Márkalogó',
       show_home: 'Otthon',
       show_name: 'Nevek a jelölőkön',
       show_picture: 'Képek a jelölőkön',
@@ -4994,7 +5368,7 @@ var RnMapI18n = {
     home: 'Domov',
     directions: 'Navigácia',
     details: 'Podrobnosti',
-    no_vehicle: 'Nenašlo sa žiadne vozidlo Renault s polohou',
+    no_vehicle: 'Nenašlo sa žiadne vozidlo s polohou',
     editor: {
       devices: 'Vozidlá (prázdne = všetky)',
       title: 'Názov (prázdne = bez názvu)',
@@ -5005,7 +5379,7 @@ var RnMapI18n = {
       tile_url: 'URL dlaždíc ({z}, {x}, {y})',
       tile_attribution: 'Zdroj dlaždíc',
       language: 'Jazyk',
-      show_icon: 'Logo Renault',
+      show_icon: 'Logo značky',
       show_home: 'Domov',
       show_name: 'Názvy na značkách',
       show_picture: 'Obrázky na značkách',
@@ -5031,7 +5405,7 @@ var RnMapI18n = {
     home: 'Domov',
     directions: 'Navigace',
     details: 'Podrobnosti',
-    no_vehicle: 'Nebylo nalezeno žádné vozidlo Renault s polohou',
+    no_vehicle: 'Nebylo nalezeno žádné vozidlo s polohou',
     editor: {
       devices: 'Vozidla (prázdné = všechna)',
       title: 'Název (prázdné = bez názvu)',
@@ -5042,7 +5416,7 @@ var RnMapI18n = {
       tile_url: 'URL dlaždic ({z}, {x}, {y})',
       tile_attribution: 'Zdroj dlaždic',
       language: 'Jazyk',
-      show_icon: 'Logo Renault',
+      show_icon: 'Logo značky',
       show_home: 'Domov',
       show_name: 'Názvy na značkách',
       show_picture: 'Obrázky na značkách',
@@ -5068,7 +5442,7 @@ var RnMapI18n = {
     home: 'Dom',
     directions: 'Navodila',
     details: 'Podrobnosti',
-    no_vehicle: 'Vozilo Renault z lokacijo ni bilo najdeno',
+    no_vehicle: 'Vozilo z lokacijo ni bilo najdeno',
     editor: {
       devices: 'Vozila (prazno = vsa)',
       title: 'Naslov (prazno = brez)',
@@ -5079,7 +5453,7 @@ var RnMapI18n = {
       tile_url: 'URL ploščic ({z}, {x}, {y})',
       tile_attribution: 'Navedba vira ploščic',
       language: 'Jezik',
-      show_icon: 'Logotip Renault',
+      show_icon: 'Logotip znamke',
       show_home: 'Dom',
       show_name: 'Imena na oznakah',
       show_picture: 'Slike na oznakah',
@@ -5105,7 +5479,7 @@ var RnMapI18n = {
     home: 'Mājas',
     directions: 'Norādes',
     details: 'Detaļas',
-    no_vehicle: 'Renault transportlīdzeklis ar atrašanās vietu nav atrasts',
+    no_vehicle: 'Transportlīdzeklis ar atrašanās vietu nav atrasts',
     editor: {
       devices: 'Transportlīdzekļi (tukšs = visi)',
       title: 'Virsraksts (tukšs = bez)',
@@ -5116,7 +5490,7 @@ var RnMapI18n = {
       tile_url: 'Flīžu URL ({z}, {x}, {y})',
       tile_attribution: 'Flīžu atsauce',
       language: 'Valoda',
-      show_icon: 'Renault logotips',
+      show_icon: 'Zīmola logotips',
       show_home: 'Mājas',
       show_name: 'Nosaukumi uz marķieriem',
       show_picture: 'Attēli uz marķieriem',
@@ -5142,7 +5516,7 @@ var RnMapI18n = {
     home: 'Σπίτι',
     directions: 'Οδηγίες',
     details: 'Λεπτομέρειες',
-    no_vehicle: 'Δεν βρέθηκε όχημα Renault με τοποθεσία',
+    no_vehicle: 'Δεν βρέθηκε όχημα με τοποθεσία',
     editor: {
       devices: 'Οχήματα (κενό = όλα)',
       title: 'Τίτλος (κενό = χωρίς)',
@@ -5153,7 +5527,7 @@ var RnMapI18n = {
       tile_url: 'URL πλακιδίων ({z}, {x}, {y})',
       tile_attribution: 'Απόδοση πλακιδίων',
       language: 'Γλώσσα',
-      show_icon: 'Λογότυπο Renault',
+      show_icon: 'Λογότυπο μάρκας',
       show_home: 'Σπίτι',
       show_name: 'Ονόματα στους δείκτες',
       show_picture: 'Εικόνες στους δείκτες',
@@ -5180,7 +5554,7 @@ function rnMapLang(hass) {
   return rnResolveLang(RnMapI18n, (hass?.language) || document.documentElement.lang);
 }
 
-// Where this file was loaded from (/hacsfiles/ha-renault-card/ with HACS): the libraries sit next to it.
+// Where this file was loaded from (/hacsfiles/ha-vehicle-card/ with the Marketplace): the libraries sit next to it.
 var rnBaseUrl = null;
 function rnAssetBase() {
   if (rnBaseUrl) return rnBaseUrl;
@@ -5188,16 +5562,16 @@ function rnAssetBase() {
   try {
     var entries = performance.getEntriesByType('resource');
     for (var i = entries.length - 1; i >= 0; i--) {
-      if (/\/renault-card\.js(\?|$)/.test(entries[i].name)) { found = entries[i].name; break; }
+      if (/\/(vehicle|renault)-card\.js(\?|$)/.test(entries[i].name)) { found = entries[i].name; break; }
     }
   } catch (_err) { /* no resource timing */ }
   if (!found) {
     var scripts = document.querySelectorAll('script[src]');
     for (var j = 0; j < scripts.length; j++) {
-      if (/\/renault-card\.js(\?|$)/.test(scripts[j].src)) found = scripts[j].src;
+      if (/\/(vehicle|renault)-card\.js(\?|$)/.test(scripts[j].src)) found = scripts[j].src;
     }
   }
-  rnBaseUrl = found ? found.split('?')[0].replace(/[^/]*$/, '') : '/hacsfiles/ha-renault-card/';
+  rnBaseUrl = found ? found.split('?')[0].replace(/[^/]*$/, '') : '/hacsfiles/ha-vehicle-card/';
   return rnBaseUrl;
 }
 
@@ -5292,7 +5666,7 @@ function rnVehicle(hass, deviceId, ent, photo) {
     ent: ent,
     tracker: tracker,
     name: device ? String(device.name_by_user || device.name || '').trim() : tracker.attributes.friendly_name,
-    model: device?.model ? `Renault ${rnModel(device.model)}` : '',
+    model: rnModelLabel(hass, deviceId, device),
     image: rnPhotoUrl(hass, photo === undefined ? rnPhotoEntity(hass, deviceId) : photo),
     lat: tracker.attributes.latitude,
     lon: tracker.attributes.longitude,
@@ -5380,7 +5754,7 @@ class RenaultMapCard extends HTMLElement {
     if (typeof ids === 'string') ids = [ids];
     if (ids?.length) return ids;
     // From the registry: a vehicle whose tracker has no state yet is kept, and shown once it has one.
-    return rnDevicesOf(this._hass, 'renault').filter((id) => rnRegistryEntities(this._hass, id).some((e) => e.entity_id.indexOf('device_tracker.') === 0));
+    return rnVehicles(this._hass).filter((id) => rnRegistryEntities(this._hass, id).some((e) => e.entity_id.indexOf('device_tracker.') === 0));
   }
 
   // Device and entity discovery walks the whole registry: redo it only when the registries
@@ -5459,13 +5833,22 @@ class RenaultMapCard extends HTMLElement {
     });
   }
 
+  // The brand logo when every vehicle on the map is of the same brand, else the car icon.
+  _brandIcon() {
+    var hass = this._hass;
+    var keys = this._discovered().ids.map((id) => rnBrandKey(hass, id, hass.devices?.[id]));
+    var one = keys.length && keys.every((k) => k === keys[0]) ? keys[0] : null;
+    return rnBrandHtml(one, () => { this._update(); }) ||
+      `<ha-icon class="car" icon="${keys.length > 1 ? 'mdi:car-multiple' : 'mdi:car'}"></ha-icon>`;
+  }
+
   _update() {
     if (!this._config || !this._hass) return;
     this._ensureShell();
     var mt = this._mt();
     var header = this._root.querySelector('.header');
     var title = this._config.title === undefined ? mt.default_title : this._config.title;
-    var icon = this._config.show_icon ? '<span class="brand" role="img" aria-label="Renault"></span>' : '';
+    var icon = this._config.show_icon ? this._brandIcon() : '';
     header.hidden = !title && !icon;
     header.innerHTML = icon + (title ? `<span class="title">${rnEsc(title)}</span>` : '');
     var mapEl = this._root.querySelector('.map');
@@ -5854,6 +6237,8 @@ class RenaultMapCard extends HTMLElement {
       '.header { display: flex; align-items: center; gap: 10px; min-height: 36px; padding: 12px 12px 8px; font-size: 16px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color); }',
       '.brand { width: 40px; height: 40px; flex: none; background: var(--primary-text-color);' +
         ' -webkit-mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; mask: url(' + RN_RENAULT_LOGO + ') center / contain no-repeat; }',
+      '.brand-svg { width: 32px; height: 32px; padding: 4px; flex: none; fill: var(--primary-text-color); }',
+      '.header .car { --mdc-icon-size: 28px; width: 40px; display: grid; place-items: center; flex: none; color: var(--primary-text-color); }',
       '.header .title { flex: 1 1 auto; min-width: 4ch; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }',
       '.header[hidden], .message[hidden] { display: none; }',
       '.message { padding: 12px 16px; color: var(--secondary-text-color); }',
@@ -5933,7 +6318,7 @@ class RenaultMapCardEditor extends HTMLElement {
         ]
       : [];
     return [
-      { name: 'devices', selector: { device: { integration: 'renault', multiple: true } } },
+      { name: 'devices', selector: { device: { entity: [{ domain: 'device_tracker' }], multiple: true } } },
       { name: 'title', selector: { text: {} } },
       {
         type: 'grid', name: '', schema: [
@@ -5996,16 +6381,18 @@ if (!customElements.get('renault-map-card-editor')) {
   customElements.define('renault-map-card-editor', RenaultMapCardEditor);
 }
 
-if (!customElements.get('renault-map-card')) {
-  customElements.define('renault-map-card', RenaultMapCard);
+// vehicle-… since the cards cover every brand; renault-… (their former name) stays defined for the dashboards that use it.
+if (!customElements.get('vehicle-map-card')) {
+  customElements.define('vehicle-map-card', class extends RenaultMapCard {});
   window.customCards = window.customCards || [];
   window.customCards.push({
-    type: 'renault-map-card',
-    name: 'Renault Map Card',
-    description: 'Map of your Renault vehicles, with Home Assistant, OpenStreetMap, IGN or satellite base maps',
+    type: 'vehicle-map-card',
+    name: 'Vehicle Map Card',
+    description: 'Map of your vehicles, of any brand, with Home Assistant, OpenStreetMap, IGN or satellite base maps',
     preview: true,
-    documentationURL: 'https://github.com/juju35/ha-renault-card',
+    documentationURL: 'https://github.com/juju35/ha-vehicle-card',
   });
 }
+if (!customElements.get('renault-map-card')) customElements.define('renault-map-card', class extends RenaultMapCard {});
 
-console.info(`%c RENAULT-CARD %c v${RENAULT_CARD_VERSION} `, 'color:#000;background:#ffcc33;font-weight:700', 'color:#000;background:#fff');
+console.info(`%c VEHICLE-CARD %c v${RENAULT_CARD_VERSION} `, 'color:#000;background:#ffcc33;font-weight:700', 'color:#000;background:#fff');
