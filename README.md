@@ -55,8 +55,6 @@ Pick the vehicle, the card finds all its entities by itself, whatever the integr
 
 ## Supported integrations
 
-| Integration | What the cards show |
-|---|---|
 The card picks the vehicle's entities by their translation keys (and entity IDs), so it works with these integrations as they are. What each one shows depends on what the car and the integration expose.
 
 | Integration | Brands | Picture |
@@ -74,7 +72,13 @@ The card picks the vehicle's entities by their translation keys (and entity IDs)
 | [Uconnect](https://github.com/hass-uconnect/hass-uconnect) | Fiat, Jeep, Alfa Romeo, Ram, Chrysler, Dodge | ✅ |
 | [Polestar](https://github.com/leeyuentuen/polestar_api), [FordPass](https://github.com/itchannel/fordpass-ha) | Polestar, Ford | — |
 | Any other integration | Any car with a `device_tracker` and sensors | Your own `image` |
-| [Orange Internet On the move](https://github.com/rexave/hass-orange-internet-on-the-move) (Marketplace, optional) | Data left, percentage, renewal or expiry date |
+
+Optional integrations:
+
+| Integration | What the cards show |
+|---|---|
+| [Renault Picture](https://github.com/juju35/ha-renault-picture) (Marketplace) | The official MyRenault photo of the vehicle |
+| [Orange Internet On the move](https://github.com/rexave/hass-orange-internet-on-the-move) (Marketplace) | Data left, percentage, renewal or expiry date of the car's data plan |
 
 ## Prerequisites
 
