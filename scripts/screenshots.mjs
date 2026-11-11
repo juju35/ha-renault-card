@@ -527,6 +527,8 @@ const mapHass = {
     ...states,
     "device_tracker.espace_location": { ...states["device_tracker.espace_location"], state: "not_home", attributes: { ...states["device_tracker.espace_location"].attributes, latitude: 48.118, longitude: -1.6925 } },
     "device_tracker.captur_location": { ...states["device_tracker.captur_location"], attributes: { ...states["device_tracker.captur_location"].attributes, latitude: 48.104, longitude: -1.67 } },
+    // Teslemetry gives no picture: the Model 3's tracker has an entity_picture set with customize.
+    "device_tracker.model_3_location": { ...states["device_tracker.model_3_location"], attributes: { ...states["device_tracker.model_3_location"].attributes, entity_picture: photoUrl("tesla") } },
     "zone.home": { entity_id: "zone.home", state: "1", attributes: { latitude: 48.104, longitude: -1.67, friendly_name: "Home" } },
   },
 };
