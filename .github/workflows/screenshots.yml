@@ -8,6 +8,7 @@ on:
       - "src/**"
       - "scripts/**"
       - "test/*.render.test.mjs"
+      - ".github/workflows/screenshots.yml"
 
 # Protected main is never pushed to: the job commits the refreshed screenshots
 # back onto the pull request's own branch, so they land through the normal merge.
