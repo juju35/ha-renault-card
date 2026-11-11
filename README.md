@@ -296,7 +296,7 @@ The repository was renamed and the Marketplace follows it: update the card as us
 - `custom:renault-card`, `custom:renault-mini-card` and `custom:renault-map-card` still work and take the same options; new cards are added as `custom:vehicle-card`, `custom:vehicle-mini-card` and `custom:vehicle-map-card`
 - `renault-card.js` is still shipped next to `vehicle-card.js`, so a dashboard resource that still points to `renault-card.js` keeps loading the cards
 
-To tidy up, replace `renault-` with `vehicle-` in your card types, and point the dashboard resource to `vehicle-card.js`.
+To tidy up, replace `renault-` with `vehicle-` in your card types. If you added the dashboard resource by hand, point it to `vehicle-card.js`. The Marketplace still registers `renault-card.js` in 3.0.0 (it checks the file against the latest release) and moves to `vehicle-card.js` in the next version.
 
 ## How it works
 

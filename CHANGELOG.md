@@ -14,6 +14,7 @@
 - The model reads "Tesla Model 3", "Peugeot e-208"…, from the device's manufacturer.
 
 ### Other
+- The Marketplace still installs and loads `renault-card.js` (the same bundle) in this version: it checks the file named in `hacs.json` against the latest release, which only has `vehicle-card.js` from 3.0.0 on. `hacs.json` points to `vehicle-card.js` in the next version.
 - Screenshots: a Tesla Model 3 card with a Wallbox button, and the map with vehicles of two brands.
 - Translations: the card names, descriptions and helpers no longer name Renault, in all 22 languages.
 
