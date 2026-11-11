@@ -305,7 +305,7 @@ height: 400
 | `show_icon` | ❌ | `true` | Brand logo in the header (when all the vehicles are of the same brand; a car icon otherwise) |
 | `show_home` | ❌ | `true` | Home marker |
 | `show_name` | ❌ | `true` | Vehicle name on the markers |
-| `show_picture` | ❌ | `true` | Vehicle picture on the markers and in the popup |
+| `show_picture` | ❌ | `true` | Vehicle picture on the markers and in the popup: the one the integration gives, else the `entity_picture` of its device tracker (which you can set with [customize](https://www.home-assistant.io/docs/configuration/customizing-devices/)) |
 | `show_fullscreen` | ❌ | `true` | Full screen button under the zoom buttons (on iPhone the card fills the screen) |
 | `language` | ❌ | Auto | Force language: `en`, `fr`, `de`, `es`, `sr`, `sr-Latn`, `it`, `nl`, `pt`, `pl`, `ro`, `da`, `sv`, `bg`, `ru`, `uk`, `hu`, `sk`, `cs`, `sl`, `lv` or `el` (auto-detects from HA settings) |
 
