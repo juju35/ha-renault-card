@@ -8,6 +8,42 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/juju35/ha-vehicle-card/blob/main/LICENSE)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/julienstep9)
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/audi.png" alt="Audi" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/bentley.png" alt="Bentley" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/bmw.png" alt="BMW" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/chrysler.png" alt="Chrysler" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/citroen.png" alt="Citroën" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/cupra.png" alt="CUPRA" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/dacia.png" alt="Dacia" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/dsautomobiles.png" alt="DS Automobiles" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/fiat.png" alt="Fiat" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/ford.png" alt="Ford" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/hyundai.png" alt="Hyundai" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/jeep.png" alt="Jeep" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/kia.png" alt="Kia" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/maserati.png" alt="Maserati" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/mazda.png" alt="Mazda" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/mg.png" alt="MG" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/mini.png" alt="Mini" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/nissan.png" alt="Nissan" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/opel.png" alt="Opel" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/peugeot.png" alt="Peugeot" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/polestar.png" alt="Polestar" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/porsche.png" alt="Porsche" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/ram.png" alt="Ram" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/renault.png" alt="Renault" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/seat.png" alt="SEAT" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/skoda.png" alt="ŠKODA" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/smart.png" alt="smart" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/subaru.png" alt="Subaru" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/tesla.png" alt="Tesla" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/toyota.png" alt="Toyota" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/vauxhall.png" alt="Vauxhall" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/volkswagen.png" alt="Volkswagen" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/volvo.png" alt="Volvo" width="48">
+</p>
+
 Custom Lovelace cards for connected cars of **any brand** in Home Assistant — Renault, Tesla, Volvo, Peugeot, Citroën, Opel, Fiat, Jeep (Stellantis), Volkswagen, Audi, Škoda, Seat, Cupra, Kia, Hyundai, Toyota, Mercedes-Benz, Polestar, Ford, Subaru, Nissan… : a **vehicle card**, a **mini card** and a **map card** showing your vehicles.
 
 Pick the vehicle, the card finds all its entities by itself, whatever the integration.
@@ -28,7 +64,7 @@ Pick the vehicle, the card finds all its entities by itself, whatever the integr
 - Location with the time of the last update; tap it to open the map
 - Action buttons for every button of the vehicle (horn, flash lights, air conditioning, start/stop charge, refresh…), pressed with a confirmation tap, and the charge mode picker for electric cars
 - **Extra buttons** of your choice (`buttons`): a switch, a script, a scene, a lock, a climate, your wallbox… toggled, run or locked from the card with the same confirmation tap
-- The brand's logo next to the name (32 brands), black on light themes and white on dark themes
+- The brand's logo next to the name (33 brands), black on light themes and white on dark themes
 - The picture of your vehicle when the integration gives one (the official MyRenault photo with [Renault Picture](https://github.com/juju35/ha-renault-picture), the renders of Volkswagen group cars, Stellantis, Toyota, Volvo, Fiat / Jeep…) or your own picture, and a French licence plate drawn like the real one (EU band, department, and a traditional regional emblem for Brittany, Occitania, Île-de-France, Provence, Corsica and Burgundy)
 - Optional **lease tracking** (LOA): mileage driven against the allowance, theoretical mileage expected today and the gap to it, kilometres left this month and per month until the end, end-of-lease projection (average or last 30 / 90 days) and estimated cost of the excess, always shown as a status; pace, contract year figures and a mileage chart folded by default
 - Optional **Orange Internet On the move** section: data left, percentage, renewal or expiry date
@@ -407,7 +443,7 @@ To tidy up, replace `renault-` with `vehicle-` in your card types.
 
 The card reads the entity registry to list the entities of the chosen device, then matches each one by its translation key, then by its entity ID (English and French slugs), then by its attributes. Everything else the device exposes as a `button` becomes an action button, followed by the entities of the `buttons` option.
 
-The **brand** comes from the device's manufacturer (else from the integration). Renault's logo is bundled; the 31 other logos ([Simple Icons](https://simpleicons.org), CC0) are in `vehicle-card-brands.js`, loaded only when a card shows another brand.
+The **brand** comes from the device's manufacturer (else from the integration). Renault's logo is bundled; the 32 other logos (also in `images/logos`, as the tiles at the top of this README) ([Simple Icons](https://simpleicons.org), CC0, and the CUPRA emblem from Wikimedia Commons) are in `vehicle-card-brands.js`, loaded only when a card shows another brand.
 
 **Action buttons** need a second tap within 3 seconds, so a horn doesn't go off by accident.
 

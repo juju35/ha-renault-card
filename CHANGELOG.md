@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.3 - 2026-11-12
+
+### Features
+- **CUPRA logo** next to the name of a CUPRA (the emblem, from Wikimedia Commons), instead of the car icon.
+
+### Documentation
+- The logos of the 33 brands at the top of the README.
+
 ## 3.0.2 - 2026-11-12
 
 ### Fixes
