@@ -26,7 +26,7 @@ before(async () => {
     content: `customElements.define("ha-card", class extends HTMLElement { constructor() { super(); this.attachShadow({ mode: "open" }).innerHTML = "<style>:host{display:block;overflow:hidden}</style><slot></slot>"; } });
 customElements.define("ha-icon", class extends HTMLElement { connectedCallback() { this.style.display = "inline-flex"; this.innerHTML = '<svg viewBox="0 0 24 24" style="width:24px;height:24px"><rect width="24" height="24"/></svg>'; } });`,
   });
-  await page.addScriptTag({ content: readFileSync(new URL("../dist/renault-card.js", import.meta.url), "utf8") });
+  await page.addScriptTag({ content: readFileSync(new URL("../dist/vehicle-card.js", import.meta.url), "utf8") });
 });
 
 after(() => browser?.close());

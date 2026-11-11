@@ -18,7 +18,7 @@ process.env.TZ = "Europe/Paris";
 const NOW = new Date("2026-10-29T10:00:00+01:00").getTime();
 
 const root = fileURLToPath(new URL("..", import.meta.url));
-const cardJs = readFileSync(`${root}dist/renault-card.js`, "utf8");
+const cardJs = readFileSync(`${root}dist/vehicle-card.js`, "utf8");
 
 const THEMES = {
   light: {
@@ -77,11 +77,11 @@ const pageHtml = (theme, width) => `<!doctype html><html><head><meta charset="ut
 </style></head><body><div id="root"></div></body></html>`;
 
 // ── Map tiles ───────────────────────────────────────────────────────────────
-// Pages come from this made-up origin: the map card finds Leaflet and MapLibre at /hacsfiles/ha-renault-card/
+// Pages come from this made-up origin: the map card finds Leaflet and MapLibre at /hacsfiles/ha-vehicle-card/
 // (its default when its own <script> has no src), and the tiles at /tiles/.
 const ORIGIN = "https://card.test";
 const TILES = `${root}scripts/tiles`;
-const USER_AGENT = "ha-renault-card screenshots (+https://github.com/juju35/ha-renault-card)";
+const USER_AGENT = "ha-vehicle-card screenshots (+https://github.com/juju35/ha-vehicle-card)";
 let http = null;
 
 // One OpenStreetMap tile, from scripts/tiles or downloaded once (tile usage policy: identify, cache).
@@ -138,7 +138,7 @@ export async function render(shots, { icons = {}, hass = {}, extra = "" } = {}) 
   await context.route(`${ORIGIN}/**`, async (route) => {
     const path = new URL(route.request().url()).pathname;
     const tile = path.match(/^\/tiles\/(\d+)\/(\d+)\/(\d+)\.png$/);
-    const lib = path.match(/^\/hacsfiles\/ha-renault-card\/([\w.-]+\.js)$/);
+    const lib = path.match(/^\/hacsfiles\/ha-vehicle-card\/([\w.-]+\.js)$/);
     const pic = path.match(/^\/pictures\/([\w.-]+\.webp)$/);
     try {
       if (tile) await route.fulfill({ body: await retinaTile(helper, ...tile.slice(1).map(Number)), contentType: "image/png" });
@@ -284,6 +284,7 @@ const icons = {
   "battery-high": "M16 20H8V6H16M16.67 4H15V2H9V4H7.33C6.6 4 6 4.6 6 5.33V20.67C6 21.4 6.6 22 7.33 22H16.67C17.41 22 18 21.41 18 20.67V5.33C18 4.6 17.4 4 16.67 4M15 16H9V19H15V16M15 7H9V10H15V7M15 11.5H9V14.5H15V11.5Z",
   "bullhorn": "M12,8H4A2,2 0 0,0 2,10V14A2,2 0 0,0 4,16H5V20A1,1 0 0,0 6,21H8A1,1 0 0,0 9,20V16H12L17,20V4L12,8M21.5,12C21.5,13.71 20.54,15.26 19,16V8C20.53,8.75 21.5,10.3 21.5,12Z",
   "car": "M5,11L6.5,6.5H17.5L19,11M17.5,16A1.5,1.5 0 0,1 16,14.5A1.5,1.5 0 0,1 17.5,13A1.5,1.5 0 0,1 19,14.5A1.5,1.5 0 0,1 17.5,16M6.5,16A1.5,1.5 0 0,1 5,14.5A1.5,1.5 0 0,1 6.5,13A1.5,1.5 0 0,1 8,14.5A1.5,1.5 0 0,1 6.5,16M18.92,6C18.72,5.42 18.16,5 17.5,5H6.5C5.84,5 5.28,5.42 5.08,6L3,12V20A1,1 0 0,0 4,21H5A1,1 0 0,0 6,20V19H18V20A1,1 0 0,0 19,21H20A1,1 0 0,0 21,20V12L18.92,6Z",
+  "car-multiple": "M8,11L9.5,6.5H18.5L20,11M18.5,16A1.5,1.5 0 0,1 17,14.5A1.5,1.5 0 0,1 18.5,13A1.5,1.5 0 0,1 20,14.5A1.5,1.5 0 0,1 18.5,16M9.5,16A1.5,1.5 0 0,1 8,14.5A1.5,1.5 0 0,1 9.5,13A1.5,1.5 0 0,1 11,14.5A1.5,1.5 0 0,1 9.5,16M19.92,6C19.71,5.4 19.14,5 18.5,5H9.5C8.86,5 8.29,5.4 8.08,6L6,12V20A1,1 0 0,0 7,21H8A1,1 0 0,0 9,20V19H19V20A1,1 0 0,0 20,21H21A1,1 0 0,0 22,20V12L19.92,6M14.92,3C14.71,2.4 14.14,2 13.5,2H4.5C3.86,2 3.29,2.4 3.08,3L1,9V17A1,1 0 0,0 2,18H3A1,1 0 0,0 4,17V12.91C3.22,12.63 2.82,11.77 3.1,11C3.32,10.4 3.87,10 4.5,10H4.57L5.27,8H3L4.5,3.5H15.09L14.92,3Z",
   "car-door": "M19,14H16V16H19V14M22,21H3V11L11,3H21A1,1 0 0,1 22,4V21M11.83,5L5.83,11H20V5H11.83Z",
   "car-light-high": "M13,4.8C9,4.8 9,19.2 13,19.2C17,19.2 22,16.5 22,12C22,7.5 17,4.8 13,4.8M13.1,17.2C12.7,16.8 12,15 12,12C12,9 12.7,7.2 13.1,6.8C16,6.9 20,8.7 20,12C20,15.3 16,17.1 13.1,17.2M2,5H9.5C9.3,5.4 9,5.8 8.9,6.4C8.8,6.6 8.8,6.8 8.7,7H2V5M8,11H2V9H8.2C8.1,9.6 8.1,10.3 8,11M8.7,17C8.9,17.8 9.2,18.4 9.6,19H2.1V17H8.7M8.2,15H2V13H8C8.1,13.7 8.1,14.4 8.2,15Z",
   "car-off": "M20.5,19.85L6.41,5.76L2.41,1.76L1.11,3L4.57,6.46L3,11V19A1,1 0 0,0 4,20H5A1,1 0 0,0 6,19V18H16.11L20.84,22.73L22.11,21.46L20.5,19.85M6.5,15A1.5,1.5 0 0,1 5,13.5A1.5,1.5 0 0,1 6.5,12A1.5,1.5 0 0,1 8,13.5A1.5,1.5 0 0,1 6.5,15M5,10L5.78,7.67L8.11,10H5M17.5,5.5L19,10H13.2L16.12,12.92C16.5,12.17 17.37,11.86 18.12,12.21C18.87,12.57 19.18,13.47 18.83,14.21C18.68,14.5 18.43,14.77 18.12,14.92L21,17.8V11L18.92,5C18.71,4.4 18.14,4 17.5,4H7.2L8.7,5.5H17.5Z",
@@ -349,6 +350,21 @@ C("sensor.captur_charging_remaining_time", "charging_remaining_time", "45", { de
 C("device_tracker.captur_location", "location", "home", { latitude: 48.11, longitude: -1.68, friendly_name: "Captur Location" });
 C("sensor.captur_location_last_activity", "location_last_activity", new Date(NOW - 12 * 60000).toISOString(), { device_class: "timestamp" });
 photo("captur", "Captur");
+// Mock Teslemetry (Tesla Model 3): no picture from the integration, the Tesla logo in the header, and an extra
+// button of the user's own (a wallbox switch) after the car's buttons.
+const T = (...a) => add("tesla", "teslemetry", ...a);
+T("sensor.model_3_odometer", "vehicle_state_odometer", "41260", { device_class: "distance", state_class: "total_increasing", unit_of_measurement: "km" });
+T("sensor.model_3_battery_level", "charge_state_battery_level", "64", { device_class: "battery", unit_of_measurement: "%" });
+T("sensor.model_3_battery_range", "charge_state_battery_range", "318", { device_class: "distance", unit_of_measurement: "km" });
+T("sensor.model_3_outside_temperature", "climate_state_outside_temp", "9", { device_class: "temperature", unit_of_measurement: "°C" });
+T("binary_sensor.model_3_charge_cable", "charge_state_conn_charge_cable", "on", { device_class: "plug" });
+T("sensor.model_3_time_to_full_charge", "charge_state_minutes_to_full_charge", "95", { device_class: "duration", unit_of_measurement: "min" });
+T("binary_sensor.model_3_charging", "charging", "on", { device_class: "battery_charging" });
+T("lock.model_3_lock", "vehicle_state_locked", "locked", { friendly_name: "Model 3 Lock" });
+T("device_tracker.model_3_location", "location", "home", { latitude: 48.11, longitude: -1.68, friendly_name: "Model 3 Location" });
+T("button.model_3_honk_horn", "honk", "unknown", { friendly_name: "Model 3 Honk horn" });
+T("button.model_3_flash_lights", "flash_lights", "unknown", { friendly_name: "Model 3 Flash lights" });
+add("wallbox", "wallbox", "switch.wallbox_pause_resume", "pause_resume", "on", { friendly_name: "Wallbox", icon: "mdi:ev-station" });
 const O = (...a) => add("orange", "orange_internet_on_the_move", ...a);
 O("sensor.orange_left_data_percentage", "left_data_percentage", "61", { unit_of_measurement: "%" });
 O("sensor.orange_left_data", "left_data", "3.1", { unit_of_measurement: "GB" });
@@ -359,6 +375,8 @@ O("sensor.orange_plan_type", "plan_type", "recurring");
 const devices = {
   espace: { id: "espace", name: "AB123CD", name_by_user: "Espace", model: "Espace vi", manufacturer: "Renault" },
   captur: { id: "captur", name: "EF456GH", name_by_user: "Captur", model: "Captur ii", manufacturer: "Renault" },
+  tesla: { id: "tesla", name: "Model 3", model: "Model 3", manufacturer: "Tesla" },
+  wallbox: { id: "wallbox", name: "Wallbox", manufacturer: "Wallbox" },
   orange: { id: "orange", name: "RENAULT Espace", model: "Espace", manufacturer: "Orange" },
 };
 const hass = { states, entities, devices, user: { name: "Alex" } };
@@ -380,7 +398,8 @@ const scale = (34497 - 12) / (km - 12);
 rows.forEach((r) => { r.state = Math.round(12 + (r.state - 12) * scale); });
 const leaseHass = { mockStatistics: { "sensor.espace_mileage": rows } };
 
-// Map card: the Captur charging at home, the Espace parked in town. OpenStreetMap raster tiles (like
+// Map card: the Captur charging at home, the Espace parked in town, the Model 3 in the centre (vehicles of two
+// brands: the car icon in the header). OpenStreetMap raster tiles (like
 // map_style: osm) from scripts/tiles; the positions stay inside the area those tiles cover.
 const MAP_CONFIG = { zoom: 13, map_style: "custom", tile_url: `${ORIGIN}/tiles/{z}/{x}/{y}.png`, tile_attribution: "&copy; OpenStreetMap contributors" };
 const mapHass = {
@@ -394,18 +413,20 @@ const mapHass = {
 
 await render(
   [
-    { file: "espace", type: "renault-card", theme: "light", width: 460, config: { plate_department: "35" } },
-    { file: "espace-dark", type: "renault-card", theme: "dark", width: 460, config: { plate_department: "35" } },
-    { file: "lease", type: "renault-card", theme: "light", width: 460, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, expand_lease: true, lease }, hass: leaseHass },
-    { file: "lease-dark", type: "renault-card", theme: "dark", width: 460, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, expand_lease: true, lease }, hass: leaseHass },
-    { file: "lease", gif: true, type: "renault-card", theme: "light", width: 460, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, lease }, hass: leaseHass },
-    { file: "lease-dark", gif: true, type: "renault-card", theme: "dark", width: 460, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, lease }, hass: leaseHass },
-    { file: "captur", type: "renault-card", theme: "light", width: 460, config: { device_id: "captur", plate_department: "35", show_data_plan: false } },
-    { file: "captur-dark", type: "renault-card", theme: "dark", width: 460, config: { device_id: "captur", plate_department: "35", show_data_plan: false } },
-    { file: "mini", type: "renault-mini-card", theme: "light", width: 280, config: { device_id: "captur" } },
-    { file: "mini-dark", type: "renault-mini-card", theme: "dark", width: 280, config: { device_id: "captur" } },
-    { file: "map", type: "renault-map-card", theme: "light", width: 420, config: MAP_CONFIG, hass: mapHass },
-    { file: "map-dark", type: "renault-map-card", theme: "dark", width: 420, config: MAP_CONFIG, hass: mapHass },
+    { file: "espace", type: "vehicle-card", theme: "light", width: 460, config: { plate_department: "35" } },
+    { file: "espace-dark", type: "vehicle-card", theme: "dark", width: 460, config: { plate_department: "35" } },
+    { file: "lease", type: "vehicle-card", theme: "light", width: 460, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, expand_lease: true, lease }, hass: leaseHass },
+    { file: "lease-dark", type: "vehicle-card", theme: "dark", width: 460, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, expand_lease: true, lease }, hass: leaseHass },
+    { file: "lease", gif: true, type: "vehicle-card", theme: "light", width: 460, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, lease }, hass: leaseHass },
+    { file: "lease-dark", gif: true, type: "vehicle-card", theme: "dark", width: 460, config: { plate_department: "35", show_image: false, show_data_plan: false, show_actions: false, show_location: false, lease }, hass: leaseHass },
+    { file: "captur", type: "vehicle-card", theme: "light", width: 460, config: { device_id: "captur", plate_department: "35", show_data_plan: false } },
+    { file: "captur-dark", type: "vehicle-card", theme: "dark", width: 460, config: { device_id: "captur", plate_department: "35", show_data_plan: false } },
+    { file: "tesla", type: "vehicle-card", theme: "light", width: 460, config: { device_id: "tesla", buttons: ["switch.wallbox_pause_resume"] } },
+    { file: "tesla-dark", type: "vehicle-card", theme: "dark", width: 460, config: { device_id: "tesla", buttons: ["switch.wallbox_pause_resume"] } },
+    { file: "mini", type: "vehicle-mini-card", theme: "light", width: 280, config: { device_id: "captur" } },
+    { file: "mini-dark", type: "vehicle-mini-card", theme: "dark", width: 280, config: { device_id: "captur" } },
+    { file: "map", type: "vehicle-map-card", theme: "light", width: 420, config: MAP_CONFIG, hass: mapHass },
+    { file: "map-dark", type: "vehicle-map-card", theme: "dark", width: 420, config: MAP_CONFIG, hass: mapHass },
   ],
   { icons, hass }
 );

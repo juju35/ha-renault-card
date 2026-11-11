@@ -1,5 +1,22 @@
 # Changelog
 
+## 3.0.0 - 2026-11-11
+
+**ha-renault-card is now ha-vehicle-card** ([#60](https://github.com/juju35/ha-vehicle-card/issues/60)): the cards work with connected cars of any brand. Existing dashboards keep working: `custom:renault-card`, `custom:renault-mini-card` and `custom:renault-map-card` are still defined with the same options, and `renault-card.js` is still shipped next to `vehicle-card.js`.
+
+### Features
+- **Any brand**: the vehicle is found and its entities matched for 18 integrations — Renault, Tesla Fleet, Teslemetry, Tessie, Volvo, Škoda and MySkoda, Subaru, Nissan Leaf (built in), and Stellantis Vehicles, Kia / Hyundai (kia_uvo), Mercedes-Benz (mbapi2020), Toyota, VW Group Connect, Volkswagen We Connect, Uconnect, Polestar and FordPass from the Marketplace. Range, battery, fuel, mileage, charging, plug, lock, air conditioning, outside temperature and location are read from each one's translation keys.
+- New cards in the picker: **Vehicle Card** (`custom:vehicle-card`), **Vehicle Mini Card** (`custom:vehicle-mini-card`) and **Vehicle Map Card** (`custom:vehicle-map-card`); the vehicle selector lists the vehicles of every brand.
+- **Brand logo** next to the name for 32 brands (from the device's manufacturer, else the integration), in the theme's text colour; Renault's stays in the bundle, the others ([Simple Icons](https://simpleicons.org)) are in `vehicle-card-brands.js`, loaded only when needed. The map card shows the brand's logo when all its vehicles are of one brand, a car icon otherwise.
+- **Vehicle picture from the integration**: an `image` entity of the car (VW group renders, Uconnect), the picture of its `device_tracker` (Stellantis Vehicles, Toyota) or, for Volvo, the `volvo.get_image_url` action; Kia / Hyundai's surround view cameras are skipped. Renault Picture still comes first, and your `image` before everything.
+- **Extra buttons** (`buttons`): any entities (switch, input boolean, script, scene, automation, lock, climate, light, fan, cover…) added after the vehicle's buttons, with the same confirmation tap: a tap presses, runs, locks or unlocks, or toggles them, and the ones that are on are highlighted.
+- **Fuel level** tile (in %) for the cars that give a level rather than a volume, and a lock chip from a `lock` entity for the integrations without a lock binary sensor.
+- The model reads "Tesla Model 3", "Peugeot e-208"…, from the device's manufacturer.
+
+### Other
+- Screenshots: a Tesla Model 3 card with a Wallbox button, and the map with vehicles of two brands.
+- Translations: the card names, descriptions and helpers no longer name Renault, in all 22 languages.
+
 ## 2.11.1 - 2026-11-09
 
 ### Fixes

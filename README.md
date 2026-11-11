@@ -1,22 +1,24 @@
-# ha-renault-card
+# ha-vehicle-card
 
 [![Marketplace](https://img.shields.io/badge/Marketplace-Custom-41BDF5.svg)](https://www.home-assistant.io/integrations/marketplace/)
-[![HACS Validation](https://github.com/juju35/ha-renault-card/actions/workflows/hacs.yml/badge.svg)](https://github.com/juju35/ha-renault-card/actions/workflows/hacs.yml)
-[![Validate](https://github.com/juju35/ha-renault-card/actions/workflows/validate.yml/badge.svg)](https://github.com/juju35/ha-renault-card/actions/workflows/validate.yml)
-[![Lint](https://github.com/juju35/ha-renault-card/actions/workflows/lint.yml/badge.svg)](https://github.com/juju35/ha-renault-card/actions/workflows/lint.yml)
-[![Release](https://img.shields.io/github/v/release/juju35/ha-renault-card)](https://github.com/juju35/ha-renault-card/releases/latest)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/juju35/ha-renault-card/blob/main/LICENSE)
+[![HACS Validation](https://github.com/juju35/ha-vehicle-card/actions/workflows/hacs.yml/badge.svg)](https://github.com/juju35/ha-vehicle-card/actions/workflows/hacs.yml)
+[![Validate](https://github.com/juju35/ha-vehicle-card/actions/workflows/validate.yml/badge.svg)](https://github.com/juju35/ha-vehicle-card/actions/workflows/validate.yml)
+[![Lint](https://github.com/juju35/ha-vehicle-card/actions/workflows/lint.yml/badge.svg)](https://github.com/juju35/ha-vehicle-card/actions/workflows/lint.yml)
+[![Release](https://img.shields.io/github/v/release/juju35/ha-vehicle-card)](https://github.com/juju35/ha-vehicle-card/releases/latest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/juju35/ha-vehicle-card/blob/main/LICENSE)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/julienstep9)
 
-Custom Lovelace cards for Home Assistant's [Renault](https://www.home-assistant.io/integrations/renault/) integration: a **vehicle card**, with an optional section for the [Orange Internet On the move](https://github.com/rexave/hass-orange-internet-on-the-move) data plan of the car, and a **map card** showing your vehicles.
+Custom Lovelace cards for connected cars of **any brand** in Home Assistant — Renault, Tesla, Volvo, Peugeot, Citroën, Opel, Fiat, Jeep (Stellantis), Volkswagen, Audi, Škoda, Seat, Cupra, Kia, Hyundai, Toyota, Mercedes-Benz, Polestar, Ford, Subaru, Nissan… : a **vehicle card**, a **mini card** and a **map card** showing your vehicles.
 
-Pick the vehicle, the card finds all its entities by itself.
+Pick the vehicle, the card finds all its entities by itself, whatever the integration.
 
-[![Open your Home Assistant instance and open a repository inside the Marketplace.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/marketplace_repository/?owner=juju35&repository=ha-renault-card&category=plugin)
+> **Formerly `ha-renault-card`.** Existing dashboards keep working: `custom:renault-card`, `custom:renault-mini-card` and `custom:renault-map-card` are still defined, and `renault-card.js` is still shipped next to `vehicle-card.js`. See [Migrating from ha-renault-card](#migrating-from-ha-renault-card).
 
-| Espace (with Orange Internet On the move) | Captur |
+[![Open your Home Assistant instance and open a repository inside the Marketplace.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/marketplace_repository/?owner=juju35&repository=ha-vehicle-card&category=plugin)
+
+| Renault Espace (with Orange Internet On the move) | Tesla Model 3 (with a Wallbox button) |
 |---|---|
-| <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/espace.png" alt="Renault Espace card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/captur.png" alt="Renault Captur card" width="400"> |
+| <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/espace.png" alt="Renault Espace card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/tesla.png" alt="Tesla Model 3 card" width="400"> |
 
 ## Features
 
@@ -24,26 +26,27 @@ Pick the vehicle, the card finds all its entities by itself.
 - Fuel gauge when you set the tank capacity, a low range warning (fuel plus battery range on a plug-in hybrid) and an optional low tyre pressure warning
 - Charging status and time left, plug, lock, door and air conditioning status
 - Location with the time of the last update; tap it to open the map
-- Action buttons for every button of the vehicle (horn, flash lights, air conditioning, start/stop charge), pressed with a confirmation tap, and the charge mode picker for electric cars
-- Renault logo next to the name, black on light themes and white on dark themes
-- The official MyRenault photo of your vehicle (with [Renault Picture](https://github.com/juju35/ha-renault-picture)) or your own picture, and a French licence plate drawn like the real one (EU band, department, and a traditional regional emblem for Brittany, Occitania, Île-de-France, Provence, Corsica and Burgundy)
+- Action buttons for every button of the vehicle (horn, flash lights, air conditioning, start/stop charge, refresh…), pressed with a confirmation tap, and the charge mode picker for electric cars
+- **Extra buttons** of your choice (`buttons`): a switch, a script, a scene, a lock, a climate, your wallbox… toggled, run or locked from the card with the same confirmation tap
+- The brand's logo next to the name (32 brands), black on light themes and white on dark themes
+- The picture of your vehicle when the integration gives one (the official MyRenault photo with [Renault Picture](https://github.com/juju35/ha-renault-picture), the renders of Volkswagen group cars, Stellantis, Toyota, Volvo, Fiat / Jeep…) or your own picture, and a French licence plate drawn like the real one (EU band, department, and a traditional regional emblem for Brittany, Occitania, Île-de-France, Provence, Corsica and Burgundy)
 - Optional **lease tracking** (LOA): mileage driven against the allowance, theoretical mileage expected today and the gap to it, kilometres left this month and per month until the end, end-of-lease projection (average or last 30 / 90 days) and estimated cost of the excess, always shown as a status; pace, contract year figures and a mileage chart folded by default
 - Optional **Orange Internet On the move** section: data left, percentage, renewal or expiry date
-- Automatic entity discovery from the device (English or French entity IDs)
+- Automatic entity discovery from the device, for [18 car integrations](#supported-integrations) (whatever the entity IDs or the Home Assistant language)
 - Visual editor in the dashboard UI (no YAML needed)
 - English, French, German, Spanish, Serbian (Cyrillic and Latin), Italian, Dutch, European Portuguese, Polish, Romanian, Danish, Swedish, Bulgarian, Russian, Ukrainian, Hungarian, Slovak, Czech, Slovenian, Latvian and Greek, follows the Home Assistant language
 - Light and dark theme compatible
 - Ready for the Marketplace, no CDN: the map libraries ship with the card
 
-**Mini card** (`custom:renault-mini-card`)
+**Mini card** (`custom:vehicle-mini-card`)
 
 - The picture, battery level, range (battery, or fuel without a battery) and charging or plug state in half a row
 - A button at the top right shows the full card; a click outside the card brings the compact view back
 - Same options and visual editor as the vehicle card
 
-**Map card** (`custom:renault-map-card`)
+**Map card** (`custom:vehicle-map-card`)
 
-- All your Renault vehicles on one map (or the ones you pick), each with its picture, name and range
+- All your vehicles on one map, whatever their brand (or the ones you pick), each with its picture, name and range
 - Popup with the picture, location, last update, range, fuel, battery and mileage, plus **Directions** (Google Maps) and **Details** buttons
 - Home marker
 - Base maps without API key: Home Assistant's own map (vector, light or dark), OpenStreetMap, OpenStreetMap France, IGN map and aerial photos, OpenTopoMap, CyclOSM, Esri satellite, or your own tile URL
@@ -53,13 +56,28 @@ Pick the vehicle, the card finds all its entities by itself.
 
 | Integration | What the cards show |
 |---|---|
-| [Renault](https://www.home-assistant.io/integrations/renault/) (built in) | Range, fuel and battery levels, mileage, charging, plug, lock, doors, air conditioning, tyre pressure, location, action buttons and charge mode; the vehicles on the map card |
-| [Renault Picture](https://github.com/juju35/ha-renault-picture) (Marketplace, optional) | The official MyRenault photo of the vehicle |
+The card picks the vehicle's entities by their translation keys (and entity IDs), so it works with these integrations as they are. What each one shows depends on what the car and the integration expose.
+
+| Integration | Brands | Picture |
+|---|---|---|
+| [Renault](https://www.home-assistant.io/integrations/renault/) (built in) | Renault, Dacia | With [Renault Picture](https://github.com/juju35/ha-renault-picture) |
+| [Tesla Fleet](https://www.home-assistant.io/integrations/tesla_fleet/), [Teslemetry](https://www.home-assistant.io/integrations/teslemetry/), [Tessie](https://www.home-assistant.io/integrations/tessie/) (built in) | Tesla | — |
+| [Volvo](https://www.home-assistant.io/integrations/volvo/) (built in) | Volvo | ✅ (`volvo.get_image_url` action) |
+| [Škoda](https://www.home-assistant.io/integrations/skoda/) (built in), [MySkoda](https://github.com/skodaconnect/homeassistant-myskoda) | Škoda | — |
+| [Subaru](https://www.home-assistant.io/integrations/subaru/), [Nissan Leaf](https://www.home-assistant.io/integrations/nissan_leaf/) (built in) | Subaru, Nissan | — |
+| [Stellantis Vehicles](https://github.com/andreadegiovine/homeassistant-stellantis-vehicles) | Peugeot, Citroën, DS, Opel, Vauxhall, Fiat, Jeep, Alfa Romeo… | ✅ |
+| [Kia / Hyundai (kia_uvo)](https://github.com/Hyundai-Kia-Connect/kia_uvo) | Kia, Hyundai, Genesis | — |
+| [Mercedes-Benz (mbapi2020)](https://github.com/ReneNulschDE/mbapi2020) | Mercedes-Benz, smart | — |
+| [Toyota](https://github.com/pytoyoda/ha_toyota) | Toyota, Lexus | ✅ |
+| [VW Group Connect (vag_connect)](https://github.com/its-me-prash/vwgroup-connect-ha), [Volkswagen We Connect](https://github.com/robinostlund/homeassistant-volkswagencarnet) | Volkswagen, Audi, Seat, Cupra, Škoda | ✅ (renders) |
+| [Uconnect](https://github.com/hass-uconnect/hass-uconnect) | Fiat, Jeep, Alfa Romeo, Ram, Chrysler, Dodge | ✅ |
+| [Polestar](https://github.com/leeyuentuen/polestar_api), [FordPass](https://github.com/itchannel/fordpass-ha) | Polestar, Ford | — |
+| Any other integration | Any car with a `device_tracker` and sensors | Your own `image` |
 | [Orange Internet On the move](https://github.com/rexave/hass-orange-internet-on-the-move) (Marketplace, optional) | Data left, percentage, renewal or expiry date |
 
 ## Prerequisites
 
-- Home Assistant 2024.8 or later with the [Renault](https://www.home-assistant.io/integrations/renault/) integration set up
+- Home Assistant 2024.8 or later with one of the [supported car integrations](#supported-integrations) set up
 - Optional: the [Orange Internet On the move](https://github.com/rexave/hass-orange-internet-on-the-move) integration, for the data plan section
 
 ## Installation
@@ -68,23 +86,23 @@ Pick the vehicle, the card finds all its entities by itself.
 
 Click the button below to add the repository directly:
 
-[![Add to the Marketplace](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/marketplace_repository/?owner=juju35&repository=ha-renault-card&category=plugin)
+[![Add to the Marketplace](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/marketplace_repository/?owner=juju35&repository=ha-vehicle-card&category=plugin)
 
 Or manually:
 
 1. Open **Settings → Marketplace → Add from link** (top right; this needs a GitHub account connected)
-2. Add `https://github.com/juju35/ha-renault-card` — Type: **Dashboard**
-3. Open **Renault Card** and click **Install** (both cards come in the same package)
+2. Add `https://github.com/juju35/ha-vehicle-card` — Type: **Dashboard**
+3. Open **Vehicle Card** and click **Install** (all three cards come in the same package)
 4. Clear your browser cache and refresh
 
 The Marketplace registers the dashboard resource for you.
 
 ### Manual
 
-1. Download all the `.js` files from the [latest release](https://github.com/juju35/ha-renault-card/releases/latest): `renault-card.js`, the map libraries (`leaflet.js`, `leaflet-maplibre-gl.js`, `maplibre-gl.js`, `maplibre-gl-worker.js`, `maplibre-gl-css.js`) and the translation files (`renault-card.i18n.*.js`)
-2. Copy them all to the same folder, for example `/config/www/` (the map card loads the libraries from the folder `renault-card.js` comes from)
+1. Download all the `.js` files from the [latest release](https://github.com/juju35/ha-vehicle-card/releases/latest): `vehicle-card.js`, the brand logos (`vehicle-card-brands.js`), the map libraries (`leaflet.js`, `leaflet-maplibre-gl.js`, `maplibre-gl.js`, `maplibre-gl-worker.js`, `maplibre-gl-css.js`) and the translation files (`vehicle-card.i18n.*.js`)
+2. Copy them all to the same folder, for example `/config/www/` (the cards load the libraries from the folder `vehicle-card.js` comes from)
 3. Go to **Settings → Dashboards → Resources** → Add resource:
-   - URL: `/local/renault-card.js`
+   - URL: `/local/vehicle-card.js`
    - Type: **JavaScript Module**
 4. Clear your browser cache and refresh
 
@@ -92,11 +110,18 @@ The Marketplace registers the dashboard resource for you.
 
 ### Visual editor
 
-Add the card from the dashboard (**Add card → Renault Card**). The first Renault vehicle is picked automatically; change it with the **Vehicle** field, then set the name, picture, tank capacity and the sections to show. The **Entities (advanced)** panel lets you force an entity if auto-detection picks the wrong one. Options left at their default are not written to the YAML.
+Add the card from the dashboard (**Add card → Vehicle Card**). The first vehicle is picked automatically; change it with the **Vehicle** field, then set the name, picture, tank capacity and the sections to show. The **Entities (advanced)** panel lets you force an entity if auto-detection picks the wrong one. Options left at their default are not written to the YAML.
 
 ### Vehicle picture
 
-If the [`renault_picture`](https://github.com/juju35/ha-renault-picture) integration is installed, the card shows the official MyRenault photo of your vehicle automatically, with nothing to set up. Without it, the card shows the Renault logo next to the name.
+The card shows the picture of your vehicle automatically, with nothing to set up, when its integration gives one:
+
+- Renault: the official MyRenault photo, with the [`renault_picture`](https://github.com/juju35/ha-renault-picture) integration
+- Volvo: the picture the built-in integration returns (`volvo.get_image_url` action, Home Assistant 2025.9 or later)
+- Volkswagen group (vag_connect), Uconnect: the integration's `image` entity of the car (Kia / Hyundai's surround view cameras are skipped)
+- Stellantis Vehicles, Toyota: the picture of the vehicle's `device_tracker`
+
+Without one, the card shows the brand's logo next to the name.
 
 For another model, or to use your own photo, give the card any image, ideally a PNG or WebP with a transparent background. Put it in `/config/www/renault/` and use `/local/renault/<file>`:
 
@@ -104,7 +129,7 @@ For another model, or to use your own photo, give the card any image, ideally a 
 image: /local/renault/clio.png
 ```
 
-Your `image` takes priority over the MyRenault photo. With no picture, or with `show_image: false`, the card shows only the Renault logo next to the name (or a car icon with `show_logo: false`).
+Your `image` takes priority over the integration's picture. With no picture, or with `show_image: false`, the card shows only the brand's logo next to the name (or a car icon with `show_logo: false`, or for a brand without a logo).
 
 ### Lease tracking (LOA)
 
@@ -134,27 +159,27 @@ Also in the visual editor, in the **Lease tracking** panel. Without `lease`, the
 
 | Lease (details unfolded) | Dark theme |
 |---|---|
-| <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/lease.png" alt="Lease tracking" width="387"> | <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/lease-dark.png" alt="Lease tracking, dark theme" width="387"> |
+| <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/lease.png" alt="Lease tracking" width="387"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/lease-dark.png" alt="Lease tracking, dark theme" width="387"> |
 
 The lease section unfolding on tap — pace, end-of-lease projection, contract year and the mileage chart — then folding back:
 
 | Light | Dark |
 |---|---|
-| <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/lease.gif" alt="Lease section unfolding and folding back" width="387"> | <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/lease-dark.gif" alt="Lease section unfolding and folding back, dark theme" width="387"> |
+| <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/lease.gif" alt="Lease section unfolding and folding back" width="387"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/lease-dark.gif" alt="Lease section unfolding and folding back, dark theme" width="387"> |
 
 ### Minimal
 
 ```yaml
-type: custom:renault-card
+type: custom:vehicle-card
 device_id: 5a8c1932ddf3f29163a275f06789b1bf
 ```
 
-Use either `device_id` (what the visual editor writes) or `entity` (any entity of the vehicle). With neither, the card uses the first Renault vehicle it finds.
+Use either `device_id` (what the visual editor writes) or `entity` (any entity of the vehicle). With neither, the card uses the first vehicle it finds.
 
 ### Full options
 
 ```yaml
-type: custom:renault-card
+type: custom:vehicle-card
 device_id: 5a8c1932ddf3f29163a275f06789b1bf
 name: Espace
 fuel_tank_capacity: 55
@@ -181,11 +206,11 @@ entities:
 
 | Option | Required | Default | Description |
 |---|---|---|---|
-| `device_id` | ❌* | Auto | Renault vehicle device (*or `entity`; the first vehicle is used if both are missing) |
+| `device_id` | ❌* | Auto | Vehicle device (*or `entity`; the first vehicle is used if both are missing) |
 | `entity` | ❌ | — | Any entity of the vehicle, used to find the device |
 | `name` | ❌ | Device name | Card title |
-| `image` | ❌ | Auto | Picture URL; overrides the MyRenault photo |
-| `show_logo` | ❌ | `true` | Show the Renault logo next to the name (follows the theme text colour) |
+| `image` | ❌ | Auto | Picture URL; overrides the integration's picture |
+| `show_logo` | ❌ | `true` | Show the brand's logo next to the name (follows the theme text colour) |
 | `show_image` | ❌ | `true` | Show the vehicle picture |
 | `fuel_tank_capacity` | ❌ | — | Tank capacity in litres; shows the fuel gauge |
 | `low_range` | ❌ | `100` | Range (km) below which the card shows a low range warning; `0` turns it off. Converted when the range sensor reads miles. On a plug-in hybrid it is compared with the fuel plus battery range, so an empty battery alone does not warn |
@@ -194,32 +219,33 @@ entities:
 | `plate_department` | ❌ | — | Department number on the right of the plate, e.g. `35`; departments of Brittany, Occitania, Île-de-France, Provence, Corsica and Burgundy get their traditional regional emblem |
 | `show_location` | ❌ | `true` | Show the location row |
 | `show_actions` | ❌ | `true` | Show the action buttons and charge mode |
+| `buttons` | ❌ | — | Extra action buttons: a list of entity IDs (`button`, `switch`, `input_boolean`, `script`, `scene`, `automation`, `lock`, `climate`, `light`, `fan`, `cover`…), after the vehicle's own buttons. A tap presses, runs, locks / unlocks or toggles the entity, after the confirmation tap |
 | `show_data_plan` | ❌ | `true` | Show the Orange Internet On the move section when a data plan is found |
 | `data_plan_device_id` | ❌ | Auto | Orange Internet On the move device; found from the vehicle model when empty |
 | `expand_lease` | ❌ | `false` | Show the lease details and chart unfolded |
 | `lease` | ❌ | — | Lease tracking: `start_date` (`YYYY-MM-DD`), `duration` (months) and `km_per_year` are required to show it; `start_mileage` (km at delivery) defaults to `0`; `forecast`: `90` or `30` to project from the last days (average since the start by default); `extra_km_cost`: cost per extra km |
 | `language` | ❌ | Auto | Force language: `en`, `fr`, `de`, `es`, `sr`, `sr-Latn`, `it`, `nl`, `pt`, `pl`, `ro`, `da`, `sv`, `bg`, `ru`, `uk`, `hu`, `sk`, `cs`, `sl`, `lv` or `el` (auto-detects from HA settings) |
-| `entities` | ❌ | Auto | Override detected entities: `mileage`, `fuel_autonomy`, `fuel_quantity`, `battery_level`, `battery_autonomy`, `location` |
+| `entities` | ❌ | Auto | Override detected entities: `mileage`, `fuel_autonomy`, `fuel_quantity`, `fuel_level`, `battery_level`, `battery_autonomy`, `location` |
 
 ## Mini card
 
-Add it from the dashboard (**Add card → Renault Mini Card**). It takes the same options as the vehicle card, which it shows in full when you press the button at the top right; a click outside the card folds it back.
+Add it from the dashboard (**Add card → Vehicle Mini Card**). It takes the same options as the vehicle card, which it shows in full when you press the button at the top right; a click outside the card folds it back.
 
 ```yaml
-type: custom:renault-mini-card
+type: custom:vehicle-mini-card
 device_id: 5a8c1932ddf3f29163a275f06789b1bf
 ```
 
 | Mini card | Mini card, dark |
 |---|---|
-| <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/mini.png" alt="Renault mini card" width="280"> | <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/mini-dark.png" alt="Renault mini card, dark theme" width="280"> |
+| <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini.png" alt="Renault mini card" width="280"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-dark.png" alt="Renault mini card, dark theme" width="280"> |
 
 ## Map card
 
-Add it from the dashboard (**Add card → Renault Map Card**). With no vehicle selected it shows all the Renault vehicles that have a location.
+Add it from the dashboard (**Add card → Vehicle Map Card**). With no vehicle selected it shows all the vehicles that have a location, whatever their brand.
 
 ```yaml
-type: custom:renault-map-card
+type: custom:vehicle-map-card
 title: Vehicles
 map_style: ha
 height: 400
@@ -227,7 +253,7 @@ height: 400
 
 | Option | Required | Default | Description |
 |---|---|---|---|
-| `devices` | ❌ | All vehicles | List of Renault device IDs to show |
+| `devices` | ❌ | All vehicles | List of vehicle device IDs to show |
 | `title` | ❌ | `Vehicles` | Card title; empty for none |
 | `map_style` | ❌ | `ha` | `ha` (Home Assistant vector map), `osm`, `osm_fr`, `ign`, `ign_photo`, `topo`, `cyclosm`, `satellite` or `custom` |
 | `theme` | ❌ | `auto` | Base map theme: `auto` (follows Home Assistant), `light` or `dark` |
@@ -235,33 +261,48 @@ height: 400
 | `tile_attribution` | ❌ | — | Attribution shown for custom tiles; rendered as HTML by Leaflet (as in Home Assistant's map card), so links are allowed |
 | `height` | ❌ | `400` | Map height in pixels |
 | `zoom` | ❌ | Auto | Fixed zoom level; by default the map fits the vehicles and home |
-| `show_icon` | ❌ | `true` | Renault logo in the header |
+| `show_icon` | ❌ | `true` | Brand logo in the header (when all the vehicles are of the same brand; a car icon otherwise) |
 | `show_home` | ❌ | `true` | Home marker |
 | `show_name` | ❌ | `true` | Vehicle name on the markers |
 | `show_picture` | ❌ | `true` | Vehicle picture on the markers and in the popup |
 | `show_fullscreen` | ❌ | `true` | Full screen button under the zoom buttons (on iPhone the card fills the screen) |
 | `language` | ❌ | Auto | Force language: `en`, `fr`, `de`, `es`, `sr`, `sr-Latn`, `it`, `nl`, `pt`, `pl`, `ro`, `da`, `sv`, `bg`, `ru`, `uk`, `hu`, `sk`, `cs`, `sl`, `lv` or `el` (auto-detects from HA settings) |
 
-The `ha` base map is the one Home Assistant's own map card uses (Home Assistant 2026.9 or later, WebGL2): OpenStreetMap vector tiles through your instance, in light or dark. On older versions or without WebGL2, the card falls back to OpenStreetMap raster tiles, also through Home Assistant when it can. Leaflet and MapLibre GL ship with the card (see [licenses](https://github.com/juju35/ha-renault-card/blob/main/licenses)): only the map tiles come from the network.
+The `ha` base map is the one Home Assistant's own map card uses (Home Assistant 2026.9 or later, WebGL2): OpenStreetMap vector tiles through your instance, in light or dark. On older versions or without WebGL2, the card falls back to OpenStreetMap raster tiles, also through Home Assistant when it can. Leaflet and MapLibre GL ship with the card (see [licenses](https://github.com/juju35/ha-vehicle-card/blob/main/licenses)): only the map tiles come from the network.
 
 ## Screenshots
 
 | Espace (fuel, data plan) | Captur (plug-in hybrid, charging) |
 |---|---|
-| <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/espace.png" alt="espace" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/captur.png" alt="captur" width="400"> |
-| <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/espace-dark.png" alt="espace dark" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/captur-dark.png" alt="captur dark" width="400"> |
+| <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/espace.png" alt="espace" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/captur.png" alt="captur" width="400"> |
+| <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/espace-dark.png" alt="espace dark" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/captur-dark.png" alt="captur dark" width="400"> |
+
+| Tesla Model 3 (Teslemetry, extra Wallbox button) | Tesla Model 3, dark |
+|---|---|
+| <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/tesla.png" alt="tesla" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/tesla-dark.png" alt="tesla dark" width="400"> |
 
 | Mini card | Mini card, dark |
 |---|---|
-| <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/mini.png" alt="mini card" width="280"> | <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/mini-dark.png" alt="mini card, dark" width="280"> |
+| <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini.png" alt="mini card" width="280"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/mini-dark.png" alt="mini card, dark" width="280"> |
 
-| Map card | Map card, dark |
+| Map card (two brands) | Map card, dark |
 |---|---|
-| <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/map.png" alt="map card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-renault-card/main/screenshots/map-dark.png" alt="map card, dark" width="400"> |
+| <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/map.png" alt="map card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/screenshots/map-dark.png" alt="map card, dark" width="400"> |
+
+## Migrating from ha-renault-card
+
+The repository was renamed and the Marketplace follows it: update the card as usual. Nothing breaks:
+
+- `custom:renault-card`, `custom:renault-mini-card` and `custom:renault-map-card` still work and take the same options; new cards are added as `custom:vehicle-card`, `custom:vehicle-mini-card` and `custom:vehicle-map-card`
+- `renault-card.js` is still shipped next to `vehicle-card.js`, so a dashboard resource that still points to `renault-card.js` keeps loading the cards
+
+To tidy up, replace `renault-` with `vehicle-` in your card types, and point the dashboard resource to `vehicle-card.js`.
 
 ## How it works
 
-The card reads the entity registry to list the entities of the chosen device, then matches each one by its translation key, then by its entity ID (English and French slugs), then by its attributes. Everything else the device exposes as a `button` becomes an action button.
+The card reads the entity registry to list the entities of the chosen device, then matches each one by its translation key, then by its entity ID (English and French slugs), then by its attributes. Everything else the device exposes as a `button` becomes an action button, followed by the entities of the `buttons` option.
+
+The **brand** comes from the device's manufacturer (else from the integration). Renault's logo is bundled; the 31 other logos ([Simple Icons](https://simpleicons.org), CC0) are in `vehicle-card-brands.js`, loaded only when a card shows another brand.
 
 **Action buttons** need a second tap within 3 seconds, so a horn doesn't go off by accident.
 
@@ -271,7 +312,7 @@ The card reads the entity registry to list the entities of the chosen device, th
 
 ```bash
 npm install
-npm run build        # stamps the version of package.json into dist/renault-card.js
+npm run build        # stamps the version of package.json into dist/vehicle-card.js (and dist/renault-card.js), writes dist/vehicle-card-brands.js
 npm run check        # builds and checks the card (run in CI)
 npm run screenshots  # renders the card with mock Renault vehicles into screenshots/, lease.gif and lease-dark.gif included (Playwright + ffmpeg/ffprobe); a file is only rewritten when its pixels change
 ```
@@ -283,7 +324,7 @@ The map libraries in `vendor/` (Leaflet, MapLibre GL and its Leaflet adapter) ar
 ### Releasing
 
 1. Bump `version` in `package.json`
-2. Add a `## <version>` section at the top of [CHANGELOG.md](https://github.com/juju35/ha-renault-card/blob/main/CHANGELOG.md)
+2. Add a `## <version>` section at the top of [CHANGELOG.md](https://github.com/juju35/ha-vehicle-card/blob/main/CHANGELOG.md)
 3. Push to `main`: the **Release** workflow builds the card, creates the tag and the GitHub release with the changelog section as notes, and attaches the files of `dist/`
 
 ## Translations
@@ -321,7 +362,7 @@ Contributions for additional languages are welcome!
 
 ## License
 
-[MIT](https://github.com/juju35/ha-renault-card/blob/main/LICENSE)
+[MIT](https://github.com/juju35/ha-vehicle-card/blob/main/LICENSE)
 
 ## Support
 
