@@ -32,6 +32,7 @@ Pick the vehicle, the card finds all its entities by itself, whatever the integr
 - The picture of your vehicle when the integration gives one (the official MyRenault photo with [Renault Picture](https://github.com/juju35/ha-renault-picture), the renders of Volkswagen group cars, Stellantis, Toyota, Volvo, Fiat / Jeep…) or your own picture, and a French licence plate drawn like the real one (EU band, department, and a traditional regional emblem for Brittany, Occitania, Île-de-France, Provence, Corsica and Burgundy)
 - Optional **lease tracking** (LOA): mileage driven against the allowance, theoretical mileage expected today and the gap to it, kilometres left this month and per month until the end, end-of-lease projection (average or last 30 / 90 days) and estimated cost of the excess, always shown as a status; pace, contract year figures and a mileage chart folded by default
 - Optional **Orange Internet On the move** section: data left, percentage, renewal or expiry date
+- **Connected services** subscription of the VW group cars (SEAT, CUPRA… with VW Group Connect): end date and days left, in orange when inactive or ending within 30 days; an **Offline** chip when a Tesla (Teslemetry) has neither mobile network nor Wi-Fi
 - Automatic entity discovery from the device, for [18 car integrations](#supported-integrations) (whatever the entity IDs or the Home Assistant language)
 - Visual editor in the dashboard UI (no YAML needed)
 - English, French, German, Spanish, Serbian (Cyrillic and Latin), Italian, Dutch, European Portuguese, Polish, Romanian, Danish, Swedish, Bulgarian, Russian, Ukrainian, Hungarian, Slovak, Czech, Slovenian, Latvian and Greek, follows the Home Assistant language
@@ -220,7 +221,7 @@ entities:
 | `show_location` | ❌ | `true` | Show the location row |
 | `show_actions` | ❌ | `true` | Show the action buttons and charge mode |
 | `buttons` | ❌ | — | Extra action buttons: a list of entity IDs (`button`, `switch`, `input_boolean`, `script`, `scene`, `automation`, `lock`, `climate`, `light`, `fan`, `cover`…), after the vehicle's own buttons. A tap presses, runs, locks / unlocks or toggles the entity, after the confirmation tap |
-| `show_data_plan` | ❌ | `true` | Show the Orange Internet On the move section when a data plan is found |
+| `show_data_plan` | ❌ | `true` | Show the Orange Internet On the move section when a data plan is found, and the connected services subscription of the car |
 | `data_plan_device_id` | ❌ | Auto | Orange Internet On the move device; found from the vehicle model when empty |
 | `expand_lease` | ❌ | `false` | Show the lease details and chart unfolded |
 | `lease` | ❌ | — | Lease tracking: `start_date` (`YYYY-MM-DD`), `duration` (months) and `km_per_year` are required to show it; `start_mileage` (km at delivery) defaults to `0`; `forecast`: `90` or `30` to project from the last days (average since the start by default); `extra_km_cost`: cost per extra km |

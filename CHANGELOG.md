@@ -11,6 +11,8 @@
 - **Vehicle picture from the integration**: an `image` entity of the car (VW group renders, Uconnect), the picture of its `device_tracker` (Stellantis Vehicles, Toyota) or, for Volvo, the `volvo.get_image_url` action; Kia / Hyundai's surround view cameras are skipped. Renault Picture still comes first, and your `image` before everything.
 - **Extra buttons** (`buttons`): any entities (switch, input boolean, script, scene, automation, lock, climate, light, fan, cover…) added after the vehicle's buttons, with the same confirmation tap: a tap presses, runs, locks or unlocks, or toggles them, and the ones that are on are highlighted.
 - **Fuel level** tile (in %) for the cars that give a level rather than a volume, and a lock chip from a `lock` entity for the integrations without a lock binary sensor.
+- **Connected services** row for the cars whose integration gives their subscription (VW Group Connect: SEAT, CUPRA…): end date and days left, in the warning colour when inactive or ending within 30 days. None of the car integrations exposes a data plan like Orange Internet On the move does.
+- **Offline** chip when a car has neither mobile network nor Wi-Fi (Teslemetry).
 - The model reads "Tesla Model 3", "Peugeot e-208"…, from the device's manufacturer.
 
 ### Other

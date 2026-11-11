@@ -53,6 +53,9 @@ var RnI18n = {
     data_left: '{l} restants sur {t}',
     renews_on: 'Renouvellement le {d}',
     expires_on: 'Expire le {d}',
+    services: 'Services connectés',
+    offline: 'Hors ligne',
+    services_inactive: 'Inactifs',
     days_left: '{n} j',
     expired: 'Expiré',
     unit_gb: 'Go',
@@ -176,6 +179,9 @@ var RnI18n = {
     data_left: '{l} left of {t}',
     renews_on: 'Renews on {d}',
     expires_on: 'Expires on {d}',
+    services: 'Connected services',
+    offline: 'Offline',
+    services_inactive: 'Inactive',
     days_left: '{n} d',
     expired: 'Expired',
     unit_gb: 'GB',
@@ -299,6 +305,9 @@ var RnI18n = {
     data_left: '{l} von {t} übrig',
     renews_on: 'Verlängerung am {d}',
     expires_on: 'Läuft am {d} ab',
+    services: 'Vernetzte Dienste',
+    offline: 'Offline',
+    services_inactive: 'Inaktiv',
     days_left: '{n} Tg.',
     expired: 'Abgelaufen',
     unit_gb: 'GB',
@@ -422,6 +431,9 @@ var RnI18n = {
     data_left: 'Quedan {l} de {t}',
     renews_on: 'Se renueva el {d}',
     expires_on: 'Caduca el {d}',
+    services: 'Servicios conectados',
+    offline: 'Sin conexión',
+    services_inactive: 'Inactivos',
     days_left: '{n} d',
     expired: 'Caducado',
     unit_gb: 'GB',
@@ -545,6 +557,9 @@ var RnI18n = {
     data_left: 'Преостало {l} од {t}',
     renews_on: 'Обнавља се {d}',
     expires_on: 'Истиче {d}',
+    services: 'Повезане услуге',
+    offline: 'Ван мреже',
+    services_inactive: 'Неактивне',
     days_left: '{n} д',
     expired: 'Истекло',
     unit_gb: 'ГБ',
@@ -668,6 +683,9 @@ var RnI18n = {
     data_left: 'Preostalo {l} od {t}',
     renews_on: 'Obnavlja se {d}',
     expires_on: 'Ističe {d}',
+    services: 'Povezane usluge',
+    offline: 'Van mreže',
+    services_inactive: 'Neaktivne',
     days_left: '{n} d',
     expired: 'Isteklo',
     unit_gb: 'GB',
@@ -791,6 +809,9 @@ var RnI18n = {
     data_left: '{l} rimanenti su {t}',
     renews_on: 'Rinnovo il {d}',
     expires_on: 'Scade il {d}',
+    services: 'Servizi connessi',
+    offline: 'Offline',
+    services_inactive: 'Inattivi',
     days_left: '{n} g',
     expired: 'Scaduto',
     unit_gb: 'GB',
@@ -914,6 +935,9 @@ var RnI18n = {
     data_left: '{l} over van {t}',
     renews_on: 'Wordt verlengd op {d}',
     expires_on: 'Verloopt op {d}',
+    services: 'Verbonden diensten',
+    offline: 'Offline',
+    services_inactive: 'Inactief',
     days_left: '{n} d',
     expired: 'Verlopen',
     unit_gb: 'GB',
@@ -1037,6 +1061,9 @@ var RnI18n = {
     data_left: '{l} restantes de {t}',
     renews_on: 'Renova a {d}',
     expires_on: 'Expira a {d}',
+    services: 'Serviços conectados',
+    offline: 'Offline',
+    services_inactive: 'Inativos',
     days_left: '{n} d',
     expired: 'Expirado',
     unit_gb: 'GB',
@@ -1160,6 +1187,9 @@ var RnI18n = {
     data_left: 'Pozostało {l} z {t}',
     renews_on: 'Odnowienie: {d}',
     expires_on: 'Wygasa: {d}',
+    services: 'Usługi online',
+    offline: 'Offline',
+    services_inactive: 'Nieaktywne',
     days_left: '{n} dn.',
     expired: 'Wygasł',
     unit_gb: 'GB',
@@ -1283,6 +1313,9 @@ var RnI18n = {
     data_left: 'Rămas: {l} din {t}',
     renews_on: 'Se reînnoiește pe {d}',
     expires_on: 'Expiră pe {d}',
+    services: 'Servicii conectate',
+    offline: 'Offline',
+    services_inactive: 'Inactive',
     days_left: '{n} z',
     expired: 'Expirat',
     unit_gb: 'GB',
@@ -1406,6 +1439,9 @@ var RnI18n = {
     data_left: '{l} tilbage af {t}',
     renews_on: 'Fornyes {d}',
     expires_on: 'Udløber {d}',
+    services: 'Forbundne tjenester',
+    offline: 'Offline',
+    services_inactive: 'Inaktive',
     days_left: '{n} d.',
     expired: 'Udløbet',
     unit_gb: 'GB',
@@ -1529,6 +1565,9 @@ var RnI18n = {
     data_left: '{l} kvar av {t}',
     renews_on: 'Förnyas {d}',
     expires_on: 'Upphör {d}',
+    services: 'Uppkopplade tjänster',
+    offline: 'Offline',
+    services_inactive: 'Inaktiva',
     days_left: '{n} d',
     expired: 'Utgånget',
     unit_gb: 'GB',
@@ -1652,6 +1691,9 @@ var RnI18n = {
     data_left: 'Остават {l} от {t}',
     renews_on: 'Подновява се на {d}',
     expires_on: 'Изтича на {d}',
+    services: 'Свързани услуги',
+    offline: 'Офлайн',
+    services_inactive: 'Неактивни',
     days_left: '{n} д',
     expired: 'Изтекъл',
     unit_gb: 'GB',
@@ -1775,6 +1817,9 @@ var RnI18n = {
     data_left: 'Осталось {l} из {t}',
     renews_on: 'Продление {d}',
     expires_on: 'Истекает {d}',
+    services: 'Онлайн-сервисы',
+    offline: 'Не в сети',
+    services_inactive: 'Неактивны',
     days_left: '{n} дн.',
     expired: 'Истёк',
     unit_gb: 'GB',
@@ -1898,6 +1943,9 @@ var RnI18n = {
     data_left: 'Залишилось {l} з {t}',
     renews_on: 'Поновлення {d}',
     expires_on: 'Спливає {d}',
+    services: 'Онлайн-сервіси',
+    offline: 'Не в мережі',
+    services_inactive: 'Неактивні',
     days_left: '{n} дн.',
     expired: 'Сплив',
     unit_gb: 'GB',
@@ -2021,6 +2069,9 @@ var RnI18n = {
     data_left: 'Hátralévő: {l} / {t}',
     renews_on: 'Megújul: {d}',
     expires_on: 'Lejár: {d}',
+    services: 'Online szolgáltatások',
+    offline: 'Offline',
+    services_inactive: 'Inaktív',
     days_left: '{n} nap',
     expired: 'Lejárt',
     unit_gb: 'GB',
@@ -2144,6 +2195,9 @@ var RnI18n = {
     data_left: 'Zostáva {l} z {t}',
     renews_on: 'Obnovenie {d}',
     expires_on: 'Platí do {d}',
+    services: 'Pripojené služby',
+    offline: 'Offline',
+    services_inactive: 'Neaktívne',
     days_left: '{n} d',
     expired: 'Platnosť skončila',
     unit_gb: 'GB',
@@ -2267,6 +2321,9 @@ var RnI18n = {
     data_left: 'Zbývá {l} z {t}',
     renews_on: 'Obnovení {d}',
     expires_on: 'Platnost do {d}',
+    services: 'Připojené služby',
+    offline: 'Offline',
+    services_inactive: 'Neaktivní',
     days_left: '{n} d',
     expired: 'Vypršelo',
     unit_gb: 'GB',
@@ -2390,6 +2447,9 @@ var RnI18n = {
     data_left: 'Preostane {l} od {t}',
     renews_on: 'Podaljšanje {d}',
     expires_on: 'Poteče {d}',
+    services: 'Povezane storitve',
+    offline: 'Brez povezave',
+    services_inactive: 'Neaktivne',
     days_left: '{n} d',
     expired: 'Poteklo',
     unit_gb: 'GB',
@@ -2513,6 +2573,9 @@ var RnI18n = {
     data_left: 'Atlikuši {l} no {t}',
     renews_on: 'Atjaunojas {d}',
     expires_on: 'Beidzas {d}',
+    services: 'Pieslēgtie pakalpojumi',
+    offline: 'Bezsaistē',
+    services_inactive: 'Neaktīvi',
     days_left: '{n} d.',
     expired: 'Beidzies',
     unit_gb: 'GB',
@@ -2636,6 +2699,9 @@ var RnI18n = {
     data_left: 'Απομένουν {l} από {t}',
     renews_on: 'Ανανέωση στις {d}',
     expires_on: 'Λήγει στις {d}',
+    services: 'Συνδεδεμένες υπηρεσίες',
+    offline: 'Εκτός σύνδεσης',
+    services_inactive: 'Ανενεργές',
     days_left: '{n} ημ.',
     expired: 'Έληξε',
     unit_gb: 'GB',
@@ -2830,6 +2896,11 @@ var RN_ROLES = {
   lock: { domain: 'lock', keys: ['vehicle_state_locked', 'lock', 'door_locks', 'door_lock'], test: () => true },
   hvac_status: { domain: 'binary_sensor', keys: ['hvac_status', 'climate_state_is_preconditioning', 'preconditioning'], id: /(hvac_status|climatisation)$/ },
   charge_mode: { domain: 'select', keys: ['charge_mode'], id: /(charge_mode|mode_de_charge)$/ },
+  // The car's connected services (VW group: SEAT, CUPRA…) and its connection (Teslemetry).
+  services_expiry: { domain: 'sensor', keys: ['subscription_expiry_at'] },
+  services_active: { domain: 'binary_sensor', keys: ['subscription_active'] },
+  cellular: { domain: 'binary_sensor', keys: ['cellular'] },
+  wifi: { domain: 'binary_sensor', keys: ['wifi'] },
 };
 
 // The integrations of connected vehicles the card finds by itself (built in, then of the Marketplace). Any other
@@ -3546,6 +3617,10 @@ class RenaultCard extends HTMLElement {
       var expiry = new Date(this._val(r.plan.expiry_date));
       if (!Number.isNaN(expiry.getTime())) out.push(Math.ceil((expiry.getTime() - Date.now()) / 86400000));
     }
+    if (this._avail(ent.services_expiry)) {
+      var end = new Date(this._val(ent.services_expiry));
+      if (!Number.isNaN(end.getTime())) out.push(Math.ceil((end.getTime() - Date.now()) / 86400000));
+    }
     return out;
   }
 
@@ -3759,6 +3834,10 @@ class RenaultCard extends HTMLElement {
     if (this._val(ent.hvac_status) === 'on') {
       chips.push(`<span class="chip ok"><ha-icon icon="mdi:air-conditioner"></ha-icon>${this._t('hvac_on')}</span>`);
     }
+    // Neither mobile network nor Wi-Fi: the car does not answer, its values may be old.
+    if (this._val(ent.cellular) === 'off' && this._val(ent.wifi) !== 'on') {
+      chips.push(`<span class="chip warn" data-more="${rnEsc(ent.cellular)}" role="button" tabindex="0"><ha-icon icon="mdi:access-point-network-off"></ha-icon>${this._t('offline')}</span>`);
+    }
 
     // Stat tiles
     var tiles = [];
@@ -3862,7 +3941,23 @@ class RenaultCard extends HTMLElement {
     this._setHtml(this._styles() + '<ha-card>' + header + image +
       (chips.length ? `<div class="chips">${chips.join('')}</div>` : '') +
       (tiles.length ? `<div class="tiles">${tiles.join('')}</div>` : '') +
-      this._leaseHtml(ent) + locationHtml + planHtml + actionsHtml + '</ha-card>');
+      this._leaseHtml(ent) + locationHtml + planHtml + this._servicesHtml(ent) + actionsHtml + '</ha-card>');
+  }
+
+  // The car's connected services subscription (VW group integrations): its end date and days left,
+  // in the warning colour when inactive, expired or ending within 30 days.
+  _servicesHtml(ent) {
+    if (!this._config.show_data_plan || !this._avail(ent.services_expiry)) return '';
+    var end = new Date(this._val(ent.services_expiry));
+    if (Number.isNaN(end.getTime())) return '';
+    var days = Math.ceil((end.getTime() - Date.now()) / 86400000);
+    var inactive = this._val(ent.services_active) === 'off';
+    var warn = inactive || days < 30;
+    var when = inactive ? this._t('services_inactive') : days < 0 ? this._t('expired') : this._t('days_left', { n: days });
+    return `<div class="row${warn ? ' warn' : ''}" data-more="${rnEsc(ent.services_expiry)}" role="button" tabindex="0">` +
+      '<ha-icon icon="mdi:access-point-network"></ha-icon>' +
+      `<div class="row-text"><span class="lbl">${this._t('services')}</span><span class="val">${rnEsc(this._t('expires_on', { d: end.toLocaleDateString(this._intl(), { day: 'numeric', month: 'long', year: 'numeric' }) }))}</span></div>` +
+      `<span class="when">${rnEsc(when)}</span><ha-icon class="chev" icon="mdi:chevron-right"></ha-icon></div>`;
   }
 
   // Replaces the card content and gives the focus back to the same action button, tile or lease
@@ -4115,6 +4210,7 @@ class RenaultCard extends HTMLElement {
       '.row { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 10px; cursor: pointer;' +
         ' background: var(--secondary-background-color, rgba(128,128,128,0.1)); }' +
       '.row > ha-icon { color: var(--rn-accent); --mdc-icon-size: 20px; }' +
+      '.row.warn > ha-icon, .row.warn .when { color: var(--warning-color, #ffa600); }' +
       // The place and "updated X ago" share the row; the time wraps rather than taking it all.
       '.row-text { flex: 1 1 auto; min-width: 0; }' +
       '.when { flex: 0 1 auto; min-width: 0; overflow-wrap: break-word; font-size: 12px; color: var(--secondary-text-color); text-align: right; }' +

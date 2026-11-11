@@ -1747,3 +1747,34 @@ test("buttons option: extra entities join the actions; a tap presses, runs, lock
   await flush();
   assert.deepEqual(JSON.parse(JSON.stringify(calls)), [["homeassistant", "toggle", { entity_id: "switch.preheat" }]]);
 });
+
+test("connected services (VW group) row and the offline chip (Teslemetry)", () => {
+  const { entities, devices } = renaultRegistry();
+  const reg = (entity_id, translation_key) => ({ entity_id, device_id: "d1", platform: "vag_connect", translation_key });
+  entities["sensor.car_subscription"] = reg("sensor.car_subscription", "subscription_expiry_at");
+  entities["binary_sensor.car_subscription_active"] = reg("binary_sensor.car_subscription_active", "subscription_active");
+  entities["binary_sensor.car_cellular"] = reg("binary_sensor.car_cellular", "cellular");
+  entities["binary_sensor.car_wifi"] = reg("binary_sensor.car_wifi", "wifi");
+  const states = {
+    ...renaultStates(Object.keys(renaultRegistry().entities)),
+    "sensor.car_subscription": { state: new Date(Date.now() + 10 * 86400000).toISOString(), attributes: { device_class: "timestamp" } },
+    "binary_sensor.car_subscription_active": { state: "on", attributes: {} },
+    "binary_sensor.car_cellular": { state: "off", attributes: {} },
+    "binary_sensor.car_wifi": { state: "off", attributes: {} },
+  };
+  const card = Object.create(RenaultCard.prototype);
+  card._config = { device_id: "d1", show_data_plan: true, show_actions: true };
+  card._hass = { entities, devices, states, language: "en" };
+  const root = { html: "", activeElement: null, querySelectorAll: () => [] };
+  Object.defineProperty(root, "innerHTML", { get: () => root.html, set: (h) => { root.html = h; } });
+  card.shadowRoot = root;
+  card._update();
+  assert.match(root.html, /<div class="row warn" data-more="sensor\.car_subscription"[^>]*>.*Connected services.*10 d/);
+  assert.match(root.html, /access-point-network-off"><\/ha-icon>Offline/);
+  states["binary_sensor.car_wifi"] = { state: "on", attributes: {} };
+  states["sensor.car_subscription"] = { state: new Date(Date.now() + 200 * 86400000).toISOString(), attributes: {} };
+  card._sig = null;
+  card._update();
+  assert.doesNotMatch(root.html, /Offline/);
+  assert.match(root.html, /<div class="row" data-more="sensor\.car_subscription"/);
+});
