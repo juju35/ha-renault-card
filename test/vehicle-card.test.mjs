@@ -660,7 +660,7 @@ test("refreshed lease statistics with the same key are rendered", () => {
   assert.equal(renders, 2);
 });
 
-// Leaflet that cannot be loaded (renault-card.js copied alone, network error): fake <script> tags fail.
+// Leaflet that cannot be loaded (vehicle-card.js copied alone, network error): fake <script> tags fail.
 function failingScripts() {
   const head = [];
   const saved = { head: ctx.document.head, createElement: ctx.document.createElement, base: ctx.rnBaseUrl };

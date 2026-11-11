@@ -1,5 +1,4 @@
-// Builds src/vehicle-card.js into dist/vehicle-card.js (and dist/renault-card.js, its former name, for the
-// dashboard resources that still load it), stamping the package version, and copies the
+// Builds src/vehicle-card.js into dist/vehicle-card.js, stamping the package version, and copies the
 // vendored map libraries (vendor/: Leaflet, MapLibre GL and its Leaflet adapter) next to it.
 // Usage: node scripts/build.mjs  (dist/ is not committed: CI and the release workflow build it)
 import { copyFileSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -7,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import { splitDist } from "./i18n-split.mjs";
 
 const FILE = "vehicle-card.js";
-const ALIASES = ["renault-card.js"];
+const ALIASES = [];
 const root = fileURLToPath(new URL("..", import.meta.url));
 const pkg = JSON.parse(readFileSync(`${root}package.json`, "utf8"));
 

@@ -12,7 +12,7 @@ Custom Lovelace cards for connected cars of **any brand** in Home Assistant — 
 
 Pick the vehicle, the card finds all its entities by itself, whatever the integration.
 
-> **Formerly `ha-renault-card`.** Existing dashboards keep working: `custom:renault-card`, `custom:renault-mini-card` and `custom:renault-map-card` are still defined, and `renault-card.js` is still shipped next to `vehicle-card.js`. See [Migrating from ha-renault-card](#migrating-from-ha-renault-card).
+> **Formerly `ha-renault-card`.** Existing dashboards keep working: `custom:renault-card`, `custom:renault-mini-card` and `custom:renault-map-card` are still defined. The file is now `vehicle-card.js`: a dashboard resource added by hand must point to it. See [Migrating from ha-renault-card](#migrating-from-ha-renault-card).
 
 [![Open your Home Assistant instance and open a repository inside the Marketplace.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/marketplace_repository/?owner=juju35&repository=ha-vehicle-card&category=plugin)
 
@@ -292,12 +292,12 @@ The `ha` base map is the one Home Assistant's own map card uses (Home Assistant 
 
 ## Migrating from ha-renault-card
 
-The repository was renamed and the Marketplace follows it: update the card as usual. Nothing breaks:
+The repository was renamed and the Marketplace follows it: update the card as usual.
 
 - `custom:renault-card`, `custom:renault-mini-card` and `custom:renault-map-card` still work and take the same options; new cards are added as `custom:vehicle-card`, `custom:vehicle-mini-card` and `custom:vehicle-map-card`
-- `renault-card.js` is still shipped next to `vehicle-card.js`, so a dashboard resource that still points to `renault-card.js` keeps loading the cards
+- The file is now `vehicle-card.js` (`renault-card.js` is no longer shipped since 3.0.1). The Marketplace registers the new file; **if you added the dashboard resource by hand** (`/local/renault-card.js`…), point it to `vehicle-card.js`, and check in **Settings → Dashboards → Resources** that no resource still loads `renault-card.js`
 
-To tidy up, replace `renault-` with `vehicle-` in your card types. If you added the dashboard resource by hand, point it to `vehicle-card.js`. The Marketplace still registers `renault-card.js` in 3.0.0 (it checks the file against the latest release) and moves to `vehicle-card.js` in the next version.
+To tidy up, replace `renault-` with `vehicle-` in your card types.
 
 ## How it works
 
@@ -313,7 +313,7 @@ The **brand** comes from the device's manufacturer (else from the integration). 
 
 ```bash
 npm install
-npm run build        # stamps the version of package.json into dist/vehicle-card.js (and dist/renault-card.js), writes dist/vehicle-card-brands.js
+npm run build        # stamps the version of package.json into dist/vehicle-card.js, writes dist/vehicle-card-brands.js
 npm run check        # builds and checks the card (run in CI)
 npm run screenshots  # renders the card with mock Renault vehicles into screenshots/, lease.gif and lease-dark.gif included (Playwright + ffmpeg/ffprobe); a file is only rewritten when its pixels change
 ```
