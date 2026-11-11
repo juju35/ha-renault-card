@@ -28,7 +28,7 @@ Pick the vehicle, the card finds all its entities by itself, whatever the integr
 - Location with the time of the last update; tap it to open the map
 - Action buttons for every button of the vehicle (horn, flash lights, air conditioning, start/stop charge, refresh…), pressed with a confirmation tap, and the charge mode picker for electric cars
 - **Extra buttons** of your choice (`buttons`): a switch, a script, a scene, a lock, a climate, your wallbox… toggled, run or locked from the card with the same confirmation tap
-- The brand's logo next to the name (32 brands), black on light themes and white on dark themes
+- The brand's logo next to the name (33 brands), black on light themes and white on dark themes
 - The picture of your vehicle when the integration gives one (the official MyRenault photo with [Renault Picture](https://github.com/juju35/ha-renault-picture), the renders of Volkswagen group cars, Stellantis, Toyota, Volvo, Fiat / Jeep…) or your own picture, and a French licence plate drawn like the real one (EU band, department, and a traditional regional emblem for Brittany, Occitania, Île-de-France, Provence, Corsica and Burgundy)
 - Optional **lease tracking** (LOA): mileage driven against the allowance, theoretical mileage expected today and the gap to it, kilometres left this month and per month until the end, end-of-lease projection (average or last 30 / 90 days) and estimated cost of the excess, always shown as a status; pace, contract year figures and a mileage chart folded by default
 - Optional **Orange Internet On the move** section: data left, percentage, renewal or expiry date
@@ -407,7 +407,7 @@ To tidy up, replace `renault-` with `vehicle-` in your card types.
 
 The card reads the entity registry to list the entities of the chosen device, then matches each one by its translation key, then by its entity ID (English and French slugs), then by its attributes. Everything else the device exposes as a `button` becomes an action button, followed by the entities of the `buttons` option.
 
-The **brand** comes from the device's manufacturer (else from the integration). Renault's logo is bundled; the 31 other logos ([Simple Icons](https://simpleicons.org), CC0) are in `vehicle-card-brands.js`, loaded only when a card shows another brand.
+The **brand** comes from the device's manufacturer (else from the integration). Renault's logo is bundled; the 32 other logos ([Simple Icons](https://simpleicons.org), CC0, and the CUPRA emblem from Wikimedia Commons) are in `vehicle-card-brands.js`, loaded only when a card shows another brand.
 
 **Action buttons** need a second tap within 3 seconds, so a horn doesn't go off by accident.
 
