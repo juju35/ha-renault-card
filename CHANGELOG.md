@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.5 - 2026-11-12
+
+### Documentation
+- Screenshots: Tesla's render of the Model 3 (card, mini card and map).
+
 ## 3.0.4 - 2026-11-12
 
 ### Documentation
