@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.6 - 2026-11-12
+
+### Documentation
+- The Orange Internet On the move section now points to [ha-orange-internet-on-the-move](https://github.com/juju35/ha-orange-internet-on-the-move), which replaces rexave's integration, no longer maintained (same domain, devices and entities: no change needed in the card).
+
 ## 3.0.5 - 2026-11-12
 
 ### Documentation
