@@ -114,12 +114,14 @@ Optional integrations:
 | Integration | What the cards show |
 |---|---|
 | [Renault Picture](https://github.com/juju35/ha-renault-picture) (Marketplace) | The official MyRenault photo of the vehicle |
-| [Orange Internet On the move](https://github.com/rexave/hass-orange-internet-on-the-move) (Marketplace) | Data left, percentage, renewal or expiry date of the car's data plan |
+| [Orange Internet On the move](https://github.com/juju35/ha-orange-internet-on-the-move) (Marketplace) | Data left, percentage, renewal or expiry date of the car's data plan |
+
+> **Note:** the original [rexave/hass-orange-internet-on-the-move](https://github.com/rexave/hass-orange-internet-on-the-move) integration is no longer maintained (it triggers Home Assistant deprecation warnings due in 2027.5 and 2027.8). [ha-orange-internet-on-the-move](https://github.com/juju35/ha-orange-internet-on-the-move) replaces it in place: same domain, devices and entities, so the card keeps working without any change. See its [migration guide](https://github.com/juju35/ha-orange-internet-on-the-move#migrating-from-rexaves-integration).
 
 ## Prerequisites
 
 - Home Assistant 2024.8 or later with one of the [supported car integrations](#supported-integrations) set up
-- Optional: the [Orange Internet On the move](https://github.com/rexave/hass-orange-internet-on-the-move) integration, for the data plan section
+- Optional: the [Orange Internet On the move](https://github.com/juju35/ha-orange-internet-on-the-move) integration, for the data plan section
 
 ## Installation
 
@@ -447,7 +449,7 @@ The **brand** comes from the device's manufacturer (else from the integration). 
 
 **Action buttons** need a second tap within 3 seconds, so a horn doesn't go off by accident.
 
-**Orange Internet On the move**: the data plan device is named after the car (for example *Data Plan for RENAULT Espace*), so the card links it to the vehicle whose model matches. Set `data_plan_device_id` to pick one by hand. The integration reports data in megabytes (labelled Mbit); the card shows it in GB above 1 GB. The date is shown as a renewal date for recurring plans, as an expiry date otherwise. Click the Orange logo to open the [Orange Internet On the move customer area](https://internetonthemove.orange-business.com/renault/#/login); click anywhere else in the section for the entity details.
+**Orange Internet On the move**: the data plan device of [ha-orange-internet-on-the-move](https://github.com/juju35/ha-orange-internet-on-the-move) is named after the car's tag on the portal (for example *RENAULT Espace*), so the card links it to the vehicle whose model matches. Set `data_plan_device_id` to pick one by hand. The card shows the data in GB above 1 GB, whatever the unit of the sensors (MiB, GiB, or the Mbit label of the unmaintained rexave integration). The date is shown as a renewal date for recurring plans, as an expiry date otherwise. Click the Orange logo to open the [Orange Internet On the move customer area](https://internetonthemove.orange-business.com/renault/#/login); click anywhere else in the section for the entity details.
 
 ## Development
 
