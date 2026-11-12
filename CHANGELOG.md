@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.1.0 - 2026-11-12
+
+### Features
+- `show_title` and `show_subtitle` options (also in the visual editor) hide the title (the name) and the subtitle (the model) of the header, separately, for a card placed under a section heading of its own (#72).
+
+### Improvements
+- A model that only repeats the name (a device named after its model) is no longer shown twice in the header.
+
 ## 3.0.6 - 2026-11-12
 
 ### Documentation

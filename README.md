@@ -225,6 +225,8 @@ Use either `device_id` (what the visual editor writes) or `entity` (any entity o
 type: custom:vehicle-card
 device_id: 5a8c1932ddf3f29163a275f06789b1bf
 name: Espace
+show_title: true
+show_subtitle: true
 fuel_tank_capacity: 55
 low_range: 100
 low_tyre_pressure: 2.2
@@ -252,6 +254,8 @@ entities:
 | `device_id` | ❌* | Auto | Vehicle device (*or `entity`; the first vehicle is used if both are missing) |
 | `entity` | ❌ | — | Any entity of the vehicle, used to find the device |
 | `name` | ❌ | Device name | Card title |
+| `show_title` | ❌ | `true` | Show the title (the name) in the header, e.g. `false` when the card sits under a section heading |
+| `show_subtitle` | ❌ | `true` | Show the subtitle (the model) under the title; a model that only repeats the name is never shown twice |
 | `image` | ❌ | Auto | Picture URL; overrides the integration's picture |
 | `show_logo` | ❌ | `true` | Show the brand's logo next to the name (follows the theme text colour) |
 | `show_image` | ❌ | `true` | Show the vehicle picture |

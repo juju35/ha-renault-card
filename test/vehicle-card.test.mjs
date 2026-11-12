@@ -1791,3 +1791,37 @@ test("connected services (VW group) row and the offline chip (Teslemetry)", () =
   assert.doesNotMatch(root.html, /Offline/);
   assert.match(root.html, /<div class="row" data-more="sensor\.car_subscription"/);
 });
+
+test("show_title / show_subtitle hide the name and the model; a model equal to the name shows once", () => {
+  const header = (config, name, model) => {
+    const card = Object.create(RenaultCard.prototype);
+    card._config = { show_logo: false, ...config };
+    return card._header(name, model, null, "/car.png");
+  };
+  const both = header({}, "Espace", "Espace E-Tech");
+  assert.match(both, /class="name">Espace</);
+  assert.match(both, /class="model">Espace E-Tech</);
+  const noTitle = header({ show_title: false }, "Espace", "Espace E-Tech");
+  assert.doesNotMatch(noTitle, /class="name"/);
+  assert.match(noTitle, /class="model">Espace E-Tech</);
+  const noSubtitle = header({ show_subtitle: false }, "Espace", "Espace E-Tech");
+  assert.match(noSubtitle, /class="name">Espace</);
+  assert.doesNotMatch(noSubtitle, /class="model"/);
+  const neither = header({ show_title: false, show_subtitle: false }, "Espace", "Espace E-Tech");
+  assert.doesNotMatch(neither, /class="(name|model)"/);
+  assert.match(neither, /class="titles"><\/div>/);
+  const same = header({}, "Model 3", "model 3");
+  assert.equal(same.match(/class="(name|model)"/g).length, 1);
+  // Without the title, the model is the only text left: it stays
+  assert.match(header({ show_title: false }, "Model 3", "Model 3"), /class="model">Model 3</);
+});
+
+test("card editor offers show_title and show_subtitle, on by default", () => {
+  const editor = Object.create(defined["renault-card-editor"].prototype);
+  editor._hass = { language: "en" };
+  const names = JSON.stringify(editor._schema());
+  assert.match(names, /"show_title"/);
+  assert.match(names, /"show_subtitle"/);
+  assert.equal(ctx.RN_EDITOR_DEFAULTS.show_title, true);
+  assert.equal(ctx.RN_EDITOR_DEFAULTS.show_subtitle, true);
+});

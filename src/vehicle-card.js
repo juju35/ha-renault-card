@@ -71,6 +71,8 @@ var RnI18n = {
     ed_image_helper: 'Laisser vide pour la photo du véhicule (Renault Picture, ou l\'image fournie par son intégration) ; sinon une URL, par exemple /local/voiture.png',
     ed_show_image: 'Image du véhicule',
     ed_show_logo: 'Logo de la marque',
+    ed_show_title: 'Titre',
+    ed_show_subtitle: 'Sous-titre (modèle)',
     ed_fuel_tank_capacity: 'Capacité du réservoir',
     ed_fuel_tank_capacity_helper: 'Affiche la jauge de carburant',
     ed_low_range: 'Seuil d\'autonomie faible',
@@ -197,6 +199,8 @@ var RnI18n = {
     ed_image_helper: 'Leave empty for the vehicle\'s picture (Renault Picture, or the image its integration gives); otherwise a URL, for example /local/car.png',
     ed_show_image: 'Vehicle picture',
     ed_show_logo: 'Brand logo',
+    ed_show_title: 'Title',
+    ed_show_subtitle: 'Subtitle (model)',
     ed_fuel_tank_capacity: 'Fuel tank capacity',
     ed_fuel_tank_capacity_helper: 'Shows the fuel gauge',
     ed_low_range: 'Low range threshold',
@@ -323,6 +327,8 @@ var RnI18n = {
     ed_image_helper: 'Leer lassen für das Bild des Fahrzeugs (Renault Picture oder das Bild seiner Integration); sonst eine URL, zum Beispiel /local/auto.png',
     ed_show_image: 'Fahrzeugbild',
     ed_show_logo: 'Markenlogo',
+    ed_show_title: 'Titel',
+    ed_show_subtitle: 'Untertitel (Modell)',
     ed_fuel_tank_capacity: 'Tankvolumen',
     ed_fuel_tank_capacity_helper: 'Zeigt die Tankanzeige an',
     ed_low_range: 'Schwelle für geringe Reichweite',
@@ -449,6 +455,8 @@ var RnI18n = {
     ed_image_helper: 'Déjalo vacío para la imagen del vehículo (Renault Picture, o la imagen de su integración); si no, una URL, por ejemplo /local/coche.png',
     ed_show_image: 'Imagen del vehículo',
     ed_show_logo: 'Logotipo de la marca',
+    ed_show_title: 'Título',
+    ed_show_subtitle: 'Subtítulo (modelo)',
     ed_fuel_tank_capacity: 'Capacidad del depósito',
     ed_fuel_tank_capacity_helper: 'Muestra el indicador de combustible',
     ed_low_range: 'Umbral de autonomía baja',
@@ -575,6 +583,8 @@ var RnI18n = {
     ed_image_helper: 'Оставите празно за слику возила (Renault Picture или слика из његове интеграције); иначе URL, на пример /local/auto.png',
     ed_show_image: 'Слика возила',
     ed_show_logo: 'Лого марке',
+    ed_show_title: 'Наслов',
+    ed_show_subtitle: 'Поднаслов (модел)',
     ed_fuel_tank_capacity: 'Запремина резервоара',
     ed_fuel_tank_capacity_helper: 'Приказује мерач горива',
     ed_low_range: 'Праг малог домета',
@@ -701,6 +711,8 @@ var RnI18n = {
     ed_image_helper: 'Ostavite prazno za sliku vozila (Renault Picture ili slika iz njegove integracije); inače URL, na primer /local/auto.png',
     ed_show_image: 'Slika vozila',
     ed_show_logo: 'Logo marke',
+    ed_show_title: 'Naslov',
+    ed_show_subtitle: 'Podnaslov (model)',
     ed_fuel_tank_capacity: 'Zapremina rezervoara',
     ed_fuel_tank_capacity_helper: 'Prikazuje merač goriva',
     ed_low_range: 'Prag malog dometa',
@@ -827,6 +839,8 @@ var RnI18n = {
     ed_image_helper: 'Lasciare vuoto per l\'immagine del veicolo (Renault Picture, o l\'immagine della sua integrazione); altrimenti un URL, ad esempio /local/auto.png',
     ed_show_image: 'Immagine del veicolo',
     ed_show_logo: 'Logo del marchio',
+    ed_show_title: 'Titolo',
+    ed_show_subtitle: 'Sottotitolo (modello)',
     ed_fuel_tank_capacity: 'Capacità del serbatoio',
     ed_fuel_tank_capacity_helper: 'Mostra l\'indicatore del carburante',
     ed_low_range: 'Soglia di autonomia bassa',
@@ -953,6 +967,8 @@ var RnI18n = {
     ed_image_helper: 'Leeg laten voor de afbeelding van het voertuig (Renault Picture, of de afbeelding van zijn integratie); anders een URL, bijvoorbeeld /local/auto.png',
     ed_show_image: 'Afbeelding van het voertuig',
     ed_show_logo: 'Merklogo',
+    ed_show_title: 'Titel',
+    ed_show_subtitle: 'Ondertitel (model)',
     ed_fuel_tank_capacity: 'Inhoud van de brandstoftank',
     ed_fuel_tank_capacity_helper: 'Toont de brandstofmeter',
     ed_low_range: 'Drempel lage actieradius',
@@ -1079,6 +1095,8 @@ var RnI18n = {
     ed_image_helper: 'Deixe vazio para a imagem do veículo (Renault Picture, ou a imagem da sua integração); caso contrário um URL, por exemplo /local/carro.png',
     ed_show_image: 'Imagem do veículo',
     ed_show_logo: 'Logótipo da marca',
+    ed_show_title: 'Título',
+    ed_show_subtitle: 'Subtítulo (modelo)',
     ed_fuel_tank_capacity: 'Capacidade do depósito',
     ed_fuel_tank_capacity_helper: 'Mostra o indicador de combustível',
     ed_low_range: 'Limite de autonomia baixa',
@@ -1205,6 +1223,8 @@ var RnI18n = {
     ed_image_helper: 'Pozostaw puste dla zdjęcia pojazdu (Renault Picture lub obraz z jego integracji); w przeciwnym razie URL, na przykład /local/auto.png',
     ed_show_image: 'Obraz pojazdu',
     ed_show_logo: 'Logo marki',
+    ed_show_title: 'Tytuł',
+    ed_show_subtitle: 'Podtytuł (model)',
     ed_fuel_tank_capacity: 'Pojemność zbiornika paliwa',
     ed_fuel_tank_capacity_helper: 'Pokazuje wskaźnik paliwa',
     ed_low_range: 'Próg niskiego zasięgu',
@@ -1331,6 +1351,8 @@ var RnI18n = {
     ed_image_helper: 'Lăsați gol pentru imaginea vehiculului (Renault Picture sau imaginea integrării sale); altfel un URL, de exemplu /local/masina.png',
     ed_show_image: 'Imaginea vehiculului',
     ed_show_logo: 'Logo-ul mărcii',
+    ed_show_title: 'Titlu',
+    ed_show_subtitle: 'Subtitlu (model)',
     ed_fuel_tank_capacity: 'Capacitatea rezervorului',
     ed_fuel_tank_capacity_helper: 'Afișează indicatorul de combustibil',
     ed_low_range: 'Prag de autonomie redusă',
@@ -1457,6 +1479,8 @@ var RnI18n = {
     ed_image_helper: 'Lad stå tom for køretøjets billede (Renault Picture, eller billedet fra dets integration); ellers en URL, for eksempel /local/bil.png',
     ed_show_image: 'Billede af køretøjet',
     ed_show_logo: 'Mærkelogo',
+    ed_show_title: 'Titel',
+    ed_show_subtitle: 'Undertitel (model)',
     ed_fuel_tank_capacity: 'Tankkapacitet',
     ed_fuel_tank_capacity_helper: 'Viser brændstofmåleren',
     ed_low_range: 'Grænse for lav rækkevidde',
@@ -1583,6 +1607,8 @@ var RnI18n = {
     ed_image_helper: 'Lämna tomt för fordonets bild (Renault Picture, eller bilden från dess integration); annars en URL, till exempel /local/bil.png',
     ed_show_image: 'Fordonsbild',
     ed_show_logo: 'Märkeslogotyp',
+    ed_show_title: 'Rubrik',
+    ed_show_subtitle: 'Underrubrik (modell)',
     ed_fuel_tank_capacity: 'Tankvolym',
     ed_fuel_tank_capacity_helper: 'Visar bränslemätaren',
     ed_low_range: 'Gräns för låg räckvidd',
@@ -1709,6 +1735,8 @@ var RnI18n = {
     ed_image_helper: 'Оставете празно за снимката на превозното средство (Renault Picture или изображението от интеграцията му); иначе URL, например /local/kola.png',
     ed_show_image: 'Изображение на автомобила',
     ed_show_logo: 'Лого на марката',
+    ed_show_title: 'Заглавие',
+    ed_show_subtitle: 'Подзаглавие (модел)',
     ed_fuel_tank_capacity: 'Обем на резервоара',
     ed_fuel_tank_capacity_helper: 'Показва индикатора за гориво',
     ed_low_range: 'Праг за малък пробег',
@@ -1835,6 +1863,8 @@ var RnI18n = {
     ed_image_helper: 'Оставьте пустым для фото автомобиля (Renault Picture или изображение из его интеграции); иначе URL, например /local/car.png',
     ed_show_image: 'Изображение автомобиля',
     ed_show_logo: 'Логотип марки',
+    ed_show_title: 'Заголовок',
+    ed_show_subtitle: 'Подзаголовок (модель)',
     ed_fuel_tank_capacity: 'Объём топливного бака',
     ed_fuel_tank_capacity_helper: 'Показывает указатель уровня топлива',
     ed_low_range: 'Порог малого запаса хода',
@@ -1961,6 +1991,8 @@ var RnI18n = {
     ed_image_helper: 'Залиште порожнім для фото автомобіля (Renault Picture або зображення з його інтеграції); інакше URL, наприклад /local/car.png',
     ed_show_image: 'Зображення автомобіля',
     ed_show_logo: 'Логотип марки',
+    ed_show_title: 'Заголовок',
+    ed_show_subtitle: 'Підзаголовок (модель)',
     ed_fuel_tank_capacity: 'Об’єм паливного бака',
     ed_fuel_tank_capacity_helper: 'Показує покажчик рівня пального',
     ed_low_range: 'Поріг малого запасу ходу',
@@ -2087,6 +2119,8 @@ var RnI18n = {
     ed_image_helper: 'Hagyja üresen a jármű képéhez (Renault Picture vagy az integráció által adott kép); egyébként egy URL, például /local/auto.png',
     ed_show_image: 'Jármű képe',
     ed_show_logo: 'Márkalogó',
+    ed_show_title: 'Cím',
+    ed_show_subtitle: 'Alcím (modell)',
     ed_fuel_tank_capacity: 'Üzemanyagtartály térfogata',
     ed_fuel_tank_capacity_helper: 'Megjeleníti az üzemanyagszint-jelzőt',
     ed_low_range: 'Alacsony hatótáv küszöbe',
@@ -2213,6 +2247,8 @@ var RnI18n = {
     ed_image_helper: 'Nechajte prázdne pre obrázok vozidla (Renault Picture alebo obrázok z jeho integrácie); inak URL, napríklad /local/auto.png',
     ed_show_image: 'Obrázok vozidla',
     ed_show_logo: 'Logo značky',
+    ed_show_title: 'Názov',
+    ed_show_subtitle: 'Podnázov (model)',
     ed_fuel_tank_capacity: 'Objem palivovej nádrže',
     ed_fuel_tank_capacity_helper: 'Zobrazí ukazovateľ paliva',
     ed_low_range: 'Prah nízkeho dojazdu',
@@ -2339,6 +2375,8 @@ var RnI18n = {
     ed_image_helper: 'Nechte prázdné pro obrázek vozidla (Renault Picture nebo obrázek z jeho integrace); jinak URL, například /local/auto.png',
     ed_show_image: 'Obrázek vozidla',
     ed_show_logo: 'Logo značky',
+    ed_show_title: 'Název',
+    ed_show_subtitle: 'Podnázev (model)',
     ed_fuel_tank_capacity: 'Objem palivové nádrže',
     ed_fuel_tank_capacity_helper: 'Zobrazí ukazatel paliva',
     ed_low_range: 'Práh nízkého dojezdu',
@@ -2465,6 +2503,8 @@ var RnI18n = {
     ed_image_helper: 'Pustite prazno za sliko vozila (Renault Picture ali slika iz njegove integracije); sicer URL, na primer /local/avto.png',
     ed_show_image: 'Slika vozila',
     ed_show_logo: 'Logotip znamke',
+    ed_show_title: 'Naslov',
+    ed_show_subtitle: 'Podnaslov (model)',
     ed_fuel_tank_capacity: 'Prostornina rezervoarja za gorivo',
     ed_fuel_tank_capacity_helper: 'Prikaže merilnik goriva',
     ed_low_range: 'Prag nizkega dosega',
@@ -2591,6 +2631,8 @@ var RnI18n = {
     ed_image_helper: 'Atstājiet tukšu transportlīdzekļa attēlam (Renault Picture vai tā integrācijas attēls); citādi URL, piemēram, /local/auto.png',
     ed_show_image: 'Transportlīdzekļa attēls',
     ed_show_logo: 'Zīmola logotips',
+    ed_show_title: 'Virsraksts',
+    ed_show_subtitle: 'Apakšvirsraksts (modelis)',
     ed_fuel_tank_capacity: 'Degvielas tvertnes tilpums',
     ed_fuel_tank_capacity_helper: 'Rāda degvielas līmeņa rādītāju',
     ed_low_range: 'Zemas sniedzamības slieksnis',
@@ -2717,6 +2759,8 @@ var RnI18n = {
     ed_image_helper: 'Αφήστε κενό για την εικόνα του οχήματος (Renault Picture ή η εικόνα της ενσωμάτωσής του); αλλιώς ένα URL, για παράδειγμα /local/car.png',
     ed_show_image: 'Εικόνα οχήματος',
     ed_show_logo: 'Λογότυπο μάρκας',
+    ed_show_title: 'Τίτλος',
+    ed_show_subtitle: 'Υπότιτλος (μοντέλο)',
     ed_fuel_tank_capacity: 'Χωρητικότητα ρεζερβουάρ',
     ed_fuel_tank_capacity_helper: 'Εμφανίζει τον δείκτη καυσίμου',
     ed_low_range: 'Όριο χαμηλής αυτονομίας',
@@ -3463,6 +3507,7 @@ class RenaultCard extends HTMLElement {
   setConfig(config) {
     if (!config) throw new Error('Invalid configuration');
     this._config = Object.assign({
+      show_title: true, show_subtitle: true,
       show_logo: true, show_image: true, show_plate: true, show_location: true, show_actions: true, show_data_plan: true, low_range: 100,
     }, config);
     if (!this.shadowRoot) {
@@ -3704,13 +3749,17 @@ class RenaultCard extends HTMLElement {
   }
 
   // Logo (or car icon when there is neither logo nor picture), name and model, plate, then the
-  // mini card's detail button (_headerAction).
+  // mini card's detail button (_headerAction). show_title / show_subtitle hide the name / the model;
+  // a model that only repeats the name is not shown twice.
   _header(name, model, plate, imgSrc) {
     var c = this._config;
+    var title = c.show_title !== false ? `<div class="name">${rnEsc(name)}</div>` : '';
+    var same = model && name && String(model).trim().toLowerCase() === String(name).trim().toLowerCase();
+    var subtitle = c.show_subtitle !== false && model && !(same && title) ? `<div class="model">${rnEsc(model)}</div>` : '';
     return '<div class="header">' +
       ((c.show_logo && rnBrandHtml(this._r?.brand, () => { this._sig = null; this._update(); })) ||
         (imgSrc && !c.show_logo ? '' : '<div class="badge"><ha-icon icon="mdi:car"></ha-icon></div>')) +
-      '<div class="titles"><div class="name">' + rnEsc(name) + '</div>' + (model ? `<div class="model">${rnEsc(model)}</div>` : '') + '</div>' +
+      `<div class="titles">${title}${subtitle}</div>` +  // kept empty: it pushes the plate to the right
       (plate ? rnPlateSvg(plate, c.plate_department) : '') + this._headerAction() +
       '</div>';
   }
@@ -4423,7 +4472,7 @@ function rnEnsureForm(editor) {
   editor.appendChild(editor._form);
 }
 
-var RN_EDITOR_DEFAULTS = { show_logo: true, show_image: true, show_plate: true, show_location: true, show_actions: true, show_data_plan: true, low_range: 100, expand_lease: false };
+var RN_EDITOR_DEFAULTS = { show_title: true, show_subtitle: true, show_logo: true, show_image: true, show_plate: true, show_location: true, show_actions: true, show_data_plan: true, low_range: 100, expand_lease: false };
 
 class RenaultCardEditor extends HTMLElement {
   setConfig(config) {
@@ -4467,6 +4516,8 @@ class RenaultCardEditor extends HTMLElement {
       },
       {
         type: 'grid', name: '', schema: [
+          { name: 'show_title', selector: { boolean: {} } },
+          { name: 'show_subtitle', selector: { boolean: {} } },
           { name: 'show_logo', selector: { boolean: {} } },
           { name: 'show_image', selector: { boolean: {} } },
           { name: 'show_plate', selector: { boolean: {} } },
