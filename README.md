@@ -219,7 +219,7 @@ type: custom:vehicle-card
 device_id: 5a8c1932ddf3f29163a275f06789b1bf
 ```
 
-Use either `device_id` (what the visual editor writes) or `entity` (any entity of the vehicle). With neither, the card uses the first vehicle it finds.
+Use either `device_id` (what the visual editor writes) or `entity` (any entity of the vehicle, YAML only). With neither, the card uses the first vehicle it finds.
 
 ### Full options
 
@@ -254,7 +254,7 @@ entities:
 | Option | Required | Default | Description |
 |---|---|---|---|
 | `device_id` | ❌* | Auto | Vehicle device (*or `entity`; the first vehicle is used if both are missing) |
-| `entity` | ❌ | — | Any entity of the vehicle, used to find the device |
+| `entity` | ❌ | — | Any entity of the vehicle, used to find the device (YAML only: the visual editor sets `device_id`) |
 | `name` | ❌ | Device name | Card title |
 | `show_title` | ❌ | `true` | Show the title (the name) in the header, e.g. `false` when the card sits under a section heading |
 | `show_subtitle` | ❌ | `true` | Show the subtitle (the model) under the title; a model that only repeats the name is never shown twice |

@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.1.1 - 2026-11-14
+
+### Fixes
+- README: `entity`, the alternative to `device_id`, is marked YAML only (the visual editor sets `device_id` and keeps an `entity` written in YAML).
+
 ## 3.1.0 - 2026-11-12
 
 ### Features
