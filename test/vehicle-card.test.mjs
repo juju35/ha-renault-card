@@ -274,6 +274,20 @@ test("card editor offers fr, en, de, es, sr, sr-Latn, it, nl, pt, pl and the 12 
   assert.equal(ed._lang(), "de");
 });
 
+test("card editor: device_id picker, entity stays YAML only and is kept by an edit", () => {
+  const Editor = defined["renault-card-editor"];
+  const ed = Object.create(Editor.prototype);
+  ed._config = { entity: "sensor.car_battery" };
+  ed._hass = { language: "en" };
+  const names = ed._schema().flatMap((s) => (s.type === "grid" ? s.schema : [s])).map((s) => s.name);
+  assert.ok(names.includes("device_id"));
+  assert.ok(!names.includes("entity"));
+  let sent;
+  ed.dispatchEvent = (ev) => (sent = ev.detail.config);
+  ed._valueChanged({ stopPropagation() {}, detail: { value: { entity: "sensor.car_battery", name: "Car" } } });
+  assert.equal(sent.entity, "sensor.car_battery");
+});
+
 test("language option labels European Portuguese explicitly", () => {
   const Editor = defined["renault-card-editor"];
   const ed = Object.create(Editor.prototype);
