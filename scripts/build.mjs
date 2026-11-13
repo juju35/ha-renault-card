@@ -1,7 +1,7 @@
 // Builds src/vehicle-card.js into dist/vehicle-card.js, stamping the package version, and copies the
 // vendored map libraries (vendor/: Leaflet, MapLibre GL and its Leaflet adapter) next to it.
 // Usage: node scripts/build.mjs  (dist/ is not committed: CI and the release workflow build it)
-import { copyFileSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, mkdirSync, readdirSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { splitDist } from "./i18n-split.mjs";
 
@@ -35,4 +35,4 @@ writeFileSync(`${root}dist/vehicle-card-brands.js`, brandsScript(`${root}images/
 
 // Translations: English stays in the bundle, each other language goes to dist/vehicle-card.i18n.<lang>.js,
 // fetched when a card needs it (scripts/i18n-split.mjs).
-if (process.argv[1] === fileURLToPath(import.meta.url)) splitDist(`${root}dist`, FILE, { version: pkg.version, aliases: ALIASES });
+if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) splitDist(`${root}dist`, FILE, { version: pkg.version, aliases: ALIASES });
