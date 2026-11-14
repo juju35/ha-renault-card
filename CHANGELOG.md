@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.2.0 - 2026-11-14
+
+### Features
+- Mercedes-Benz logo in the header (34 brands), also picked from the `mbapi2020` integration when the device has no manufacturer (#77, thanks @briis).
+
 ## 3.1.1 - 2026-11-14
 
 ### Fixes
