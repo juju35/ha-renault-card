@@ -3087,9 +3087,9 @@ function rnPlatformOf(hass, deviceId) {
 
 // Brand of a vehicle: its device's manufacturer, else the integration's own brand. The logos
 // (Simple Icons, CC0) other than Renault's sit in vehicle-card-brands.js, loaded on first use.
-var RN_BRANDS = ['audi', 'bentley', 'bmw', 'chrysler', 'citroen', 'cupra', 'dacia', 'dsautomobiles', 'fiat', 'ford', 'hyundai', 'jeep', 'kia', 'maserati', 'mazda', 'mg', 'mini', 'nissan', 'opel', 'peugeot', 'polestar', 'porsche', 'ram', 'renault', 'seat', 'skoda', 'smart', 'subaru', 'tesla', 'toyota', 'vauxhall', 'volkswagen', 'volvo'];
+var RN_BRANDS = ['audi', 'bentley', 'bmw', 'chrysler', 'citroen', 'cupra', 'dacia', 'dsautomobiles', 'fiat', 'ford', 'hyundai', 'jeep', 'kia', 'maserati', 'mazda', 'mercedes', 'mg', 'mini', 'nissan', 'opel', 'peugeot', 'polestar', 'porsche', 'ram', 'renault', 'seat', 'skoda', 'smart', 'subaru', 'tesla', 'toyota', 'vauxhall', 'volkswagen', 'volvo'];
 var RN_BRAND_ALIASES = { ds: 'dsautomobiles', vw: 'volkswagen', vwgroup: 'volkswagen', kiamotors: 'kia', mgmotor: 'mg', teslamotors: 'tesla' };
-var RN_PLATFORM_BRAND = { renault: 'renault', tesla_fleet: 'tesla', teslemetry: 'tesla', tessie: 'tesla', volvo: 'volvo', skoda: 'skoda', myskoda: 'skoda', subaru: 'subaru', nissan_leaf: 'nissan', polestar_api: 'polestar', fordpass: 'ford', toyota: 'toyota' };
+var RN_PLATFORM_BRAND = { renault: 'renault', tesla_fleet: 'tesla', teslemetry: 'tesla', tessie: 'tesla', volvo: 'volvo', skoda: 'skoda', myskoda: 'skoda', subaru: 'subaru', nissan_leaf: 'nissan', polestar_api: 'polestar', fordpass: 'ford', toyota: 'toyota', mbapi2020: 'mercedes' };
 var RN_PLATFORM_MAKER = { renault: 'Renault', tesla_fleet: 'Tesla', teslemetry: 'Tesla', tessie: 'Tesla', volvo: 'Volvo', skoda: 'Škoda', myskoda: 'Škoda', subaru: 'Subaru', nissan_leaf: 'Nissan', polestar_api: 'Polestar', fordpass: 'Ford', toyota: 'Toyota', mbapi2020: 'Mercedes-Benz' };
 
 function rnBrandKey(hass, deviceId, device) {
