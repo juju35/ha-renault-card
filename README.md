@@ -26,6 +26,7 @@
   <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/kia.png" alt="Kia" width="48">&nbsp;
   <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/maserati.png" alt="Maserati" width="48">&nbsp;
   <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/mazda.png" alt="Mazda" width="48">&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/mercedes.png" alt="Mercedes-Benz" width="48">&nbsp;
   <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/mg.png" alt="MG" width="48">&nbsp;
   <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/mini.png" alt="Mini" width="48">&nbsp;
   <img src="https://raw.githubusercontent.com/juju35/ha-vehicle-card/main/images/logos/nissan.png" alt="Nissan" width="48">&nbsp;
@@ -66,7 +67,7 @@ Pick the vehicle, the card finds all its entities by itself, whatever the integr
 - Location with the time of the last update; tap it to open the map
 - Action buttons for every button of the vehicle (horn, flash lights, air conditioning, start/stop charge, refresh…), pressed with a confirmation tap, and the charge mode picker for electric cars
 - **Extra buttons** of your choice (`buttons`): a switch, a script, a scene, a lock, a climate, your wallbox… toggled, run or locked from the card with the same confirmation tap
-- The brand's logo next to the name (33 brands), black on light themes and white on dark themes
+- The brand's logo next to the name (34 brands), black on light themes and white on dark themes
 - The picture of your vehicle when the integration gives one (the official MyRenault photo with [Renault Picture](https://github.com/juju35/ha-renault-picture), the renders of Volkswagen group cars, Stellantis, Toyota, Volvo, Fiat / Jeep…) or your own picture, and a French licence plate drawn like the real one (EU band, department, and a traditional regional emblem for Brittany, Occitania, Île-de-France, Provence, Corsica and Burgundy)
 - Optional **lease tracking** (LOA): mileage driven against the allowance, theoretical mileage expected today and the gap to it, kilometres left this month and per month until the end, end-of-lease projection (average or last 30 / 90 days) and estimated cost of the excess, always shown as a status; pace, contract year figures and a mileage chart folded by default
 - Optional **Orange Internet On the move** section: data left, percentage, renewal or expiry date
